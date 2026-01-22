@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/menu/[id]/page.jsx", "tailwind.config.js", "src/app/page.jsx", "src/app/layout.jsx", "src/app/verify-code/page.jsx", "src/app/terms/page.jsx", "src/app/subscriptions/page.jsx", "src/app/signup/page.jsx", "src/app/forgot-password/page.jsx", "src/app/login/page.jsx", "src/app/how-it-works/page.jsx", "src/app/about/page.jsx", "src/app/account/page.jsx", "src/app/cart/page.jsx", "src/app/checkout/page.jsx", "src/app/catering/page.jsx", "src/app/contact/page.jsx", "src/app/faq/page.jsx", "src/app/register/page.jsx", "src/app/privacy/page.jsx", "src/components/nav.jsx", "src/components/footer.jsx", "next.config.js", "src/app/account/orders/page.jsx", "src/app/order-confirmation/page.jsx", "src/app/menu/page.jsx"],
+  "exclude": ["node_modules"]
+}
