@@ -7,10 +7,7 @@ export default function ProductPage({ params }) {
     <div className="min-h-screen">
      
       <Navigation />
-      <Product params={params} />
-
-
-
+      <Product slug={params.slug} />
       <Footer />
     </div>
   )

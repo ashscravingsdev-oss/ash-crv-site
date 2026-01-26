@@ -8,7 +8,7 @@ import { motion } from "framer-motion"
 
 const ProductItem = ({ product }) => {
     return (
-        <Link href={`/menu/${product.id}`}>
+        <Link href={`/menu/${product.slug}`}>
             <motion.div
                 whileHover={{ y: -8 }}
                 transition={{ duration: 0.2 }}
@@ -21,7 +21,7 @@ const ProductItem = ({ product }) => {
                         className="aspect-square overflow-hidden"
                     >
                         <img
-                            src={product.image || "/placeholder.svg"}
+                            src={product.image_url || "/placeholder.svg"}
                             alt={product.name}
                             className="w-full h-full object-cover"
                         />
@@ -35,7 +35,7 @@ const ProductItem = ({ product }) => {
                             className="flex items-center gap-2 mb-2"
                         >
                             <Badge variant="secondary" className="text-xs">
-                                {product.category}
+                                {product.category.name}
                             </Badge>
                         </motion.div>
 
@@ -63,8 +63,8 @@ const ProductItem = ({ product }) => {
                             transition={{ delay: 0.25 }}
                             className="flex items-center justify-between text-sm text-muted-foreground mb-4"
                         >
-                            <span>{product.calories} cal</span>
-                            <span>{product.protein}g protein</span>
+                            <span>{product.nutrition_info.calories} cal</span>
+                            <span>{product.nutrition_info.protein}g protein</span>
                         </motion.div>
 
                         <motion.div
@@ -73,7 +73,7 @@ const ProductItem = ({ product }) => {
                             transition={{ delay: 0.3 }}
                             className="flex items-center justify-between"
                         >
-                            <span className="text-2xl font-bold">${product.price.toFixed(2)}</span>
+                            <span className="text-2xl font-bold">${product.price}</span>
                             <motion.div
                             >
                                 <Button>Add to Cart</Button>

@@ -7,14 +7,14 @@ const ProductImages = ({ product }) => {
         <div className="space-y-4">
             <div className="aspect-square rounded-2xl overflow-hidden bg-muted">
                 <img
-                    src={product.image || "/placeholder.svg"}
+                    src={product.image_url || "/placeholder.svg"}
                     alt={product.name}
                     className="w-full h-full object-cover"
                 />
             </div>
-            {product.images && product.images.length > 1 && (
+            {product.gallery_images && product.gallery_images.length > 1 && (
                 <div className="grid grid-cols-4 gap-4">
-                    {product.images.map((img, idx) => (
+                    {product.gallery_images.map((img, idx) => (
                         <button
                             key={idx}
                             onClick={() => setCurrentImage(idx)}

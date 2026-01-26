@@ -1,58 +1,19 @@
 "use client"
 
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { Minus, Plus, ShoppingCart, Heart, } from "lucide-react"
+import { Minus, Plus, ShoppingCart, Heart, LoaderCircle, } from "lucide-react"
 import Link from "next/link"
 import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
 import SEO from '../seo'
-// Mock product data - in a real app, this would come from an API
-const getProduct = (id) => {
-    const products = {
-        "1": {
-            id: "1",
-            name: "Mediterranean Bowl",
-            category: "Meal Prep",
-            description:
-                "A delicious and nutritious bowl featuring grilled chicken, fluffy quinoa, roasted vegetables, and creamy hummus. Perfect for a balanced, protein-rich meal.",
-            price: 12.99,
-            image: "/mediterranean-bowl-with-chicken-quinoa-vegetables.jpg",
-            images: [
-                "/mediterranean-bowl-with-chicken-quinoa-vegetables.jpg",
-                "/mediterranean-bowl-with-chicken-quinoa-vegetables.jpg",
-            ],
-            calories: 450,
-            protein: 35,
-            carbs: 42,
-            fat: 15,
-            ingredients: [
-                "Grilled chicken breast",
-                "Organic quinoa",
-                "Roasted bell peppers",
-                "Cherry tomatoes",
-                "Red onions",
-                "Cucumber",
-                "House-made hummus",
-                "Olive oil",
-                "Lemon juice",
-                "Fresh herbs",
-            ],
-            allergens: ["Sesame"],
-            addons: [
-                { id: "extra-protein", name: "Extra Protein (Chicken)", price: 3.99 },
-                { id: "avocado", name: "Fresh Avocado", price: 2.49 },
-                { id: "feta", name: "Feta Cheese", price: 1.99 },
-            ],
-        },
-    }
-    return products[id] || products["1"]
-}
+import { fetchProductBySlug } from '@/store/productSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 const relatedProducts = [
     {
@@ -74,11 +35,21 @@ const relatedProducts = [
         image: "/breakfast-power-bowl.jpg",
     },
 ]
-const Product = ({ params }) => {
-    const resolvedParams = use(params)
-    const product = getProduct(resolvedParams.id)
+const Product = ({ slug }) => {
+    const dispatch = useDispatch()
+    const {
+        product,
+        loading
+    } = useSelector((state) => state.products)
     const [quantity, setQuantity] = useState(1)
     const [selectedAddons, setSelectedAddons] = useState([])
+
+    useEffect(() => {
+        if (slug) {
+            dispatch(fetchProductBySlug(slug))
+        }
+    }, [dispatch, slug])
+
 
     const handleAddonToggle = (addonId) => {
         setSelectedAddons((prev) => (prev.includes(addonId) ? prev.filter((id) => id !== addonId) : [...prev, addonId]))
@@ -92,6 +63,26 @@ const Product = ({ params }) => {
         })
         return total.toFixed(2)
     }
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <LoaderCircle className="w-12 h-12 text-primary animate-spin" />
+            </div>
+        )
+    }
+
+    if (!product) {
+        return (
+            <div className="container mx-auto px-4 py-16 text-center">
+                <h2 className="text-2xl font-bold mb-4">Product Not Found</h2>
+                <Button asChild>
+                    <Link href="/menu">Browse Products</Link>
+                </Button>
+            </div>
+        )
+    }
+
     return (
         <>
             <SEO
@@ -222,6 +213,7 @@ const Product = ({ params }) => {
                 </div>
             </div>
         </>
+
     )
 }
 

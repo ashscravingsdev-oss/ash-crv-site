@@ -8,7 +8,7 @@ const ProductInfo = ({ product }) => {
         <>
             <div>
                 <Badge variant="secondary" className="mb-3">
-                    {product.category}
+                    {product.category.name}
                 </Badge>
                 <h1 className="text-4xl font-bold mb-4 text-balance">{product.name}</h1>
                 <div className="flex items-center gap-2 mb-4">
@@ -25,11 +25,11 @@ const ProductInfo = ({ product }) => {
             <div className="flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
                     <Flame className="h-4 w-4 text-primary" />
-                    <span>{product.calories} cal</span>
+                    <span>{product.nutrition_info.calories} cal</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <Drumstick className="h-4 w-4 text-primary" />
-                    <span>{product.protein}g protein</span>
+                    <span>{product.nutrition_info.protein}g protein</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <Leaf className="h-4 w-4 text-primary" />
@@ -43,19 +43,19 @@ const ProductInfo = ({ product }) => {
                 <h3 className="font-semibold mb-3">Nutritional Information</h3>
                 <div className="grid grid-cols-4 gap-4">
                     <div className="text-center p-3 bg-muted rounded-lg">
-                        <p className="text-2xl font-bold">{product.calories}</p>
+                        <p className="text-2xl font-bold">{product.nutrition_info.calories}</p>
                         <p className="text-sm text-muted-foreground">Calories</p>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
-                        <p className="text-2xl font-bold">{product.protein}g</p>
+                        <p className="text-2xl font-bold">{product.nutrition_info.protein}g</p>
                         <p className="text-sm text-muted-foreground">Protein</p>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
-                        <p className="text-2xl font-bold">{product.carbs}g</p>
+                        <p className="text-2xl font-bold">{product.nutrition_info.carbs}g</p>
                         <p className="text-sm text-muted-foreground">Carbs</p>
                     </div>
                     <div className="text-center p-3 bg-muted rounded-lg">
-                        <p className="text-2xl font-bold">{product.fat}g</p>
+                        <p className="text-2xl font-bold">{product.nutrition_info.fat}g</p>
                         <p className="text-sm text-muted-foreground">Fat</p>
                     </div>
                 </div>
