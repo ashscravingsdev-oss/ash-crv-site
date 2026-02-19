@@ -18,7 +18,7 @@ import {
 // import { toast } from "react-hot-toast"
 import { motion, AnimatePresence } from "framer-motion"
 import Cookies from "js-cookie";
-
+import { toast } from "sonner"
 
 const Cart = () => {
     const dispatch = useDispatch()

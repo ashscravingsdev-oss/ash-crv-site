@@ -4,6 +4,8 @@ import "./globals.css"
 import StoreProvider from "@/store/provider";
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
+import { Toaster } from "@/components/ui/sonner"
+
 
 export default function RootLayout({ children }) {
   return (
@@ -12,6 +14,7 @@ export default function RootLayout({ children }) {
         <StoreProvider>
           {children}
         </StoreProvider>
+        <Toaster />
         <Analytics />
       </body>
     </html>
