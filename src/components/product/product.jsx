@@ -119,7 +119,7 @@ const Product = ({ slug }) => {
 
     const handleAddToCart = async () => {
         if (!cart?.id) {
-            toast.error("Cart not initialized")
+            // toast.error("Cart not initialized")
             return
         }
 
@@ -136,15 +136,6 @@ const Product = ({ slug }) => {
             })).unwrap()
 
             setShowSuccess(true)
-            toast.success(
-                <div>
-                    <p className="font-semibold">{quantity} × {product.name} added to cart!</p>
-                    {selectedAddons.length > 0 && (
-                        <p className="text-xs mt-1">+ {selectedAddons.length} add-on(s)</p>
-                    )}
-                </div>,
-                { icon: '🛒', duration: 3000 }
-            )
 
             setTimeout(() => {
                 setShowSuccess(false)
@@ -152,7 +143,7 @@ const Product = ({ slug }) => {
 
         } catch (error) {
             console.error("Failed to add to cart:", error)
-            toast.error(error?.message || "Failed to add item to cart")
+            // toast.error(error?.message || "Failed to add item to cart")
         } finally {
             setIsAdding(false)
         }
@@ -172,7 +163,7 @@ const Product = ({ slug }) => {
                 }
             })).unwrap()
 
-            toast.success("Cart updated successfully!")
+            // toast.success("Cart updated successfully!")
             setShowSuccess(true)
 
             setTimeout(() => {
@@ -181,7 +172,7 @@ const Product = ({ slug }) => {
 
         } catch (error) {
             console.error("Failed to update cart:", error)
-            toast.error(error?.message || "Failed to update cart")
+            // toast.error(error?.message || "Failed to update cart")
         } finally {
             setIsAdding(false)
         }
@@ -265,8 +256,8 @@ const Product = ({ slug }) => {
                                             <motion.div
                                                 key={addon.id}
                                                 className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-all ${isSelected
-                                                        ? 'border-primary bg-primary/5'
-                                                        : 'border-border hover:border-primary/50'
+                                                    ? 'border-primary bg-primary/5'
+                                                    : 'border-border hover:border-primary/50'
                                                     }`}
                                                 onClick={() => handleAddonToggle(addon.id)}
                                             >
@@ -371,7 +362,10 @@ const Product = ({ slug }) => {
                                 >
                                     <Button
                                         size="lg"
-                                        className="w-full relative"
+                                        className={`
+                        w-full relative
+                         ${showSuccess ? 'bg-green-600 hover:bg-green-700' : ''}
+                         `}
                                         onClick={isInCart ? handleUpdateCart : handleAddToCart}
                                         disabled={isAdding || showSuccess || itemLoading}
                                     >
@@ -479,7 +473,7 @@ const Product = ({ slug }) => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

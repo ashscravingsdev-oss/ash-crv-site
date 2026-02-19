@@ -17,6 +17,8 @@ import {
 } from "@/store/cartSlice"
 // import { toast } from "react-hot-toast"
 import { motion, AnimatePresence } from "framer-motion"
+import Cookies from "js-cookie";
+
 
 const Cart = () => {
     const dispatch = useDispatch()
@@ -36,17 +38,9 @@ const Cart = () => {
 
     // Fetch cart on mount
     useEffect(() => {
-        const getSessionId = () => {
-            let sessionId = localStorage.getItem('session_id')
-            if (!sessionId) {
-                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
-                localStorage.setItem('session_id', sessionId)
-            }
-            return sessionId
-        }
-
+        let sessionId = Cookies.get('session_id')
         const token = localStorage.getItem('token')
-        const params = token ? {} : { session_id: getSessionId() }
+        const params = token ? {} : { session_id: sessionId }
         dispatch(fetchCart(params))
     }, [dispatch])
 
