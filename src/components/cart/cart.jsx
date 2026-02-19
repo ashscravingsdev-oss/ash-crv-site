@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Minus, Plus, Trash2, ShoppingBag, Loader2 } from "lucide-react"
+import { Minus, Plus, Trash2, ShoppingBag, Loader2, Tag, XCircle } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -12,10 +12,8 @@ import {
     fetchCart,
     updateCartItem,
     removeFromCart,
-    clearCart,
     calculateCartTotals
 } from "@/store/cartSlice"
-// import { toast } from "react-hot-toast"
 import { motion, AnimatePresence } from "framer-motion"
 import Cookies from "js-cookie";
 import { toast } from "sonner"
@@ -23,8 +21,11 @@ import { toast } from "sonner"
 const Cart = () => {
     const dispatch = useDispatch()
     const [promoCode, setPromoCode] = useState("")
-    const [promoApplied, setPromoApplied] = useState(false)
     const [updatingId, setUpdatingId] = useState(null)
+    const [isApplyingPromo, setIsApplyingPromo] = useState(false)
+    const [appliedCoupon, setAppliedCoupon] = useState(null)
+    const [couponDiscount, setCouponDiscount] = useState(0)
+    const [couponError, setCouponError] = useState("")
 
     // Get cart state from Redux
     const {
@@ -36,13 +37,14 @@ const Cart = () => {
         taxTotal,
     } = useSelector(state => state.cart)
 
+    const sessionId = Cookies.get('session_id')
+
     // Fetch cart on mount
     useEffect(() => {
-        let sessionId = Cookies.get('session_id')
         const token = localStorage.getItem('token')
         const params = token ? {} : { session_id: sessionId }
         dispatch(fetchCart(params))
-    }, [dispatch])
+    }, [dispatch, sessionId])
 
     // Calculate totals when cart changes
     useEffect(() => {
@@ -50,6 +52,21 @@ const Cart = () => {
             dispatch(calculateCartTotals(cart.id))
         }
     }, [cart, dispatch])
+
+    // Recalculate discount when subtotal changes
+    useEffect(() => {
+        if (appliedCoupon) {
+            if (appliedCoupon.type === 'percentage') {
+                // Recalculate percentage discount based on new subtotal
+                const newDiscount = subtotal * (appliedCoupon.value / 100)
+                setCouponDiscount(newDiscount)
+            } else if (appliedCoupon.type === 'fixed') {
+                // Fixed amount discount should not exceed subtotal
+                const newDiscount = Math.min(appliedCoupon.value, subtotal)
+                setCouponDiscount(newDiscount)
+            }
+        }
+    }, [subtotal, appliedCoupon])
 
     const updateQuantity = async (itemId, newQuantity) => {
         if (newQuantity < 1) return
@@ -62,7 +79,6 @@ const Cart = () => {
                 updateData: { quantity: newQuantity }
             })).unwrap()
 
-            // Recalculate totals after update
             if (cart?.id) {
                 dispatch(calculateCartTotals(cart.id))
             }
@@ -80,7 +96,6 @@ const Cart = () => {
             await dispatch(removeFromCart(itemId)).unwrap()
             toast.success("Item removed from cart")
 
-            // Recalculate totals after removal
             if (cart?.id) {
                 dispatch(calculateCartTotals(cart.id))
             }
@@ -91,18 +106,72 @@ const Cart = () => {
         }
     }
 
-    const applyPromo = () => {
-        if (promoCode.toLowerCase() === "welcome10") {
-            setPromoApplied(true)
-            toast.success("10% discount applied!")
-        } else {
-            toast.error("Invalid promo code")
+    const validateCoupon = async () => {
+        if (!promoCode.trim()) {
+            toast.error("Please enter a coupon code")
+            return
+        }
+
+        setIsApplyingPromo(true)
+        setCouponError("")
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/coupons/validate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    code: promoCode.trim(),
+                    user_id: sessionId || null,
+                    order_amount: subtotal
+                })
+            })
+
+            const data = await response.json()
+
+            if (data.valid) {
+                setAppliedCoupon(data.coupon)
+                // For fixed amount, ensure discount doesn't exceed subtotal
+                const discount = data.coupon.type === 'fixed'
+                    ? Math.min(data.coupon.value, subtotal)
+                    : data.discount_amount
+                setCouponDiscount(discount)
+                toast.success(`Coupon applied! ${data.message}`)
+                setPromoCode("")
+            } else {
+                setCouponError(data.message || "Invalid coupon code")
+                toast.error(data.message || "Invalid coupon code")
+            }
+        } catch (error) {
+            console.error("Error validating coupon:", error)
+            toast.error("Failed to validate coupon")
+        } finally {
+            setIsApplyingPromo(false)
         }
     }
 
-    // Calculate delivery fee based on subtotal
-    const discount = promoApplied ? subtotal * 0.1 : 0
-    const total = subtotal + discount + taxTotal
+    const removeCoupon = () => {
+        setAppliedCoupon(null)
+        setCouponDiscount(0)
+        setCouponError("")
+        toast.success("Coupon removed")
+    }
+
+    const total = subtotal + taxTotal - couponDiscount
+
+    const getDiscountSummary = () => {
+        if (!appliedCoupon) return null
+
+        switch (appliedCoupon.type) {
+            case 'percentage':
+                return `${appliedCoupon.value}% off`
+            case 'fixed':
+                return `$${appliedCoupon.value} off`
+            default:
+                return 'Discount applied'
+        }
+    }
 
     if (loading) {
         return (
@@ -267,22 +336,56 @@ const Cart = () => {
                             {/* Promo Code */}
                             <div>
                                 <label className="text-sm font-medium mb-2 block">Promo Code</label>
-                                <div className="flex gap-2">
-                                    <Input
-                                        placeholder="Enter code"
-                                        value={promoCode}
-                                        onChange={(e) => setPromoCode(e.target.value)}
-                                        disabled={promoApplied}
-                                    />
-                                    <Button
-                                        onClick={applyPromo}
-                                        disabled={promoApplied}
-                                    >
-                                        {promoApplied ? "Applied" : "Apply"}
-                                    </Button>
-                                </div>
-                                {promoApplied && (
-                                    <p className="text-sm text-primary mt-2">10% discount applied!</p>
+
+                                {appliedCoupon ? (
+                                    <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <Tag className="h-4 w-4 text-green-600" />
+                                                <div>
+                                                    <p className="font-medium text-green-600">{appliedCoupon.code}</p>
+                                                    <p className="text-xs text-green-600/70">
+                                                        {getDiscountSummary()}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={removeCoupon}
+                                                className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-500/20"
+                                            >
+                                                <XCircle className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                            <Input
+                                                placeholder="Enter code"
+                                                value={promoCode}
+                                                onChange={(e) => {
+                                                    setPromoCode(e.target.value)
+                                                    setCouponError("")
+                                                }}
+                                                className={couponError ? "border-red-500" : ""}
+                                            />
+                                            <Button
+                                                onClick={validateCoupon}
+                                                disabled={isApplyingPromo || !promoCode.trim()}
+                                            >
+                                                {isApplyingPromo ? (
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                ) : (
+                                                    "Apply"
+                                                )}
+                                            </Button>
+                                        </div>
+                                        {couponError && (
+                                            <p className="text-sm text-red-500">{couponError}</p>
+                                        )}
+                                    </div>
                                 )}
                             </div>
 
@@ -294,14 +397,14 @@ const Cart = () => {
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                                 </div>
-                                {promoApplied && (
-                                    <div className="flex justify-between text-sm text-primary">
-                                        <span>Discount (10%)</span>
-                                        <span>-${discount.toFixed(2)}</span>
+                                {appliedCoupon && (
+                                    <div className="flex justify-between text-sm text-green-600">
+                                        <span>Discount ({appliedCoupon.type === 'percentage' ? `${appliedCoupon.value}%` : `$${appliedCoupon.value}`})</span>
+                                        <span>-${couponDiscount.toFixed(2)}</span>
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Tax  </span>
+                                    <span className="text-muted-foreground">Tax</span>
                                     <span className="font-medium">${taxTotal.toFixed(2)}</span>
                                 </div>
                             </div>
