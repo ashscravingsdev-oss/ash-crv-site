@@ -7,53 +7,70 @@ import Link from "next/link"
 import BundleList from "./bundle-list"
 import { motion } from "framer-motion"
 import { fadeUp, fadeIn, scaleUp } from "@/lib/animations"
-const bundles = [
-    {
-        id: "wellness-week",
-        name: "Wellness Week Bundle",
-        description: "Complete nutrition for 7 days",
-        image: "/wellness-bundle.jpg",
-        price: 89.99,
-        originalPrice: 109.99,
-        savings: 20,
-        items: ["5 Mediterranean Bowls", "5 Power Protein Packs", "7 Green Detox Juices", "3 Berry Blast Smoothies"],
-        features: ["Free Delivery", "Flexible Scheduling", "Cancel Anytime"],
-    },
-    {
-        id: "juice-cleanse",
-        name: "5-Day Juice Cleanse",
-        description: "Reset and rejuvenate your body",
-        image: "/juice-cleanse-bundle.jpg",
-        price: 149.99,
-        originalPrice: 179.99,
-        savings: 30,
-        items: ["15 Cold-Pressed Juices", "5 Green Detox Blends", "5 Citrus Immunity Shots", "Cleanse Guide Included"],
-        features: ["Nutritionist Approved", "Daily Schedule", "Free Consultation"],
-    },
-    {
-        id: "family-pack",
-        name: "Family Meal Bundle",
-        description: "Healthy meals for the whole family",
-        image: "/family-meal-bundle.jpg",
-        price: 129.99,
-        originalPrice: 159.99,
-        savings: 30,
-        items: ["12 Mixed Meal Preps", "8 Breakfast Bowls", "6 Fresh Juices", "4 Healthy Snacks"],
-        features: ["Kid-Friendly Options", "Portion Variety", "Weekly Delivery"],
-    },
-    {
-        id: "fitness-fuel",
-        name: "Fitness Fuel Bundle",
-        description: "High-protein meals for athletes",
-        image: "/fitness-bundle.jpg",
-        price: 109.99,
-        originalPrice: 134.99,
-        savings: 25,
-        items: ["8 Power Protein Packs", "6 Pre-Workout Smoothies", "4 Recovery Juices", "Macro Tracking Guide"],
-        features: ["45g+ Protein per Meal", "Performance Optimized", "Macro Balanced"],
-    },
-]
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    fetchActiveBundles,
+} from '@/store/bundleSlice';
+import { useEffect } from "react"
+
+// const bundles = [
+//     {
+//         id: "wellness-week",
+//         name: "Wellness Week Bundle",
+//         description: "Complete nutrition for 7 days",
+//         image: "/wellness-bundle.jpg",
+//         price: 89.99,
+//         originalPrice: 109.99,
+//         savings: 20,
+//         items: ["5 Mediterranean Bowls", "5 Power Protein Packs", "7 Green Detox Juices", "3 Berry Blast Smoothies"],
+//         features: ["Free Delivery", "Flexible Scheduling", "Cancel Anytime"],
+//     },
+//     {
+//         id: "juice-cleanse",
+//         name: "5-Day Juice Cleanse",
+//         description: "Reset and rejuvenate your body",
+//         image: "/juice-cleanse-bundle.jpg",
+//         price: 149.99,
+//         originalPrice: 179.99,
+//         savings: 30,
+//         items: ["15 Cold-Pressed Juices", "5 Green Detox Blends", "5 Citrus Immunity Shots", "Cleanse Guide Included"],
+//         features: ["Nutritionist Approved", "Daily Schedule", "Free Consultation"],
+//     },
+//     {
+//         id: "family-pack",
+//         name: "Family Meal Bundle",
+//         description: "Healthy meals for the whole family",
+//         image: "/family-meal-bundle.jpg",
+//         price: 129.99,
+//         originalPrice: 159.99,
+//         savings: 30,
+//         items: ["12 Mixed Meal Preps", "8 Breakfast Bowls", "6 Fresh Juices", "4 Healthy Snacks"],
+//         features: ["Kid-Friendly Options", "Portion Variety", "Weekly Delivery"],
+//     },
+//     {
+//         id: "fitness-fuel",
+//         name: "Fitness Fuel Bundle",
+//         description: "High-protein meals for athletes",
+//         image: "/fitness-bundle.jpg",
+//         price: 109.99,
+//         originalPrice: 134.99,
+//         savings: 25,
+//         items: ["8 Power Protein Packs", "6 Pre-Workout Smoothies", "4 Recovery Juices", "Macro Tracking Guide"],
+//         features: ["45g+ Protein per Meal", "Performance Optimized", "Macro Balanced"],
+//     },
+// ]
 const Bundles = () => {
+    const dispatch = useDispatch();
+    const {
+        bundles,
+        loading,
+        error,
+    } = useSelector(state => state.bundles);
+
+    useEffect(() => {
+        dispatch(fetchActiveBundles());
+    }, [dispatch]);
+
     return (
         <motion.div
             initial="initial"
@@ -103,7 +120,7 @@ const Bundles = () => {
                 }}
                 className="grid md:grid-cols-2 gap-8 mb-16 md:mb-24 container mx-auto px-4"
             >
-                {bundles.map((bundle, index) => (
+                {bundles && bundles?.map((bundle, index) => (
                     <motion.div
                         key={bundle.id}
                         variants={fadeUp}
