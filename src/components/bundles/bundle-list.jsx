@@ -1,11 +1,68 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Check } from "lucide-react"
+import { Check, ShoppingCart, Loader2, Plus, Minus, ShoppingBag } from "lucide-react"
 import Link from "next/link"
+import { useDispatch, useSelector } from "react-redux"
+import { addToCart, } from "@/store/cartSlice"
 
 const BundleList = ({ bundle }) => {
+    const dispatch = useDispatch()
+    const [isAdding, setIsAdding] = useState(false)
+    const [showSuccess, setShowSuccess] = useState(false)
+    const [quantity, setQuantity] = useState(1)
+
+    // Get cart from Redux
+    const { cart, itemLoading } = useSelector(state => state.cart)
+
+    // Find if bundle is in cart
+    const cartItem = cart?.items?.find(item =>
+        item.bundle_id === bundle.id && item.bundle_id !== null
+    )
+    const isInCart = !!cartItem
+
+    const handleAddToCart = async (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        if (!cart?.id) {
+            toast.error("Cart not initialized")
+            return
+        }
+
+        if (quantity < 1) return
+
+        setIsAdding(true)
+
+        try {
+            await dispatch(addToCart({
+                cart_id: cart.id,
+                bundle_id: bundle.id,
+                quantity: quantity
+            })).unwrap()
+
+            setShowSuccess(true)
+            // toast.success(`${quantity} × ${bundle.name} added to cart!`, {
+            //     icon: '📦',
+            //     duration: 2000
+            // })
+
+            setTimeout(() => {
+                setShowSuccess(false)
+                setQuantity(1)
+            }, 2000)
+
+        } catch (error) {
+            console.error("Failed to add bundle to cart:", error)
+            toast.error(error?.message || "Failed to add bundle to cart")
+        } finally {
+            setIsAdding(false)
+        }
+    }
+
     return (
         <Card key={bundle.id} className="overflow-hidden hover:shadow-lg transition-shadow h-full ">
             <div className="aspect-video overflow-hidden relative">
@@ -19,7 +76,14 @@ const BundleList = ({ bundle }) => {
                 </Badge> */}
             </div>
             <CardHeader>
-                <CardTitle className="text-2xl">{bundle.name}</CardTitle>
+                <div className='flex justify-between items-center'>
+                    <CardTitle className="text-2xl">{bundle.name}</CardTitle>
+                    {isInCart && (
+                        <Badge variant="outline" className="text-xs border-green-500 text-green-500 mt-2">
+                            In Cart ({cartItem.quantity})
+                        </Badge>
+                    )}
+                </div>
                 <p className="text-muted-foreground">{bundle.description}</p>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -59,8 +123,35 @@ const BundleList = ({ bundle }) => {
 
                 {/* Actions */}
                 <div className="flex gap-3 pt-4">
-                    <Button className="flex-1" asChild>
-                        <Link href="/cart">Add to Cart</Link>
+                    <Button
+                        onClick={handleAddToCart}
+                        disabled={isAdding || showSuccess || itemLoading}
+                        className={`
+                        w-full relative
+                         ${showSuccess ? 'bg-green-600 hover:bg-green-700' : ''}
+                         `}
+                    >
+                        {isAdding ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Adding...
+                            </>
+                        ) : showSuccess ? (
+                            <>
+                                <Check className="mr-2 h-4 w-4" />
+                                Added!
+                            </>
+                        ) : isInCart ? (
+                            <>
+                                <ShoppingCart className="mr-2 h-4 w-4" />
+                                Add More
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart className="mr-2 h-4 w-4" />
+                                Add to Cart
+                            </>
+                        )}
                     </Button>
                     <Button variant="outline" asChild>
                         <Link href="#" >Details</Link>

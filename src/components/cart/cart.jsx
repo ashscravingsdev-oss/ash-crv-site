@@ -4,64 +4,125 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Minus, Plus, Trash2, ShoppingBag } from "lucide-react"
+import { Minus, Plus, Trash2, ShoppingBag, Loader2 } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
-
-const initialCartItems = [
-    {
-        id: "1",
-        name: "Mediterranean Bowl",
-        description: "Grilled chicken, quinoa, roasted vegetables",
-        price: 12.99,
-        quantity: 2,
-        image: "/mediterranean-bowl-with-chicken-quinoa-vegetables.jpg",
-    },
-    {
-        id: "2",
-        name: "Green Detox Juice",
-        description: "Kale, cucumber, green apple, lemon",
-        price: 8.99,
-        quantity: 1,
-        image: "/green-detox-juice-cold-pressed.jpg",
-    },
-    {
-        id: "3",
-        name: "Power Protein Pack",
-        description: "Grilled salmon, sweet potato, broccoli",
-        price: 14.99,
-        quantity: 1,
-        image: "/protein-meal-prep-salmon-sweet-potato.jpg",
-    },
-]
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import {
+    fetchCart,
+    updateCartItem,
+    removeFromCart,
+    clearCart,
+    calculateCartTotals
+} from "@/store/cartSlice"
+// import { toast } from "react-hot-toast"
+import { motion, AnimatePresence } from "framer-motion"
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState(initialCartItems)
+    const dispatch = useDispatch()
     const [promoCode, setPromoCode] = useState("")
     const [promoApplied, setPromoApplied] = useState(false)
+    const [updatingId, setUpdatingId] = useState(null)
 
-    const updateQuantity = (id, newQuantity) => {
+    // Get cart state from Redux
+    const {
+        cart,
+        items,
+        loading,
+        itemLoading,
+        subtotal,
+        taxTotal,
+    } = useSelector(state => state.cart)
+
+    // Fetch cart on mount
+    useEffect(() => {
+        const getSessionId = () => {
+            let sessionId = localStorage.getItem('session_id')
+            if (!sessionId) {
+                sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                localStorage.setItem('session_id', sessionId)
+            }
+            return sessionId
+        }
+
+        const token = localStorage.getItem('token')
+        const params = token ? {} : { session_id: getSessionId() }
+        dispatch(fetchCart(params))
+    }, [dispatch])
+
+    // Calculate totals when cart changes
+    useEffect(() => {
+        if (cart?.id) {
+            dispatch(calculateCartTotals(cart.id))
+        }
+    }, [cart, dispatch])
+
+    const updateQuantity = async (itemId, newQuantity) => {
         if (newQuantity < 1) return
-        setCartItems(cartItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)))
+
+        setUpdatingId(itemId)
+
+        try {
+            await dispatch(updateCartItem({
+                id: itemId,
+                updateData: { quantity: newQuantity }
+            })).unwrap()
+
+            // Recalculate totals after update
+            if (cart?.id) {
+                dispatch(calculateCartTotals(cart.id))
+            }
+        } catch (error) {
+            toast.error(error?.message || "Failed to update quantity")
+        } finally {
+            setUpdatingId(null)
+        }
     }
 
-    const removeItem = (id) => {
-        setCartItems(cartItems.filter((item) => item.id !== id))
-    }
+    const removeItem = async (itemId) => {
+        setUpdatingId(itemId)
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-    const deliveryFee = subtotal > 50 ? 0 : 5.99
-    const discount = promoApplied ? subtotal * 0.1 : 0
-    const tax = (subtotal - discount) * 0.08
-    const total = subtotal + deliveryFee - discount + tax
+        try {
+            await dispatch(removeFromCart(itemId)).unwrap()
+            toast.success("Item removed from cart")
+
+            // Recalculate totals after removal
+            if (cart?.id) {
+                dispatch(calculateCartTotals(cart.id))
+            }
+        } catch (error) {
+            toast.error(error?.message || "Failed to remove item")
+        } finally {
+            setUpdatingId(null)
+        }
+    }
 
     const applyPromo = () => {
         if (promoCode.toLowerCase() === "welcome10") {
             setPromoApplied(true)
+            toast.success("10% discount applied!")
+        } else {
+            toast.error("Invalid promo code")
         }
     }
 
-    if (cartItems.length === 0) {
+    // Calculate delivery fee based on subtotal
+    const discount = promoApplied ? subtotal * 0.1 : 0
+    const total = subtotal + discount + taxTotal
+
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4 py-16">
+                <Card className="max-w-md mx-auto text-center p-12">
+                    <Loader2 className="h-16 w-16 text-muted-foreground mx-auto mb-4 animate-spin" />
+                    <h2 className="text-2xl font-bold mb-2">Loading your cart...</h2>
+                    <p className="text-muted-foreground">Please wait while we fetch your items</p>
+                </Card>
+            </div>
+        )
+    }
+
+    if (!items || items.length === 0) {
         return (
             <div className="container mx-auto px-4 py-16">
                 <Card className="max-w-md mx-auto text-center p-12">
@@ -73,9 +134,9 @@ const Cart = () => {
                     </Button>
                 </Card>
             </div>
-
         )
     }
+
     return (
         <div className="container mx-auto px-4 pt-8">
             <h1 className="text-4xl font-bold mb-8">Shopping Cart</h1>
@@ -83,60 +144,94 @@ const Cart = () => {
             <div className="grid lg:grid-cols-3 gap-8">
                 {/* Cart Items */}
                 <div className="lg:col-span-2 space-y-4">
-                    {cartItems.map((item) => (
-                        <Card key={item.id}>
-                            <CardContent className="p-6">
-                                <div className="flex gap-4">
-                                    <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                                        <img
-                                            src={item.image || "/placeholder.svg"}
-                                            alt={item.name}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex justify-between gap-4 mb-2">
-                                            <div>
-                                                <h3 className="font-semibold text-lg">{item.name}</h3>
-                                                <p className="text-sm text-muted-foreground">{item.description}</p>
-                                            </div>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => removeItem(item.id)}
-                                                className="flex-shrink-0"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                        <div className="flex items-center justify-between mt-4">
-                                            <div className="flex items-center border border-border rounded-lg">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                    disabled={item.quantity <= 1}
-                                                >
-                                                    <Minus className="h-4 w-4" />
-                                                </Button>
-                                                <span className="w-12 text-center font-semibold">{item.quantity}</span>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                >
-                                                    <Plus className="h-4 w-4" />
-                                                </Button>
-                                            </div>
-                                            <span className="text-xl font-bold">${(item.price * item.quantity).toFixed(2)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    <AnimatePresence>
+                        {items.map((item) => {
+                            const isUpdating = updatingId === item.id
+                            const itemTotal = (item.product?.price || item.bundle?.price || 0) * item.quantity
 
-                    {/* Upsell Suggestions */}
+                            return (
+                                <motion.div
+                                    key={item.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, x: -100 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <Card>
+                                        <CardContent className="p-6">
+                                            <div className="flex gap-4">
+                                                <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+                                                    <img
+                                                        src={item.product?.image_url || item.bundle?.image || "/placeholder.svg"}
+                                                        alt={item.product?.name || item.bundle?.name}
+                                                        className="w-full h-full object-cover"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex justify-between gap-4 mb-2">
+                                                        <div>
+                                                            <h3 className="font-semibold text-lg">
+                                                                {item.product?.name || item.bundle?.name}
+                                                            </h3>
+                                                            <p className="text-sm text-muted-foreground">
+                                                                {item.product?.description || item.bundle?.description}
+                                                            </p>
+                                                            {item.addon_ids && item.addon_ids.length > 0 && (
+                                                                <p className="text-xs text-primary mt-1">
+                                                                    + Add-ons: {item.addon_ids.length} selected
+                                                                </p>
+                                                            )}
+                                                        </div>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={() => removeItem(item.id)}
+                                                            disabled={isUpdating}
+                                                            className="flex-shrink-0"
+                                                        >
+                                                            {isUpdating ? (
+                                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                            ) : (
+                                                                <Trash2 className="h-4 w-4" />
+                                                            )}
+                                                        </Button>
+                                                    </div>
+                                                    <div className="flex items-center justify-between mt-4">
+                                                        <div className="flex items-center border border-border rounded-lg">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                                disabled={item.quantity <= 1 || isUpdating}
+                                                            >
+                                                                <Minus className="h-4 w-4" />
+                                                            </Button>
+                                                            <span className="w-12 text-center font-semibold">
+                                                                {item.quantity}
+                                                            </span>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                                disabled={isUpdating}
+                                                            >
+                                                                <Plus className="h-4 w-4" />
+                                                            </Button>
+                                                        </div>
+                                                        <span className="text-xl font-bold">
+                                                            ${itemTotal.toFixed(2)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                </motion.div>
+                            )
+                        })}
+                    </AnimatePresence>
+
+                    {/* Upsell Suggestions - Static for now */}
                     <Card className="bg-muted border-none">
                         <CardContent className="p-6">
                             <h3 className="font-semibold mb-4">You might also like</h3>
@@ -185,11 +280,16 @@ const Cart = () => {
                                         onChange={(e) => setPromoCode(e.target.value)}
                                         disabled={promoApplied}
                                     />
-                                    <Button onClick={applyPromo} disabled={promoApplied}>
+                                    <Button
+                                        onClick={applyPromo}
+                                        disabled={promoApplied}
+                                    >
                                         {promoApplied ? "Applied" : "Apply"}
                                     </Button>
                                 </div>
-                                {promoApplied && <p className="text-sm text-primary mt-2">10% discount applied!</p>}
+                                {promoApplied && (
+                                    <p className="text-sm text-primary mt-2">10% discount applied!</p>
+                                )}
                             </div>
 
                             <Separator />
@@ -200,10 +300,6 @@ const Cart = () => {
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                                 </div>
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Delivery Fee</span>
-                                    <span className="font-medium">{deliveryFee === 0 ? "FREE" : `$${deliveryFee.toFixed(2)}`}</span>
-                                </div>
                                 {promoApplied && (
                                     <div className="flex justify-between text-sm text-primary">
                                         <span>Discount (10%)</span>
@@ -211,8 +307,8 @@ const Cart = () => {
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-muted-foreground">Tax</span>
-                                    <span className="font-medium">${tax.toFixed(2)}</span>
+                                    <span className="text-muted-foreground">Tax  </span>
+                                    <span className="font-medium">${taxTotal.toFixed(2)}</span>
                                 </div>
                             </div>
 
@@ -223,17 +319,21 @@ const Cart = () => {
                                 <span>${total.toFixed(2)}</span>
                             </div>
 
-                            {deliveryFee > 0 && (
-                                <p className="text-xs text-muted-foreground">
-                                    Add ${(50 - subtotal).toFixed(2)} more for free delivery!
-                                </p>
-                            )}
-
-                            <Button size="lg" className="w-full" asChild>
+                            <Button
+                                size="lg"
+                                className="w-full"
+                                asChild
+                                disabled={itemLoading}
+                            >
                                 <Link href="/checkout">Proceed to Checkout</Link>
                             </Button>
 
-                            <Button size="lg" variant="outline" className="w-full bg-transparent" asChild>
+                            <Button
+                                size="lg"
+                                variant="outline"
+                                className="w-full bg-transparent"
+                                asChild
+                            >
                                 <Link href="/menu">Continue Shopping</Link>
                             </Button>
                         </CardContent>
