@@ -134,6 +134,25 @@ export const logout = createAsyncThunk(
     }
 );
 
+export const checkAuthState = createAsyncThunk(
+    'auth/checkAuthState',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = Cookies.get('accessToken');
+            const userStr = Cookies.get('user');
+
+            if (token && userStr) {
+                const user = JSON.parse(userStr);
+                return { user, accessToken: token };
+            }
+
+            return null;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {

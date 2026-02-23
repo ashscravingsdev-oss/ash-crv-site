@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "@/store/cartSlice";
-import { logout } from "@/store/authSlice";
+import { clearAuthErrors, logout } from "@/store/authSlice";
 
 export function Navigation() {
   const [user, setUser] = useState(null);
@@ -74,7 +74,7 @@ export function Navigation() {
       dispatch(clearAuthErrors());
 
       // Redirect to home page
-      router.push('/');
+      router.push('/login');
 
       // Fetch empty cart for new guest
       dispatch(fetchCart());
