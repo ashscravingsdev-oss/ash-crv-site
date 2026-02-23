@@ -68,6 +68,9 @@ const quickStats = [
     }
 ]
 const Account = () => {
+    const token = Cookies.get('accessToken')
+    const user = JSON.parse(Cookies.get('user') || 'null');
+    console.log(token, user);
 
     return (
         <Layout title="  Dashboard"

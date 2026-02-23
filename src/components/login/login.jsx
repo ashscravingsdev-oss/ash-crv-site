@@ -11,10 +11,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { clearAuthErrors, signin } from "@/store/authSlice";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert"; // Add this if you have shadcn alert component
 
 // Define validation schema with Zod
 const loginSchema = z.object({
@@ -30,13 +35,21 @@ const loginSchema = z.object({
 });
 
 export default function LoginPage() {
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const [apiError, setApiError] = useState(null);
+
+    // Get auth state from Redux
+    const { signinError, isAuthenticated, signinLoading } = useSelector((state) => state.auth);
+
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
         setError,
         clearErrors,
-        control
+        control,
+        watch
     } = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -46,32 +59,87 @@ export default function LoginPage() {
         },
     });
 
+    // Watch form fields to clear API error when user starts typing
+    const emailValue = watch('email');
+    const passwordValue = watch('password');
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push("/account");
+        }
+    }, [isAuthenticated, router]);
+
+    // Handle API errors from Redux
+    useEffect(() => {
+        if (signinError) {
+            // Parse error message
+            let errorMessage = "Login failed. Please check your credentials.";
+
+            if (typeof signinError === 'string') {
+                errorMessage = signinError;
+            } else if (signinError?.message) {
+                errorMessage = signinError.message;
+            } else if (signinError?.error) {
+                errorMessage = signinError.error;
+            }
+
+            setApiError(errorMessage);
+
+            // Optionally set field-specific errors based on API response
+            if (signinError?.field === 'email') {
+                setError('email', {
+                    type: 'manual',
+                    message: errorMessage
+                });
+            } else if (signinError?.field === 'password') {
+                setError('password', {
+                    type: 'manual',
+                    message: errorMessage
+                });
+            }
+        }
+    }, [signinError, setError]);
+
+    // Clear API error when user starts typing in any field
+    useEffect(() => {
+        if (emailValue || passwordValue) {
+            setApiError(null);
+            dispatch(clearAuthErrors());
+        }
+    }, [emailValue, passwordValue, dispatch]);
+
+    // Clean up errors on unmount
+    useEffect(() => {
+        return () => {
+            dispatch(clearAuthErrors());
+        };
+    }, [dispatch]);
+
     const onSubmit = async (data) => {
         try {
-            Cookies.set('isLoggedIn', 'true', {
-                expires: 7,
-                secure: true,
-                sameSite: 'strict'
-            });
-            Cookies.set('user', JSON.stringify({
+            // Clear any previous errors
+            setApiError(null);
+            dispatch(clearAuthErrors());
+
+            // Dispatch signin action
+            const result = await dispatch(signin({
                 email: data.email,
-            }), { expires: 7 });
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+                password: data.password
+            }));
 
-            // Redirect on success
-            window.location.href = "/account";
-
+            // Check if signin was successful
+            if (signin.fulfilled.match(result)) {
+                // Redirect on success
+                router.push("/account");
+            }
         } catch (error) {
-            // Handle API errors
-            setError("root", {
-                type: "manual",
-                message: "Login failed. Please check your credentials.",
-            });
+            // Handle unexpected errors
+            setApiError("An unexpected error occurred. Please try again.");
         }
     };
 
-    // Handle input change to clear errors
+    // Handle input change to clear field errors
     const handleInputChange = (fieldName) => {
         if (errors[fieldName]) {
             clearErrors(fieldName);
@@ -87,6 +155,16 @@ export default function LoginPage() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {/* API Error Alert - Shows at the top of form */}
+                        {apiError && (
+                            <Alert variant="destructive" >
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertDescription className="mt-1">
+                                    {apiError}
+                                </AlertDescription>
+                            </Alert>
+                        )}
+
                         {/* Email field with React Hook Form validation */}
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
@@ -95,10 +173,15 @@ export default function LoginPage() {
                                 type="email"
                                 placeholder="you@example.com"
                                 {...register("email", {
-                                    onChange: () => handleInputChange("email"),
+                                    onChange: () => {
+                                        handleInputChange("email");
+                                        setApiError(null); // Clear API error on typing
+                                        dispatch(clearAuthErrors());
+                                    },
                                 })}
                                 className={errors.email ? "border-red-500 focus-visible:ring-red-500" : ""}
                                 aria-invalid={errors.email ? "true" : "false"}
+                                disabled={signinLoading}
                             />
                             {errors.email && (
                                 <p className="text-red-500 text-sm mt-1" role="alert">
@@ -115,10 +198,15 @@ export default function LoginPage() {
                                 type="password"
                                 placeholder="Enter your password"
                                 {...register("password", {
-                                    onChange: () => handleInputChange("password"),
+                                    onChange: () => {
+                                        handleInputChange("password");
+                                        setApiError(null); // Clear API error on typing
+                                        dispatch(clearAuthErrors());
+                                    },
                                 })}
                                 className={errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}
                                 aria-invalid={errors.password ? "true" : "false"}
+                                disabled={signinLoading}
                             />
                             {errors.password && (
                                 <p className="text-red-500 text-sm mt-1" role="alert">
@@ -138,6 +226,7 @@ export default function LoginPage() {
                                             id="remember"
                                             checked={field.value}
                                             onCheckedChange={field.onChange}
+                                            disabled={signinLoading}
                                         />
                                     )}
                                 />
@@ -158,9 +247,9 @@ export default function LoginPage() {
                             type="submit"
                             size="lg"
                             className="w-full"
-                            disabled={isSubmitting}
+                            disabled={signinLoading}
                         >
-                            {isSubmitting ? "Signing in..." : "Sign In"}
+                            {signinLoading ? "Signing in..." : "Sign In"}
                         </Button>
                     </form>
 
