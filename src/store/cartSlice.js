@@ -1,27 +1,55 @@
 // store/cartSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import Cookies from "js-cookie";
 
 // Helper function to get token
 const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('accessToken');
     return {
         'Content-Type': 'application/json',
         ...(token && { 'Authorization': `Bearer ${token}` })
     };
 };
 
+// Helper function to get or create session_id
+const getSessionId = () => {
+    let sessionId = Cookies.get('session_id');
+
+    if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        Cookies.set('session_id', sessionId, {
+            expires: 7,
+            secure: true,
+            sameSite: 'Lax',
+        });
+    }
+
+    return sessionId;
+};
+
+// Helper to build URL with session_id if needed
+const buildUrl = (endpoint, includeSessionId = true) => {
+    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+    const hasToken = !!Cookies.get('accessToken');
+
+    // If user is authenticated, don't include session_id
+    if (hasToken) {
+        return `${baseUrl}${endpoint}`;
+    }
+
+    // For guest users, include session_id
+    const sessionId = getSessionId();
+    const separator = endpoint.includes('?') ? '&' : '?';
+    return `${baseUrl}${endpoint}${separator}session_id=${sessionId}`;
+};
+
 // Get or create cart (supports both user and guest carts)
+// store/cartSlice.js
 export const fetchCart = createAsyncThunk(
     'cart/fetchCart',
-    async (params = {}, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            // Build query string for session_id (for guest carts)
-            const queryParams = new URLSearchParams();
-            if (params.session_id) queryParams.append('session_id', params.session_id);
-
-            const queryString = queryParams.toString();
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart${queryString ? `?${queryString}` : ''}`;
-
+            const url = buildUrl('/cart');
             const response = await fetch(url, {
                 headers: getAuthHeaders()
             });
@@ -31,20 +59,26 @@ export const fetchCart = createAsyncThunk(
                 return rejectWithValue(errorData);
             }
 
-            return await response.json();
+            const data = await response.json();
+
+            // Store cart in cookie for persistence across sessions
+            if (data) {
+                Cookies.set('cart', JSON.stringify(data), { expires: 7 });
+            }
+
+            return data;
         } catch (error) {
             return rejectWithValue(error.message);
         }
     }
 );
 
-// Add item to cart (product, bundle, or addons)
+// Add item to cart
 export const addToCart = createAsyncThunk(
     'cart/addToCart',
     async (itemData, { rejectWithValue }) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/items`;
-
+            const url = buildUrl('/cart/items');
             const response = await fetch(url, {
                 method: 'POST',
                 headers: getAuthHeaders(),
@@ -68,8 +102,7 @@ export const updateCartItem = createAsyncThunk(
     'cart/updateCartItem',
     async ({ id, updateData }, { rejectWithValue }) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/items/${id}`;
-
+            const url = buildUrl(`/cart/items/${id}`);
             const response = await fetch(url, {
                 method: 'PUT',
                 headers: getAuthHeaders(),
@@ -93,8 +126,7 @@ export const removeFromCart = createAsyncThunk(
     'cart/removeFromCart',
     async (itemId, { rejectWithValue }) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/items/${itemId}`;
-
+            const url = buildUrl(`/cart/items/${itemId}`);
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: getAuthHeaders()
@@ -115,10 +147,16 @@ export const removeFromCart = createAsyncThunk(
 // Clear entire cart
 export const clearCart = createAsyncThunk(
     'cart/clearCart',
-    async (cartId, { rejectWithValue }) => {
+    async (_, { rejectWithValue, getState }) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/${cartId}`;
+            const state = getState();
+            const cartId = state.cart.cartId || state.cart.items?.[0]?.cart_id;
 
+            if (!cartId) {
+                return rejectWithValue('No cart to clear');
+            }
+
+            const url = buildUrl(`/cart/${cartId}`);
             const response = await fetch(url, {
                 method: 'DELETE',
                 headers: getAuthHeaders()
@@ -139,10 +177,16 @@ export const clearCart = createAsyncThunk(
 // Calculate cart totals
 export const calculateCartTotals = createAsyncThunk(
     'cart/calculateCartTotals',
-    async (cartId, { rejectWithValue }) => {
+    async (_, { rejectWithValue, getState }) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/${cartId}/totals`;
+            const state = getState();
+            const cartId = state.cart.cartId || state.cart.items?.[0]?.cart_id;
 
+            if (!cartId) {
+                return rejectWithValue('No cart to calculate totals');
+            }
+
+            const url = buildUrl(`/cart/${cartId}/totals`);
             const response = await fetch(url, {
                 headers: getAuthHeaders()
             });
@@ -246,6 +290,15 @@ const cartSlice = createSlice({
             if (item) {
                 item.addon_ids = addon_ids;
             }
+        },
+        setCart: (state, action) => {
+            // Directly set cart data (used after merge)
+            state.items = action.payload.items || [];
+            state.cartId = action.payload.id || action.payload.cart_id;
+            state.subtotal = action.payload.subtotal || 0;
+            state.tax = action.payload.tax || 0;
+            state.deliveryFee = action.payload.deliveryFee || 0;
+            state.total = action.payload.total || 0;
         },
     },
     extraReducers: (builder) => {
@@ -412,7 +465,8 @@ export const {
     clearCartState,
     updateItemQuantityOptimistic,
     removeItemOptimistic,
-    updateItemAddonsOptimistic
+    updateItemAddonsOptimistic,
+    setCart
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

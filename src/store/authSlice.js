@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import { fetchCart, setCart } from './cartSlice';
 
 // Signup user
 export const signup = createAsyncThunk(
@@ -46,10 +47,9 @@ export const signup = createAsyncThunk(
     }
 );
 
-// Signin user
 export const signin = createAsyncThunk(
     'auth/signin',
-    async (credentials, { rejectWithValue }) => {
+    async (credentials, { rejectWithValue, dispatch }) => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signin`, {
                 method: 'POST',
@@ -81,6 +81,35 @@ export const signin = createAsyncThunk(
                 };
 
                 Cookies.set('user', JSON.stringify(user), { expires: 7 });
+
+                // Get session_id before potentially removing it
+                const sessionId = Cookies.get('session_id');
+
+                // Call backend to merge carts
+                if (sessionId) {
+                    try {
+                        const mergeResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/merge`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${data.accessToken}`
+                            },
+                            body: JSON.stringify({ session_id: sessionId })
+                        });
+
+                        if (mergeResponse.ok) {
+                            const mergedCart = await mergeResponse.json();
+                            // Update cart in Redux with merged cart
+                            dispatch(setCart(mergedCart));
+
+                        }
+                    } catch (mergeError) {
+                        console.error('Error merging cart:', mergeError);
+                    }
+                }
+
+                // Fetch fresh cart after merge
+                await dispatch(fetchCart());
             }
 
             return data;
@@ -89,7 +118,6 @@ export const signin = createAsyncThunk(
         }
     }
 );
-
 // Logout user
 export const logout = createAsyncThunk(
     'auth/logout',

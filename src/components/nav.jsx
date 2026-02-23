@@ -15,17 +15,29 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "@/store/cartSlice";
+import { logout } from "@/store/authSlice";
 
 export function Navigation() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userData, setUserData] = useState(null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const pathname = usePathname();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { items, loading } = useSelector(state => state.cart);
+  const { isAuthenticated } = useSelector(state => state.auth);
+
+  // Read cookies and update state whenever auth state changes
+  useEffect(() => {
+    const userCookie = Cookies.get('user');
+    const tokenCookie = Cookies.get('accessToken');
+
+    setUser(userCookie ? JSON.parse(userCookie) : null);
+    setToken(tokenCookie || null);
+  }, [isAuthenticated]); // Re-run when Redux auth state changes
 
   const menuItems = [
     { label: "Home", href: "/" },
@@ -37,71 +49,66 @@ export function Navigation() {
     { label: "Catering", href: "/catering" },
   ];
 
-  const getSessionId = () => {
-    let sessionId = Cookies.get('session_id');
+  // In Navigation component - simplified
+  useEffect(() => {
+    dispatch(fetchCart()); // No need to pass params
+  }, [dispatch, isAuthenticated]); // Just depend on auth state
 
-    if (!sessionId) {
-      sessionId =
-        'session_' +
-        Date.now() +
-        '_' +
-        Math.random().toString(36).substr(2, 9);
+  // In Navigation component
+  const handleLogout = async () => {
+    try {
+      // Clear auth cookies
+      Cookies.remove('accessToken');
+      Cookies.remove('user');
 
-      Cookies.set('session_id', sessionId, {
-        expires: 7, // days
-        secure: true, // only over HTTPS
-        sameSite: 'Lax', // helps protect against CSRF
-      });
+      // Generate new session_id for guest
+      const newSessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      Cookies.set('session_id', newSessionId, { expires: 7 });
+
+      // Clear local state
+      setUser(null);
+      setToken(null);
+
+      // Dispatch Redux logout action
+      await dispatch(logout());
+      dispatch(clearAuthErrors());
+
+      // Redirect to home page
+      router.push('/');
+
+      // Fetch empty cart for new guest
+      dispatch(fetchCart());
+
+    } catch (error) {
+      console.error('Logout error:', error);
     }
-
-    return sessionId;
   };
 
+  // In Navigation component
   useEffect(() => {
-    // Check cookie on component mount
-    const loggedIn = Cookies.get("isLoggedIn") === "true";
-    setIsLoggedIn(loggedIn);
+    // Always fetch cart when auth state changes
+    const loadCart = async () => {
+      await dispatch(fetchCart());
+    };
 
-    // Get user data if available
-    const userCookie = Cookies.get("user");
-    if (userCookie) {
-      try {
-        setUserData(JSON.parse(userCookie));
-      } catch (e) {
-        console.error("Error parsing user data:", e);
-      }
-    }
+    loadCart();
+  }, [dispatch, isAuthenticated]); // Depend on isAuthenticated
 
-    // Initialize cart when component mounts
-    const params = loggedIn ? {} : { session_id: getSessionId() };
-    dispatch(fetchCart(params));
-  }, [dispatch]);
-
-  // Re-fetch cart when login status changes
+  // Also watch for changes in cart items to update UI
   useEffect(() => {
-    const params = isLoggedIn ? {} : { session_id: getSessionId() };
-    dispatch(fetchCart(params));
-  }, [isLoggedIn, dispatch]);
-
-  const handleLogout = () => {
-    Cookies.remove("isLoggedIn");
-    Cookies.remove("user");
-    setIsLoggedIn(false);
-    setUserData(null);
-
-    // After logout, create new guest cart
-    const params = { session_id: getSessionId() };
-    dispatch(fetchCart(params));
-
-    // Redirect to home
-    window.location.href = "/";
-  };
+    console.log('Cart updated:', items);
+  }, [items]);
 
   const getUserInitials = () => {
-    if (userData?.name) {
-      return userData.name.split(" ").map(n => n[0]).join("").toUpperCase();
+    if (!user) return "U";
+
+    if (user?.username) {
+      return user.username.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
     }
-    return userData?.email?.[0]?.toUpperCase() || "U";
+    if (user?.name) {
+      return user.name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
+    }
+    return user?.email?.[0]?.toUpperCase() || "U";
   };
 
   // Calculate total cart items
@@ -163,7 +170,7 @@ export function Navigation() {
             </Button>
 
             {/* Login/User Section */}
-            {!isLoggedIn ? (
+            {!user ? (
               <>
                 <Link href="/login" className="hidden md:block">
                   <Button>Login</Button>
@@ -178,8 +185,8 @@ export function Navigation() {
                   >
                     <Avatar className="h-9 w-9">
                       <AvatarImage
-                        src={userData?.profilePic || ""}
-                        alt={userData?.name || "User"}
+                        src={user?.profilePic || ""}
+                        alt={user?.username || user?.name || "User"}
                       />
                       <AvatarFallback className="bg-primary text-white">
                         {getUserInitials()}
@@ -194,10 +201,10 @@ export function Navigation() {
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">
-                        {userData?.name || "Welcome"}
+                        {user?.username || user?.name || "Welcome"}
                       </p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {userData?.email || "user@example.com"}
+                        {user?.email || "user@example.com"}
                       </p>
                     </div>
                   </DropdownMenuLabel>
@@ -265,17 +272,17 @@ export function Navigation() {
               <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                 <div className="flex flex-col gap-4 mt-8">
                   {/* User Info in Mobile Menu */}
-                  {isLoggedIn && userData && (
+                  {user && (
                     <div className="flex items-center gap-3 pb-4 border-b border-border mb-2">
                       <Avatar className="h-10 w-10">
-                        <AvatarImage src={userData.profilePic} alt={userData.name} />
+                        <AvatarImage src={user.profilePic} alt={user.username || user.name} />
                         <AvatarFallback className="bg-primary text-white">
                           {getUserInitials()}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-foreground">{userData.name}</p>
-                        <p className="text-sm text-muted-foreground">{userData.email}</p>
+                        <p className="font-medium text-foreground">{user.username || user.name}</p>
+                        <p className="text-sm text-muted-foreground">{user.email}</p>
                       </div>
                     </div>
                   )}
@@ -295,7 +302,7 @@ export function Navigation() {
                   ))}
 
                   <div className="border-t border-border pt-4 mt-4">
-                    {!isLoggedIn ? (
+                    {!user ? (
                       <>
                         <Link href="/login">
                           <Button className="w-full mb-3">Login</Button>
