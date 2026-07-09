@@ -153,6 +153,165 @@ export const checkAuthState = createAsyncThunk(
     }
 );
 
+export const sendOtp = createAsyncThunk(
+    'auth/sendOtp',
+    async (email, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/send-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data);
+            }
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const verifyOtp = createAsyncThunk(
+    'auth/verifyOtp',
+    async ({ email, otp }, { rejectWithValue }) => {
+        try {
+            const token = Cookies.get('accessToken');
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify-otp`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` }),
+                },
+                body: JSON.stringify({ email, otp }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data);
+            }
+
+            // Update user verification status in cookies
+            const userCookie = Cookies.get('user');
+            if (userCookie) {
+                const user = JSON.parse(userCookie);
+                user.is_verified = true;
+                Cookies.set('user', JSON.stringify(user), { expires: 7 });
+            }
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+export const resetPasswordWithOtp = createAsyncThunk(
+    'auth/resetPasswordWithOtp',
+    async ({ email, otp, newPassword }, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/reset-password`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, otp, newPassword }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data);
+            }
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+// Update user profile
+export const updateUserProfile = createAsyncThunk(
+    'auth/updateUserProfile',
+    async (userData, { rejectWithValue }) => {
+        try {
+            const token = Cookies.get('accessToken');
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` }),
+                },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data);
+            }
+
+            // Get current user from cookies and merge with updated data
+            const userCookie = Cookies.get('user');
+            const currentUser = userCookie ? JSON.parse(userCookie) : {};
+
+            const updatedUser = {
+                ...currentUser,
+                id: data.id || currentUser.id,
+                email: data.email || currentUser.email,
+                username: data.username || currentUser.username,
+                roles: data.roles || currentUser.roles,
+                is_verified: data.is_verified !== undefined ? data.is_verified : currentUser.is_verified,
+            };
+
+            Cookies.set('user', JSON.stringify(updatedUser), { expires: 7 });
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
+// Update user password
+export const updateUserPassword = createAsyncThunk(
+    'auth/updateUserPassword',
+    async ({ oldPassword, newPassword }, { rejectWithValue }) => {
+        try {
+            const token = Cookies.get('accessToken');
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/password`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { 'Authorization': `Bearer ${token}` }),
+                },
+                body: JSON.stringify({ oldPassword, newPassword }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                return rejectWithValue(data);
+            }
+
+            return data;
+        } catch (error) {
+            return rejectWithValue(error.message);
+        }
+    }
+);
+
 const authSlice = createSlice({
     name: 'auth',
     initialState: {

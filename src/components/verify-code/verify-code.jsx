@@ -1,146 +1,169 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { ArrowLeft, Mail, Clock } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { sendOtp, verifyOtp } from "@/store/authSlice";
+
+// Zod validation schema
+const verifyCodeSchema = z.object({
+    code: z
+        .string()
+        .min(1, "Verification code is required")
+        .min(6, "Code must be at least 6 characters")
+        .max(6, "Code must not exceed 6 characters"),
+});
 
 const VerifyCode = () => {
-    const [code, setCode] = useState(["", "", "", "", "", ""])
-    const [error, setError] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState("johndoe@example.com") // Mock email
-    const [timer, setTimer] = useState(60) // 60 seconds
-    const [canResend, setCanResend] = useState(false)
-    const inputRefs = useRef([])
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const dispatch = useDispatch();
 
-    // Set up timer for resend button
+    // Local states
+    const [isLoading, setIsLoading] = useState(false);
+    const [isResending, setIsResending] = useState(false);
+    const [apiError, setApiError] = useState(null);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [timer, setTimer] = useState(60);
+    const [canResend, setCanResend] = useState(false);
+
+    // Get email from URL
+    const email = searchParams.get("email");
+
+    // React Hook Form
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        setError,
+        clearErrors,
+        watch,
+    } = useForm({
+        resolver: zodResolver(verifyCodeSchema),
+        defaultValues: {
+            code: "",
+        },
+    });
+
+    // Timer for resend button
     useEffect(() => {
         if (timer > 0) {
             const interval = setInterval(() => {
-                setTimer(prev => prev - 1)
-            }, 1000)
-            return () => clearInterval(interval)
+                setTimer((prev) => prev - 1);
+            }, 1000);
+            return () => clearInterval(interval);
         } else {
-            setCanResend(true)
+            setCanResend(true);
         }
-    }, [timer])
+    }, [timer]);
 
-    // Focus first input on mount
+    // Redirect if no email
     useEffect(() => {
-        if (inputRefs.current[0]) {
-            inputRefs.current[0].focus()
+        if (!email) {
+            router.push("/forgot-password");
         }
-    }, [])
+    }, [email, router]);
 
-    const handleChange = (index, value) => {
-        // Only allow numbers
-        if (!/^\d*$/.test(value)) return
-        if (value.length > 1) return
-
-        const newCode = [...code]
-        newCode[index] = value
-        setCode(newCode)
-        setError("") // Clear error when user types
-
-        // Auto-focus next input
-        if (value && index < 5) {
-            const nextInput = inputRefs.current[index + 1]
-            nextInput?.focus()
-        }
-    }
-
-    const handleKeyDown = (index, e) => {
-        if (e.key === "Backspace" && !code[index] && index > 0) {
-            const prevInput = inputRefs.current[index - 1]
-            prevInput?.focus()
-        }
-    }
-
-    const handlePaste = (e) => {
-        e.preventDefault()
-        const pasteData = e.clipboardData.getData('text').trim()
-
-        // Only allow 6 digits
-        if (/^\d{6}$/.test(pasteData)) {
-            const digits = pasteData.split('')
-            const newCode = [...code]
-            digits.forEach((digit, index) => {
-                if (index < 6) {
-                    newCode[index] = digit
-                }
-            })
-            setCode(newCode)
-            setError("")
-
-            // Focus last input after paste
-            if (inputRefs.current[5]) {
-                inputRefs.current[5].focus()
-            }
-        }
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setError("")
-
-        const verificationCode = code.join("")
-
-        // Validation
-        if (verificationCode.length !== 6) {
-            setError("Please enter the complete 6-digit code")
-            return
-        }
-
-        if (!/^\d{6}$/.test(verificationCode)) {
-            setError("Code must contain only numbers")
-            return
-        }
-
-        setIsLoading(true)
+    const onSubmit = async (data) => {
+        setIsLoading(true);
+        setApiError(null);
 
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500))
+            await dispatch(verifyOtp({
+                email: email,
+                otp: data.code,
+            })).unwrap();
 
-            // Mock verification success
-            console.log("Verification successful:", verificationCode)
-
-            // Redirect to account or next step
-            window.location.href = "/login"
-
+            setIsSuccess(true);
         } catch (error) {
-            setError("Verification failed. Please check the code and try again.")
+            let errorMessage = "Verification failed. Please check the code and try again.";
+
+            if (typeof error === "string") errorMessage = error;
+            else if (error?.message) errorMessage = error.message;
+            else if (error?.error) errorMessage = error.error;
+
+            setApiError(errorMessage);
+
+            if (error?.field === "code" || error?.field === "otp") {
+                setError("code", {
+                    type: "manual",
+                    message: errorMessage,
+                });
+            }
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     const handleResend = async () => {
-        if (!canResend) return
+        if (!canResend) return;
 
-        setError("")
-        setCanResend(false)
-        setTimer(60) // Reset timer
+        setIsResending(true);
+        setApiError(null);
+        setCanResend(false);
 
         try {
-            // Simulate resend API call
-            await new Promise((resolve) => setTimeout(resolve, 800))
-
-            // Clear code and focus first input
-            setCode(["", "", "", "", "", ""])
-            if (inputRefs.current[0]) {
-                inputRefs.current[0].focus()
-            }
-
+            await dispatch(sendOtp(email)).unwrap();
+            setTimer(60);
         } catch (error) {
-            setError("Failed to resend code. Please try again.")
-            setCanResend(true)
+            let errorMessage = "Failed to resend code. Please try again.";
+
+            if (typeof error === "string") errorMessage = error;
+            else if (error?.message) errorMessage = error.message;
+
+            setApiError(errorMessage);
+            setCanResend(true);
+        } finally {
+            setIsResending(false);
         }
+    };
+
+    const handleInputChange = () => {
+        if (errors.code) clearErrors("code");
+        if (apiError) setApiError(null);
+    };
+
+    // Guard: if no email, don't render
+    if (!email) return null;
+
+    // Success state
+    if (isSuccess) {
+        return (
+            <div className="container mx-auto px-4 pt-16">
+                <Card className="max-w-md mx-auto">
+                    <CardHeader className="text-center">
+                        <div className="flex justify-center mb-4">
+                            <CheckCircle2 className="h-16 w-16 text-green-500" />
+                        </div>
+                        <CardTitle className="text-3xl">Email Verified</CardTitle>
+                        <CardDescription>
+                            Your email has been verified successfully.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="text-center space-y-4">
+                        <p className="text-muted-foreground">
+                            Your account is now fully activated.
+                        </p>
+                        <Button
+                            onClick={() => router.push("/account")}
+                            className="w-full"
+                            size="lg"
+                        >
+                            Go to Account
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     }
 
     return (
@@ -148,80 +171,101 @@ const VerifyCode = () => {
             <Card className="max-w-md mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl">Verify Your Account</CardTitle>
-                    <CardDescription>Enter the 6-digit code sent to your email</CardDescription>
+                    <CardDescription>
+                        Enter the verification code sent to
+                        {email && (
+                            <span className="block text-sm font-medium text-primary mt-1">
+                                {email}
+                            </span>
+                        )}
+                    </CardDescription>
                 </CardHeader>
 
                 <CardContent>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                        {/* API Error Alert */}
+                        {apiError && (
+                            <Alert variant="destructive">
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertDescription className="mt-1">
+                                    {apiError}
+                                </AlertDescription>
+                            </Alert>
+                        )}
 
-
-                    <form onSubmit={handleSubmit} className="space-y-3">
-                        <div className="space-y-3">
-                            <Label className="text-center block">Verification Code</Label>
-                            <div className="flex gap-2 justify-center" onPaste={handlePaste}>
-                                {code.map((digit, index) => (
-                                    <Input
-                                        key={index}
-                                        ref={el => inputRefs.current[index] = el}
-                                        id={`code-${index}`}
-                                        type="text"
-                                        inputMode="numeric"
-                                        pattern="[0-9]*"
-                                        maxLength={1}
-                                        value={digit}
-                                        onChange={(e) => handleChange(index, e.target.value)}
-                                        onKeyDown={(e) => handleKeyDown(index, e)}
-                                        className="w-12 h-14 text-center text-xl font-bold"
-                                        disabled={isLoading}
-                                        aria-label={`Digit ${index + 1} of verification code`}
-                                    />
-                                ))}
-                            </div>
-                            {error && (
-                                <p className="text-red-500 text-sm mt-1 text-center" role="alert">
-                                    {error}
+                        {/* Verification Code Input */}
+                        <div className="space-y-2">
+                            <Label htmlFor="code">Verification Code</Label>
+                            <Input
+                                id="code"
+                                type="text"
+                                placeholder="Enter verification code"
+                                maxLength={6}
+                                {...register("code", {
+                                    onChange: () => handleInputChange(),
+                                })}
+                                className={errors.code ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                aria-invalid={errors.code ? "true" : "false"}
+                                disabled={isLoading || isResending}
+                                autoComplete="one-time-code"
+                            />
+                            {errors.code && (
+                                <p className="text-red-500 text-sm mt-1" role="alert">
+                                    {errors.code.message}
                                 </p>
                             )}
                         </div>
 
-                        {/* Timer */}
-                        <div className="text-center">
-                            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mb-">
+                        {/* Timer & Resend */}
+                        <div className="text-center space-y-2">
+                            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                                 <Clock className="h-4 w-4" />
-                                <span>Code expires in: {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, '0')}</span>
+                                {canResend ? (
+                                    <span>Didn't receive the code?</span>
+                                ) : (
+                                    <span>
+                                        Resend code in {Math.floor(timer / 60)}:
+                                        {String(timer % 60).padStart(2, "0")}
+                                    </span>
+                                )}
                             </div>
 
                             <Button
                                 type="button"
                                 variant="link"
                                 onClick={handleResend}
-                                disabled={!canResend || isLoading}
+                                disabled={!canResend || isResending || isLoading}
                                 className="text-primary hover:text-primary/80"
                             >
-                                {canResend ? "Resend Code" : `Resend available in ${timer}s`}
+                                {isResending ? "Sending..." : "Resend Code"}
                             </Button>
                         </div>
 
                         <Button
                             type="submit"
                             className="w-full"
-                            disabled={isLoading}
+                            disabled={isLoading || isResending}
                         >
-                            {isLoading ? "Verifying..." : "Verify Code"}
+                            {isLoading ? "Verifying..." : "Verify Email"}
                         </Button>
                     </form>
                 </CardContent>
 
-                <CardFooter className="flex flex-col">
+                <CardFooter className="flex justify-center">
                     <p className="text-center text-sm text-muted-foreground">
                         Need to change email?{" "}
-                        <Link href="/register" className="text-primary font-medium hover:underline">
+                        <Button
+                            variant="link"
+                            className="p-0 h-auto font-medium"
+                            onClick={() => router.push("/register")}
+                        >
                             Go back to registration
-                        </Link>
+                        </Button>
                     </p>
                 </CardFooter>
             </Card>
         </div>
-    )
-}
+    );
+};
 
-export default VerifyCode
+export default VerifyCode;
