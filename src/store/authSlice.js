@@ -76,6 +76,7 @@ export const signin = createAsyncThunk(
                     id: data.id,
                     email: data.email,
                     username: data.username,
+                    phone: data.phone,
                     roles: data.roles,
                     is_verified: data.is_verified
                 };
@@ -270,6 +271,7 @@ export const updateUserProfile = createAsyncThunk(
                 id: data.id || currentUser.id,
                 email: data.email || currentUser.email,
                 username: data.username || currentUser.username,
+                phone: data.phone || currentUser.phone,
                 roles: data.roles || currentUser.roles,
                 is_verified: data.is_verified !== undefined ? data.is_verified : currentUser.is_verified,
             };
