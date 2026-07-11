@@ -1,138 +1,144 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { CreditCard, Lock, Apple, Chrome } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Lock, Loader2, AlertCircle } from "lucide-react"
 
 const PaymentMethod = ({
-    paymentMethod,
-    setPaymentMethod,
-    cardDetails,
-    onCardDetailsChange
+    onSquareReady,
+    onPaymentError
 }) => {
-    const formatCardNumber = (value) => {
-        const v = value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
-        const matches = v.match(/\d{4,16}/g);
-        const match = (matches && matches[0]) || '';
-        const parts = [];
-        for (let i = 0; i < match.length; i += 4) {
-            parts.push(match.substring(i, i + 4));
-        }
-        return parts.length ? parts.join(' ') : value;
-    };
+    const [squareLoading, setSquareLoading] = useState(true);
+    const [squareError, setSquareError] = useState(null);
+    const cardContainerRef = useRef(null);
+    const squareInstanceRef = useRef(null);
+    const cardRef = useRef(null);
 
-    const handleCardNumberChange = (e) => {
-        const formatted = formatCardNumber(e.target.value);
-        onCardDetailsChange('cardNumber', formatted);
-    };
+    useEffect(() => {
+        const initSquare = async () => {
+            try {
+                // Load Square Web Payments SDK
+                if (!window.Square) {
+                    const script = document.createElement('script');
+                    script.src = process.env.NEXT_PUBLIC_SQUARE_SDK_URL || 'https://sandbox.web.squarecdn.com/v1/square.js';
+                    script.async = true;
 
-    const handleExpiryChange = (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length >= 2) {
-            value = value.slice(0, 2) + ' / ' + value.slice(2, 4);
-        }
-        onCardDetailsChange('expiry', value);
-    };
+                    await new Promise((resolve, reject) => {
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                }
+
+                // Initialize Square
+                const appId = process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID;
+                const locationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID;
+
+                if (!appId || !locationId) {
+                    throw new Error("Square credentials not configured");
+                }
+
+                const payments = window.Square.payments(appId, locationId);
+                squareInstanceRef.current = payments;
+
+                // Initialize Card Secure Payment
+                const card = await payments.card();
+                cardRef.current = card;
+
+                // Mount card element
+                if (cardContainerRef.current) {
+                    await card.attach('#card-container');
+                }
+
+                setSquareLoading(false);
+
+                // Notify parent that Square is ready
+                if (onSquareReady) {
+                    onSquareReady({
+                        tokenize: async () => {
+                            const result = await card.tokenize();
+                            if (result.status === 'OK') {
+                                return {
+                                    token: result.token,
+                                    cardBrand: result.card?.cardBrand,
+                                    lastFour: result.card?.lastFour,
+                                    expMonth: result.card?.expMonth,
+                                    expYear: result.card?.expYear,
+                                };
+                            } else {
+                                throw new Error(result.errors?.[0]?.detail || 'Card tokenization failed');
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error("Square initialization error:", error);
+                setSquareError(error.message || "Failed to initialize payment system");
+                setSquareLoading(false);
+
+                if (onPaymentError) {
+                    onPaymentError(error.message);
+                }
+            }
+        };
+
+        initSquare();
+
+        // Cleanup
+        return () => {
+            if (cardRef.current) {
+                cardRef.current.destroy();
+            }
+        };
+    }, []);
+
+    if (squareLoading) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Secure Payment</CardTitle>
+                </CardHeader>
+                <CardContent className="flex justify-center py-12">
+                    <div className="text-center">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                        <p className="text-muted-foreground">Loading secure payment form...</p>
+                    </div>
+                </CardContent>
+            </Card>
+        );
+    }
+
+    if (squareError) {
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Secure Payment</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertDescription>
+                            {squareError}
+                        </AlertDescription>
+                    </Alert>
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Payment Method</CardTitle>
+                <CardTitle>Secure Payment</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-                <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                    {/* Credit Card Option */}
-                    <div className={`flex items-center space-x-2 border rounded-lg p-4 mb-3 transition-all ${paymentMethod === "card"
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50"
-                        }`}>
-                        <RadioGroupItem value="card" id="card" />
-                        <Label htmlFor="card" className="flex-1 cursor-pointer flex items-center gap-2">
-                            <CreditCard className="h-5 w-5" />
-                            <span className="font-semibold">Credit / Debit Card</span>
-                        </Label>
-                    </div>
-
-                    {/* Apple Pay Option */}
-                    <div className={`flex items-center space-x-2 border rounded-lg p-4 mb-3 transition-all ${paymentMethod === "apple"
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50"
-                        }`}>
-                        <RadioGroupItem value="apple" id="apple" />
-                        <Label htmlFor="apple" className="flex-1 cursor-pointer flex items-center gap-2">
-                            <Apple className="h-5 w-5" />
-                            <span className="font-semibold">Apple Pay</span>
-                        </Label>
-                    </div>
-
-                    {/* Google Pay Option */}
-                    <div className={`flex items-center space-x-2 border rounded-lg p-4 transition-all ${paymentMethod === "google"
-                            ? "border-primary bg-primary/5"
-                            : "border-border hover:border-primary/50"
-                        }`}>
-                        <RadioGroupItem value="google" id="google" />
-                        <Label htmlFor="google" className="flex-1 cursor-pointer flex items-center gap-2">
-                            <Chrome className="h-5 w-5" />
-                            <span className="font-semibold">Google Pay</span>
-                        </Label>
-                    </div>
-                </RadioGroup>
-
-                {/* Credit Card Form */}
-                {paymentMethod === "card" && (
-                    <div className="space-y-4 mt-6">
-                        <div className="space-y-2">
-                            <Label htmlFor="cardNumber">Card Number *</Label>
-                            <Input
-                                id="cardNumber"
-                                placeholder="1234 5678 9012 3456"
-                                value={cardDetails.cardNumber}
-                                onChange={handleCardNumberChange}
-                                maxLength="19"
-                                required
-                            />
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-4">
-                            <div className="space-y-2 md:col-span-2">
-                                <Label htmlFor="expiry">Expiry Date *</Label>
-                                <Input
-                                    id="expiry"
-                                    placeholder="MM / YY"
-                                    value={cardDetails.expiry}
-                                    onChange={handleExpiryChange}
-                                    maxLength="9"
-                                    required
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="cvv">CVV *</Label>
-                                <Input
-                                    id="cvv"
-                                    placeholder="123"
-                                    value={cardDetails.cvv}
-                                    onChange={(e) => onCardDetailsChange('cvv', e.target.value)}
-                                    maxLength="4"
-                                    type="password"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="cardName">Cardholder Name *</Label>
-                            <Input
-                                id="cardName"
-                                placeholder="John Doe"
-                                value={cardDetails.cardName}
-                                onChange={(e) => onCardDetailsChange('cardName', e.target.value)}
-                                required
-                            />
-                        </div>
-                    </div>
-                )}
+                {/* Square Card Element */}
+                <div
+                    id="card-container"
+                    ref={cardContainerRef}
+                    className="min-h-[100px] border rounded-lg p-4 bg-white"
+                />
 
                 {/* Security Message */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground pt-4 border-t">

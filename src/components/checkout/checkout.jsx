@@ -10,6 +10,7 @@ import DeliverySchedule from './delivery-schedule'
 import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
+import { toast } from "sonner"
 
 const Checkout = () => {
     const dispatch = useDispatch()
@@ -41,14 +42,18 @@ const Checkout = () => {
         cvv: '',
         cardName: ''
     })
+    const [deliveryFee, setDeliveryFee] = useState(null);
+    const [feeLoading, setFeeLoading] = useState(false);
+    const [squarePayment, setSquarePayment] = useState(null);
+
 
     // ----- Cart totals from Redux -----
     const { cart, subtotal, taxTotal, couponDiscount } = useSelector(state => state.cart)
 
     const tipAmount = Number.parseFloat(tip) || 0
-    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount
 
-    // ----- Cart fetching & totals -----
+    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0)
+
     useEffect(() => {
         dispatch(fetchCart())
     }, [dispatch])
@@ -59,59 +64,133 @@ const Checkout = () => {
         }
     }, [cart, dispatch])
 
+    const calculateDeliveryFee = async () => {
+        if (!addressData.latitude || !addressData.longitude) {
+            toast.error("Please select a delivery address");
+            return false;
+        }
+
+        setFeeLoading(true);
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delivery/calculate-fee`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    latitude: addressData.latitude,
+                    longitude: addressData.longitude,
+                }),
+            });
+            const data = await res.json();
+
+            if (data.outOfRange) {
+                toast.error("Delivery not available for this location. Please choose a closer address.");
+                setDeliveryFee(null);
+                return false;
+            }
+
+            setDeliveryFee(data.fee);
+            return true;
+        } catch (err) {
+            toast.error("Failed to calculate delivery fee");
+            setDeliveryFee(null);
+            return false;
+        } finally {
+            setFeeLoading(false);
+        }
+    };
+
+    // Trigger fee calculation when moving to step 2 or if address changes
+    useEffect(() => {
+        if (step === 2 && addressData.latitude && addressData.longitude) {
+            calculateDeliveryFee();
+        }
+    }, [step, addressData]);
+
     const handleAddressSelect = (locationData) => {
         setAddressData(locationData)
     }
 
-    const handleCardDetailsChange = (field, value) => {
-        setCardDetails(prev => ({ ...prev, [field]: value }))
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        if (step < 3) {
-            setStep(step + 1)
+        if (step === 1) {
+            const feeCalculated = await calculateDeliveryFee();
+            if (!feeCalculated) return;
+            setStep(step + 1);
+        } else if (step < 3) {
+            setStep(step + 1);
         } else {
-            const orderData = {
-                // User details from account (or guest)
-                name: currentUser?.username || personalInfo.name,  // if guest
-                email: currentUser?.email || personalInfo.email,
-                phone: currentUser?.phone || personalInfo.phone,
-                address: addressData.address,
-                deliveryDay,
-                deliveryTime,
-                tip,
-                paymentMethod,
-                cardDetails: paymentMethod === 'card' ? cardDetails : null,
-                totals: {
-                    subtotal,
-                    discount: couponDiscount || 0,
-                    tax: taxTotal,
-                    tipAmount,
-                    total
+            try {
+                // Tokenize card using Square
+                const cardToken = await squarePayment.tokenize();
+
+                // Compute next occurrence of the selected delivery day
+                const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+                const today = new Date();
+                const currentDayIndex = today.getDay();
+                const targetDayIndex = daysOfWeek.indexOf(deliveryDay.toLowerCase());
+                let daysUntil = targetDayIndex - currentDayIndex;
+                if (daysUntil <= 0) daysUntil += 7;
+                const deliveryDateObj = new Date(today);
+                deliveryDateObj.setDate(today.getDate() + daysUntil);
+                const delivery_date = deliveryDateObj.toISOString().split('T')[0];
+
+                const orderData = {
+                    cart_id: cart.id,
+                    address: addressData.address,
+                    latitude: addressData.latitude,
+                    longitude: addressData.longitude,
+                    delivery_day: deliveryDay,
+                    delivery_time_slot: deliveryTime,
+                    delivery_date,                    // now defined
+                    delivery_fee: deliveryFee,
+                    tip: tip,
+                    totals: {
+                        subtotal,
+                        discount: couponDiscount || 0,
+                        tax: taxTotal,
+                        tipAmount,
+                        deliveryFee,
+                        total
+                    },
+                    cardToken: cardToken.token,
+                    couponId: cart?.coupon?.id || null,
+                };
+
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/checkout/create-order`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
+                    },
+                    body: JSON.stringify(orderData),
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    window.location.href = `/order-confirmation?orderId=${result.order.id}`;
+                } else {
+                    toast.error(result.message || 'Order failed');
                 }
+            } catch (error) {
+                console.error("Order submission error:", error);
+                toast.error("Failed to place order. Please try again.");
             }
-            console.log('Order submitted:', orderData)
-            // window.location.href = "/order-confirmation"
         }
     }
 
     const canProceed = () => {
         switch (step) {
             case 1:
-                return addressData.address.trim() !== ''
+                return addressData.address.trim() !== '';
             case 2:
-                return deliveryDay && deliveryTime
+                return deliveryDay && deliveryTime;
             case 3:
-                if (paymentMethod === 'card') {
-                    return cardDetails.cardNumber && cardDetails.expiry &&
-                        cardDetails.cvv && cardDetails.cardName
-                }
-                return true
+                return squarePayment !== null; // Square is ready
             default:
-                return true
+                return true;
         }
-    }
+    };
 
     // ---------- Guest state (only used when not logged in) ----------
     const [guestInfo, setGuestInfo] = useState({
@@ -123,6 +202,14 @@ const Checkout = () => {
     const handleGuestInfoChange = (field, value) => {
         setGuestInfo(prev => ({ ...prev, [field]: value }))
     }
+
+    const handleSquareReady = (squareInstance) => {
+        setSquarePayment(squareInstance);
+    };
+
+    const handlePaymentError = (error) => {
+        toast.error(error || "Payment system error");
+    };
 
     return (
         <div className="container mx-auto px-4 pt-8">
@@ -161,10 +248,8 @@ const Checkout = () => {
                         )}
                         {step === 3 && (
                             <PaymentMethod
-                                paymentMethod={paymentMethod}
-                                setPaymentMethod={setPaymentMethod}
-                                cardDetails={cardDetails}
-                                onCardDetailsChange={handleCardDetailsChange}
+                                onSquareReady={handleSquareReady}
+                                onPaymentError={handlePaymentError}
                             />
                         )}
 
@@ -182,9 +267,10 @@ const Checkout = () => {
                             <Button
                                 type="submit"
                                 className="flex-1"
-                                disabled={!canProceed()}
+                                disabled={!canProceed() || feeLoading}
                             >
-                                {step === 3 ? "Place Order" : "Continue"}
+                                {step === 1 && feeLoading ? "Calculating delivery fee..." :
+                                    step === 3 ? "Place Order" : "Continue"}
                             </Button>
                         </div>
                     </form>
@@ -194,7 +280,8 @@ const Checkout = () => {
                     subtotal={subtotal}
                     discount={couponDiscount || 0}
                     tax={taxTotal}
-                    tipAmount={tipAmount} 
+                    tipAmount={tipAmount}
+                    deliveryFee={deliveryFee}
                     total={total}
                 />
             </div>

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 
-const OrderSummary = ({ subtotal, discount, tax, tipAmount, total }) => {
+const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }) => {
     return (
         <div className="lg:col-span-1">
             <Card className="sticky top-20">
@@ -32,10 +32,18 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, total }) => {
                             </div>
                         )}
 
-                        <div className="flex justify-between text-sm">
-                            <span className="text-muted-foreground">Delivery Fee</span>
-                            <span className="font-medium text-primary">FREE</span>
-                        </div>
+                        {deliveryFee !== null && deliveryFee !== undefined && (
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Delivery Fee</span>
+                                <span className="font-medium">
+                                    {deliveryFee === 0 ? (
+                                        <span className="text-green-600">FREE</span>
+                                    ) : (
+                                        `$${deliveryFee.toFixed(2)}`
+                                    )}
+                                </span>
+                            </div>
+                        )}
 
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Tax</span>
