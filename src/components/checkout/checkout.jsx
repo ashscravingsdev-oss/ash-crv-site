@@ -11,11 +11,11 @@ import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
 import { toast } from "sonner"
+import { Loader2 } from "lucide-react"
 
 const Checkout = () => {
     const dispatch = useDispatch()
     const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN
-    const sessionId = Cookies.get('session_id')
     const mapRef = useRef(null)
     const [step, setStep] = useState(1)
 
@@ -24,34 +24,29 @@ const Checkout = () => {
     const currentUser = userCookie ? JSON.parse(userCookie) : null
     const isLoggedIn = !!currentUser
 
-    // ----- Address state (simplified) -----
+    // ----- Address state -----
     const [addressData, setAddressData] = useState({
         address: '',
         latitude: null,
         longitude: null,
     })
 
-    // ----- Step 2 & 3 state unchanged -----
+    // ----- Step 2 & 3 state -----
     const [deliveryDay, setDeliveryDay] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
-    const [tip, setTip] = useState("10")
-    const [paymentMethod, setPaymentMethod] = useState("card")
-    const [cardDetails, setCardDetails] = useState({
-        cardNumber: '',
-        expiry: '',
-        cvv: '',
-        cardName: ''
-    })
+    const [tip, setTip] = useState("0")
+
     const [deliveryFee, setDeliveryFee] = useState(null);
     const [feeLoading, setFeeLoading] = useState(false);
     const [squarePayment, setSquarePayment] = useState(null);
 
+    // ----- Order submission loading -----
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // ----- Cart totals from Redux -----
     const { cart, subtotal, taxTotal, couponDiscount } = useSelector(state => state.cart)
 
     const tipAmount = Number.parseFloat(tip) || 0
-
     const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0)
 
     useEffect(() => {
@@ -99,7 +94,6 @@ const Checkout = () => {
         }
     };
 
-    // Trigger fee calculation when moving to step 2 or if address changes
     useEffect(() => {
         if (step === 2 && addressData.latitude && addressData.longitude) {
             calculateDeliveryFee();
@@ -120,6 +114,8 @@ const Checkout = () => {
         } else if (step < 3) {
             setStep(step + 1);
         } else {
+            setIsSubmitting(true);
+
             try {
                 // Tokenize card using Square
                 const cardToken = await squarePayment.tokenize();
@@ -142,7 +138,7 @@ const Checkout = () => {
                     longitude: addressData.longitude,
                     delivery_day: deliveryDay,
                     delivery_time_slot: deliveryTime,
-                    delivery_date,                    // now defined
+                    delivery_date,
                     delivery_fee: deliveryFee,
                     tip: tip,
                     totals: {
@@ -154,7 +150,7 @@ const Checkout = () => {
                         total
                     },
                     cardToken: cardToken.token,
-                    couponId: cart?.coupon?.id || null,
+                    couponId: cart?.coupon_id || null,
                 };
 
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/checkout/create-order`, {
@@ -168,6 +164,7 @@ const Checkout = () => {
 
                 const result = await response.json();
                 if (response.ok) {
+                    toast.success("Order placed successfully!");
                     window.location.href = `/order-confirmation?orderId=${result.order.id}`;
                 } else {
                     toast.error(result.message || 'Order failed');
@@ -175,6 +172,8 @@ const Checkout = () => {
             } catch (error) {
                 console.error("Order submission error:", error);
                 toast.error("Failed to place order. Please try again.");
+            } finally {
+                setIsSubmitting(false);
             }
         }
     }
@@ -186,22 +185,11 @@ const Checkout = () => {
             case 2:
                 return deliveryDay && deliveryTime;
             case 3:
-                return squarePayment !== null; // Square is ready
+                return squarePayment !== null;
             default:
                 return true;
         }
     };
-
-    // ---------- Guest state (only used when not logged in) ----------
-    const [guestInfo, setGuestInfo] = useState({
-        name: '',
-        email: '',
-        phone: '',
-    })
-
-    const handleGuestInfoChange = (field, value) => {
-        setGuestInfo(prev => ({ ...prev, [field]: value }))
-    }
 
     const handleSquareReady = (squareInstance) => {
         setSquarePayment(squareInstance);
@@ -209,6 +197,19 @@ const Checkout = () => {
 
     const handlePaymentError = (error) => {
         toast.error(error || "Payment system error");
+    };
+
+    // Determine button text and disabled state
+    const getButtonText = () => {
+        if (step === 1 && feeLoading) return "Calculating delivery fee...";
+        if (isSubmitting) return (
+            <span className="flex items-center justify-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Placing Order...
+            </span>
+        );
+        if (step === 3) return "Place Order";
+        return "Continue";
     };
 
     return (
@@ -227,15 +228,12 @@ const Checkout = () => {
                                     email: currentUser?.email || '',
                                     phone: currentUser?.phone || '',
                                 }}
-                                guestInfo={guestInfo}
-                                onGuestInfoChange={handleGuestInfoChange}
                                 addressData={addressData}
                                 onAddressSelect={handleAddressSelect}
                                 mapboxAccessToken={mapboxAccessToken}
                                 mapRef={mapRef}
                             />
                         )}
-                        {/* ... steps 2 and 3 unchanged */}
                         {step === 2 && (
                             <DeliverySchedule
                                 deliveryDay={deliveryDay}
@@ -260,6 +258,7 @@ const Checkout = () => {
                                     variant="outline"
                                     onClick={() => setStep(step - 1)}
                                     className="flex-1"
+                                    disabled={isSubmitting}
                                 >
                                     Back
                                 </Button>
@@ -267,10 +266,9 @@ const Checkout = () => {
                             <Button
                                 type="submit"
                                 className="flex-1"
-                                disabled={!canProceed() || feeLoading}
+                                disabled={!canProceed() || feeLoading || isSubmitting}
                             >
-                                {step === 1 && feeLoading ? "Calculating delivery fee..." :
-                                    step === 3 ? "Place Order" : "Continue"}
+                                {getButtonText()}
                             </Button>
                         </div>
                     </form>
