@@ -1,143 +1,154 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
+import { fetchCart, calculateCartTotals } from "@/store/cartSlice"
+import { useDispatch, useSelector } from "react-redux"
+import Cookies from "js-cookie"
 import DeliveryInfo from './delivery-info'
 import DeliverySchedule from './delivery-schedule'
 import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
-import { log } from "util"
 
 const Checkout = () => {
-    const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN;
-    const mapRef = useRef(null);
+    const dispatch = useDispatch()
+    const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN
+    const sessionId = Cookies.get('session_id')
+    const mapRef = useRef(null)
     const [step, setStep] = useState(1)
 
-    // Step 1: Delivery Info State
-    const [personalInfo, setPersonalInfo] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        instructions: ''
-    });
+    // ----- User data (from cookie or Redux) -----
+    const userCookie = Cookies.get('user')
+    const currentUser = userCookie ? JSON.parse(userCookie) : null
+    const isLoggedIn = !!currentUser
 
-
-
-    // Address state (already dynamic)
+    // ----- Address state (simplified) -----
     const [addressData, setAddressData] = useState({
         address: '',
-        street: '',
-        city: '',
-        state: '',
-        zip_code: '',
-        country: 'USA',
         latitude: null,
-        longitude: null
-    });
+        longitude: null,
+    })
 
-    // Step 2: Delivery Schedule State
+    // ----- Step 2 & 3 state unchanged -----
     const [deliveryDay, setDeliveryDay] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
     const [tip, setTip] = useState("10")
-
-    // Step 3: Payment State
     const [paymentMethod, setPaymentMethod] = useState("card")
     const [cardDetails, setCardDetails] = useState({
         cardNumber: '',
         expiry: '',
         cvv: '',
         cardName: ''
-    });
+    })
 
-    // Order totals (would come from cart in real app)
-    const subtotal = 49.96
-    const discount = 10
-    const deliveryFee = 0
-    const tax = 3.99
-    const tipAmount = Number.parseFloat(tip)
-    const total = subtotal + deliveryFee + tax + tipAmount
+    // ----- Cart totals from Redux -----
+    const { cart, subtotal, taxTotal, couponDiscount } = useSelector(state => state.cart)
 
-    console.log(personalInfo, 'personal info');
-    console.log(addressData, 'addressData');
-    console.log(paymentMethod, 'addressData');
-    console.log(deliveryDay, deliveryTime, tip, 'addressData');
+    const tipAmount = Number.parseFloat(tip) || 0
+    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount
+
+    // ----- Cart fetching & totals -----
+    useEffect(() => {
+        dispatch(fetchCart())
+    }, [dispatch])
+
+    useEffect(() => {
+        if (cart?.id) {
+            dispatch(calculateCartTotals(cart.id))
+        }
+    }, [cart, dispatch])
 
     const handleAddressSelect = (locationData) => {
-        setAddressData(locationData);
-        console.log('Address Data:', locationData);
-    };
-
-    const handlePersonalInfoChange = (field, value) => {
-        setPersonalInfo(prev => ({ ...prev, [field]: value }));
-    };
+        setAddressData(locationData)
+    }
 
     const handleCardDetailsChange = (field, value) => {
-        setCardDetails(prev => ({ ...prev, [field]: value }));
-    };
+        setCardDetails(prev => ({ ...prev, [field]: value }))
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         if (step < 3) {
             setStep(step + 1)
         } else {
-            // Submit order
             const orderData = {
-                personalInfo,
-                addressData,
+                // User details from account (or guest)
+                name: currentUser?.username || personalInfo.name,  // if guest
+                email: currentUser?.email || personalInfo.email,
+                phone: currentUser?.phone || personalInfo.phone,
+                address: addressData.address,
                 deliveryDay,
                 deliveryTime,
                 tip,
                 paymentMethod,
                 cardDetails: paymentMethod === 'card' ? cardDetails : null,
-                totals: { subtotal, discount, deliveryFee, tax, tipAmount, total }
-            };
-            console.log('Order submitted:', orderData);
-            window.location.href = "/order-confirmation"
+                totals: {
+                    subtotal,
+                    discount: couponDiscount || 0,
+                    tax: taxTotal,
+                    tipAmount,
+                    total
+                }
+            }
+            console.log('Order submitted:', orderData)
+            // window.location.href = "/order-confirmation"
         }
     }
 
     const canProceed = () => {
         switch (step) {
             case 1:
-                return personalInfo.firstName && personalInfo.lastName &&
-                    personalInfo.email && personalInfo.phone && addressData.address;
+                return addressData.address.trim() !== ''
             case 2:
-                return deliveryDay && deliveryTime;
+                return deliveryDay && deliveryTime
             case 3:
                 if (paymentMethod === 'card') {
                     return cardDetails.cardNumber && cardDetails.expiry &&
-                        cardDetails.cvv && cardDetails.cardName;
+                        cardDetails.cvv && cardDetails.cardName
                 }
-                return true; // Apple Pay / Google Pay don't need card details
+                return true
             default:
-                return true;
+                return true
         }
-    };
+    }
+
+    // ---------- Guest state (only used when not logged in) ----------
+    const [guestInfo, setGuestInfo] = useState({
+        name: '',
+        email: '',
+        phone: '',
+    })
+
+    const handleGuestInfoChange = (field, value) => {
+        setGuestInfo(prev => ({ ...prev, [field]: value }))
+    }
 
     return (
         <div className="container mx-auto px-4 pt-8">
             <h1 className="text-4xl font-bold mb-8">Checkout</h1>
-
-            {/* Progress Indicator */}
             <CheckoutProgress currentStep={step} />
 
             <div className="grid lg:grid-cols-3 gap-8">
-                {/* Checkout Form */}
                 <div className="lg:col-span-2">
                     <form onSubmit={handleSubmit}>
                         {step === 1 && (
                             <DeliveryInfo
-                                personalInfo={personalInfo}
-                                onPersonalInfoChange={handlePersonalInfoChange}
+                                isLoggedIn={isLoggedIn}
+                                userData={{
+                                    name: currentUser?.username || '',
+                                    email: currentUser?.email || '',
+                                    phone: currentUser?.phone || '',
+                                }}
+                                guestInfo={guestInfo}
+                                onGuestInfoChange={handleGuestInfoChange}
                                 addressData={addressData}
                                 onAddressSelect={handleAddressSelect}
                                 mapboxAccessToken={mapboxAccessToken}
                                 mapRef={mapRef}
                             />
                         )}
-
+                        {/* ... steps 2 and 3 unchanged */}
                         {step === 2 && (
                             <DeliverySchedule
                                 deliveryDay={deliveryDay}
@@ -148,7 +159,6 @@ const Checkout = () => {
                                 setTip={setTip}
                             />
                         )}
-
                         {step === 3 && (
                             <PaymentMethod
                                 paymentMethod={paymentMethod}
@@ -180,12 +190,11 @@ const Checkout = () => {
                     </form>
                 </div>
 
-                {/* Order Summary Sidebar */}
                 <OrderSummary
                     subtotal={subtotal}
-                    discount={discount}
-                    tipAmount={tipAmount}
-                    tax={tax}
+                    discount={couponDiscount || 0}
+                    tax={taxTotal}
+                    tipAmount={tipAmount} 
                     total={total}
                 />
             </div>

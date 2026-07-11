@@ -211,6 +211,9 @@ const cartSlice = createSlice({
         cartId: null,
         items: [],
 
+        coupon: null,
+        couponDiscount: 0,
+
         // Cart totals
         subtotal: 0,
         taxTotal: 0,
@@ -447,6 +450,8 @@ const cartSlice = createSlice({
                 if (action.payload) {
                     state.subtotal = action.payload.subtotal || 0;
                     state.taxTotal = action.payload.tax_total || 0;
+                    state.couponDiscount = action.payload.coupon_discount || 0;   
+                    state.coupon = action.payload.coupon || null;
                     state.itemCount = action.payload.item_count || state.items.length;
                     state.itemsWithTotals = action.payload.items || [];
                 }

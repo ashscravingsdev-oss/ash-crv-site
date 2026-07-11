@@ -23,9 +23,6 @@ const Cart = () => {
     const [promoCode, setPromoCode] = useState("")
     const [updatingId, setUpdatingId] = useState(null)
     const [isApplyingPromo, setIsApplyingPromo] = useState(false)
-    const [appliedCoupon, setAppliedCoupon] = useState(null)
-    const [couponDiscount, setCouponDiscount] = useState(0)
-    const [couponError, setCouponError] = useState("")
 
     // Get cart state from Redux
     const {
@@ -35,6 +32,8 @@ const Cart = () => {
         itemLoading,
         subtotal,
         taxTotal,
+        coupon,
+        couponDiscount,
     } = useSelector(state => state.cart)
 
     const sessionId = Cookies.get('session_id')
@@ -53,20 +52,6 @@ const Cart = () => {
         }
     }, [cart, dispatch])
 
-    // Recalculate discount when subtotal changes
-    useEffect(() => {
-        if (appliedCoupon) {
-            if (appliedCoupon.type === 'percentage') {
-                // Recalculate percentage discount based on new subtotal
-                const newDiscount = subtotal * (appliedCoupon.value / 100)
-                setCouponDiscount(newDiscount)
-            } else if (appliedCoupon.type === 'fixed') {
-                // Fixed amount discount should not exceed subtotal
-                const newDiscount = Math.min(appliedCoupon.value, subtotal)
-                setCouponDiscount(newDiscount)
-            }
-        }
-    }, [subtotal, appliedCoupon])
 
     const updateQuantity = async (itemId, newQuantity) => {
         if (newQuantity < 1) return
@@ -113,17 +98,15 @@ const Cart = () => {
         }
 
         setIsApplyingPromo(true)
-        setCouponError("")
 
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/coupons/validate`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     code: promoCode.trim(),
                     user_id: sessionId || null,
+                    cart_id: cart?.id || null,
                     order_amount: subtotal
                 })
             })
@@ -131,16 +114,13 @@ const Cart = () => {
             const data = await response.json()
 
             if (data.valid) {
-                setAppliedCoupon(data.coupon)
-                // For fixed amount, ensure discount doesn't exceed subtotal
-                const discount = data.coupon.type === 'fixed'
-                    ? Math.min(data.coupon.value, subtotal)
-                    : data.discount_amount
-                setCouponDiscount(discount)
                 toast.success(`Coupon applied! ${data.message}`)
                 setPromoCode("")
+                // Refresh totals from backend (which now includes the coupon)
+                if (cart?.id) {
+                    dispatch(calculateCartTotals(cart.id))
+                }
             } else {
-                setCouponError(data.message || "Invalid coupon code")
                 toast.error(data.message || "Invalid coupon code")
             }
         } catch (error) {
@@ -150,6 +130,7 @@ const Cart = () => {
             setIsApplyingPromo(false)
         }
     }
+
 
     const removeCoupon = () => {
         setAppliedCoupon(null)
@@ -161,13 +142,12 @@ const Cart = () => {
     const total = subtotal + taxTotal - couponDiscount
 
     const getDiscountSummary = () => {
-        if (!appliedCoupon) return null
-
-        switch (appliedCoupon.type) {
+        if (!coupon) return null
+        switch (coupon.type) {
             case 'percentage':
-                return `${appliedCoupon.value}% off`
+                return `${coupon.value}% off`
             case 'fixed':
-                return `$${appliedCoupon.value} off`
+                return `$${coupon.value} off`
             default:
                 return 'Discount applied'
         }
@@ -333,30 +313,29 @@ const Cart = () => {
 
                             <Separator />
 
-                            {/* Promo Code */}
                             <div>
                                 <label className="text-sm font-medium mb-2 block">Promo Code</label>
 
-                                {appliedCoupon ? (
+                                {coupon ? (   // ← use Redux coupon
                                     <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-2">
                                                 <Tag className="h-4 w-4 text-green-600" />
                                                 <div>
-                                                    <p className="font-medium text-green-600">{appliedCoupon.code}</p>
+                                                    <p className="font-medium text-green-600">{coupon.code}</p>
                                                     <p className="text-xs text-green-600/70">
                                                         {getDiscountSummary()}
                                                     </p>
                                                 </div>
                                             </div>
-                                            <Button
+                                            {/* <Button
                                                 variant="ghost"
                                                 size="icon"
                                                 onClick={removeCoupon}
                                                 className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-500/20"
                                             >
                                                 <XCircle className="h-4 w-4" />
-                                            </Button>
+                                            </Button> */}
                                         </div>
                                     </div>
                                 ) : (
@@ -365,11 +344,7 @@ const Cart = () => {
                                             <Input
                                                 placeholder="Enter code"
                                                 value={promoCode}
-                                                onChange={(e) => {
-                                                    setPromoCode(e.target.value)
-                                                    setCouponError("")
-                                                }}
-                                                className={couponError ? "border-red-500" : ""}
+                                                onChange={(e) => setPromoCode(e.target.value)}
                                             />
                                             <Button
                                                 onClick={validateCoupon}
@@ -382,24 +357,19 @@ const Cart = () => {
                                                 )}
                                             </Button>
                                         </div>
-                                        {couponError && (
-                                            <p className="text-sm text-red-500">{couponError}</p>
-                                        )}
                                     </div>
                                 )}
                             </div>
 
-                            <Separator />
-
-                            {/* Price Breakdown */}
+                            {/* Price Breakdown – already using couponDiscount from Redux */}
                             <div className="space-y-3">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                                 </div>
-                                {appliedCoupon && (
+                                {coupon && (   // ← show when coupon exists
                                     <div className="flex justify-between text-sm text-green-600">
-                                        <span>Discount ({appliedCoupon.type === 'percentage' ? `${appliedCoupon.value}%` : `$${appliedCoupon.value}`})</span>
+                                        <span>Discount ({coupon.type === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`})</span>
                                         <span>-${couponDiscount.toFixed(2)}</span>
                                     </div>
                                 )}
