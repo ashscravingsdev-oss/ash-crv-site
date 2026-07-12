@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Lock, Loader2, AlertCircle } from "lucide-react"
 
+const SQUARE_SCRIPT_TIMEOUT = 15000; // 15 seconds
+
 const PaymentMethod = ({
     onSquareReady,
     onPaymentError
@@ -12,48 +14,79 @@ const PaymentMethod = ({
     const [squareLoading, setSquareLoading] = useState(true);
     const [squareError, setSquareError] = useState(null);
     const cardContainerRef = useRef(null);
-    const squareInstanceRef = useRef(null);
     const cardRef = useRef(null);
 
     useEffect(() => {
+        let timeoutId;
+        let scriptElement;
+
         const initSquare = async () => {
             try {
-                // Load Square Web Payments SDK
-                if (!window.Square) {
-                    const script = document.createElement('script');
-                    script.src = process.env.NEXT_PUBLIC_SQUARE_SDK_URL || 'https://sandbox.web.squarecdn.com/v1/square.js';
-                    script.async = true;
-
-                    await new Promise((resolve, reject) => {
-                        script.onload = resolve;
-                        script.onerror = reject;
-                        document.head.appendChild(script);
-                    });
-                }
-
-                // Initialize Square
                 const appId = process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID;
                 const locationId = process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID;
 
+                console.log('Square init - App ID exists:', !!appId, 'Location ID exists:', !!locationId);
+
                 if (!appId || !locationId) {
-                    throw new Error("Square credentials not configured");
+                    throw new Error("Square credentials not configured. Check NEXT_PUBLIC_SQUARE_APPLICATION_ID and NEXT_PUBLIC_SQUARE_LOCATION_ID");
                 }
 
-                const payments = window.Square.payments(appId, locationId);
-                squareInstanceRef.current = payments;
+                // Load Square SDK with timeout
+                if (!window.Square) {
+                    console.log('Loading Square SDK...');
 
-                // Initialize Card Secure Payment
+                    const sdkUrl = process.env.NEXT_PUBLIC_SQUARE_SDK_URL || 'https://sandbox.web.squarecdn.com/v1/square.js';
+                    console.log('Square SDK URL:', sdkUrl);
+
+                    scriptElement = document.createElement('script');
+                    scriptElement.src = sdkUrl;
+                    scriptElement.async = true;
+
+                    await new Promise((resolve, reject) => {
+                        // Timeout fallback
+                        timeoutId = setTimeout(() => {
+                            reject(new Error(`Square SDK failed to load after ${SQUARE_SCRIPT_TIMEOUT / 1000} seconds. Check network connectivity.`));
+                        }, SQUARE_SCRIPT_TIMEOUT);
+
+                        scriptElement.onload = () => {
+                            clearTimeout(timeoutId);
+                            console.log('Square SDK loaded successfully');
+                            resolve();
+                        };
+
+                        scriptElement.onerror = (err) => {
+                            clearTimeout(timeoutId);
+                            console.error('Square SDK load error:', err);
+                            reject(new Error('Failed to load Square payment SDK. Please refresh the page.'));
+                        };
+
+                        document.head.appendChild(scriptElement);
+                    });
+                } else {
+                    console.log('Square SDK already loaded');
+                }
+
+                // Initialize Square
+                console.log('Initializing Square payments...');
+                const payments = window.Square.payments(appId, locationId);
+
+                // Initialize Card
                 const card = await payments.card();
                 cardRef.current = card;
+                console.log('Square card initialized');
 
                 // Mount card element
-                if (cardContainerRef.current) {
-                    await card.attach('#card-container');
+                const container = document.getElementById('card-container');
+                if (!container) {
+                    throw new Error('Card container not found in DOM');
                 }
+
+                await card.attach('#card-container');
+                console.log('Card attached to container');
 
                 setSquareLoading(false);
 
-                // Notify parent that Square is ready
+                // Notify parent
                 if (onSquareReady) {
                     onSquareReady({
                         tokenize: async () => {
@@ -87,8 +120,16 @@ const PaymentMethod = ({
 
         // Cleanup
         return () => {
+            clearTimeout(timeoutId);
+            if (scriptElement && document.head.contains(scriptElement)) {
+                document.head.removeChild(scriptElement);
+            }
             if (cardRef.current) {
-                cardRef.current.destroy();
+                try {
+                    cardRef.current.destroy();
+                } catch (e) {
+                    // Ignore destroy errors
+                }
             }
         };
     }, []);
