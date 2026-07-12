@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
@@ -8,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,7 +24,10 @@ const verifyCodeSchema = z.object({
         .max(6, "Code must not exceed 6 characters"),
 });
 
-const VerifyCode = () => {
+// ──────────────────────────────────────────
+// Inner component that uses useSearchParams
+// ──────────────────────────────────────────
+function VerifyCodeContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const dispatch = useDispatch();
@@ -266,6 +270,26 @@ const VerifyCode = () => {
             </Card>
         </div>
     );
-};
+}
 
-export default VerifyCode;
+// ──────────────────────────────────────────
+// Page export wrapped in Suspense
+// ──────────────────────────────────────────
+export default function VerifyCodePage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="container mx-auto px-4 pt-16">
+                    <Card className="max-w-md mx-auto">
+                        <CardContent className="p-12 text-center">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                            <p className="text-muted-foreground">Loading...</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            }
+        >
+            <VerifyCodeContent />
+        </Suspense>
+    );
+}

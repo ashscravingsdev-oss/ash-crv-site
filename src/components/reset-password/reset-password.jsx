@@ -1,4 +1,6 @@
 "use client";
+
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -17,7 +19,7 @@ import { z } from "zod";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { resetPasswordWithOtp } from "@/store/authSlice";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Define validation schema with Zod
@@ -41,7 +43,10 @@ const resetPasswordSchema = z.object({
     path: ["confirmPassword"],
 });
 
-function ResetPassword() {
+// ──────────────────────────────────────────
+// Inner component that uses useSearchParams
+// ──────────────────────────────────────────
+function ResetPasswordContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const dispatch = useDispatch();
@@ -295,4 +300,25 @@ function ResetPassword() {
         </div>
     );
 }
-export default ResetPassword;
+
+// ──────────────────────────────────────────
+// Page export wrapped in Suspense
+// ──────────────────────────────────────────
+export default function ResetPasswordPage() {
+    return (
+        <Suspense
+            fallback={
+                <div className="container mx-auto px-4 pt-16">
+                    <Card className="max-w-md mx-auto">
+                        <CardContent className="p-12 text-center">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                            <p className="text-muted-foreground">Loading...</p>
+                        </CardContent>
+                    </Card>
+                </div>
+            }
+        >
+            <ResetPasswordContent />
+        </Suspense>
+    );
+}
