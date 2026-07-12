@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/nav";
@@ -11,7 +12,10 @@ import Link from "next/link";
 import SEO from "@/components/seo";
 import Cookies from "js-cookie";
 
-export default function OrderConfirmationPage() {
+// ──────────────────────────────────────────
+// Inner component that uses useSearchParams
+// ──────────────────────────────────────────
+function OrderConfirmationContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
@@ -72,7 +76,7 @@ export default function OrderConfirmationPage() {
     return `${formattedDay}, ${timeSlot || ""}`;
   };
 
-  // Loading state
+  // ── Loading State ──
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -95,7 +99,7 @@ export default function OrderConfirmationPage() {
     );
   }
 
-  // Error state
+  // ── Error State ──
   if (error || !order) {
     return (
       <div className="min-h-screen">
@@ -210,5 +214,36 @@ export default function OrderConfirmationPage() {
 
       <Footer />
     </div>
+  );
+}
+
+// ──────────────────────────────────────────
+// Page export wrapped in Suspense
+// ──────────────────────────────────────────
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen">
+          <SEO
+            title="Order Confirmation - FreshPrep"
+            description="Confirming your order..."
+          />
+          <Navigation />
+          <div className="container mx-auto px-4 py-16">
+            <Card className="max-w-2xl mx-auto text-center">
+              <CardContent className="p-12">
+                <Loader2 className="h-16 w-16 text-primary mx-auto mb-4 animate-spin" />
+                <h1 className="text-2xl font-bold mb-2">Loading your order...</h1>
+                <p className="text-muted-foreground">Please wait while we fetch your order details</p>
+              </CardContent>
+            </Card>
+          </div>
+          <Footer />
+        </div>
+      }
+    >
+      <OrderConfirmationContent />
+    </Suspense>
   );
 }
