@@ -153,9 +153,6 @@ const BundleList = ({ bundle }) => {
                             </>
                         )}
                     </Button>
-                    <Button variant="outline" asChild>
-                        <Link href="#" >Details</Link>
-                    </Button>
                 </div>
             </CardContent>
         </Card>
