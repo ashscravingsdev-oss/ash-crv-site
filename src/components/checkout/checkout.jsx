@@ -34,6 +34,8 @@ const Checkout = () => {
     // ----- Step 2 & 3 state -----
     const [deliveryDay, setDeliveryDay] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
+    const [frequency, setFrequency] = useState("one-time");
+
     const [tip, setTip] = useState("0")
 
     const [deliveryFee, setDeliveryFee] = useState(null);
@@ -141,6 +143,7 @@ const Checkout = () => {
                     delivery_date,
                     delivery_fee: deliveryFee,
                     tip: tip,
+                    frequency: frequency,
                     totals: {
                         subtotal,
                         discount: couponDiscount || 0,
@@ -242,6 +245,8 @@ const Checkout = () => {
                                 setDeliveryTime={setDeliveryTime}
                                 tip={tip}
                                 setTip={setTip}
+                                frequency={frequency}        
+                                setFrequency={setFrequency} 
                             />
                         )}
                         {step === 3 && (

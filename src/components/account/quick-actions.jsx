@@ -29,16 +29,6 @@ const QuickActions = () => {
                         Account Settings
                     </Link>
                 </Button>
-                <Button
-                    variant="outline"
-                    className="w-full justify-start bg-transparent"
-                    asChild
-                >
-                    <Link href="/subscriptions">
-                        <Calendar className="h-4 w-4 mr-2" />
-                        Manage Subscription
-                    </Link>
-                </Button>
             </CardContent>
         </Card>
     )

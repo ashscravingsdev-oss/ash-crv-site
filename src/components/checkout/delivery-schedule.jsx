@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar, Clock, Loader2 } from "lucide-react"
+import { Calendar, Clock, Loader2, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
 
 // Helper: format time "HH:MM:SS" to "h:MM AM/PM"
@@ -46,7 +46,9 @@ const DeliverySchedule = ({
     deliveryTime,
     setDeliveryTime,
     tip,
-    setTip
+    setTip,
+    frequency,
+    setFrequency
 }) => {
     const [loading, setLoading] = useState(true)
     const [availableDays, setAvailableDays] = useState([])
@@ -199,6 +201,40 @@ const DeliverySchedule = ({
                     </p>
                 </div>
 
+                {/* ── Frequency Selector (NEW) ── */}
+                <div className="space-y-3">
+                    <Label className="flex items-center gap-2">
+                        <RefreshCw className="w-4 h-4" />
+                        Delivery Frequency *
+                    </Label>
+                    <RadioGroup value={frequency} onValueChange={setFrequency}>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            {[
+                                { value: "one-time", label: "One-time" },
+                                { value: "weekly", label: "Weekly" },
+                                { value: "biweekly", label: "Bi-Weekly" },
+                                { value: "monthly", label: "Monthly" }
+                            ].map((option) => (
+                                <Label
+                                    key={option.value}
+                                    htmlFor={`freq-${option.value}`}
+                                    className={`border border-border rounded-lg p-3 text-center cursor-pointer transition-all ${frequency === option.value
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "hover:border-primary/50"
+                                        }`}
+                                >
+                                    <RadioGroupItem
+                                        value={option.value}
+                                        id={`freq-${option.value}`}
+                                        className="sr-only"
+                                    />
+                                    <div className="font-semibold text-sm">{option.label}</div>
+                                </Label>
+                            ))}
+                        </div>
+                    </RadioGroup>
+                </div>
+
                 {/* Tip */}
                 <div className="space-y-3">
                     <Label>Add a Tip for Your Driver</Label>
@@ -209,8 +245,8 @@ const DeliverySchedule = ({
                                     key={option.value}
                                     htmlFor={`tip-${option.value}`}
                                     className={`border border-border rounded-lg p-3 text-center cursor-pointer transition-all ${tip === option.value
-                                            ? "bg-primary text-primary-foreground border-primary"
-                                            : "hover:border-primary/50"
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "hover:border-primary/50"
                                         }`}
                                 >
                                     <RadioGroupItem
