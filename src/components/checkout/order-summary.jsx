@@ -2,8 +2,19 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { Info } from "lucide-react"
 
-const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }) => {
+const OrderSummary = ({
+    subtotal,
+    discount,
+    tax,
+    tipAmount,
+    deliveryFee,
+    total,
+    rushFee = 0,
+    freeDeliveryThreshold = null,
+    requiresAdminApproval = false,
+}) => {
     return (
         <div className="lg:col-span-1">
             <Card className="sticky top-20">
@@ -17,7 +28,7 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }
                             <span className="font-medium">${subtotal.toFixed(2)}</span>
                         </div>
 
-                        {/* Show only if there is a discount */}
+                        {/* Discount */}
                         {discount > 0 && (
                             <div className="flex justify-between text-sm text-green-600">
                                 <span>Discount</span>
@@ -25,6 +36,7 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }
                             </div>
                         )}
 
+                        {/* Driver Tip */}
                         {tipAmount > 0 && (
                             <div className="flex justify-between text-sm text-green-600">
                                 <span>Driver Tip</span>
@@ -32,9 +44,12 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }
                             </div>
                         )}
 
+                        {/* Delivery Fee */}
                         {deliveryFee !== null && deliveryFee !== undefined && (
                             <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Delivery Fee</span>
+                                <span className="text-muted-foreground">
+                                    {deliveryFee === 0 ? "Delivery Fee (FREE)" : "Delivery Fee"}
+                                </span>
                                 <span className="font-medium">
                                     {deliveryFee === 0 ? (
                                         <span className="text-green-600">FREE</span>
@@ -45,6 +60,22 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }
                             </div>
                         )}
 
+                        {/* Rush Fee (if selected) */}
+                        {rushFee > 0 && (
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Rush Delivery</span>
+                                <span className="font-medium text-amber-600">+${rushFee.toFixed(2)}</span>
+                            </div>
+                        )}
+
+                        {/* Free Delivery Threshold Info */}
+                        {freeDeliveryThreshold && subtotal < freeDeliveryThreshold && (
+                            <div className="text-xs text-muted-foreground italic">
+                                Add ${(freeDeliveryThreshold - subtotal).toFixed(2)} more to your order to qualify for free delivery in your area.
+                            </div>
+                        )}
+
+                        {/* Tax */}
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Tax</span>
                             <span className="font-medium">${tax.toFixed(2)}</span>
@@ -57,6 +88,15 @@ const OrderSummary = ({ subtotal, discount, tax, tipAmount, deliveryFee, total }
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                     </div>
+                    {/* Admin Approval Notice */}
+                    {requiresAdminApproval && (
+                        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+                            <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                            <p className="text-sm text-blue-800">
+                                Your order requires admin approval. You will only be charged after approval.
+                            </p>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
         </div>

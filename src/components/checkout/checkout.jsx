@@ -36,6 +36,11 @@ const Checkout = () => {
     const [deliveryTime, setDeliveryTime] = useState("")
     const [frequency, setFrequency] = useState("one-time");
 
+    const [rushFee, setRushFee] = useState(0);
+    const [requiresAdminApproval, setRequiresAdminApproval] = useState(false);
+    const [freeDeliveryThreshold, setFreeDeliveryThreshold] = useState(null);
+    const [isRush, setIsRush] = useState(false);
+
     const [tip, setTip] = useState("0")
 
     const [deliveryFee, setDeliveryFee] = useState(null);
@@ -49,7 +54,7 @@ const Checkout = () => {
     const { cart, subtotal, taxTotal, couponDiscount } = useSelector(state => state.cart)
 
     const tipAmount = Number.parseFloat(tip) || 0
-    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0)
+    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0) + (isRush ? rushFee : 0);
 
     useEffect(() => {
         dispatch(fetchCart())
@@ -75,18 +80,22 @@ const Checkout = () => {
                 body: JSON.stringify({
                     latitude: addressData.latitude,
                     longitude: addressData.longitude,
+                    cart_total: subtotal,
                 }),
             });
             const data = await res.json();
-
-            if (data.outOfRange) {
+            if (!data.outOfRange) {
+                setDeliveryFee(data.fee);
+                setRushFee(data.rush_fee || 0);
+                setRequiresAdminApproval(data.requires_admin_approval || false);
+                setFreeDeliveryThreshold(data.free_delivery_threshold || null);
+                return true;
+            } else {
                 toast.error("Delivery not available for this location. Please choose a closer address.");
                 setDeliveryFee(null);
                 return false;
-            }
 
-            setDeliveryFee(data.fee);
-            return true;
+            }
         } catch (err) {
             toast.error("Failed to calculate delivery fee");
             setDeliveryFee(null);
@@ -144,12 +153,14 @@ const Checkout = () => {
                     delivery_fee: deliveryFee,
                     tip: tip,
                     frequency: frequency,
+                    requires_admin_approval: requiresAdminApproval,
                     totals: {
                         subtotal,
                         discount: couponDiscount || 0,
                         tax: taxTotal,
                         tipAmount,
                         deliveryFee,
+                        rushFee: isRush ? rushFee : 0,
                         total
                     },
                     cardToken: cardToken.token,
@@ -245,14 +256,22 @@ const Checkout = () => {
                                 setDeliveryTime={setDeliveryTime}
                                 tip={tip}
                                 setTip={setTip}
-                                frequency={frequency}        
-                                setFrequency={setFrequency} 
+                                frequency={frequency}
+                                setFrequency={setFrequency}
+                                deliveryFee={deliveryFee}
+                                rushFee={rushFee}
+                                requiresAdminApproval={requiresAdminApproval}
+                                freeDeliveryThreshold={freeDeliveryThreshold}
+                                isRush={isRush}
+                                setIsRush={setIsRush}
+                                feeLoading={feeLoading}
                             />
                         )}
                         {step === 3 && (
                             <PaymentMethod
                                 onSquareReady={handleSquareReady}
                                 onPaymentError={handlePaymentError}
+                                requiresAdminApproval={requiresAdminApproval}
                             />
                         )}
 
@@ -286,6 +305,9 @@ const Checkout = () => {
                     tipAmount={tipAmount}
                     deliveryFee={deliveryFee}
                     total={total}
+                    rushFee={isRush ? rushFee : 0}
+                    freeDeliveryThreshold={freeDeliveryThreshold}
+                     requiresAdminApproval={requiresAdminApproval}
                 />
             </div>
         </div>

@@ -1,11 +1,11 @@
 "use client"
 
-import { useEffect, useState, useMemo } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar, Clock, Loader2, RefreshCw, AlertTriangle, Info } from "lucide-react"
+import { Calendar, Clock, Loader2, RefreshCw, AlertTriangle, Info, Zap, ShieldCheck, Truck } from "lucide-react"
 import { toast } from "sonner"
 
 // ---------- Helpers ----------
@@ -66,14 +66,21 @@ const DeliverySchedule = ({
     tip,
     setTip,
     frequency,
-    setFrequency
+    setFrequency,
+    deliveryFee,
+    rushFee,
+    requiresAdminApproval,
+    freeDeliveryThreshold,
+    isRush,
+    setIsRush,
+    feeLoading,
 }) => {
     const [loading, setLoading] = useState(true)
-    const [timeRules, setTimeRules] = useState([])        // active delivery day rules
-    const [cutoffRule, setCutoffRule] = useState(null)    // active cutoff rule
-    const [availableDays, setAvailableDays] = useState([]) // upcoming delivery days
-    const [timeSlots, setTimeSlots] = useState([])        // slots for selected day
-    const [isWeekOpen, setIsWeekOpen] = useState(true)    // true if current week still open
+    const [timeRules, setTimeRules] = useState([])
+    const [cutoffRule, setCutoffRule] = useState(null)
+    const [availableDays, setAvailableDays] = useState([])
+    const [timeSlots, setTimeSlots] = useState([])
+    const [isWeekOpen, setIsWeekOpen] = useState(true)
 
     const tipOptions = [
         { value: "0", label: "No Tip" },
@@ -83,7 +90,7 @@ const DeliverySchedule = ({
         { value: "15", label: "$15" }
     ]
 
-    // ---------- Fetch rules & cutoff ----------
+    // ---------- Fetch rules ----------
     useEffect(() => {
         const fetchRules = async () => {
             try {
@@ -94,7 +101,6 @@ const DeliverySchedule = ({
                     setLoading(false)
                     return
                 }
-                // active time rules
                 const activeRules = data.rules.filter(r => r.is_active)
                 if (activeRules.length === 0) {
                     toast.error("No active delivery time rules found")
@@ -102,12 +108,10 @@ const DeliverySchedule = ({
                     return
                 }
                 setTimeRules(activeRules)
-                // active cutoff rule
                 const cutoff = data.cutoff_rule
                 if (cutoff && cutoff.is_active) {
                     setCutoffRule(cutoff)
                 } else {
-                    // If no active cutoff, treat as always open
                     setCutoffRule(null)
                 }
             } catch (err) {
@@ -119,7 +123,6 @@ const DeliverySchedule = ({
         }
         fetchRules()
     }, [])
-
     // ---------- Compute available delivery days ----------
     useEffect(() => {
         if (timeRules.length === 0) return
@@ -257,35 +260,88 @@ const DeliverySchedule = ({
                 <CardTitle>Delivery Schedule</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-                {/* Cutoff notice */}
                 {cutoffDisplay}
 
-                {/* Delivery Day */}
+                {/* Delivery Fees & Details */}
+                {deliveryFee !== null && !feeLoading && (
+                    <div className="space-y-3 border rounded-lg p-4 bg-muted/30">
+                        <Label className="flex items-center gap-2 text-base font-semibold">
+                            <Truck className="w-4 h-4" />
+                            Delivery Fee Details
+                        </Label>
+
+                        <div className="flex justify-between text-sm">
+                            <span>Base Delivery Fee</span>
+                            <span className="font-medium">${deliveryFee.toFixed(2)}</span>
+                        </div>
+
+                        {/* Rush delivery option */}
+                        {rushFee > 0 && (
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        type="checkbox"
+                                        id="rush-delivery"
+                                        checked={isRush}
+                                        onChange={(e) => setIsRush(e.target.checked)}
+                                        className="accent-primary w-5 h-5"
+                                    />
+                                    <Label htmlFor="rush-delivery" className="cursor-pointer">
+                                        <span className="flex items-center gap-2">
+                                            <Zap className="w-4 h-4 text-amber-500" />
+                                            Rush Delivery
+                                        </span>
+                                        <p className="text-xs text-muted-foreground">
+                                            Priority handling, delivered faster
+                                        </p>
+                                    </Label>
+                                </div>
+                                <span className="font-medium text-amber-600">+${rushFee.toFixed(2)}</span>
+                            </div>
+                        )}
+
+                        {/* Free delivery threshold info */}
+                        {freeDeliveryThreshold && (
+                            <div className="flex items-center gap-2 text-sm text-green-600">
+                                <ShieldCheck className="w-4 h-4" />
+                                <span>
+                                    Free delivery on orders over ${freeDeliveryThreshold.toFixed(2)} in your area.
+                                </span>
+                            </div>
+                        )}
+
+                        {/* Admin approval notice */}
+                        {requiresAdminApproval && (
+                            <div className="flex items-center gap-2 text-sm text-yellow-600 bg-yellow-50 p-2 rounded-md">
+                                <AlertTriangle className="w-4 h-4" />
+                                <span>
+                                    This delivery zone requires admin approval. Your order will be reviewed before confirmation.
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Delivery Day – compact Select */}
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         Delivery Day *
                     </Label>
-                    <RadioGroup value={deliveryDay} onValueChange={setDeliveryDay} required>
-                        <div className="grid gap-3">
-                            {availableDays.map((day) => (
-                                <div
-                                    key={day.value}
-                                    className="flex items-center space-x-2 border border-border rounded-lg p-4 hover:border-primary transition-colors"
-                                >
-                                    <RadioGroupItem value={day.value} id={day.value} />
-                                    <Label htmlFor={day.value} className="flex-1 cursor-pointer">
-                                        <div className="font-semibold">{day.label}</div>
-                                        <div className="text-sm text-muted-foreground">
-                                            {day.date}
-                                        </div>
-                                    </Label>
-                                </div>
+                    <Select value={deliveryDay} onValueChange={setDeliveryDay} required>
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a delivery day" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {availableDays.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </SelectItem>
                             ))}
-                        </div>
-                    </RadioGroup>
+                        </SelectContent>
+                    </Select>
                     {availableDays.length === 0 && (
-                        <p className="text-sm text-muted-foreground">No delivery days available at the moment.</p>
+                        <p className="text-sm text-muted-foreground">No delivery days available.</p>
                     )}
                 </div>
 
@@ -336,8 +392,8 @@ const DeliverySchedule = ({
                                     key={option.value}
                                     htmlFor={`freq-${option.value}`}
                                     className={`border border-border rounded-lg p-3 text-center cursor-pointer transition-all ${frequency === option.value
-                                            ? "bg-primary text-primary-foreground border-primary"
-                                            : "hover:border-primary/50"
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "hover:border-primary/50"
                                         }`}
                                 >
                                     <RadioGroupItem
@@ -362,8 +418,8 @@ const DeliverySchedule = ({
                                     key={option.value}
                                     htmlFor={`tip-${option.value}`}
                                     className={`border border-border rounded-lg p-3 text-center cursor-pointer transition-all ${tip === option.value
-                                            ? "bg-primary text-primary-foreground border-primary"
-                                            : "hover:border-primary/50"
+                                        ? "bg-primary text-primary-foreground border-primary"
+                                        : "hover:border-primary/50"
                                         }`}
                                 >
                                     <RadioGroupItem
