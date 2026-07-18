@@ -148,6 +148,8 @@ const Cart = () => {
                 return `${coupon.value}% off`
             case 'fixed':
                 return `$${coupon.value} off`
+            case 'free_delivery':
+                return 'Free Delivery'
             default:
                 return 'Discount applied'
         }
@@ -367,10 +369,18 @@ const Cart = () => {
                                     <span className="text-muted-foreground">Subtotal</span>
                                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                                 </div>
-                                {coupon && (   // ← show when coupon exists
+                                {coupon && (
                                     <div className="flex justify-between text-sm text-green-600">
-                                        <span>Discount ({coupon.type === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`})</span>
-                                        <span>-${couponDiscount.toFixed(2)}</span>
+                                        <span>
+                                            {coupon.type === 'free_delivery'
+                                                ? 'Free Delivery'
+                                                : `Discount (${coupon.type === 'percentage' ? `${coupon.value}%` : `$${coupon.value}`})`}
+                                        </span>
+                                        <span>
+                                            {coupon.type === 'free_delivery'
+                                                ? 'FREE'
+                                                : `-$${couponDiscount.toFixed(2)}`}
+                                        </span>
                                     </div>
                                 )}
                                 <div className="flex justify-between text-sm">

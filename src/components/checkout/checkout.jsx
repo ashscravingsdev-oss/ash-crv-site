@@ -51,7 +51,8 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // ----- Cart totals from Redux -----
-    const { cart, subtotal, taxTotal, couponDiscount } = useSelector(state => state.cart)
+    const { cart, subtotal, taxTotal, couponDiscount, coupon } = useSelector(state => state.cart)
+    const isFreeDeliveryCoupon = coupon?.type === 'free_delivery';
 
     const tipAmount = Number.parseFloat(tip) || 0
     const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0) + (isRush ? rushFee : 0);
@@ -85,16 +86,18 @@ const Checkout = () => {
             });
             const data = await res.json();
             if (!data.outOfRange) {
-                setDeliveryFee(data.fee);
+                // Apply free_delivery coupon if active
+                setDeliveryFee(coupon?.type === 'free_delivery' ? 0 : data.fee);
                 setRushFee(data.rush_fee || 0);
                 setRequiresAdminApproval(data.requires_admin_approval || false);
-                setFreeDeliveryThreshold(data.free_delivery_threshold || null);
+                setFreeDeliveryThreshold(
+                    coupon?.type === 'free_delivery' ? null : (data.free_delivery_threshold || null)
+                );
                 return true;
             } else {
                 toast.error("Delivery not available for this location. Please choose a closer address.");
                 setDeliveryFee(null);
                 return false;
-
             }
         } catch (err) {
             toast.error("Failed to calculate delivery fee");
@@ -109,7 +112,7 @@ const Checkout = () => {
         if (step === 2 && addressData.latitude && addressData.longitude) {
             calculateDeliveryFee();
         }
-    }, [step, addressData]);
+    }, [step, addressData, coupon]);
 
     const handleAddressSelect = (locationData) => {
         setAddressData(locationData)
@@ -166,6 +169,7 @@ const Checkout = () => {
                     cardToken: cardToken.token,
                     couponId: cart?.coupon_id || null,
                 };
+                console.log(orderData)
 
                 const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/checkout/create-order`, {
                     method: 'POST',
@@ -307,7 +311,9 @@ const Checkout = () => {
                     total={total}
                     rushFee={isRush ? rushFee : 0}
                     freeDeliveryThreshold={freeDeliveryThreshold}
-                     requiresAdminApproval={requiresAdminApproval}
+                    requiresAdminApproval={requiresAdminApproval}
+                    isFreeDeliveryCoupon={isFreeDeliveryCoupon}
+                    coupon={coupon} // pass the coupon object for display
                 />
             </div>
         </div>

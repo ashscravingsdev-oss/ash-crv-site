@@ -14,6 +14,8 @@ const OrderSummary = ({
     rushFee = 0,
     freeDeliveryThreshold = null,
     requiresAdminApproval = false,
+    isFreeDeliveryCoupon = false,
+    coupon = null,
 }) => {
     return (
         <div className="lg:col-span-1">
@@ -23,12 +25,13 @@ const OrderSummary = ({
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="space-y-3">
+                        {/* Subtotal */}
                         <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Subtotal</span>
                             <span className="font-medium">${subtotal.toFixed(2)}</span>
                         </div>
 
-                        {/* Discount */}
+                        {/* Discount (if any) */}
                         {discount > 0 && (
                             <div className="flex justify-between text-sm text-green-600">
                                 <span>Discount</span>
@@ -44,11 +47,15 @@ const OrderSummary = ({
                             </div>
                         )}
 
-                        {/* Delivery Fee */}
+                        {/* Delivery Fee – handle free delivery coupon */}
                         {deliveryFee !== null && deliveryFee !== undefined && (
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">
-                                    {deliveryFee === 0 ? "Delivery Fee (FREE)" : "Delivery Fee"}
+                                    {isFreeDeliveryCoupon
+                                        ? "Delivery Fee (Coupon)"
+                                        : deliveryFee === 0
+                                            ? "Delivery Fee (FREE)"
+                                            : "Delivery Fee"}
                                 </span>
                                 <span className="font-medium">
                                     {deliveryFee === 0 ? (
@@ -60,7 +67,14 @@ const OrderSummary = ({
                             </div>
                         )}
 
-                        {/* Rush Fee (if selected) */}
+                        {/* Free delivery coupon note */}
+                        {isFreeDeliveryCoupon && coupon && (
+                            <div className="text-xs text-green-600 italic -mt-2">
+                                Free delivery applied via coupon &quot;{coupon.code}&quot;
+                            </div>
+                        )}
+
+                        {/* Rush Fee */}
                         {rushFee > 0 && (
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">Rush Delivery</span>
@@ -68,10 +82,11 @@ const OrderSummary = ({
                             </div>
                         )}
 
-                        {/* Free Delivery Threshold Info */}
-                        {freeDeliveryThreshold && subtotal < freeDeliveryThreshold && (
+                        {/* Free Delivery Threshold Info (only if not already free) */}
+                        {freeDeliveryThreshold && !isFreeDeliveryCoupon && subtotal < freeDeliveryThreshold && (
                             <div className="text-xs text-muted-foreground italic">
-                                Add ${(freeDeliveryThreshold - subtotal).toFixed(2)} more to your order to qualify for free delivery in your area.
+                                Add ${(freeDeliveryThreshold - subtotal).toFixed(2)} more to qualify
+                                for free delivery in your area.
                             </div>
                         )}
 
@@ -88,6 +103,7 @@ const OrderSummary = ({
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                     </div>
+
                     {/* Admin Approval Notice */}
                     {requiresAdminApproval && (
                         <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
