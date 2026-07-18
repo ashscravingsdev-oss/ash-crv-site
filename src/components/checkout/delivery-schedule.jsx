@@ -335,7 +335,7 @@ const DeliverySchedule = ({
                         <SelectContent>
                             {availableDays.map(option => (
                                 <SelectItem key={option.value} value={option.value}>
-                                    {option.label}
+                                    {option.label} ({option.date})
                                 </SelectItem>
                             ))}
                         </SelectContent>
