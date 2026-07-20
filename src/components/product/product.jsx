@@ -12,40 +12,17 @@ import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
 import SEO from '../seo'
-import { fetchProductBySlug } from '@/store/productSlice'
+import { fetchProductBySlug, fetchProducts } from '@/store/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, updateCartItem, fetchCart } from '@/store/cartSlice'
 // import { toast } from 'react-hot-toast'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const relatedProducts = [
-    {
-        id: "3",
-        name: "Power Protein Pack",
-        price: 14.99,
-        image: "/protein-meal-prep-salmon-sweet-potato.jpg",
-        slug: "power-protein-pack"
-    },
-    {
-        id: "5",
-        name: "Asian Fusion Bowl",
-        price: 13.99,
-        image: "/asian-teriyaki-bowl.jpg",
-        slug: "asian-fusion-bowl"
-    },
-    {
-        id: "6",
-        name: "Breakfast Power Bowl",
-        price: 11.99,
-        image: "/breakfast-power-bowl.jpg",
-        slug: "breakfast-power-bowl"
-    },
-]
-
 const Product = ({ slug }) => {
     const dispatch = useDispatch()
     const {
         product,
+        products,
         loading: productLoading
     } = useSelector((state) => state.products)
 
@@ -81,6 +58,10 @@ const Product = ({ slug }) => {
             dispatch(fetchProductBySlug(slug))
         }
     }, [dispatch, slug])
+
+    useEffect(() => {
+        dispatch(fetchProducts({ status: 'active' }))
+    }, [dispatch])
 
     // Fetch cart on mount
     useEffect(() => {
@@ -177,6 +158,10 @@ const Product = ({ slug }) => {
             setIsAdding(false)
         }
     }
+
+    const relatedProducts = products
+        ? products.filter(p => p.id !== product?.id).slice(0, 3)
+        : []
 
     if (productLoading) {
         return (
@@ -451,18 +436,20 @@ const Product = ({ slug }) => {
                     <div className="grid md:grid-cols-3 gap-6">
                         {relatedProducts.map((relatedProduct) => (
                             <Link key={relatedProduct.id} href={`/menu/${relatedProduct.slug}`}>
-                                <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
+                                <Card className="overflow-hidden hover:shadow-lg transition-shadow group h-full">
                                     <div className="aspect-square overflow-hidden">
                                         <img
-                                            src={relatedProduct.image || "/placeholder.svg"}
+                                            src={relatedProduct.image_url || "/placeholder.svg"}
                                             alt={relatedProduct.name}
                                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
-                                    <CardContent className="p-6">
+                                    <CardContent className="p-6 flex flex-col">
                                         <h3 className="text-xl font-semibold mb-2">{relatedProduct.name}</h3>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-2xl font-bold">${relatedProduct.price.toFixed(2)}</span>
+                                        <div className="mt-auto flex items-center justify-between">
+                                            <span className="text-2xl font-bold">
+                                                ${parseFloat(relatedProduct.price).toFixed(2)}
+                                            </span>
                                             <Button variant="outline" size="sm">
                                                 View Details
                                             </Button>

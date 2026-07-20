@@ -14,6 +14,7 @@ import {
     removeFromCart,
     calculateCartTotals
 } from "@/store/cartSlice"
+import { fetchProducts } from "@/store/productSlice"   
 import { motion, AnimatePresence } from "framer-motion"
 import Cookies from "js-cookie";
 import { toast } from "sonner"
@@ -36,6 +37,8 @@ const Cart = () => {
         couponDiscount,
     } = useSelector(state => state.cart)
 
+    const { products } = useSelector((state) => state.products)   
+
     const sessionId = Cookies.get('session_id')
 
     // Fetch cart on mount
@@ -44,6 +47,10 @@ const Cart = () => {
         const params = token ? {} : { session_id: sessionId }
         dispatch(fetchCart(params))
     }, [dispatch, sessionId])
+
+    useEffect(() => {
+        dispatch(fetchProducts({ status: 'active' }))
+    }, [dispatch])
 
     // Calculate totals when cart changes
     useEffect(() => {
@@ -281,27 +288,35 @@ const Cart = () => {
                         <CardContent className="p-6">
                             <h3 className="font-semibold mb-4">You might also like</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                {[
-                                    { name: "Berry Smoothie", price: 7.99, image: "/berry-smoothie-bowl.jpg" },
-                                    { name: "Asian Fusion Bowl", price: 13.99, image: "/asian-teriyaki-bowl.jpg" },
-                                ].map((product) => (
-                                    <div key={product.name} className="flex gap-3 items-center">
-                                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-background">
-                                            <img
-                                                src={product.image || "/placeholder.svg"}
-                                                alt={product.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-sm">{product.name}</p>
-                                            <p className="text-sm text-muted-foreground">${product.price}</p>
-                                        </div>
-                                        <Button size="sm" variant="outline">
-                                            Add
-                                        </Button>
-                                    </div>
-                                ))}
+                                {products
+                                    ?.filter(p => p.is_active && !items.some(item => item.product_id === p.id))
+                                    .slice(0, 4)
+                                    .map((product) => (
+                                        <Link
+                                            key={product.id}
+                                            href={`/menu/${product.slug}`}
+                                            className="flex gap-3 items-center group p-2 rounded-xl hover:bg-background/50 transition-colors"
+                                        >
+                                            <div className="w-16 h-16 rounded-lg overflow-hidden bg-background flex-shrink-0">
+                                                <img
+                                                    src={product.image_url || "/placeholder.svg"}
+                                                    alt={product.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-medium text-sm group-hover:underline">
+                                                    {product.name}
+                                                </p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    ${parseFloat(product.price).toFixed(2)}
+                                                </p>
+                                            </div>
+                                            <Button size="sm" variant="outline" className="flex-shrink-0">
+                                                View
+                                            </Button>
+                                        </Link>
+                                    ))}
                             </div>
                         </CardContent>
                     </Card>
