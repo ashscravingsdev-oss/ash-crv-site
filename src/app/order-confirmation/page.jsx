@@ -11,6 +11,7 @@ import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import SEO from "@/components/seo";
 import Cookies from "js-cookie";
+import { apiRequest } from "@/lib/apiRequest";
 
 // ──────────────────────────────────────────
 // Inner component that uses useSearchParams
@@ -32,22 +33,7 @@ function OrderConfirmationContent() {
 
     const fetchOrder = async () => {
       try {
-        const token = Cookies.get("accessToken");
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/orders/${orderId}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              ...(token && { Authorization: `Bearer ${token}` }),
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch order details");
-        }
-
-        const data = await response.json();
+        const data = await apiRequest(`/orders/${orderId}`);
         setOrder(data);
       } catch (err) {
         console.error("Error fetching order:", err);
@@ -56,7 +42,6 @@ function OrderConfirmationContent() {
         setLoading(false);
       }
     };
-
     fetchOrder();
   }, [orderId]);
 

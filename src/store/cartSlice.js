@@ -1,20 +1,11 @@
-// store/cartSlice.js
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
+import { apiRequest } from '@/lib/apiRequest';
 
-// Helper function to get token
-const getAuthHeaders = () => {
-    const token = Cookies.get('accessToken');
-    return {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
-    };
-};
-
-// Helper function to get or create session_id
+// Helper function to get or create session_id (still needed for guest carts)
 const getSessionId = () => {
     let sessionId = Cookies.get('session_id');
-
     if (!sessionId) {
         sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         Cookies.set('session_id', sessionId, {
@@ -23,49 +14,30 @@ const getSessionId = () => {
             sameSite: 'Lax',
         });
     }
-
     return sessionId;
 };
 
-// Helper to build URL with session_id if needed
+// Helper to build URL with session_id if needed (unchanged)
 const buildUrl = (endpoint, includeSessionId = true) => {
-    const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
     const hasToken = !!Cookies.get('accessToken');
-
-    // If user is authenticated, don't include session_id
     if (hasToken) {
-        return `${baseUrl}${endpoint}`;
+        return endpoint;                              
     }
-
-    // For guest users, include session_id
     const sessionId = getSessionId();
     const separator = endpoint.includes('?') ? '&' : '?';
-    return `${baseUrl}${endpoint}${separator}session_id=${sessionId}`;
+    return `${endpoint}${separator}session_id=${sessionId}`; 
 };
 
-// Get or create cart (supports both user and guest carts)
-// store/cartSlice.js
+// Get or create cart
 export const fetchCart = createAsyncThunk(
     'cart/fetchCart',
     async (_, { rejectWithValue }) => {
         try {
             const url = buildUrl('/cart');
-            const response = await fetch(url, {
-                headers: getAuthHeaders()
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            const data = await response.json();
-
-            // Store cart in cookie for persistence across sessions
+            const data = await apiRequest(url);   // uses cookie token automatically
             if (data) {
                 Cookies.set('cart', JSON.stringify(data), { expires: 7 });
             }
-
             return data;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -79,18 +51,10 @@ export const addToCart = createAsyncThunk(
     async (itemData, { rejectWithValue }) => {
         try {
             const url = buildUrl('/cart/items');
-            const response = await fetch(url, {
+            return await apiRequest(url, {
                 method: 'POST',
-                headers: getAuthHeaders(),
-                body: JSON.stringify(itemData)
+                body: JSON.stringify(itemData),
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            return await response.json();
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -103,18 +67,10 @@ export const updateCartItem = createAsyncThunk(
     async ({ id, updateData }, { rejectWithValue }) => {
         try {
             const url = buildUrl(`/cart/items/${id}`);
-            const response = await fetch(url, {
+            return await apiRequest(url, {
                 method: 'PUT',
-                headers: getAuthHeaders(),
-                body: JSON.stringify(updateData)
+                body: JSON.stringify(updateData),
             });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            return await response.json();
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -127,17 +83,8 @@ export const removeFromCart = createAsyncThunk(
     async (itemId, { rejectWithValue }) => {
         try {
             const url = buildUrl(`/cart/items/${itemId}`);
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: getAuthHeaders()
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            return { itemId, ...(await response.json()) };
+            const result = await apiRequest(url, { method: 'DELETE' });
+            return { itemId, ...result };
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -151,23 +98,12 @@ export const clearCart = createAsyncThunk(
         try {
             const state = getState();
             const cartId = state.cart.cartId || state.cart.items?.[0]?.cart_id;
-
             if (!cartId) {
                 return rejectWithValue('No cart to clear');
             }
-
             const url = buildUrl(`/cart/${cartId}`);
-            const response = await fetch(url, {
-                method: 'DELETE',
-                headers: getAuthHeaders()
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            return { cartId, ...(await response.json()) };
+            const result = await apiRequest(url, { method: 'DELETE' });
+            return { cartId, ...result };
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -181,27 +117,16 @@ export const calculateCartTotals = createAsyncThunk(
         try {
             const state = getState();
             const cartId = state.cart.cartId || state.cart.items?.[0]?.cart_id;
-
             if (!cartId) {
                 return rejectWithValue('No cart to calculate totals');
             }
-
             const url = buildUrl(`/cart/${cartId}/totals`);
-            const response = await fetch(url, {
-                headers: getAuthHeaders()
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                return rejectWithValue(errorData);
-            }
-
-            return await response.json();
+            return await apiRequest(url);
         } catch (error) {
             return rejectWithValue(error.message);
         }
     }
-);
+)
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -450,7 +375,7 @@ const cartSlice = createSlice({
                 if (action.payload) {
                     state.subtotal = action.payload.subtotal || 0;
                     state.taxTotal = action.payload.tax_total || 0;
-                    state.couponDiscount = action.payload.coupon_discount || 0;   
+                    state.couponDiscount = action.payload.coupon_discount || 0;
                     state.coupon = action.payload.coupon || null;
                     state.itemCount = action.payload.item_count || state.items.length;
                     state.itemsWithTotals = action.payload.items || [];

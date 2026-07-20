@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Calendar, Clock, Loader2, RefreshCw, AlertTriangle, Info, Zap, ShieldCheck, Truck } from "lucide-react"
 import { toast } from "sonner"
+import { apiRequest } from "@/lib/apiRequest"
 
 // ---------- Helpers ----------
 
@@ -94,8 +95,7 @@ const DeliverySchedule = ({
     useEffect(() => {
         const fetchRules = async () => {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delivery/time-rules`)
-                const data = await res.json()
+                const data = await apiRequest('/delivery/time-rules');
                 if (!data.rules || data.rules.length === 0) {
                     toast.error("No delivery slots available")
                     setLoading(false)

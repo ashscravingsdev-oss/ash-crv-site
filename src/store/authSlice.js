@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { fetchCart, setCart } from './cartSlice';
+import { apiRequest } from '@/lib/apiRequest';
 
 // Signup user
 export const signup = createAsyncThunk(
@@ -183,24 +184,13 @@ export const verifyOtp = createAsyncThunk(
     'auth/verifyOtp',
     async ({ email, otp }, { rejectWithValue }) => {
         try {
-            const token = Cookies.get('accessToken');
-
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/verify-otp`, {
+            const endpoint = '/auth/verify-otp';
+            const data = await apiRequest(endpoint, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
-                },
                 body: JSON.stringify({ email, otp }),
             });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                return rejectWithValue(data);
-            }
-
-            // Update user verification status in cookies
+            // Update verification status in cookie
             const userCookie = Cookies.get('user');
             if (userCookie) {
                 const user = JSON.parse(userCookie);
@@ -210,7 +200,7 @@ export const verifyOtp = createAsyncThunk(
 
             return data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.message || error);
         }
     }
 );
@@ -245,27 +235,15 @@ export const updateUserProfile = createAsyncThunk(
     'auth/updateUserProfile',
     async (userData, { rejectWithValue }) => {
         try {
-            const token = Cookies.get('accessToken');
-
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/profile`, {
+            const endpoint = '/users/profile';
+            const data = await apiRequest(endpoint, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
-                },
                 body: JSON.stringify(userData),
             });
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                return rejectWithValue(data);
-            }
-
-            // Get current user from cookies and merge with updated data
+            // Merge updated data into the cookie
             const userCookie = Cookies.get('user');
             const currentUser = userCookie ? JSON.parse(userCookie) : {};
-
             const updatedUser = {
                 ...currentUser,
                 id: data.id || currentUser.id,
@@ -275,12 +253,11 @@ export const updateUserProfile = createAsyncThunk(
                 roles: data.roles || currentUser.roles,
                 is_verified: data.is_verified !== undefined ? data.is_verified : currentUser.is_verified,
             };
-
             Cookies.set('user', JSON.stringify(updatedUser), { expires: 7 });
 
             return data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.message || error);
         }
     }
 );
@@ -290,26 +267,13 @@ export const updateUserPassword = createAsyncThunk(
     'auth/updateUserPassword',
     async ({ oldPassword, newPassword }, { rejectWithValue }) => {
         try {
-            const token = Cookies.get('accessToken');
-
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/users/password`, {
+            const endpoint = '/users/password';
+            return await apiRequest(endpoint, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    ...(token && { 'Authorization': `Bearer ${token}` }),
-                },
                 body: JSON.stringify({ oldPassword, newPassword }),
             });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                return rejectWithValue(data);
-            }
-
-            return data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.message || error);
         }
     }
 );

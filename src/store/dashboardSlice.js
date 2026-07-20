@@ -1,17 +1,5 @@
-// store/dashboardSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
-
-// ---------- Helpers (same as cartSlice) ----------
-const getAuthHeaders = () => {
-    const token = Cookies.get('accessToken');
-    return {
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` }),
-    };
-};
-
-const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { apiRequest } from '@/lib/apiRequest';
 
 // ---------- Async Thunks ----------
 
@@ -25,15 +13,10 @@ export const fetchUserOrders = createAsyncThunk(
             if (params.limit) query.append('limit', params.limit);
             if (params.status) query.append('status', params.status);
             const qs = query.toString();
-            const url = `${BASE_URL}/orders${qs ? `?${qs}` : ''}`;
-            const res = await fetch(url, { headers: getAuthHeaders() });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = `/orders${qs ? `?${qs}` : ''}`;
+            return await apiRequest(endpoint);
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
@@ -43,15 +26,10 @@ export const fetchUserOrderById = createAsyncThunk(
     'dashboard/fetchUserOrderById',
     async (orderId, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/orders/${orderId}`;
-            const res = await fetch(url, { headers: getAuthHeaders() });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = `/orders/${orderId}`;
+            return await apiRequest(endpoint);
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
@@ -61,15 +39,10 @@ export const fetchUserSubscriptions = createAsyncThunk(
     'dashboard/fetchUserSubscriptions',
     async (_, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/subscriptions`;
-            const res = await fetch(url, { headers: getAuthHeaders() });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = '/subscriptions';
+            return await apiRequest(endpoint);
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
@@ -79,18 +52,10 @@ export const pauseUserSubscription = createAsyncThunk(
     'dashboard/pauseUserSubscription',
     async (subId, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/subscriptions/${subId}/pause`;
-            const res = await fetch(url, {
-                method: 'PATCH',
-                headers: getAuthHeaders(),
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = `/subscriptions/${subId}/pause`;
+            return await apiRequest(endpoint, { method: 'PATCH' });
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
@@ -100,18 +65,10 @@ export const resumeUserSubscription = createAsyncThunk(
     'dashboard/resumeUserSubscription',
     async (subId, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/subscriptions/${subId}/resume`;
-            const res = await fetch(url, {
-                method: 'PATCH',
-                headers: getAuthHeaders(),
-            });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = `/subscriptions/${subId}/resume`;
+            return await apiRequest(endpoint, { method: 'PATCH' });
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
@@ -121,33 +78,21 @@ export const fetchDashboardStats = createAsyncThunk(
     'dashboard/fetchDashboardStats',
     async (_, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/dashboard/stats`;
-            const res = await fetch(url, { headers: getAuthHeaders() });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = '/dashboard/stats';
+            return await apiRequest(endpoint);
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );
-
-// store/dashboardSlice.js
 export const skipUserSubscription = createAsyncThunk(
     'dashboard/skipUserSubscription',
     async (subId, { rejectWithValue }) => {
         try {
-            const url = `${BASE_URL}/subscriptions/${subId}/skip`;
-            const res = await fetch(url, { method: 'PATCH', headers: getAuthHeaders() });
-            if (!res.ok) {
-                const err = await res.json();
-                return rejectWithValue(err);
-            }
-            return await res.json();
+            const endpoint = `/subscriptions/${subId}/skip`;
+            return await apiRequest(endpoint, { method: 'PATCH' });
         } catch (err) {
-            return rejectWithValue(err.message);
+            return rejectWithValue(err.message || err);
         }
     }
 );

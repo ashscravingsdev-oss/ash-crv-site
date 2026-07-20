@@ -12,6 +12,7 @@ import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
 import { toast } from "sonner"
 import { Loader2 } from "lucide-react"
+import { apiRequest } from "@/lib/apiRequest"
 
 const Checkout = () => {
     const dispatch = useDispatch()
@@ -75,16 +76,15 @@ const Checkout = () => {
 
         setFeeLoading(true);
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/delivery/calculate-fee`, {
+            const data = await apiRequest('/delivery/calculate-fee', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     latitude: addressData.latitude,
                     longitude: addressData.longitude,
                     cart_total: subtotal,
                 }),
             });
-            const data = await res.json();
+            
             if (!data.outOfRange) {
                 // Apply free_delivery coupon if active
                 setDeliveryFee(coupon?.type === 'free_delivery' ? 0 : data.fee);
@@ -171,16 +171,11 @@ const Checkout = () => {
                 };
                 console.log(orderData)
 
-                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/checkout/create-order`, {
+                const result = await apiRequest('/checkout/create-order', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${Cookies.get('accessToken')}`,
-                    },
                     body: JSON.stringify(orderData),
                 });
 
-                const result = await response.json();
                 if (response.ok) {
                     toast.success("Order placed successfully!");
                     window.location.href = `/order-confirmation?orderId=${result.order.id}`;
