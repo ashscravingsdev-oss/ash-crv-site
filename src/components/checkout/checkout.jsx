@@ -84,7 +84,7 @@ const Checkout = () => {
                     cart_total: subtotal,
                 }),
             });
-            
+
             if (!data.outOfRange) {
                 // Apply free_delivery coupon if active
                 setDeliveryFee(coupon?.type === 'free_delivery' ? 0 : data.fee);
@@ -176,12 +176,9 @@ const Checkout = () => {
                     body: JSON.stringify(orderData),
                 });
 
-                if (response.ok) {
-                    toast.success("Order placed successfully!");
-                    window.location.href = `/order-confirmation?orderId=${result.order.id}`;
-                } else {
-                    toast.error(result.message || 'Order failed');
-                }
+                toast.success("Order placed successfully!");
+                window.location.href = `/order-confirmation?orderId=${result.order.id}`;
+                
             } catch (error) {
                 console.error("Order submission error:", error);
                 toast.error("Failed to place order. Please try again.");
