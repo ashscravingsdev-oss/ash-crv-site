@@ -1,53 +1,30 @@
-// components/account/active-subscription.js
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Loader2 } from "lucide-react";
 
-const ActiveSubscription = ({ subscription, onPause, onResume, onSkip ,loading }) => {
-    if (loading) {
-        return (
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Active Subscription</CardTitle>
-                </CardHeader>
-                <CardContent className="flex justify-center py-6">
-                    <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-                </CardContent>
-            </Card>
-        );
-    }
-
-    if (!subscription) {
-        return (
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Active Subscription</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <p className="text-muted-foreground text-sm">No active subscription.</p>
-                    <Button className="mt-4" asChild>
-                        <a href="/subscriptions">Explore Plans</a>
-                    </Button>
-                </CardContent>
-            </Card>
-        );
-    }
-
+const ActiveSubscription = ({
+    subscription,
+    onPause,
+    onResume,
+    onSkip,
+    onUnskip,      
+}) => {
     const freqLabel =
         subscription.frequency.charAt(0).toUpperCase() + subscription.frequency.slice(1);
 
     return (
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle> {freqLabel} Plan</CardTitle>
+                <CardTitle>{freqLabel} Plan</CardTitle>
                 <Badge className="bg-primary">
                     {subscription.status === "active" ? "Active" : subscription.status}
                 </Badge>
             </CardHeader>
             <CardContent className="space-y-4">
+                {/* Next Delivery + Skip/Unskip buttons */}
                 <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                     <div>
                         <p className="text-sm text-muted-foreground">Next Delivery</p>
@@ -61,10 +38,27 @@ const ActiveSubscription = ({ subscription, onPause, onResume, onSkip ,loading }
                                 : "—"}
                         </p>
                     </div>
-                    <Button variant="outline" size="sm" onClick={() => onSkip(subscription.id)} >
-                        Skip
-                    </Button>
+                    {subscription.status === "active" && (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => onSkip(subscription.id)}
+                            >
+                                Skip
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => onUnskip(subscription.id)}
+                            >
+                                Undo
+                            </Button>
+                        </div>
+                    )}
                 </div>
+
+                {/* Pause/Resume */}
                 <div className="flex gap-3">
                     {subscription.status === "active" ? (
                         <Button

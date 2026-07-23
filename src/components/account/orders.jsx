@@ -119,18 +119,34 @@ const Orders = () => {
                                 <div className="bg-muted/50 rounded-lg p-4 mb-4 space-y-2 text-sm">
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Subtotal</span>
-                                        <span className="font-medium">${parseFloat(order.subtotal).toFixed(2)}</span>
+                                        <span className="font-medium">
+                                            ${parseFloat(order.subtotal).toFixed(2)}
+                                        </span>
                                     </div>
-                                    {discount > 0 && (
+
+                                    {/* Coupon Discount – calculated from coupon */}
+                                    {order.coupon && (
                                         <div className="flex justify-between text-green-600">
-                                            <span>Discount {order.coupon ? `(${order.coupon.code})` : ""}</span>
-                                            <span>-${discount.toFixed(2)}</span>
+                                            <span>
+                                                Discount ({order.coupon.code})
+                                            </span>
+                                            <span>
+                                                -$
+                                                {(order.coupon.type === 'percentage'
+                                                    ? (parseFloat(order.subtotal) * parseFloat(order.coupon.value) / 100)
+                                                    : Math.min(parseFloat(order.coupon.value), parseFloat(order.subtotal))
+                                                ).toFixed(2)}
+                                            </span>
                                         </div>
                                     )}
+
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Tax</span>
-                                        <span className="font-medium">${parseFloat(order.tax_total).toFixed(2)}</span>
+                                        <span className="font-medium">
+                                            ${parseFloat(order.tax_total).toFixed(2)}
+                                        </span>
                                     </div>
+
                                     <div className="flex justify-between">
                                         <span className="text-muted-foreground">Delivery Fee</span>
                                         <span className="font-medium">
@@ -141,19 +157,32 @@ const Orders = () => {
                                             )}
                                         </span>
                                     </div>
-                                    {/* Tip (if available) – optional, you can add later */}
-                                    {order.tip_amount > 0 && (
+
+                                    {/* Rush Fee – only if > 0 */}
+                                    {parseFloat(order.rush_fee || 0) > 0 && (
                                         <div className="flex justify-between">
-                                            <span className="text-muted-foreground">Tip</span>
-                                            <span className="font-medium">${parseFloat(order.tip_amount).toFixed(2)}</span>
+                                            <span className="text-muted-foreground">Rush Delivery</span>
+                                            <span className="font-medium text-amber-600">
+                                                +${parseFloat(order.rush_fee).toFixed(2)}
+                                            </span>
                                         </div>
                                     )}
+
+                                    {/* Tip – from tip relation */}
+                                    {order.tip && parseFloat(order.tip.amount) > 0 && (
+                                        <div className="flex justify-between">
+                                            <span className="text-muted-foreground">Driver Tip</span>
+                                            <span className="font-medium">
+                                                ${parseFloat(order.tip.amount).toFixed(2)}
+                                            </span>
+                                        </div>
+                                    )}
+
                                     <div className="flex justify-between font-semibold pt-2 border-t">
                                         <span>Total</span>
                                         <span>${parseFloat(order.total_amount).toFixed(2)}</span>
                                     </div>
                                 </div>
-
                                 {/* Delivery details */}
                                 {(order.delivery_address || order.delivery_day) && (
                                     <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mb-4">

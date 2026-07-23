@@ -6,7 +6,7 @@ import { apiRequest } from '@/lib/apiRequest';
 // Signup user
 export const signup = createAsyncThunk(
     'auth/signup',
-    async (userData, { rejectWithValue }) => {
+    async (userData, { rejectWithValue, dispatch }) => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signup`, {
                 method: 'POST',
@@ -15,6 +15,7 @@ export const signup = createAsyncThunk(
                 },
                 body: JSON.stringify({
                     username: userData.username,
+                    phone: userData.phone,
                     email: userData.email,
                     password: userData.password
                 }),
@@ -25,7 +26,6 @@ export const signup = createAsyncThunk(
             if (!response.ok) {
                 return rejectWithValue(data);
             }
-            console.log(data, 'data');
 
             if (data.accessToken) {
                 Cookies.set('accessToken', data.accessToken, { expires: 7 });
@@ -34,11 +34,40 @@ export const signup = createAsyncThunk(
                     id: data.id,
                     email: data.email,
                     username: data.username,
+                    phone: data.phone,
                     roles: data.roles,
                     is_verified: data.is_verified
                 };
 
                 Cookies.set('user', JSON.stringify(user), { expires: 7 });
+
+                // ── Merge guest cart (same logic as signin) ──
+                const sessionId = Cookies.get('session_id');
+                if (sessionId) {
+                    try {
+                        const mergeResponse = await fetch(
+                            `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart/merge`,
+                            {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${data.accessToken}`
+                                },
+                                body: JSON.stringify({ session_id: sessionId })
+                            }
+                        );
+
+                        if (mergeResponse.ok) {
+                            const mergedCart = await mergeResponse.json();
+                            dispatch(setCart(mergedCart));
+                        }
+                    } catch (mergeError) {
+                        console.error('Error merging cart:', mergeError);
+                    }
+                }
+
+                // Fetch the fresh (now merged) cart
+                await dispatch(fetchCart());
             }
 
             return data;

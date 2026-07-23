@@ -16,7 +16,6 @@ import { signup, clearAuthErrors } from "@/store/authSlice"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
-// Define validation schema with Zod - updated with single name field
 const registerSchema = z.object({
     name: z
         .string()
@@ -28,6 +27,11 @@ const registerSchema = z.object({
         .string()
         .min(1, "Email is required")
         .email("Please enter a valid email address"),
+
+    phone: z
+        .string()
+        .min(1, "Phone number is required")
+        .regex(/^\+?[\d\s\-\(\)]{7,15}$/, "Please enter a valid phone number"),
 
     password: z
         .string()
@@ -47,13 +51,11 @@ const registerSchema = z.object({
     path: ["confirmPassword"],
 });
 
-// Infer TypeScript type from schema
 const Register = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const [apiError, setApiError] = useState(null);
 
-    // Get auth state from Redux
     const { signupError, signupLoading, signupSuccess, isAuthenticated } = useSelector((state) => state.auth);
 
     const {
@@ -69,72 +71,104 @@ const Register = () => {
         defaultValues: {
             name: "",
             email: "",
+            phone: "",
             password: "",
             confirmPassword: "",
             terms: false,
         },
     });
 
-    // Watch password for real-time confirmation validation
     const password = watch("password");
-    // Watch form fields to clear API error when user starts typing
     const nameValue = watch('name');
     const emailValue = watch('email');
+    const phoneValue = watch('phone');
     const passwordValue = watch('password');
     const confirmPasswordValue = watch('confirmPassword');
 
-    // Redirect if already authenticated or signup successful
     useEffect(() => {
         if (isAuthenticated) {
             router.push("/account");
         }
         if (signupSuccess) {
-            // Optionally redirect to login or account after successful signup
             router.push("/account");
         }
     }, [isAuthenticated, signupSuccess, router]);
 
-    // Handle API errors from Redux
     useEffect(() => {
         if (signupError) {
-            // Parse error message
+            // Default fallback message
             let errorMessage = "Registration failed. Please try again.";
 
             if (typeof signupError === 'string') {
                 errorMessage = signupError;
             } else if (signupError?.message) {
                 errorMessage = signupError.message;
-            } else if (signupError?.error) {
-                errorMessage = signupError.error;
+            }
+
+            // ── Handle structured express‑validator errors ──
+            if (signupError?.errors && Array.isArray(signupError.errors)) {
+                signupError.errors.forEach((err) => {
+                    // Map each error path to the corresponding form field
+                    switch (err.path) {
+                        case 'email':
+                            setError('email', { type: 'manual', message: err.msg });
+                            break;
+                        case 'username':
+                        case 'name':
+                            setError('name', { type: 'manual', message: err.msg });
+                            break;
+                        case 'phone':
+                            setError('phone', { type: 'manual', message: err.msg });
+                            break;
+                        case 'password':
+                            setError('password', { type: 'manual', message: err.msg });
+                            break;
+                        case 'confirmPassword':
+                            setError('confirmPassword', { type: 'manual', message: err.msg });
+                            break;
+                        default:
+                            // For other fields, just use the message as a general error
+                            break;
+                    }
+                });
+
+                // Use the first error as the general banner message if nothing else set
+                if (signupError.errors.length > 0 && !errorMessage) {
+                    errorMessage = signupError.errors[0].msg;
+                }
+            } else {
+                // ── Fallback: old flat error object (if backend ever returns that) ──
+                if (signupError?.field === 'email' || signupError?.email) {
+                    setError('email', {
+                        type: 'manual',
+                        message: signupError.email || "Email already exists",
+                    });
+                }
+                if (signupError?.field === 'username' || signupError?.username) {
+                    setError('name', {
+                        type: 'manual',
+                        message: signupError.username || "Username already taken",
+                    });
+                }
+                if (signupError?.field === 'phone' || signupError?.phone) {
+                    setError('phone', {
+                        type: 'manual',
+                        message: signupError.phone || "Phone number already in use",
+                    });
+                }
             }
 
             setApiError(errorMessage);
-
-            // Handle field-specific errors (common patterns)
-            if (signupError?.field === 'email' || signupError?.email) {
-                setError('email', {
-                    type: 'manual',
-                    message: signupError.email || "Email already exists"
-                });
-            }
-            if (signupError?.field === 'username' || signupError?.username) {
-                setError('name', {
-                    type: 'manual',
-                    message: signupError.username || "Username already taken"
-                });
-            }
         }
     }, [signupError, setError]);
 
-    // Clear API error when user starts typing in any field
     useEffect(() => {
-        if (nameValue || emailValue || passwordValue || confirmPasswordValue) {
+        if (nameValue || emailValue || phoneValue || passwordValue || confirmPasswordValue) {
             setApiError(null);
             dispatch(clearAuthErrors());
         }
-    }, [nameValue, emailValue, passwordValue, confirmPasswordValue, dispatch]);
+    }, [nameValue, emailValue, phoneValue, passwordValue, confirmPasswordValue, dispatch]);
 
-    // Clean up errors on unmount
     useEffect(() => {
         return () => {
             dispatch(clearAuthErrors());
@@ -143,29 +177,24 @@ const Register = () => {
 
     const onSubmit = async (data) => {
         try {
-            // Clear any previous errors
             setApiError(null);
             dispatch(clearAuthErrors());
 
-            // Dispatch signup action with single name field
             const result = await dispatch(signup({
-                username: data.name, // Map name to username for backend
+                username: data.name,
                 email: data.email,
+                phone: data.phone,
                 password: data.password
             }));
 
-            // Check if signup was successful
             if (signup.fulfilled.match(result)) {
-                // Success is handled by the useEffect redirect
                 console.log("Signup successful");
             }
         } catch (error) {
-            // Handle unexpected errors
             setApiError("An unexpected error occurred. Please try again.");
         }
     };
 
-    // Handle input change to clear field errors
     const handleInputChange = (fieldName) => {
         if (errors[fieldName]) {
             clearErrors(fieldName);
@@ -180,18 +209,15 @@ const Register = () => {
                     <CardDescription>Join FreshPrep and start your healthy journey</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {/* API Error Alert */}
                     {apiError && (
                         <Alert variant="destructive" className="mb-4">
                             <AlertCircle className="h-4 w-4" />
-                            <AlertDescription>
-                                {apiError}
-                            </AlertDescription>
+                            <AlertDescription>{apiError}</AlertDescription>
                         </Alert>
                     )}
 
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        {/* Full Name Field - Single field instead of first/last */}
+                        {/* Full Name */}
                         <div className="space-y-2">
                             <Label htmlFor="name">Full Name</Label>
                             <Input
@@ -215,7 +241,7 @@ const Register = () => {
                             )}
                         </div>
 
-                        {/* Email Field */}
+                        {/* Email */}
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
                             <Input
@@ -240,7 +266,32 @@ const Register = () => {
                             )}
                         </div>
 
-                        {/* Password Field */}
+                        {/* Phone Number (NEW) */}
+                        <div className="space-y-2">
+                            <Label htmlFor="phone">Phone Number</Label>
+                            <Input
+                                id="phone"
+                                type="tel"
+                                placeholder="+1 (555) 123-4567"
+                                {...register("phone", {
+                                    onChange: () => {
+                                        handleInputChange("phone");
+                                        setApiError(null);
+                                        dispatch(clearAuthErrors());
+                                    },
+                                })}
+                                className={errors.phone ? "border-red-500 focus-visible:ring-red-500" : ""}
+                                aria-invalid={errors.phone ? "true" : "false"}
+                                disabled={signupLoading}
+                            />
+                            {errors.phone && (
+                                <p className="text-red-500 text-sm mt-1" role="alert">
+                                    {errors.phone.message}
+                                </p>
+                            )}
+                        </div>
+
+                        {/* Password */}
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
                             <Input
@@ -263,25 +314,15 @@ const Register = () => {
                                     {errors.password.message}
                                 </p>
                             )}
-
-                            {/* Password strength hints - optional */}
                             <div className="text-xs text-gray-500 mt-1 space-y-1">
-                                <p className={password?.length >= 8 ? "text-green-600" : ""}>
-                                    • At least 8 characters
-                                </p>
-                                <p className={/[A-Z]/.test(password) ? "text-green-600" : ""}>
-                                    • One uppercase letter
-                                </p>
-                                <p className={/[0-9]/.test(password) ? "text-green-600" : ""}>
-                                    • One number
-                                </p>
-                                <p className={/[^A-Za-z0-9]/.test(password) ? "text-green-600" : ""}>
-                                    • One special character
-                                </p>
+                                <p className={password?.length >= 8 ? "text-green-600" : ""}>• At least 8 characters</p>
+                                <p className={/[A-Z]/.test(password) ? "text-green-600" : ""}>• One uppercase letter</p>
+                                <p className={/[0-9]/.test(password) ? "text-green-600" : ""}>• One number</p>
+                                <p className={/[^A-Za-z0-9]/.test(password) ? "text-green-600" : ""}>• One special character</p>
                             </div>
                         </div>
 
-                        {/* Confirm Password Field */}
+                        {/* Confirm Password */}
                         <div className="space-y-2">
                             <Label htmlFor="confirmPassword">Confirm Password</Label>
                             <Input
@@ -306,7 +347,7 @@ const Register = () => {
                             )}
                         </div>
 
-                        {/* Terms Checkbox */}
+                        {/* Terms */}
                         <div className="flex items-start space-x-2">
                             <Controller
                                 name="terms"

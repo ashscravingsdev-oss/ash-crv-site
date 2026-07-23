@@ -19,6 +19,7 @@ import {
     pauseUserSubscription,
     skipUserSubscription,
     resumeUserSubscription,
+    unskipUserSubscription,
 } from "@/store/dashboardSlice";
 import { toast } from "sonner"
 
@@ -76,7 +77,7 @@ const Account = () => {
         try {
             await dispatch(pauseUserSubscription(subId)).unwrap();
             dispatch(fetchUserSubscriptions());
-             dispatch(fetchDashboardStats());
+            dispatch(fetchDashboardStats());
             toast.success("Subscription paused");
         } catch (err) {
             toast.error(err?.message || "Failed to pause subscription");
@@ -87,7 +88,7 @@ const Account = () => {
         try {
             await dispatch(resumeUserSubscription(subId)).unwrap();
             dispatch(fetchUserSubscriptions());
-             dispatch(fetchDashboardStats());
+            dispatch(fetchDashboardStats());
             toast.success("Subscription resumed");
         } catch (err) {
             toast.error(err?.message || "Failed to resume subscription");
@@ -98,13 +99,23 @@ const Account = () => {
         try {
             await dispatch(skipUserSubscription(subId)).unwrap();
             dispatch(fetchUserSubscriptions());
-             dispatch(fetchDashboardStats());
+            dispatch(fetchDashboardStats());
             toast.success("Next delivery skipped");
         } catch (err) {
             toast.error(err?.message || "Failed to skip delivery");
         }
     };
 
+    const handleUnskip = async (subId) => {
+        try {
+            await dispatch(unskipUserSubscription(subId)).unwrap();
+            dispatch(fetchUserSubscriptions());
+            dispatch(fetchDashboardStats());
+            toast.success("Skipped delivery restored");
+        } catch (err) {
+            toast.error(err?.message || "Failed to undo skip");
+        }
+    };
     return (
         <Layout
             title="Dashboard"
@@ -154,6 +165,7 @@ const Account = () => {
                                             onPause={handlePause}
                                             onResume={handleResume}
                                             onSkip={handleSkip}
+                                            onUnskip={handleUnskip}
                                         />
                                     ))
                                 ) : (

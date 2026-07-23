@@ -10,12 +10,16 @@ import DeliverySchedule from './delivery-schedule'
 import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
+import { Loader2, ShoppingBag } from "lucide-react" 
 import { toast } from "sonner"
-import { Loader2 } from "lucide-react"
 import { apiRequest } from "@/lib/apiRequest"
+import { Card, CardContent } from "@/components/ui/card"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 const Checkout = () => {
     const dispatch = useDispatch()
+    const router = useRouter()
     const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN
     const mapRef = useRef(null)
     const [step, setStep] = useState(1)
@@ -52,7 +56,7 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // ----- Cart totals from Redux -----
-    const { cart, subtotal, taxTotal, couponDiscount, coupon } = useSelector(state => state.cart)
+    const { cart, loading: cartLoading, items, subtotal, taxTotal, couponDiscount, coupon } = useSelector(state => state.cart)
     const isFreeDeliveryCoupon = coupon?.type === 'free_delivery';
 
     const tipAmount = Number.parseFloat(tip) || 0
@@ -178,7 +182,7 @@ const Checkout = () => {
 
                 toast.success("Order placed successfully!");
                 window.location.href = `/order-confirmation?orderId=${result.order.id}`;
-                
+
             } catch (error) {
                 console.error("Order submission error:", error);
                 toast.error("Failed to place order. Please try again.");
@@ -221,6 +225,32 @@ const Checkout = () => {
         if (step === 3) return "Place Order";
         return "Continue";
     };
+
+    // ===================== EMPTY CART STATE =====================
+    if (cartLoading) {
+        return (
+            <div className="container mx-auto px-4 pt-16">
+                <div className="flex justify-center py-16">
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                </div>
+            </div>
+        )
+    }
+
+    if (!cartLoading && (!items || items.length === 0)) {
+        return (
+            <div className="container mx-auto px-4 pt-16">
+                <Card className="max-w-md mx-auto text-center p-12">
+                    <ShoppingBag className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                    <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
+                    <p className="text-muted-foreground mb-6">Add some delicious meals to get started!</p>
+                    <Button asChild>
+                        <Link href="/menu">Browse Menu</Link>
+                    </Button>
+                </Card>
+            </div>
+        )
+    }
 
     return (
         <div className="container mx-auto px-4 pt-8">

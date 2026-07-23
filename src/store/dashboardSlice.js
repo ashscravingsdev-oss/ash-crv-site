@@ -97,6 +97,18 @@ export const skipUserSubscription = createAsyncThunk(
     }
 );
 
+export const unskipUserSubscription = createAsyncThunk(
+    'dashboard/unskipUserSubscription',
+    async (subId, { rejectWithValue }) => {
+        try {
+            const endpoint = `/subscriptions/${subId}/unskip`;
+            return await apiRequest(endpoint, { method: 'PATCH' });
+        } catch (err) {
+            return rejectWithValue(err.message || err);
+        }
+    }
+);
+
 // ---------- Slice ----------
 const dashboardSlice = createSlice({
     name: 'dashboard',
@@ -125,6 +137,7 @@ const dashboardSlice = createSlice({
             pause: false,
             resume: false,
             skip: false,
+            unskip: false,
         },
 
         // Errors
@@ -222,6 +235,22 @@ const dashboardSlice = createSlice({
             })
             .addCase(skipUserSubscription.rejected, (state, action) => {
                 state.loading.skip = false;
+                state.error = action.payload || action.error.message;
+            })
+            .addCase(unskipUserSubscription.pending, (state) => {
+                state.loading.unskip = true;
+                state.error = null;
+            })
+            .addCase(unskipUserSubscription.fulfilled, (state, action) => {
+                state.loading.unskip = false;
+                const updated = action.payload.subscription;
+                if (updated) {
+                    const idx = state.subscriptions.findIndex(s => s.id === updated.id);
+                    if (idx !== -1) state.subscriptions[idx] = updated;
+                }
+            })
+            .addCase(unskipUserSubscription.rejected, (state, action) => {
+                state.loading.unskip = false;
                 state.error = action.payload || action.error.message;
             });
     },

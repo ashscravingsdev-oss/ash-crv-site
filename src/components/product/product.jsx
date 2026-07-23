@@ -244,7 +244,6 @@ const Product = ({ slug }) => {
                                                     ? 'border-primary bg-primary/5'
                                                     : 'border-border hover:border-primary/50'
                                                     }`}
-                                                onClick={() => handleAddonToggle(addon.id)}
                                             >
                                                 <div className="flex items-center gap-3 flex-1">
                                                     <Checkbox

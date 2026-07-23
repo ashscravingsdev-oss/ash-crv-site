@@ -12,10 +12,10 @@ export default function UserProfilePage() {
         >
             <div className="lg:col-span-3">
                 <Tabs defaultValue="personal" className="w-full ">
-                    <TabsList className="grid grid-cols-3 mb-8 bg-white">
+                    <TabsList className="grid grid-cols-2 mb-8 bg-white">
                         <TabsTrigger value="personal">Personal Information</TabsTrigger>
                         <TabsTrigger value="security">Security</TabsTrigger>
-                        <TabsTrigger value="preferences">Preferences</TabsTrigger>
+                        {/* <TabsTrigger value="preferences">Preferences</TabsTrigger> */}
                     </TabsList>
 
                     {/* Profile Tab */}
