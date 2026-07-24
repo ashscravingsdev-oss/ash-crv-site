@@ -29,18 +29,28 @@ const formatDate = (date) => {
 }
 
 // Next occurrence of a weekday (0-6) after a given date, without time
-const getNextDayOfWeek = (dayName, afterDate = new Date()) => {
+const getNextDayOfWeek = (dayName, afterDate = new Date(), timeEnd = null) => {
     const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
     const targetDay = days.indexOf(dayName.toLowerCase())
     const from = new Date(afterDate)
-    // Start from the next day to avoid today if already passed
-    from.setDate(from.getDate() + 1)
-    from.setHours(0, 0, 0, 0)
+    from.setHours(0, 0, 0, 0)            // start from midnight of the given date
     const currentDay = from.getDay()
     let daysUntilTarget = targetDay - currentDay
     if (daysUntilTarget < 0) daysUntilTarget += 7
     const result = new Date(from)
     result.setDate(from.getDate() + daysUntilTarget)
+
+    // If the result is today, verify that the delivery window hasn't ended yet
+    if (timeEnd && result.getTime() === from.getTime()) {
+        const now = new Date()
+        const [endHours, endMinutes] = timeEnd.split(':').map(Number)
+        const endTime = new Date(result)
+        endTime.setHours(endHours, endMinutes, 0, 0)
+        if (now >= endTime) {
+            // Already past today's window → move to next week
+            result.setDate(result.getDate() + 7)
+        }
+    }
     return result
 }
 
@@ -128,29 +138,46 @@ const DeliverySchedule = ({
         if (timeRules.length === 0) return
 
         const now = new Date()
+
         let startAfter = now
         let weekOpen = true
 
         if (cutoffRule) {
-            const thisWeekCutoff = getThisWeekCutoff(cutoffRule.cutoff_day, cutoffRule.cutoff_time)
+            const thisWeekCutoff = getThisWeekCutoff(
+                cutoffRule.cutoff_day,
+                cutoffRule.cutoff_time
+            )
+
             weekOpen = now < thisWeekCutoff
+
             setIsWeekOpen(weekOpen)
+
             if (!weekOpen) {
-                // Week closed: start from the day after the cutoff
                 const dayAfter = new Date(thisWeekCutoff)
-                dayAfter.setDate(dayAfter.getDate() + 1)
+
+                dayAfter.setDate(
+                    dayAfter.getDate() + 1
+                )
+
                 dayAfter.setHours(0, 0, 0, 0)
+
                 startAfter = dayAfter
+
+                console.log(
+                    "Week closed. Starting from:",
+                    startAfter.toString()
+                )
             }
-        } else {
-            setIsWeekOpen(true)
         }
 
-        // Build upcoming delivery days
         const upcoming = timeRules.map(rule => {
-            const nextDate = getNextDayOfWeek(rule.delivery_day, startAfter)
+            const nextDate = getNextDayOfWeek(
+                rule.delivery_day,
+                startAfter,
+                rule.time_end          // ✅ tell the function when the window closes today
+            )
             return {
-                value: rule.delivery_day,         // e.g., "monday"
+                value: rule.delivery_day,
                 label: rule.delivery_day.charAt(0).toUpperCase() + rule.delivery_day.slice(1),
                 date: formatDate(nextDate),
                 fullDate: nextDate,
@@ -160,8 +187,8 @@ const DeliverySchedule = ({
             }
         }).sort((a, b) => a.fullDate - b.fullDate)
 
-        // Limit to first 4 upcoming days for clarity
         setAvailableDays(upcoming.slice(0, 4))
+
     }, [timeRules, cutoffRule])
 
     // ---------- When selected day changes, regenerate time slots ----------
@@ -175,10 +202,21 @@ const DeliverySchedule = ({
             setTimeSlots([])
             return
         }
+
         const startHour = parseInt(selected.time_start.split(':')[0], 10)
         const endHour = parseInt(selected.time_end.split(':')[0], 10)
+
+        const now = new Date()
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        const selectedDate = new Date(selected.fullDate)
+        selectedDate.setHours(0, 0, 0, 0)
+        const isToday = selectedDate.getTime() === today.getTime()
+
         const slots = []
         for (let hour = startHour; hour < endHour; hour++) {
+            // Skip hours that are already in the past (only relevant for today)
+            if (isToday && hour <= now.getHours()) continue
+
             const start = formatTime(`${hour.toString().padStart(2, '0')}:00:00`)
             const end = formatTime(`${(hour + 1).toString().padStart(2, '0')}:00:00`)
             slots.push(`${start} - ${end}`)
@@ -346,32 +384,40 @@ const DeliverySchedule = ({
                 </div>
 
                 {/* Delivery Time – one-hour slots for the selected day */}
+                {/* Delivery Time – one-hour slots for the selected day */}
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
                         Delivery Time *
                     </Label>
+
                     {timeSlots.length > 0 ? (
-                        <Select value={deliveryTime} onValueChange={setDeliveryTime} required>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a time slot" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {timeSlots.map((slot) => (
-                                    <SelectItem key={slot} value={slot}>
-                                        {slot}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
+                        <>
+                            <Select value={deliveryTime} onValueChange={setDeliveryTime} required>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a time slot" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {timeSlots.map((slot) => (
+                                        <SelectItem key={slot} value={slot}>
+                                            {slot}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <p className="text-xs text-muted-foreground">
+                                Choose a one-hour window for your delivery.
+                            </p>
+                        </>
+                    ) : deliveryDay ? (
+                        <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                            No available time slots for this day. Please choose another delivery day.
+                        </p>
                     ) : (
                         <p className="text-sm text-muted-foreground">
                             Select a delivery day to see available time slots.
                         </p>
                     )}
-                    <p className="text-xs text-muted-foreground">
-                        Choose a one-hour window for your delivery.
-                    </p>
                 </div>
 
                 {/* Delivery Frequency */}
