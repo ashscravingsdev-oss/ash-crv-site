@@ -14,7 +14,7 @@ import {
     removeFromCart,
     calculateCartTotals
 } from "@/store/cartSlice"
-import { fetchProducts } from "@/store/productSlice"   
+import { fetchProducts } from "@/store/productSlice"
 import { motion, AnimatePresence } from "framer-motion"
 import Cookies from "js-cookie";
 import { toast } from "sonner"
@@ -37,7 +37,7 @@ const Cart = () => {
         couponDiscount,
     } = useSelector(state => state.cart)
 
-    const { products } = useSelector((state) => state.products)   
+    const { products } = useSelector((state) => state.products)
 
     const sessionId = Cookies.get('session_id')
 
@@ -214,7 +214,7 @@ const Cart = () => {
                                             <div className="flex gap-4">
                                                 <div className="w-24 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
                                                     <img
-                                                        src={item.product?.image_url || item.bundle?.image || "/placeholder.svg"}
+                                                        src={item.product?.image_url || item.bundle?.image_url || "/placeholder.svg"}
                                                         alt={item.product?.name || item.bundle?.name}
                                                         className="w-full h-full object-cover"
                                                     />
@@ -225,9 +225,21 @@ const Cart = () => {
                                                             <h3 className="font-semibold text-lg">
                                                                 {item.product?.name || item.bundle?.name}
                                                             </h3>
-                                                            <p className="text-sm text-muted-foreground">
-                                                                {item.product?.description || item.bundle?.description}
-                                                            </p>
+                                                            {item.product ? (
+                                                                <p className="text-sm text-muted-foreground">
+                                                                    {item.product.description}
+                                                                </p>
+                                                            ) : item.bundle ? (
+                                                                <div className="text-sm text-muted-foreground">
+                                                                    {item.bundle.products?.map((p, i) => (
+                                                                        <span key={p.id}>
+                                                                            {p.BundleItem.quantity}x {p.name}
+                                                                            {i < item.bundle.products.length - 1 ? ' + ' : ''}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            ) : null}
+
                                                             {item.addon_ids && item.addon_ids.length > 0 && (
                                                                 <p className="text-xs text-primary mt-1">
                                                                     + Add-ons: {item.addon_ids.length} selected
