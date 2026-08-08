@@ -120,12 +120,12 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">
-                F
-              </span>
-            </div>
-            <span className="font-bold text-xl text-foreground">FreshPrep</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/logo-header-600w.png"
+              alt="Ash's Cravings"
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Menu */}

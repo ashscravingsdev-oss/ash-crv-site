@@ -1,4 +1,4 @@
-
+﻿
 import { Navigation } from "@/components/nav";
 import Bundles from "@/components/bundles/bundles";
 import { Footer } from "@/components/footer";
@@ -9,7 +9,7 @@ export default function BundlesPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Meal Prep Bundles & Packages - FreshPrep | Save Up to 25%"
+        title="Meal Prep Bundles & Packages - Ash's Cravings | Save Up to 25%"
         description="Save time and money with our healthy meal prep bundles. Weekly packages, family bundles, and customized meal plans with fresh ingredients delivered to your door."
         keywords={[
           "meal prep bundles",

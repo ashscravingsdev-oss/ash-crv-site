@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Account from '@/components/account/account'
 import SEO from "@/components/seo";
@@ -10,18 +10,18 @@ export default function AccountPage() {
 
       <div className="min-h-screen">
         <SEO
-          title="My Account - FreshPrep | Manage Your Meal Delivery"
-          description="Access your FreshPrep account to manage subscriptions, view order history, update delivery preferences, and track your healthy meal deliveries."
+          title="My Account - Ash's Cravings | Manage Your Meal Delivery"
+          description="Access your Ash's Cravings account to manage subscriptions, view order history, update delivery preferences, and track your healthy meal deliveries."
           keywords={[
-            "freshprep account login",
+            "Ash's Cravings account login",
             "manage meal subscription",
-            "my account freshprep",
+            "my account Ash's Cravings",
             "meal delivery account",
-            "track my order freshprep",
+            "track my order Ash's Cravings",
             "update delivery address",
             "meal prep account settings",
             "subscription management",
-            "order history freshprep",
+            "order history Ash's Cravings",
             "delivery preferences",
             "account dashboard",
             "healthy food account"

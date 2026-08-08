@@ -2,7 +2,6 @@
 import React from 'react'
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeUp, slideInRight } from "@/lib/animations";
@@ -25,7 +24,7 @@ const HeroSection = () => {
                 >
                     <motion.div variants={fadeUp}>
                         <Badge variant='secondary'>
-                            Fresh Daily Deliveries
+                            Deliveries Mondays & Tuesdays
                         </Badge>
                     </motion.div>
 
@@ -35,6 +34,13 @@ const HeroSection = () => {
                     >
                         Healthy meals & juices delivered to your door
                     </motion.h1>
+
+                    <motion.p
+                        variants={fadeUp}
+                        className="text-lg font-semibold text-primary"
+                    >
+                        Fresh. Organic. Chef-Crafted meals.
+                    </motion.p>
 
                     <motion.p
                         variants={fadeUp}
@@ -59,25 +65,6 @@ const HeroSection = () => {
                         >
                             <Link href="/subscriptions">View Plans</Link>
                         </Button>
-                    </motion.div> 
-
-                    <motion.div
-                        variants={fadeUp}
-                        className="flex items-center gap-8 pt-4"
-                    >
-                        <div>
-                            <div className="flex items-center gap-1 mb-1">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star
-                                        key={i}
-                                        className="h-5 w-5 fill-amber-500 text-amber-500"
-                                    />
-                                ))}
-                            </div>
-                            <p className="text-sm text-muted-foreground">
-                                Rated 4.9/5 by 5,000+ customers
-                            </p>
-                        </div>
                     </motion.div>
                 </motion.div>
 
@@ -94,7 +81,7 @@ const HeroSection = () => {
                         className="aspect-square rounded-2xl overflow-hidden bg-muted"
                     >
                         <img
-                            src="/fresh-colorful-meal-prep-bowls-with-vegetables-and.jpg"
+                            src="/brand/home-hero.jpg"
                             alt="Fresh meal prep bowls"
                             className="w-full h-full object-cover"
                         />

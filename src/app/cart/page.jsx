@@ -1,4 +1,4 @@
-
+﻿
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Cart from '@/components/cart/cart'
@@ -8,12 +8,12 @@ export default function CartPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="My Cart - FreshPrep | Review Your Meal Delivery Order"
-        description="Review items in your FreshPrep cart before checkout. Add or remove meals, update quantities, and apply promo codes for your healthy meal delivery."
+        title="My Cart - Ash's Cravings | Review Your Meal Delivery Order"
+        description="Review items in your Ash's Cravings cart before checkout. Add or remove meals, update quantities, and apply promo codes for your healthy meal delivery."
         keywords={[
-          "freshprep cart",
+          "Ash's Cravings cart",
           "meal delivery cart",
-          "shopping cart freshprep",
+          "shopping cart Ash's Cravings",
           "review my order",
           "meal prep cart",
           "food delivery cart",

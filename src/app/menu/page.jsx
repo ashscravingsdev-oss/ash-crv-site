@@ -1,4 +1,4 @@
-
+﻿
 import { Navigation } from "@/components/nav";
 import Menu from "@/components/menu/menu";
 import { Footer } from "@/components/footer";
@@ -8,7 +8,7 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Our Menu - FreshPrep | Healthy Meal Prep & Wellness Juices"
+        title="Our Menu - Ash's Cravings | Healthy Meal Prep & Wellness Juices"
         description="Browse our chef-prepared healthy meals, meal prep bowls, and cold-pressed juices. Customize your order with fresh ingredients and get delivery in 30 minutes."
         keywords={[
           "meal prep delivery",

@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Checkout from '@/components/checkout/checkout'
 import SEO from "@/components/seo";
@@ -10,10 +10,10 @@ export default function CheckoutPage() {
     <ProtectedRoute>
       <div className="min-h-screen">
         <SEO
-          title="Checkout - FreshPrep | Complete Your Meal Delivery Order"
-          description="Complete your FreshPrep order securely. Enter delivery details, choose payment method, and confirm your healthy meal delivery. Secure checkout guaranteed."
+          title="Checkout - Ash's Cravings | Complete Your Meal Delivery Order"
+          description="Complete your Ash's Cravings order securely. Enter delivery details, choose payment method, and confirm your healthy meal delivery. Secure checkout guaranteed."
           keywords={[
-            "freshprep checkout",
+            "Ash's Cravings checkout",
             "meal delivery checkout",
             "complete order",
             "secure checkout",

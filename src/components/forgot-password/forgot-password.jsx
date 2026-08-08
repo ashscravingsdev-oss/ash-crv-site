@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -144,7 +144,7 @@ function ForgotPassword() {
 
                             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                 <p className="text-sm text-gray-600">
-                                    Enter the email address associated with your FreshPrep account,
+                                    Enter the email address associated with your Ash's Cravings account,
                                     and we'll send you a code to reset your password.
                                 </p>
                             </div>

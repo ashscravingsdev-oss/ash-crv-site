@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -151,7 +151,7 @@ export default function LoginPage() {
             <Card className="max-w-md mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl">Welcome Back</CardTitle>
-                    <CardDescription>Sign in to your FreshPrep account</CardDescription>
+                    <CardDescription>Sign in to your Ash's Cravings account</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

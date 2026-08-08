@@ -1,11 +1,11 @@
 export default function SEO({
-    title = "FreshPrep - Healthy Meal Prep",
-    description = "Premium meal prep and cold-pressed juices delivered to your door",
+    title = "Ash's Cravings - Healthy Meal Prep",
+    description = "Fresh, organic, chef-crafted meal prep and cold-pressed juices delivered to your door in Eastvale, CA",
     keywords = ["meal prep", "healthy meals", "food delivery", "wellness"],
     image = "/og-default.jpg",
     url,
     type = "website",
-    author = "FreshPrep",
+    author = "Ash's Cravings",
     publishedTime,
     modifiedTime,
     section,
@@ -13,7 +13,7 @@ export default function SEO({
     noindex = false,
     nofollow = false,
 }) {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://freshprep.com";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ashscravings.com";
     const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
     const fullImageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
 
@@ -39,7 +39,7 @@ export default function SEO({
             <meta property="og:image" content={fullImageUrl} />
             <meta property="og:url" content={fullUrl} />
             <meta property="og:type" content={type} />
-            <meta property="og:site_name" content="FreshPrep" />
+            <meta property="og:site_name" content="Ash's Cravings" />
             <meta property="og:locale" content="en_US" />
             <meta name="twitter:card" content="summary_large_image" />
 
@@ -47,7 +47,7 @@ export default function SEO({
             <meta name="twitter:title" content={title} />
             <meta name="twitter:description" content={description} />
             <meta name="twitter:image" content={fullImageUrl} />
-            <meta name="twitter:site" content="@freshprep" />
+            <meta name="twitter:site" content="@ashscravings" />
 
             {/* Article-specific (optional) */}
             {publishedTime && (

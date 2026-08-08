@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -206,7 +206,7 @@ const Register = () => {
             <Card className="max-w-md mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl">Create Account</CardTitle>
-                    <CardDescription>Join FreshPrep and start your healthy journey</CardDescription>
+                    <CardDescription>Join Ash's Cravings and start your healthy journey</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {apiError && (

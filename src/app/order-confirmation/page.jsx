@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Suspense } from "react";
 import { useEffect, useState } from "react";
@@ -66,7 +66,7 @@ function OrderConfirmationContent() {
     return (
       <div className="min-h-screen">
         <SEO
-          title="Order Confirmation - FreshPrep"
+          title="Order Confirmation - Ash's Cravings"
           description="Confirming your order..."
         />
         <Navigation />
@@ -89,7 +89,7 @@ function OrderConfirmationContent() {
     return (
       <div className="min-h-screen">
         <SEO
-          title="Order Confirmation - FreshPrep"
+          title="Order Confirmation - Ash's Cravings"
           description="Order confirmation"
         />
         <Navigation />
@@ -125,10 +125,10 @@ function OrderConfirmationContent() {
   return (
     <div className="min-h-screen">
       <SEO
-        title={`Order Confirmed #${order_number || orderId} - FreshPrep | Your Meal Delivery is Confirmed`}
-        description={`Thank you for your FreshPrep order! Your order #${order_number || orderId} has been confirmed. Delivery scheduled for ${formatDeliveryDay(delivery_day, delivery_time_slot)}. View order details and next steps.`}
+        title={`Order Confirmed #${order_number || orderId} - Ash's Cravings | Your Meal Delivery is Confirmed`}
+        description={`Thank you for your Ash's Cravings order! Your order #${order_number || orderId} has been confirmed. Delivery scheduled for ${formatDeliveryDay(delivery_day, delivery_time_slot)}. View order details and next steps.`}
         keywords={[
-          "order confirmation freshprep",
+          "order confirmation Ash's Cravings",
           "thank you for your order",
           "meal delivery confirmed",
           `order #${order_number || orderId}`,
@@ -211,7 +211,7 @@ export default function OrderConfirmationPage() {
       fallback={
         <div className="min-h-screen">
           <SEO
-            title="Order Confirmation - FreshPrep"
+            title="Order Confirmation - Ash's Cravings"
             description="Confirming your order..."
           />
           <Navigation />

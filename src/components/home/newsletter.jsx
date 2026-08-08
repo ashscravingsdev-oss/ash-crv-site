@@ -71,7 +71,7 @@ const Newsletter = () => {
                         transition={{ delay: 0.25 }}
                         className="text-sm text-primary-foreground/80"
                     >
-                        Join 10,000+ subscribers. Unsubscribe anytime.
+                        Unsubscribe anytime.
                     </motion.p>
                 </div>
             </motion.div>

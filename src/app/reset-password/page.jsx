@@ -1,4 +1,4 @@
-
+﻿
 
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -9,21 +9,21 @@ export default function ResetPasswordPage() {
     return (
         <div className="min-h-screen">
             <SEO
-                title="Reset Your Password - FreshPrep | Forgot Password Help"
-                description="Forgot your FreshPrep password? Reset it quickly and securely. Enter your email to receive a password reset link for your meal delivery account."
+                title="Reset Your Password - Ash's Cravings | Forgot Password Help"
+                description="Forgot your Ash's Cravings password? Reset it quickly and securely. Enter your email to receive a password reset link for your meal delivery account."
                 keywords={[
-                    "forgot password freshprep",
+                    "forgot password Ash's Cravings",
                     "reset password meal delivery",
-                    "password recovery freshprep",
-                    "lost password freshprep",
+                    "password recovery Ash's Cravings",
+                    "lost password Ash's Cravings",
                     "account recovery meal delivery",
-                    "freshprep password reset",
-                    "cannot login freshprep",
+                    "Ash's Cravings password reset",
+                    "cannot login Ash's Cravings",
                     "reset my password",
-                    "password help freshprep",
+                    "password help Ash's Cravings",
                     "account access recovery",
                     "meal delivery login help",
-                    "freshprep account recovery"
+                    "Ash's Cravings account recovery"
                 ]}
                 url="/forgot-password"
                 type="website"

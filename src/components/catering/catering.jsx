@@ -46,12 +46,21 @@ const Catering = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="bg-primary text-primary-foreground py-16 md:py-24 overflow-hidden"
+                className="relative text-primary-foreground py-16 md:py-24 overflow-hidden"
             >
+                <div className="absolute inset-0">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/brand/catering-hero.jpg"
+                        alt="Ash's Cravings catering spread"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-primary/40" />
+                </div>
                 <motion.div
                     whileHover={{ scale: 1.01 }}
                     transition={{ duration: 0.3 }}
-                    className="container mx-auto px-4 text-center"
+                    className="relative container mx-auto px-4 text-center"
                 >
                     <motion.h1
                         initial={{ opacity: 0, y: 10 }}

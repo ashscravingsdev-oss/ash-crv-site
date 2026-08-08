@@ -8,14 +8,13 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="About FreshPrep - Our Story, Mission & Commitment to Healthy Eating"
-        description="Discover FreshPrep's journey from a local kitchen to a nationwide healthy meal delivery service. Learn about our mission, values, and commitment to fresh, nutritious meals."
+        title="About Ash's Cravings - Our Story, Mission & Commitment to Healthy Eating"
+        description="Discover Ash's Cravings' mission to bring fresh, organic, chef-crafted meals to Eastvale, CA. Learn about our commitment to fresh, nutritious meals made with real ingredients."
         keywords={[
-          "about freshprep",
+          "about ash's cravings",
           "our story",
           "company mission",
           "healthy meal delivery company",
-          "freshprep founders",
           "meal prep company about us",
           "our commitment to quality",
           "fresh ingredients mission",

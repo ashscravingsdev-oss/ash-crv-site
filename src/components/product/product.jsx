@@ -1,4 +1,4 @@
-"use client"
+﻿"use client"
 
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
@@ -185,7 +185,7 @@ const Product = ({ slug }) => {
     return (
         <>
             <SEO
-                title={`${product.name} - FreshPrep`}
+                title={`${product.name} - Ash's Cravings`}
                 description={product.description}
                 keywords={[product.name, product.category, "healthy meal"]}
                 image={product.image}

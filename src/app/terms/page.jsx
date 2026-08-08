@@ -1,4 +1,4 @@
-import { Footer } from "@/components/footer";
+﻿import { Footer } from "@/components/footer";
 import { Navigation } from "@/components/nav";
 import SEO from "@/components/seo";
 
@@ -7,10 +7,10 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Terms of Service - FreshPrep | Meal Delivery Terms & Conditions"
-        description="Read FreshPrep's Terms of Service for meal delivery subscriptions, orders, cancellations, and service policies. Your rights and responsibilities."
+        title="Terms of Service - Ash's Cravings | Meal Delivery Terms & Conditions"
+        description="Read Ash's Cravings's Terms of Service for meal delivery subscriptions, orders, cancellations, and service policies. Your rights and responsibilities."
         keywords={[
-          "terms of service freshprep",
+          "terms of service Ash's Cravings",
           "meal delivery terms",
           "service agreement",
           "subscription terms",
@@ -43,14 +43,14 @@ export default function TermsPage() {
               1. Acceptance of Terms
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              Welcome to FreshPrep. By accessing or using our website, mobile
+              Welcome to Ash's Cravings. By accessing or using our website, mobile
               application, or services, you agree to be bound by these Terms of
               Service ("Terms"). If you do not agree to these Terms, please do
               not use our services.
             </p>
             <p className="text-muted-foreground leading-relaxed">
               These Terms constitute a legally binding agreement between you and
-              FreshPrep ("Company," "we," "us," or "our"). We reserve the right
+              Ash's Cravings LLC ("Company," "we," "us," or "our"). We reserve the right
               to modify these Terms at any time, and such modifications will be
               effective immediately upon posting.
             </p>
@@ -61,7 +61,7 @@ export default function TermsPage() {
               2. Service Description
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              FreshPrep provides meal preparation and cold-pressed juice
+              Ash's Cravings provides meal preparation and cold-pressed juice
               delivery services. Our services include:
             </p>
             <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-4">
@@ -294,7 +294,7 @@ export default function TermsPage() {
             <p className="text-muted-foreground leading-relaxed mb-4">
               All content on our website and applications, including but not
               limited to text, graphics, logos, images, recipes, and software,
-              is the property of FreshPrep and is protected by copyright,
+              is the property of Ash's Cravings and is protected by copyright,
               trademark, and other intellectual property laws.
             </p>
             <p className="text-muted-foreground leading-relaxed">
@@ -310,7 +310,7 @@ export default function TermsPage() {
               10. Limitation of Liability
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              To the fullest extent permitted by law, FreshPrep shall not be
+              To the fullest extent permitted by law, Ash's Cravings shall not be
               liable for any indirect, incidental, special, consequential, or
               punitive damages arising out of or relating to your use of our
               services, including but not limited to:
@@ -334,7 +334,7 @@ export default function TermsPage() {
               11. Indemnification
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              You agree to indemnify, defend, and hold harmless FreshPrep, its
+              You agree to indemnify, defend, and hold harmless Ash's Cravings, its
               affiliates, officers, directors, employees, and agents from any
               claims, liabilities, damages, losses, and expenses arising out of
               or related to your use of our services, violation of these Terms,
@@ -350,7 +350,7 @@ export default function TermsPage() {
               12.1 Informal Resolution
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              If you have a dispute with FreshPrep, please contact our customer
+              If you have a dispute with Ash's Cravings, please contact our customer
               service team first to attempt an informal resolution.
             </p>
 
@@ -361,7 +361,7 @@ export default function TermsPage() {
               Any dispute that cannot be resolved informally shall be resolved
               through binding arbitration in accordance with the rules of the
               American Arbitration Association. The arbitration shall take place
-              in [Your State], and judgment on the award may be entered in any
+              in California, and judgment on the award may be entered in any
               court having jurisdiction.
             </p>
 
@@ -370,7 +370,7 @@ export default function TermsPage() {
             </h3>
             <p className="text-muted-foreground leading-relaxed">
               You agree that any arbitration or proceeding shall be limited to
-              the dispute between you and FreshPrep individually. You waive any
+              the dispute between you and Ash's Cravings individually. You waive any
               right to participate in a class action lawsuit or class-wide
               arbitration.
             </p>
@@ -382,10 +382,10 @@ export default function TermsPage() {
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               These Terms shall be governed by and construed in accordance with
-              the laws of [Your State], without regard to its conflict of law
+              the laws of California, without regard to its conflict of law
               provisions. Any legal action or proceeding relating to your access
               to or use of our services shall be instituted in state or federal
-              court in [Your State].
+              court in California.
             </p>
           </section>
 
@@ -411,14 +411,14 @@ export default function TermsPage() {
             </p>
             <div className="bg-muted rounded-lg p-6">
               <p className="text-foreground font-semibold mb-2">
-                FreshPrep Customer Service
+                Ash's Cravings LLC Customer Service
               </p>
               <p className="text-muted-foreground">
-                Email: legal@freshprep.com
+                Email: Ashscravings@gmail.com
               </p>
-              <p className="text-muted-foreground">Phone: 1-800-FRESH-PREP</p>
+              <p className="text-muted-foreground">Phone: 951-224-7740</p>
               <p className="text-muted-foreground">
-                Address: [Your Business Address]
+                Serving Eastvale, CA
               </p>
             </div>
           </section>

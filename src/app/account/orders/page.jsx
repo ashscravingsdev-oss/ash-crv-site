@@ -1,4 +1,4 @@
-
+﻿
 
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -11,16 +11,16 @@ export default function OrdersPage() {
     <ProtectedRoute>
       <div className="min-h-screen">
         <SEO
-          title="My Orders - FreshPrep | Order History & Tracking"
-          description="View your FreshPrep order history, track current deliveries, and manage past meal deliveries. Access receipts and delivery details for all your orders."
+          title="My Orders - Ash's Cravings | Order History & Tracking"
+          description="View your Ash's Cravings order history, track current deliveries, and manage past meal deliveries. Access receipts and delivery details for all your orders."
           keywords={[
-            "freshprep order history",
-            "my orders freshprep",
+            "Ash's Cravings order history",
+            "my orders Ash's Cravings",
             "meal delivery orders",
             "track my order",
             "order history meal prep",
             "delivery tracking",
-            "past orders freshprep",
+            "past orders Ash's Cravings",
             "meal prep order status",
             "view my orders",
             "order receipts",

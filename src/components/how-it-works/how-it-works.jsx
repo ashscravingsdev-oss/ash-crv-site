@@ -250,7 +250,7 @@ const HowItWorks = () => {
                         variants={fadeUp}
                         className="text-3xl font-bold mb-8 text-center"
                     >
-                        Why Choose FreshPrep
+                        Why Choose Ash's Cravings
                     </motion.h2>
 
                     <motion.div
@@ -392,7 +392,7 @@ const HowItWorks = () => {
                             transition={{ delay: 0.2 }}
                             className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
                         >
-                            Join thousands of busy professionals who save time and eat healthier with FreshPrep.
+                            Save time and eat healthier with Ash's Cravings.
                         </motion.p>
 
                         <motion.div

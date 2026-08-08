@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { Instagram, Facebook, Twitter } from "lucide-react";
+import { Instagram } from "lucide-react";
+
+function TikTokIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.69 5.7c3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.31 1.38V7.3s-1.88.09-3.24-1.48z" />
+    </svg>
+  );
+}
 
 export function Footer() {
   return (
@@ -9,40 +17,38 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center justify-center md:justify-start gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">
-                  F
-                </span>
-              </div>
-              <span className="font-bold text-xl text-foreground">
-                FreshPrep
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/logo-header-600w.png"
+                alt="Ash's Cravings"
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Premium meal prep and cold-pressed juices delivered fresh to your
-              door.
+              Fresh. Organic. Chef-Crafted meals. Deliveries Mondays &amp; Tuesdays
+              in Eastvale, CA.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed italic">
+              Nothing added. Nothing hidden.
             </p>
             <div className="flex items-center justify-center md:justify-start gap-4">
               <Link
-                href="#"
+                href="https://www.instagram.com/ashscravings"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
               <Link
-                href="#"
+                href="https://www.tiktok.com/@ashscravings"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
+                <TikTokIcon className="h-5 w-5" />
+                <span className="sr-only">TikTok</span>
               </Link>
             </div>
           </div>
@@ -167,7 +173,7 @@ export function Footer() {
 
         <div className="border-t border-border mt-12 pt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} FreshPrep. All rights reserved.
+            © {new Date().getFullYear()} Ash's Cravings. All rights reserved.
           </p>
         </div>
       </div>

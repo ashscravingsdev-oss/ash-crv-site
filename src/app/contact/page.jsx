@@ -1,4 +1,4 @@
-
+﻿
 
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
@@ -9,20 +9,20 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Contact FreshPrep - Customer Support & Meal Delivery Inquiries"
-        description="Get in touch with FreshPrep for meal delivery questions, catering inquiries, or customer support. We're here to help with your healthy eating journey."
+        title="Contact Ash's Cravings - Customer Support & Meal Delivery Inquiries"
+        description="Get in touch with Ash's Cravings for meal delivery questions, catering inquiries, or customer support. We're here to help with your healthy eating journey."
         keywords={[
-          "contact freshprep",
+          "contact Ash's Cravings",
           "customer service meal delivery",
-          "freshprep support",
+          "Ash's Cravings support",
           "meal prep contact",
           "healthy food delivery help",
-          "freshprep phone number",
+          "Ash's Cravings phone number",
           "meal delivery customer service",
           "food subscription support",
           "catering inquiries",
           "contact us meal prep",
-          "freshprep email",
+          "Ash's Cravings email",
           "meal delivery questions"
         ]}
         url="/contact"

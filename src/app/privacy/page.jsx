@@ -1,4 +1,4 @@
-import { Footer } from "@/components/footer";
+﻿import { Footer } from "@/components/footer";
 import { Navigation } from "@/components/nav";
 import SEO from "@/components/seo";
 
@@ -6,10 +6,10 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Privacy Policy - FreshPrep | How We Protect Your Data"
-        description="Learn how FreshPrep collects, uses, and protects your personal information. Our commitment to your privacy and data security in meal delivery services."
+        title="Privacy Policy - Ash's Cravings | How We Protect Your Data"
+        description="Learn how Ash's Cravings collects, uses, and protects your personal information. Our commitment to your privacy and data security in meal delivery services."
         keywords={[
-          "privacy policy freshprep",
+          "privacy policy ashscravings",
           "meal delivery privacy",
           "data protection policy",
           "personal information protection",
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
               1. Introduction
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              FreshPrep ("we," "us," or "our") is committed to protecting your
+              Ash's Cravings LLC ("we," "us," or "our") is committed to protecting your
               privacy. This Privacy Policy explains how we collect, use,
               disclose, and safeguard your information when you use our website,
               mobile application, and services (collectively, the "Services").
@@ -393,7 +393,7 @@ export default function PrivacyPage() {
             </ul>
             <p className="text-muted-foreground leading-relaxed">
               To submit a request under the CCPA, please email
-              privacy@freshprep.com or call 1-800-FRESH-PREP. We may need to
+              Ashscravings@gmail.com or call 951-224-7740. We may need to
               verify your identity before processing your request.
             </p>
           </section>
@@ -462,14 +462,14 @@ export default function PrivacyPage() {
             </p>
             <div className="bg-muted rounded-lg p-6">
               <p className="text-foreground font-semibold mb-2">
-                FreshPrep Privacy Team
+                Ash's Cravings LLC Privacy Team
               </p>
               <p className="text-muted-foreground">
-                Email: privacy@freshprep.com
+                Email: Ashscravings@gmail.com
               </p>
-              <p className="text-muted-foreground">Phone: 1-800-FRESH-PREP</p>
+              <p className="text-muted-foreground">Phone: 951-224-7740</p>
               <p className="text-muted-foreground">
-                Address: [Your Business Address]
+                Serving Eastvale, CA
               </p>
               <p className="text-muted-foreground mt-4">
                 For California residents exercising CCPA rights, please use the
@@ -484,7 +484,7 @@ export default function PrivacyPage() {
               Your Privacy Matters to Us
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              At FreshPrep, we are committed to transparency and protecting your
+              At Ash's Cravings, we are committed to transparency and protecting your
               privacy. If you have any questions or concerns about how we handle
               your information, please don't hesitate to reach out to our
               privacy team.

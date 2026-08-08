@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import FAQ from "@/components/faq/faq";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
@@ -7,11 +7,11 @@ export default function FAQPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="FreshPrep FAQ - Meal Prep Subscription Questions Answered"
-        description="Find answers to common questions about our meal prep subscriptions, delivery, pricing, cancellation, and more. Everything you need to know about FreshPrep."
+        title="Ash's Cravings FAQ - Meal Prep Subscription Questions Answered"
+        description="Find answers to common questions about our meal prep subscriptions, delivery, pricing, cancellation, and more. Everything you need to know about Ash's Cravings."
         keywords={[
           "meal prep FAQ",
-          "freshprep frequently asked questions",
+          "Ash's Cravings frequently asked questions",
           "subscription questions",
           "meal delivery FAQ",
           "healthy meal prep questions",
@@ -20,7 +20,7 @@ export default function FAQPage() {
           "delivery schedule FAQ",
           "meal prep pricing questions",
           "food subscription FAQ",
-          "freshprep help center",
+          "Ash's Cravings help center",
           "meal plan questions answered"
         ]}
         url="/faq"

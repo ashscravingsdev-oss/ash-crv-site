@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Register from '@/components/register/register'
 import SEO from "@/components/seo";
@@ -7,21 +7,21 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Sign Up for FreshPrep | Create Your Meal Delivery Account"
-        description="Join FreshPrep for healthy meal delivery. Create your account in 60 seconds to order fresh meals, manage subscriptions, and track deliveries."
+        title="Sign Up for Ash's Cravings | Create Your Meal Delivery Account"
+        description="Join Ash's Cravings for healthy meal delivery. Create your account in 60 seconds to order fresh meals, manage subscriptions, and track deliveries."
         keywords={[
-          "sign up freshprep",
+          "sign up Ash's Cravings",
           "create account meal delivery",
-          "register freshprep",
-          "join freshprep",
+          "register Ash's Cravings",
+          "join Ash's Cravings",
           "meal prep account signup",
           "healthy food delivery signup",
-          "create freshprep account",
+          "create Ash's Cravings account",
           "meal delivery registration",
-          "new account freshprep",
+          "new account Ash's Cravings",
           "food subscription sign up",
           "healthy eating membership",
-          "freshprep customer registration"
+          "Ash's Cravings customer registration"
         ]}
         url="/register"
         type="website"

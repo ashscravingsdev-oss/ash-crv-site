@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Profile from '@/components/account/profile/profile'
 import SEO from "@/components/seo";
@@ -10,16 +10,16 @@ export default function AccountPage() {
         <ProtectedRoute>
             <div className="min-h-screen">
                 <SEO
-                    title="Profile Settings - FreshPrep | Edit Your Account Details"
-                    description="Manage your FreshPrep profile settings. Update your name, email address, password, and preferences to keep your meal delivery account secure and up to date."
+                    title="Profile Settings - Ash's Cravings | Edit Your Account Details"
+                    description="Manage your Ash's Cravings profile settings. Update your name, email address, password, and preferences to keep your meal delivery account secure and up to date."
                     keywords={[
-                        "freshprep profile",
-                        "profile settings freshprep",
-                        "edit profile freshprep",
-                        "change email freshprep",
-                        "change password freshprep",
+                        "Ash's Cravings profile",
+                        "profile settings Ash's Cravings",
+                        "edit profile Ash's Cravings",
+                        "change email Ash's Cravings",
+                        "change password Ash's Cravings",
                         "manage account profile",
-                        "personal information freshprep",
+                        "personal information Ash's Cravings",
                         "account profile settings",
                         "meal delivery profile"
                     ]}

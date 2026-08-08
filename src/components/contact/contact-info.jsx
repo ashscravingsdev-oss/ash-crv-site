@@ -10,17 +10,17 @@ const ContactInfo = () => {
         {
             icon: <Mail className="h-6 w-6 text-primary" />,
             title: "Email",
-            details: ["support@freshprep.com"]
+            details: ["Ashscravings@gmail.com"]
         },
         {
             icon: <Phone className="h-6 w-6 text-primary" />,
             title: "Phone",
-            details: ["(555) 123-4567"]
+            details: ["951-224-7740"]
         },
         {
             icon: <MapPin className="h-6 w-6 text-primary" />,
-            title: "Address",
-            details: ["123 Wellness Way, San Francisco, CA 94102"]
+            title: "Service Area",
+            details: ["Serving Eastvale, CA"]
         },
         {
             icon: <Clock className="h-6 w-6 text-primary" />,

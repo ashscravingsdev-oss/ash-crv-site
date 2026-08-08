@@ -1,4 +1,4 @@
-import { Navigation } from "@/components/nav";
+﻿import { Navigation } from "@/components/nav";
 import Subscriptions from "@/components/subscriptions/subscriptions";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
@@ -7,7 +7,7 @@ export default function SubscriptionsPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Meal Prep Subscription Plans - FreshPrep | Save Up to 30%"
+        title="Meal Prep Subscription Plans - Ash's Cravings | Save Up to 30%"
         description="Subscribe & save! Get weekly, bi-weekly, or monthly meal prep subscriptions starting at $9.99/meal. Free delivery, flexible scheduling, cancel anytime."
         keywords={[
           "meal prep subscription",
