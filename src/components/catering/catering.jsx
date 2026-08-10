@@ -2,39 +2,41 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import InquiryForm from './inquiry-form'
+import CateringGallery from './catering-gallery'
 import { motion } from "framer-motion"
 import { fadeUp, fadeIn, scaleUp } from "@/lib/animations"
 const cateringServices = [
     {
-        title: "Corporate Events",
+        title: "Birthdays & Celebrations",
         description:
-            "Healthy catering for meetings, conferences, and office events",
+            "From first birthdays to milestone parties, I'll build a spread that fits the celebration — and the guest list.",
         features: [
-            "Custom menu planning",
-            "On-time delivery",
-            "Setup & cleanup",
-            "Dietary accommodations",
+            "Custom menu built around your theme",
+            "Set up and styled for the table",
+            "Kid-friendly and adult options",
+            "Delivered ready to serve",
         ],
     },
     {
-        title: "Private Parties",
+        title: "Private Events & Showers",
         description:
-            "Elegant meal service for birthdays, celebrations, and gatherings",
+            "Baby showers, bridal showers, graduations, and backyard gatherings — food that feels like a homemade spread, without you lifting a finger.",
         features: [
-            "Personalized menus",
-            "Professional presentation",
-            "Serving staff available",
-            "Flexible portions",
+            "Personalized menu planning",
+            "Beautifully presented platters",
+            "Flexible portions for any headcount",
+            "Dietary accommodations available",
         ],
     },
     {
-        title: "Wellness Programs",
-        description: "Ongoing meal services for corporate wellness initiatives",
+        title: "Corporate & Office Catering",
+        description:
+            "Meetings, lunch-and-learns, and office events — fresh, easy food your team will actually look forward to.",
         features: [
-            "Weekly meal plans",
-            "Nutritional tracking",
-            "Employee discounts",
-            "Flexible scheduling",
+            "Reliable, on-time delivery",
+            "Easy ordering for recurring meetings",
+            "Individually packaged options available",
+            "Setup & cleanup on request",
         ],
     },
 ];
@@ -53,7 +55,7 @@ const Catering = () => {
                     <img
                         src="/brand/catering-hero.jpg"
                         alt="Ash's Cravings catering spread"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-center"
                     />
                     <div className="absolute inset-0 bg-primary/40" />
                 </div>
@@ -175,9 +177,13 @@ const Catering = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
+                    className="mb-16"
                 >
                     <InquiryForm />
                 </motion.div>
+
+                {/* Gallery */}
+                <CateringGallery />
 
             </section>
         </>

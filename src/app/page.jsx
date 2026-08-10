@@ -1,8 +1,8 @@
 ﻿import { Navigation } from "@/components/nav";
 import HeroSection from "@/components/home/hero";
-import Features from "@/components/home/features";
 import HowItWorks from "@/components/home/how-it-works";
 import FeaturedProducts from "@/components/home/featured-products";
+import OurStory from "@/components/home/our-story";
 import Newsletter from "@/components/home/newsletter";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
@@ -18,9 +18,9 @@ export default function HomePage() {
       />
       <Navigation />
       <HeroSection />
-      <Features />
       <HowItWorks />
       <FeaturedProducts />
+      <OurStory />
       <Newsletter />
       <Footer />
     </div>

@@ -43,10 +43,9 @@ export function Navigation() {
     { label: "Home", href: "/" },
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
-    { label: "Subscriptions", href: "/subscriptions" },
-    { label: "How It Works", href: "/how-it-works" },
-    { label: "About", href: "/about" },
     { label: "Catering", href: "/catering" },
+    { label: "Custom Cakes", href: "/custom-cakes" },
+    { label: "Subscriptions", href: "/subscriptions" },
   ];
 
   // In Navigation component - simplified

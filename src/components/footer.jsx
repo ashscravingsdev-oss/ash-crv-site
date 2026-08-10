@@ -90,7 +90,7 @@ export function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/about"
+                  href="/#our-story"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
                   About Us

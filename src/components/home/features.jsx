@@ -25,18 +25,18 @@ const Features = () => {
                     {[
                         {
                             icon: <Leaf className="h-6 w-6 text-primary" />,
-                            title: "100% Organic",
-                            description: "All ingredients sourced from certified organic farms for maximum nutrition and flavor."
+                            title: "Organic, On Purpose",
+                            description: "I choose organic, local ingredients because that's genuinely how I cook — not a marketing checkbox."
                         },
                         {
                             icon: <ChefHat className="h-6 w-6 text-primary" />,
-                            title: "Chef-Crafted",
-                            description: "Gourmet meals designed by professional chefs using restaurant-quality techniques."
+                            title: "Made by One Chef, By Hand",
+                            description: "No line cooks, no shortcuts — every meal is cooked, portioned, and packed by me, personally."
                         },
                         {
                             icon: <Truck className="h-6 w-6 text-primary" />,
-                            title: "Fresh Delivery",
-                            description: "Deliveries Mondays & Tuesdays in eco-friendly packaging to ensure peak freshness and quality."
+                            title: "Fresh to Your Door",
+                            description: "Deliveries Mondays & Tuesdays, cooked and packed the same day so it reaches you as fresh as it left my kitchen."
                         }
                     ].map((feature, index) => (
                         <motion.div key={index} variants={fadeUp}>

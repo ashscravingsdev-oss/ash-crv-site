@@ -70,12 +70,14 @@ const InquiryForm = () => {
                                         <SelectValue placeholder="Select type" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="corporate">
-                                            Corporate Event
+                                        <SelectItem value="birthday">
+                                            Birthday / Celebration
                                         </SelectItem>
-                                        <SelectItem value="private">Private Party</SelectItem>
-                                        <SelectItem value="wellness">
-                                            Wellness Program
+                                        <SelectItem value="private">
+                                            Private Event / Shower
+                                        </SelectItem>
+                                        <SelectItem value="corporate">
+                                            Corporate / Office Event
                                         </SelectItem>
                                         <SelectItem value="other">Other</SelectItem>
                                     </SelectContent>
