@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2 } from "lucide-react";
+import { Loader2, UtensilsCrossed } from "lucide-react";
+import Link from "next/link";
 
 const ActiveSubscription = ({
     subscription,
@@ -77,6 +78,14 @@ const ActiveSubscription = ({
                             Resume Subscription
                         </Button>
                     ) : null}
+                    {subscription.status === "active" && (
+                        <Button className="flex-1" asChild>
+                            <Link href="/account/subscriptions">
+                                <UtensilsCrossed className="h-4 w-4 mr-2" />
+                                Pick Your Meals
+                            </Link>
+                        </Button>
+                    )}
                 </div>
             </CardContent>
         </Card>

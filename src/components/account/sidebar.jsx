@@ -8,6 +8,7 @@ import {
     UserCircle,
     Package2,
     HomeIcon,
+    UtensilsCrossed,
 } from "lucide-react"
 
 const Sidebar = () => {
@@ -64,6 +65,21 @@ const Sidebar = () => {
                         <Link href="/account/orders">
                             <Package2 className="h-4 w-4" />
                             Orders
+                        </Link>
+                    </Button>
+
+                    {/* Subscriptions (pick-each-cycle) */}
+                    <Button
+                        asChild
+                        variant="ghost"
+                        className={`w-full justify-start gap-2 ${isActive("/account/subscriptions")
+                            ? "bg-primary text-primary-foreground hover:bg-primary hover:text-white"
+                            : "text-muted-foreground hover:text-foreground"
+                            }`}
+                    >
+                        <Link href="/account/subscriptions">
+                            <UtensilsCrossed className="h-4 w-4" />
+                            Pick Your Meals
                         </Link>
                     </Button>
                 </div>

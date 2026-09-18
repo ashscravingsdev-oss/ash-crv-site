@@ -4,6 +4,7 @@ import bundleReducer from './bundleSlice';
 import cartReducer from './cartSlice';
 import authReducer from './authSlice';
 import dashboardReducer from './dashboardSlice';
+import subscriptionSelectionReducer from './subscriptionSelectionSlice';
 
 export const makeStore = () => {
     return configureStore({
@@ -13,6 +14,7 @@ export const makeStore = () => {
             products: productReducer,
             bundles: bundleReducer,
             cart: cartReducer,
+            subscriptionSelection: subscriptionSelectionReducer,
         },
         middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware({
