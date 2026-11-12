@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
-import DessertShop from "@/components/desserts/dessert-shop";
+import DessertList from "@/components/desserts/dessert-list";
 
 // Photos removed from the gallery (redundant/weak shots) — kept out of both
 // featuredCakes and allCakes below.
@@ -160,7 +160,7 @@ const CustomCakes = () => {
 
             {/* Desserts by the dozen */}
             <section id="desserts" className="scroll-mt-24 container mx-auto px-4 py-16 md:py-20">
-                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
                     <div className="space-y-4">
                         <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
                             <span className="text-brand-matcha">■</span> Desserts
@@ -168,16 +168,12 @@ const CustomCakes = () => {
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>
-                        <p className="text-lg text-foreground/85 leading-relaxed">
-                            Cookies, mini cupcakes, cheesecakes, brownies, chocolate-covered strawberries and dessert cups,
-                            made fresh for birthdays, showers, holidays or just because. Pick your favorites below and
-                            check out right here.
+                        <p className="text-lg text-foreground/85 leading-relaxed pb-4">
+                            Made fresh for birthdays, showers, holidays or just because. Mix and match your favorites.
                         </p>
-                        <p className="text-sm text-muted-foreground">
-                            Want a whole dessert table for your event? See <a href="/events" className="underline">Events</a>.
-                        </p>
+                        <DessertList />
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3 md:sticky md:top-28">
                         <figure className="row-span-2 relative rounded-[18px] overflow-hidden bg-brand-latte">
                             <video
                                 className="w-full h-full object-cover"
@@ -199,10 +195,6 @@ const CustomCakes = () => {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/gallery/catering/catering-05.jpg" alt="Dessert table with chocolate-covered strawberries and pink cupcakes" className="aspect-square w-full object-cover rounded-[18px]" />
                     </div>
-                </div>
-
-                <div className="mt-12">
-                    <DessertShop requestHref="#request" />
                 </div>
             </section>
 
