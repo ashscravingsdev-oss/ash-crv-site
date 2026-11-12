@@ -136,10 +136,13 @@ export default function TermsPage() {
               4.3 Order Modifications
             </h3>
             <p className="text-muted-foreground leading-relaxed">
-              Order modifications or cancellations must be made at least 48
-              hours before your scheduled delivery time. Changes made after this
-              deadline may not be accommodated and may be subject to
-              cancellation fees.
+              Meal prep orders can be changed or cancelled before the Saturday
+              8:00 PM order cutoff. After the cutoff, groceries have already been
+              purchased for your order, so that week cannot be refunded. Custom
+              cakes, desserts, events and private chef services require a 50%
+              deposit to hold your date. Deposits are non-refundable, but if you
+              cancel at least 7 days before your date, your deposit can be moved
+              to a new date one time.
             </p>
           </section>
 
@@ -162,8 +165,8 @@ export default function TermsPage() {
             <p className="text-muted-foreground leading-relaxed mb-4">
               You may pause, skip, or cancel your subscription at any time
               through your account settings. To avoid being charged for the next
-              billing cycle, you must cancel at least 48 hours before your next
-              scheduled delivery.
+              billing cycle, you must skip or cancel before the Saturday 8:00 PM
+              cutoff ahead of your next scheduled delivery.
             </p>
 
             <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">

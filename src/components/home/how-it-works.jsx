@@ -1,9 +1,9 @@
 import React from 'react'
 
 const steps = [
-    { number: "01", title: "Pick your meals", description: "Mix and match from this week’s menu. Order by Monday." },
+    { number: "01", title: "Pick your meals", description: "Mix and match from this week’s menu. Order by Saturday at 8 PM." },
     { number: "02", title: "I cook it fresh", description: "Everything is made from scratch, with love." },
-    { number: "03", title: "Delivered Tuesday", description: "Ready to heat and enjoy all week long." },
+    { number: "03", title: "Delivered fresh", description: "Every Monday and Tuesday, or pick up. Just heat and enjoy." },
 ]
 
 const HowItWorks = () => {

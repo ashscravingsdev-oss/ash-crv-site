@@ -200,7 +200,7 @@ const Catering = () => {
                             craving and I&apos;ll build the menu around it.
                         </p>
                         <ul className="space-y-2 text-sm">
-                            {["A menu made just for you", "Cooked fresh, right in your kitchen", "Pricing based on your menu and guest count"].map((item) => (
+                            {["Up to 10 guests", "I bring the groceries and clean up after", "A menu made just for you, cooked fresh in your kitchen", "Send me a request and I’ll put together your quote"].map((item) => (
                                 <li key={item} className="flex items-start gap-2">
                                     <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                                     <span>{item}</span>

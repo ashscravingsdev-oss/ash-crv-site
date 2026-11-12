@@ -14,36 +14,35 @@ import { useState } from "react";
 
 const faqs = [
     {
-        category: "Orders & Delivery",
+        category: "Meal Prep & Delivery",
         questions: [
             {
-                q: "How does delivery work?",
-                a: "We deliver fresh meals to your door every Monday and Tuesday between 10 AM and 7 PM. You can select your preferred delivery day and time window during checkout. All deliveries are made in eco-friendly, insulated packaging to maintain freshness.",
+                q: "When do you deliver?",
+                a: "I deliver every Monday and Tuesday. You'll pick your day and delivery window at checkout. Order by Saturday at 8 PM to get your meals that Monday or Tuesday.",
+            },
+            {
+                q: "Is there a delivery fee? Can I pick up instead?",
+                a: "Delivery has a fee based on your address, and you'll see it at checkout before you pay. You can also pick up your order. Just message me and we'll set it up.",
             },
             {
                 q: "What if I'm not home for delivery?",
-                a: "Our insulated packaging keeps meals fresh for up to 8 hours. You can also provide delivery instructions during checkout, such as leaving the package at your doorstep or with a neighbor.",
+                a: "No problem! Message me before your delivery day and tell me where to leave your meals. Just pop them in the fridge as soon as you can.",
             },
             {
-                q: "Can I change my delivery address?",
-                a: "Yes! You can update your delivery address in your account settings at any time. Changes must be made at least 48 hours before your next scheduled delivery.",
+                q: "How long do meals stay fresh?",
+                a: "Your meals are best within 3 to 4 days in the fridge.",
             },
-        ],
-    },
-    {
-        category: "Meal Plans & Pricing",
-        questions: [
+            {
+                q: "How do I reheat my meals?",
+                a: "The microwave works perfect, about 2 minutes. My favorite way is in my mini oven or the air fryer.",
+            },
+            {
+                q: "Can I make swaps or work around allergies?",
+                a: "Yes! No rice, extra veggies, extra protein, just tell me what you like. If you have an allergy, let me know when you order and I'll work around it. Everything is made in my kitchen, so if your allergy is severe, please message me first so we can talk it through.",
+            },
             {
                 q: "How much do meals cost?",
-                a: "Meals are $17 each, or mix and match 5 meals for $80 or 10 meals for $160.",
-            },
-            {
-                q: "Can I customize my meal selection?",
-                a: "Before each delivery, you'll receive an email allowing you to select exactly which meals you want from our full menu. You have complete control over your meal choices.",
-            },
-            {
-                q: "Are there options for dietary restrictions?",
-                a: "Yes! We offer vegetarian, vegan, gluten-free, and dairy-free options. You can filter meals by dietary preference when selecting your items. All allergen information is clearly listed on each meal.",
+                a: "Meals are $17 each, or mix and match 5 for $80 or 10 for $160.",
             },
         ],
     },
@@ -52,32 +51,74 @@ const faqs = [
         questions: [
             {
                 q: "How do subscriptions work?",
-                a: "Choose a plan (Weekly, Bi-Weekly, or Monthly), and you'll receive regular deliveries based on your schedule. You can skip, pause, or cancel anytime without penalties. You'll be billed automatically before each delivery.",
+                a: "Pick your meals, choose how often you want them (every week, every other week or once a month) and your order repeats on its own. You can skip, pause or cancel anytime.",
             },
             {
-                q: "Can I skip a delivery?",
-                a: "Yes! You can skip any delivery up to 5 days before your scheduled delivery date through your account dashboard. There are no limits on how many deliveries you can skip.",
+                q: "Can I skip a week?",
+                a: "Of course! Skip it from your account before Saturday at 8 PM and you won't be charged that week.",
             },
             {
                 q: "How do I cancel my subscription?",
-                a: "You can cancel anytime from your account settings. There are no cancellation fees or penalties. We'll be sad to see you go, but you're always welcome back!",
+                a: "Anytime from your account. No fees and no hard feelings. You're always welcome back!",
             },
         ],
     },
     {
-        category: "Food Quality & Safety",
+        category: "Cakes & Desserts",
         questions: [
             {
-                q: "What ingredients do you use?",
-                a: "Fresh ingredients, cooked from scratch every week. If you have an allergy or a question about a specific ingredient, just message me before you order.",
+                q: "How far ahead should I order a cake?",
+                a: "At least 1 week ahead. The sooner you reach out, the better, so I can save your date.",
             },
             {
-                q: "How long do meals stay fresh?",
-                a: "Meals stay fresh for 5-7 days when refrigerated properly. Each meal is labeled with preparation and best-by dates. Our cold-pressed juices are best consumed within 3-4 days.",
+                q: "How much are custom cakes?",
+                a: "My 6\" cakes start at $125. The final price depends on the size, design, flavors and fillings, and I'll send you a quote.",
             },
             {
-                q: "How are meals prepared?",
-                a: "I make every meal myself, from scratch, fresh each week before delivery day.",
+                q: "Do you do cake tastings?",
+                a: "Yes! My tasting box is $55 for 4 flavors, and if you book your cake with me, the full $55 goes toward it.",
+            },
+            {
+                q: "Do you sell desserts by the dozen?",
+                a: "Yes! Dessert cups, chocolate-covered strawberries and more, starting at $44 a dozen.",
+            },
+        ],
+    },
+    {
+        category: "Events & Private Chef",
+        questions: [
+            {
+                q: "How far ahead should I book an event?",
+                a: "At least 3 weeks ahead, so I have time to plan your menu and shop for everything.",
+            },
+            {
+                q: "How do I book an event or a private chef night?",
+                a: "Fill out the request form on my Events page and I'll get back to you with a custom quote. A 50% deposit holds your date.",
+            },
+            {
+                q: "What's included with a private chef night?",
+                a: "I bring all the groceries, cook right in your kitchen and clean up after, so all you have to do is enjoy. I can cook for up to 10 guests, and I'll serve on your plates and dishes.",
+            },
+            {
+                q: "How much is a private chef night?",
+                a: "Every dinner is different! Send me a request with your date, how many guests and what you're craving, and I'll put together your quote.",
+            },
+        ],
+    },
+    {
+        category: "Payments & Cancellations",
+        questions: [
+            {
+                q: "How can I pay?",
+                a: "On the website, you pay by card at checkout. For cakes, desserts, events and private chef nights, I take card, Zelle or a payment link, whatever's easiest for you.",
+            },
+            {
+                q: "Do I need to pay a deposit?",
+                a: "For cakes, desserts, events and private chef nights, a 50% deposit holds your date. The rest is due before your pickup or event.",
+            },
+            {
+                q: "What if I need to cancel?",
+                a: "Meal prep: you can change or cancel anytime before Saturday at 8 PM. After that, I've already shopped for your meals, so I can't refund that week. Cakes, desserts, events and private chef nights: your deposit holds your date and isn't refundable, since I turn other orders away for you. If you cancel at least 7 days before, I'll happily move your deposit to a new date one time. Life happens, so just talk to me!",
             },
         ],
     },
@@ -100,12 +141,12 @@ const FAQ = () => {
         <div className="container mx-auto px-4 pt-8">
             {/* Header */}
             <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                    Frequently Asked Questions
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">■ FAQ</p>
+                <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading mb-4">
+                    Questions? <em className="italic">I&apos;ve got you</em>
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-                    Find answers to common questions about our meals, delivery, and
-                    subscriptions
+                    Everything you might want to know before you order. Can&apos;t find your answer? Just message me.
                 </p>
 
                 {/* Search */}
@@ -125,13 +166,13 @@ const FAQ = () => {
             <div className="max-w-3xl mx-auto space-y-12">
                 {filteredFaqs.map((category) => (
                     <div key={category.category}>
-                        <h2 className="text-2xl font-bold mb-6">{category.category}</h2>
+                        <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading mb-6">{category.category}</h2>
                         <Accordion type="single" collapsible className="space-y-4">
                             {category.questions.map((faq, idx) => (
                                 <AccordionItem
                                     key={idx}
                                     value={`${category.category}-${idx}`}
-                                    className="border border-border rounded-lg px-6"
+                                    className="border border-border rounded-lg px-6 bg-card"
                                 >
                                     <AccordionTrigger className="text-left hover:no-underline">
                                         <span className="font-semibold">{faq.q}</span>

@@ -16,13 +16,14 @@ const OurStory = () => {
                 </div>
 
                 <div className="space-y-5 order-1 md:order-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Our story</p>
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ My story</p>
                     <h2 className="font-serif font-medium text-5xl md:text-6xl leading-none text-brand-heading">
                         Hi, I’m <em className="italic">Ash</em>
                     </h2>
                     <p className="text-lg text-foreground/85 leading-relaxed">
-                        Everything at Ash’s Cravings is made from scratch, from weekly meal prep that actually tastes amazing
-                        to custom cakes with every little detail done by hand. If you’re craving it, I’ll make it with love.
+                        I’ve been in the kitchen since I was little, right next to my grandma, the number one chef I know.
+                        She helped me find my love for food, and we both shared the love of making people happy through it.
+                        I graduated from culinary school in 2024, and with Ash’s Cravings, I get to keep doing exactly that.
                     </p>
                     <Link href="/about" className="inline-block font-medium border-b border-dashed border-brand-tobacco">
                         Read my story →
