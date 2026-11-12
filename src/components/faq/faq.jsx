@@ -75,10 +75,6 @@ const faqs = [
                 a: "My 6\" cakes start at $125. The final price depends on the size, design, flavors and fillings, and I'll send you a quote.",
             },
             {
-                q: "Do you do cake tastings?",
-                a: "Yes! My tasting box is $55 for 4 flavors, and if you book your cake with me, the full $55 goes toward it.",
-            },
-            {
                 q: "Do you sell desserts by the dozen?",
                 a: "Yes! Dessert cups, chocolate-covered strawberries and more, starting at $44 a dozen.",
             },

@@ -47,7 +47,6 @@ const remainingCakes = allCakes.filter((f) => !featuredCakes.includes(f));
 
 const perks = [
     { label: "6\" custom cakes", value: "from $125" },
-    { label: "Tasting box, 4 flavors", value: "$55" },
     { label: "Order ahead", value: "at least 1 week" },
     { label: "Deposit to hold your date", value: "50%" },
 ]
@@ -114,7 +113,7 @@ const CustomCakes = () => {
                 </div>
 
                 {/* Quick facts */}
-                <dl className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-12">
+                <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-12">
                     {perks.map((p) => (
                         <div key={p.label} className="rounded-2xl border border-border bg-card p-4 md:p-5">
                             <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">{p.label}</dt>
@@ -123,8 +122,7 @@ const CustomCakes = () => {
                     ))}
                 </dl>
                 <p className="text-sm text-muted-foreground mt-3">
-                    Bigger sizes, tiers, fillings and design details are priced from there. If you book your cake, the full $55
-                    from your tasting box goes toward it.
+                    Bigger sizes, tiers, fillings and design details are priced from there.
                 </p>
             </section>
 
