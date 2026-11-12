@@ -10,9 +10,9 @@ const Cravings = () => {
 
     const tiles = [
         { title: "Meal Prep", line: "Eat good all week", href: "/menu", img: mealPhoto, alt: "Meal prep bowl" },
+        { title: "Cakes & Desserts", line: "Made to wow", href: "/custom-cakes", img: "/gallery/cakes/cake-06.jpg", alt: "Green vintage-piped cake with red bows" },
         { title: "Events", line: "Feed the whole crew", href: "/events", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table" },
-        { title: "Cakes", line: "Made to wow", href: "/custom-cakes", img: "/gallery/cakes/cake-06.jpg", alt: "Green vintage-piped cake with red bows" },
-        { title: "Desserts", line: "Little sweet things", href: "/menu", img: "/gallery/catering/catering-05.jpg", alt: "Chocolate-covered strawberries and dessert cups" },
+        { title: "Private Chef", line: "Dinner at your place", href: "/events#private-chef", img: "/gallery/catering/catering-03.jpg", alt: "Meatballs and baked mac and cheese cooking on the stove" },
     ]
 
     return (
@@ -40,7 +40,7 @@ const Cravings = () => {
                                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                                 />
                             </div>
-                            <div className="p-4 md:p-5 flex items-end justify-between gap-2">
+                            <div className="flex-1 p-4 md:p-5 flex items-end justify-between gap-2">
                                 <div>
                                     <h3 className="font-serif text-2xl md:text-3xl font-semibold leading-none text-brand-espresso">{t.title}</h3>
                                     <p className="text-sm md:text-[15px] text-muted-foreground mt-1">{t.line}</p>

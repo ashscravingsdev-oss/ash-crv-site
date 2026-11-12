@@ -44,7 +44,7 @@ export function Navigation() {
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
     { label: "Events", href: "/events" },
-    { label: "Custom Cakes", href: "/custom-cakes" },
+    { label: "Cakes & Desserts", href: "/custom-cakes" },
     { label: "Subscriptions", href: "/subscriptions" },
   ];
 

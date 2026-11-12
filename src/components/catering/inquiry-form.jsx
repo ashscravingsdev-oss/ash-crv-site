@@ -19,6 +19,7 @@ const eventTypeLabels = {
     birthday: "Birthday / Celebration",
     private: "Private Event / Shower",
     corporate: "Corporate / Office Event",
+    privatechef: "Private Chef Dinner",
     other: "Other",
 };
 
@@ -193,6 +194,9 @@ const InquiryForm = () => {
                                         </SelectItem>
                                         <SelectItem value="corporate">
                                             Corporate / Office Event
+                                        </SelectItem>
+                                        <SelectItem value="privatechef">
+                                            Private Chef Dinner
                                         </SelectItem>
                                         <SelectItem value="other">Other</SelectItem>
                                     </SelectContent>

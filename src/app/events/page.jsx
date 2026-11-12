@@ -7,8 +7,8 @@ export default function EventsPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Events - Ash's Cravings | Party Food, Office Lunches & Dessert Tables in Eastvale, CA"
-        description="Food for your events from Ash's Cravings: breakfast burritos, sandwich trays and dessert tables for birthdays, showers and office orders in Eastvale, CA."
+        title="Events & Private Chef - Ash's Cravings | Party Food, Office Lunches & Chef Dinners in Eastvale, CA"
+        description="Food for your events from Ash's Cravings: breakfast burritos, sandwich trays and dessert tables for birthdays, showers and office orders, plus private chef dinners at your home in Eastvale, CA."
         keywords={[
           "healthy catering service",
           "corporate meal delivery",

@@ -1,6 +1,7 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
+import Link from "next/link";
 import InquiryForm from './inquiry-form'
 import CateringGallery from './catering-gallery'
 import { motion } from "framer-motion"
@@ -171,13 +172,60 @@ const Catering = () => {
                     ))}
                 </motion.div>
 
+                {/* Private Chef (new — trying it out) */}
+                <motion.div
+                    id="private-chef"
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.25 }}
+                    className="scroll-mt-24 mb-16 grid md:grid-cols-2 bg-muted rounded-2xl overflow-hidden"
+                >
+                    <div className="aspect-[4/3] md:aspect-auto md:min-h-[380px] bg-brand-latte">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/gallery/catering/catering-03.jpg"
+                            alt="Meatballs and baked mac and cheese cooking on the stove"
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                    <div className="p-6 md:p-10 flex flex-col justify-center space-y-4">
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ New · Private chef</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl leading-[1.05] text-brand-heading">
+                            Your own chef, <em className="italic">for the night</em>
+                        </h2>
+                        <p className="text-foreground/85 leading-relaxed">
+                            I come to your home, cook in your kitchen and make a dinner just for you and your people.
+                            Date nights, birthdays, family dinners, a night in with the girls. Tell me what you&apos;re
+                            craving and I&apos;ll build the menu around it.
+                        </p>
+                        <ul className="space-y-2 text-sm">
+                            {["A menu made just for you", "Cooked fresh, right in your kitchen", "Pricing based on your menu and guest count"].map((item) => (
+                                <li key={item} className="flex items-start gap-2">
+                                    <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="pt-2">
+                            <Link
+                                href="#request-a-quote"
+                                className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
+                            >
+                                Book a chef night <span aria-hidden="true">→</span>
+                            </Link>
+                        </div>
+                    </div>
+                </motion.div>
+
                 {/* Inquiry Form */}
                 <motion.div
+                    id="request-a-quote"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="mb-16"
+                    className="scroll-mt-24 mb-16"
                 >
                     <InquiryForm />
                 </motion.div>
