@@ -38,17 +38,18 @@ const About = () => {
                             Hi, I&apos;m <em className="italic text-brand-tobacco">Ash</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                            I&apos;m sooo obsessed with food. I love cooking all types of food from all different
-                            cuisines, and honestly, I eat all day. I&apos;m always hungry!
+                            I&apos;m a culinary school-trained chef and the founder of Ash&apos;s Cravings. Food has
+                            always been my passion, and I love cooking across every cuisine.
                         </p>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                            So it&apos;s a blessing to get to have <em className="font-serif text-2xl md:text-[1.6rem] italic text-brand-heading">real</em>, fresh food every day, not the garbage
-                            they&apos;re feeding us. I love living a healthy life and feeling good, and I know food is
-                            the way. But I still have my cravings, of course, so I make them my way.
+                            I believe eating well and feeling good should never mean giving up what you crave. That&apos;s
+                            why I cook with real, fresh ingredients and make every craving my way. My goal is simple:
+                            every bite should leave you happy and truly satisfied.
                         </p>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                            That&apos;s Ash&apos;s Cravings. When you eat my food, I just want you to feel happy and
-                            the most satisfied.
+                            Everything at Ash&apos;s Cravings is made from scratch, from weekly meal prep that actually
+                            tastes amazing to custom cakes with every little detail done by hand. If you&apos;re craving
+                            it, I&apos;ll make it with love.
                         </p>
                     </motion.div>
                     <motion.div

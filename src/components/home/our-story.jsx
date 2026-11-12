@@ -21,9 +21,9 @@ const OurStory = () => {
                         Hi, I’m <em className="italic text-brand-tobacco">Ash</em>
                     </h2>
                     <p className="text-lg text-foreground/85 leading-relaxed">
-                        I’m sooo obsessed with food. I love cooking every kind of cuisine, and I’m always hungry! I love
-                        living healthy and feeling good, but I still have my cravings, of course, so I make them my way,
-                        with real, fresh food. That’s Ash’s Cravings.
+                        I’m a culinary school-trained chef, and everything at Ash’s Cravings is made from scratch with
+                        real, fresh ingredients, from weekly meal prep that actually tastes amazing to custom cakes with
+                        every little detail done by hand. If you’re craving it, I’ll make it with love.
                     </p>
                     <Link href="/about" className="inline-block font-medium border-b border-dashed border-brand-tobacco">
                         Read my story →
