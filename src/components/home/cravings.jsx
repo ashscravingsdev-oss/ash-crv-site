@@ -21,7 +21,7 @@ const Cravings = () => {
                 <div className="text-center mb-10 md:mb-12 space-y-2">
                     <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Pick your craving</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                        Something for <em className="italic text-brand-matcha-dark">every</em> mood
+                        Something for <em className="italic text-brand-tobacco">every</em> mood
                     </h2>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">

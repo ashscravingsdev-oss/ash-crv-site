@@ -6,7 +6,7 @@ const Half = ({ hidden }) => (
         {[...items, ...items].map((text, i) => (
             <span key={i} className="flex items-center whitespace-nowrap">
                 <span className="px-6 md:px-8">{text}</span>
-                <span className="text-brand-matcha-light text-base">✦</span>
+                <span className="text-brand-latte/70 text-base">✦</span>
             </span>
         ))}
     </div>
