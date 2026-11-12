@@ -22,6 +22,7 @@ const removedCakes = [
 // clicked. Swap any of these to change which 15 cakes are featured — order matters,
 // they display left-to-right, top-to-bottom in this order.
 const featuredCakes = [
+    "cake-54.jpg",
     "cake-51.jpg",
     "cake-48.jpg",
     "cake-50.jpg",
@@ -37,11 +38,19 @@ const featuredCakes = [
     "cake-27.jpg",
     "cake-39.jpg",
     "cake-43.jpg",
-    "cake-34.jpg",
+    // "cake-34.jpg" moved under "Show more" to keep the grid even
 ];
 
+// A little note on special cakes, and a real description for screen readers
+const cakeNotes = {
+    "cake-54.jpg": {
+        note: "For my grandma ♡",
+        alt: "Peach piped cake with baby's breath and a photo of Ash's grandma Maria Elena holding a cake",
+    },
+};
+
 const allCakes = Array.from(
-    { length: 53 },
+    { length: 54 },
     (_, i) => `cake-${String(i + 1).padStart(2, "0")}.jpg`
 ).filter((f) => !removedCakes.includes(f));
 
@@ -147,15 +156,20 @@ const CustomCakes = () => {
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                         {visibleCakes.map((filename, idx) => (
-                            <div key={filename} className="aspect-square overflow-hidden rounded-2xl bg-background">
+                            <figure key={filename} className="relative aspect-square overflow-hidden rounded-2xl bg-background">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={`/gallery/cakes/${filename}`}
-                                    alt={`Custom cake ${idx + 1} by Ash's Cravings`}
+                                    alt={cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`}
                                     loading="lazy"
                                     className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
                                 />
-                            </div>
+                                {cakeNotes[filename]?.note && (
+                                    <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                                        {cakeNotes[filename].note}
+                                    </figcaption>
+                                )}
+                            </figure>
                         ))}
                     </div>
                     {!showAll && remainingCakes.length > 0 && (

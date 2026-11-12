@@ -11,7 +11,7 @@ const values = [
     },
     {
         title: "Made with love",
-        description: "The way my grandma taught me, with the goal of making you happy.",
+        description: "The way my grandmas taught me, with the goal of making you happy.",
     },
     {
         title: "Made for you",
@@ -70,20 +70,31 @@ const About = () => {
 
             {/* Grandma */}
             <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-24">
-                    <motion.div {...reveal} className="max-w-3xl mx-auto text-center space-y-6">
+                <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <motion.figure {...reveal} className="relative order-2 md:order-1 max-w-lg w-full mx-auto md:mx-0 aspect-[9/10] rounded-[18px] overflow-hidden bg-background">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/brand/about-grandma.jpg"
+                            alt="Young Ash and her grandma Maria Elena making pupusas from scratch"
+                            loading="lazy"
+                            className="w-full h-full object-cover object-[center_30%]"
+                        />
+                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                            Me &amp; my grandma Maria Elena ♡
+                        </figcaption>
+                    </motion.figure>
+                    <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
                         <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Where it all started</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
-                            In the kitchen with <em className="italic text-brand-tobacco">my grandma</em>
+                            In the kitchen with <em className="italic text-brand-tobacco">my grandmas</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            I&apos;ve been in the kitchen my whole life. Ever since I was little, I was right next
-                            to my grandma. She has always been the number one chef I know. She taught me so much
-                            and really helped me find my love for food and cooking.
+                            I grew up in the kitchen, right beside my two grandmas, the best chefs I know.
+                            Everything I know about cooking, I learned from them.
                         </p>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            We both truly shared the love of making people happy through food. She&apos;s passed
-                            now, but that love is in everything I make.
+                            They taught me that food is how you show love, and that love goes into everything
+                            I make.
                         </p>
                     </motion.div>
                 </div>
