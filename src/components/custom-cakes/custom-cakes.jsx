@@ -21,25 +21,26 @@ const removedCakes = [
 // clicked. Swap any of these to change which 15 cakes are featured — order matters,
 // they display left-to-right, top-to-bottom in this order.
 const featuredCakes = [
-    "cake-01.jpg",
-    "cake-02.jpg",
-    "cake-03.jpg",
-    "cake-04.jpg",
-    "cake-05.jpg",
+    "cake-51.jpg",
+    "cake-48.jpg",
+    "cake-50.jpg",
+    "cake-52.jpg",
+    "cake-49.jpg",
+    "cake-53.jpg",
+    "cake-37.jpg",
     "cake-06.jpg",
-    "cake-09.jpg",
-    "cake-10.jpg",
-    "cake-11.jpg",
-    "cake-13.jpg",
-    "cake-14.jpg",
-    "cake-15.jpg",
-    "cake-16.jpg",
+    "cake-05.jpg",
     "cake-17.jpg",
-    "cake-18.jpg",
+    "cake-01.jpg",
+    "cake-22.jpg",
+    "cake-27.jpg",
+    "cake-39.jpg",
+    "cake-43.jpg",
+    "cake-34.jpg",
 ];
 
 const allCakes = Array.from(
-    { length: 47 },
+    { length: 53 },
     (_, i) => `cake-${String(i + 1).padStart(2, "0")}.jpg`
 ).filter((f) => !removedCakes.includes(f));
 
@@ -104,11 +105,11 @@ const CustomCakes = () => {
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with peonies" className="col-span-3 row-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-51.jpg" alt="Vintage piped cake topped with cherries and red bows" className="col-span-3 row-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-05.jpg" alt="Chocolate-covered strawberries and dessert cups" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/strawberry-cheesecake.jpg" alt="Strawberry cheesecake" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -191,12 +192,26 @@ const CustomCakes = () => {
                         </p>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
+                        <figure className="row-span-2 relative rounded-[18px] overflow-hidden bg-brand-latte">
+                            <video
+                                className="w-full h-full object-cover"
+                                src="/video/dessert-boxes.mp4"
+                                poster="/video/dessert-boxes-poster.jpg"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="metadata"
+                                aria-label="Ash packing up a dessert order with Ash's Cravings stickers"
+                            />
+                            <figcaption className="absolute left-3 bottom-3 rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                                Packed with love ♡
+                            </figcaption>
+                        </figure>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-05.jpg" alt="Dessert cups and chocolate-covered strawberries" className="col-span-2 aspect-[16/10] w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/dessert-boxes-1.jpg" alt="Boxes of chocolate-covered strawberries, mini cheesecakes and rice krispie pops" className="aspect-square w-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-23.jpg" alt="Holiday cupcakes" className="aspect-square w-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-19.jpg" alt="Christmas mini cakes" className="aspect-square w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/dessert-boxes-2.jpg" alt="Mini cheesecakes, chocolate pretzels and cow-print strawberries" className="aspect-square w-full object-cover rounded-[18px]" />
                     </div>
                 </div>
             </section>
