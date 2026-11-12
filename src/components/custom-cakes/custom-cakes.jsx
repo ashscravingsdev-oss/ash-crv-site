@@ -147,7 +147,7 @@ const CustomCakes = () => {
                         <span className="text-brand-matcha">■</span> Recent cakes
                     </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
-                        Every one, <em className="italic text-brand-tobacco">one of a kind</em>
+                        Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                         {visibleCakes.map((filename, idx) => (
