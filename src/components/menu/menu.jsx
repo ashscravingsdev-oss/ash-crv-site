@@ -15,7 +15,7 @@ import DessertGrid from "@/components/desserts/dessert-grid"
 
 const DESSERTS = "Desserts"
 // Ash's tab order (by category name); anything new she adds goes after these
-const TAB_ORDER = ["Meals", DESSERTS, "Wellness Shots", "Juices"]
+const TAB_ORDER = ["Meals", "Juices", DESSERTS, "Wellness Shots"]
 const TAB_LABELS = { Meals: "Meal Prep" }
 
 const Menu = () => {
@@ -199,7 +199,7 @@ const Menu = () => {
                     </Button>
                 </motion.div>
 
-                {/* Category Buttons: Meal Prep, Desserts, Wellness Shots, Juices */}
+                {/* Category Buttons: Meal Prep, Juices, Desserts, Wellness Shots */}
                 {tabNames.map((name, index) => (
                     <motion.div
                         key={name}
