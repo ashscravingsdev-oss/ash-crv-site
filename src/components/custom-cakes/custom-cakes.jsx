@@ -53,6 +53,20 @@ const perks = [
     { label: "Deposit to hold your date", value: "50%" },
 ]
 
+// One photo in the dessert photo wall; fills whatever height its column gives it
+// (`tall` makes the photo taller than its frame and pins it to the top, to crop off the bottom)
+const DessertPhoto = ({ src, alt, flex, position = "object-center", tall = false }) => (
+    <div className={`relative ${flex} min-h-0 rounded-[18px] overflow-hidden bg-brand-latte`}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            className={`absolute inset-x-0 top-0 w-full object-cover ${tall ? "h-[135%] object-top" : `h-full ${position}`}`}
+        />
+    </div>
+)
+
 const CustomCakes = () => {
     const [showAll, setShowAll] = useState(false);
     const visibleCakes = showAll ? [...featuredCakes, ...remainingCakes] : featuredCakes;
@@ -160,7 +174,7 @@ const CustomCakes = () => {
 
             {/* Desserts by the dozen */}
             <section id="desserts" className="scroll-mt-24 container mx-auto px-4 py-16 md:py-20">
-                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+                <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
                     <div className="space-y-4">
                         <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
                             <span className="text-brand-matcha">■</span> Desserts
@@ -173,27 +187,32 @@ const CustomCakes = () => {
                         </p>
                         <DessertList />
                     </div>
-                    <div className="grid grid-cols-2 gap-3 md:sticky md:top-28">
-                        <figure className="row-span-2 relative rounded-[18px] overflow-hidden bg-brand-latte">
-                            <video
-                                className="w-full h-full object-cover"
-                                src="/video/dessert-boxes.mp4"
-                                poster="/video/dessert-boxes-poster.jpg"
-                                autoPlay
-                                muted
-                                loop
-                                playsInline
-                                preload="metadata"
-                                aria-label="Ash packing up a dessert order with Ash's Cravings stickers"
-                            />
-                            <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
-                                Packed with love ♡
-                            </figcaption>
-                        </figure>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet in pinks and yellows" className="aspect-square w-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-05.jpg" alt="Dessert table with chocolate-covered strawberries and pink cupcakes" className="aspect-square w-full object-cover rounded-[18px]" />
+                    {/* Photo wall: two columns that grow to the full height of the list */}
+                    <div className="flex gap-3 h-[680px] sm:h-[860px] lg:h-auto lg:min-h-[640px]">
+                        <div className="flex-1 flex flex-col gap-3">
+                            <figure className="relative flex-[5] min-h-0 rounded-[18px] overflow-hidden bg-brand-latte">
+                                <video
+                                    className="absolute inset-0 w-full h-full object-cover"
+                                    src="/video/dessert-boxes.mp4"
+                                    poster="/video/dessert-boxes-poster.jpg"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                    preload="metadata"
+                                    aria-label="Ash packing up a dessert order with Ash's Cravings stickers"
+                                />
+                                <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                                    Packed with love ♡
+                                </figcaption>
+                            </figure>
+                            <DessertPhoto flex="flex-[4]" src="/gallery/desserts/dessert-boxes-2.jpg" alt="Boxes of strawberry mini cheesecakes, cow-print strawberries and chocolate pretzels" position="object-[center_35%]" />
+                        </div>
+                        <div className="flex-1 flex flex-col gap-3">
+                            <DessertPhoto flex="flex-[3]" src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet in pinks and yellows" />
+                            <DessertPhoto flex="flex-[3]" src="/gallery/catering/catering-05.jpg" alt="Dessert table with chocolate-covered strawberries and pink cupcakes" tall />
+                            <DessertPhoto flex="flex-[3]" src="/gallery/desserts/strawberry-cheesecake.jpg" alt="Cheesecake topped with fresh strawberries" position="object-[center_60%]" />
+                        </div>
                     </div>
                 </div>
             </section>

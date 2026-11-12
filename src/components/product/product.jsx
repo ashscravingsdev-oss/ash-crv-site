@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Minus, Plus, ShoppingCart, Heart, LoaderCircle, Check, ShoppingBag } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { isMenuProduct } from "@/lib/special-orders"
 import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
@@ -169,7 +170,7 @@ const Product = ({ slug }) => {
     }
 
     const relatedProducts = products
-        ? products.filter(p => p.id !== product?.id).slice(0, 3)
+        ? products.filter(p => p.id !== product?.id && isMenuProduct(p)).slice(0, 3)
         : []
 
     if (productLoading) {

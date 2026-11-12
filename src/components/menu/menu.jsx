@@ -11,6 +11,7 @@ import { fadeUp, fadeIn } from "@/lib/animations"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories, fetchProducts } from "@/store/productSlice"
 import { bestSellerRank } from "@/lib/menu-pins"
+import { isMenuProduct } from "@/lib/special-orders"
 import DessertGrid from "@/components/desserts/dessert-grid"
 
 const DESSERTS = "Desserts"
@@ -21,10 +22,12 @@ const TAB_LABELS = { Meals: "Meal Prep" }
 const Menu = () => {
     const dispatch = useDispatch()
     const {
-        products,
+        products: allProducts,
         categories,
         loading
     } = useSelector((state) => state.products)
+    // Desserts live in their own tab, never in the weekly grid
+    const products = allProducts.filter(isMenuProduct)
 
     const [selectedCategory, setSelectedCategory] = useState("All")
     const [searchQuery, setSearchQuery] = useState("")

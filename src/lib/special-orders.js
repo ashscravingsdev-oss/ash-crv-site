@@ -99,3 +99,11 @@ export const priceRange = (items = []) => {
 
 export const dessertSlug = (name) =>
     String(name).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+
+// Weekly menu items only: never a dessert flavor or someone's private custom item.
+// (Also guards against an older backend that ignores the order_type filter.)
+export const isMenuProduct = (p) =>
+    !!p &&
+    p.order_type !== "special_order" &&
+    p.visibility !== "private" &&
+    !DESSERT_ORDER.some((d) => d.toLowerCase() === String(p.category?.name || "").toLowerCase())

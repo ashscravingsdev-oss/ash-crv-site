@@ -3,6 +3,7 @@
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts } from "@/store/productSlice"
+import { isMenuProduct } from "@/lib/special-orders"
 import ProductItem from "@/components/menu/product-item"
 import Link from "next/link";
 
@@ -16,7 +17,7 @@ export default function FeaturedProducts() {
         }
     }, [dispatch, products.length])
 
-    const featuredProducts = products.slice(0, 3)
+    const featuredProducts = products.filter(isMenuProduct).slice(0, 3)
     // Show placeholders until the first fetch finishes, instead of flashing "no products"
     const showSkeleton = loading || (products.length === 0 && !error)
 
