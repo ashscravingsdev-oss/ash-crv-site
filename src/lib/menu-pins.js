@@ -1,7 +1,7 @@
 // Best sellers pinned to the top of the menu, in this order, with a "#1 Best Seller" tag on the first one.
 // Matched by product name (capital letters and punctuation don't matter).
 // To pin something else, change or add a name here.
-export const BEST_SELLERS = ["Heart Beet"];
+export const BEST_SELLERS = ["Heart Beet", "Chia Pudding"];
 
 const clean = (s = "") => String(s).toLowerCase().replace(/[^a-z0-9]/g, "");
 
