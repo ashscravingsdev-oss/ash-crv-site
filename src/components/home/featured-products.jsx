@@ -24,12 +24,12 @@ export default function FeaturedProducts() {
         <section className="container mx-auto px-4 pt-12 pb-16 md:pb-24">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-8 md:mb-10">
                 <div className="space-y-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ This week’s menu</p>
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> This week’s menu</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                        Fresh <em className="italic">picks</em>
+                        Fresh <em className="italic text-brand-matcha-dark">picks</em>
                     </h2>
                 </div>
-                <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-2">
+                <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso bg-brand-matcha-light rounded-full px-4 py-2">
                     $17 each · 5 for $80 · 10 for $160
                 </p>
             </div>

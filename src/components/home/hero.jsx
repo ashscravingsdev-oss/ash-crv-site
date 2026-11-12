@@ -18,14 +18,14 @@ const HeroSection = () => {
                         variants={fadeUp}
                         className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-1.5"
                     >
-                        ■ Fresh meal prep, delivered weekly
+                        <span className="text-brand-matcha">■</span> Fresh meal prep, delivered weekly
                     </motion.p>
 
                     <motion.h1
                         variants={fadeUp}
                         className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl xl:text-[5.5rem] text-brand-heading text-balance"
                     >
-                        What are you <em className="italic">craving?</em>
+                        What are you <em className="italic text-brand-matcha-dark">craving?</em>
                     </motion.h1>
 
                     <motion.p
@@ -68,7 +68,7 @@ const HeroSection = () => {
                         />
                     </div>
 
-                    <p className="absolute top-4 right-4 rounded-full bg-background/95 px-4 py-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso shadow-md">
+                    <p className="absolute top-4 right-4 rounded-full bg-brand-matcha-light px-4 py-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso shadow-md">
                         $17 a meal · 10 for $160
                     </p>
 
@@ -84,7 +84,7 @@ const HeroSection = () => {
                             className="w-[68px] h-[68px] rounded-lg object-cover shrink-0"
                         />
                         <span className="flex flex-col">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-heading">■ New this season</span>
+                            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-heading"><span className="text-brand-matcha">■</span> New this season</span>
                             <span className="font-serif text-xl font-semibold leading-tight text-brand-espresso">Christmas Mini Cakes</span>
                             <span className="text-sm font-medium text-brand-espresso border-b border-dashed border-brand-tobacco self-start">Request yours →</span>
                         </span>

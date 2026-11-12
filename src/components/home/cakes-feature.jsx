@@ -5,7 +5,7 @@ const CakesFeature = () => {
         <section className="bg-muted">
             <div className="container mx-auto px-4 py-16 md:py-24 grid lg:grid-cols-[1fr_1.25fr] gap-10 lg:gap-14 items-center">
                 <div className="space-y-5">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Custom cakes</p>
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Custom cakes</p>
                     <h2 className="font-serif font-medium text-5xl md:text-6xl leading-[0.98] text-brand-heading">
                         Cakes made to <em className="italic text-brand-tobacco">wow</em>
                     </h2>

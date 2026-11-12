@@ -10,9 +10,9 @@ const HowItWorks = () => {
     return (
         <section className="container mx-auto px-4 pt-16 md:pt-24 pb-8">
             <div className="text-center mb-10 md:mb-12 space-y-2">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ How it works</p>
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> How it works</p>
                 <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                    Fresh meals, <em className="italic">no stress</em>
+                    Fresh meals, <em className="italic text-brand-matcha-dark">no stress</em>
                 </h2>
             </div>
 
