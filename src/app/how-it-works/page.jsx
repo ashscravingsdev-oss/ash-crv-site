@@ -7,8 +7,8 @@ export default function HowItWorksPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="How Ash's Cravings Works - Easy Meal Delivery Explained"
-        description="Discover how Ash's Cravings makes meal delivery simple and convenient. Learn about our meal plans, easy ordering process, and fast delivery to enjoy fresh meals at home."
+        title="How It Works - Ash's Cravings | Meal Prep Delivered Monday & Tuesday"
+        description="Order Ash's Cravings meal prep by Sunday for Monday or Tuesday delivery in Eastvale, CA. Order one time or subscribe and pick new meals every week."
         keywords={[
           "Ash's Cravings how it works",
           "meal delivery process",

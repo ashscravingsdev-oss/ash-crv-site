@@ -51,15 +51,15 @@ const faqs = [
         questions: [
             {
                 q: "How do subscriptions work?",
-                a: "Pick your meals, choose how often you want them (every week, every other week or once a month) and your order repeats on its own. You can skip, pause or cancel anytime.",
+                a: "Subscriptions are for bundles. Pick a bundle and how often (every week or every 2 weeks), then pick new meals from your account each week before the Sunday cutoff. If you don't pick, I'll repeat your last picks and swap anything that's off the menu for a chef's choice.",
             },
             {
                 q: "Can I skip a week?",
                 a: "Of course! Skip it from your account before Sunday and you won't be charged that week.",
             },
             {
-                q: "How do I cancel my subscription?",
-                a: "Anytime from your account. No fees and no hard feelings. You're always welcome back!",
+                q: "How do I stop my subscription?",
+                a: "Pause it anytime from your account. No fees and no hard feelings, and it stays paused until you resume. You're always welcome back!",
             },
         ],
     },

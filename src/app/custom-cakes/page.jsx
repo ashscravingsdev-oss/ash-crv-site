@@ -7,8 +7,8 @@ export default function CustomCakesPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Custom Cakes - Ash's Cravings"
-        description="Handcrafted custom cakes for birthdays, weddings, and every celebration. Every cake is custom-quoted to your vision."
+        title="Custom Cakes & Desserts - Ash's Cravings | Eastvale, CA"
+        description="Custom cakes made from scratch and decorated by hand, from $125, plus dessert cups, chocolate-covered strawberries and sweets by the dozen. Eastvale, CA."
         keywords={[
           "custom cakes",
           "birthday cake",

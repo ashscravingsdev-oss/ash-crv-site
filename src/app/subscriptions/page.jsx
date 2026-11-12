@@ -7,8 +7,8 @@ export default function SubscriptionsPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Meal Prep Subscription Plans - Ash's Cravings | Save Up to 30%"
-        description="Subscribe & save! Get weekly, bi-weekly, or monthly meal prep subscriptions starting at $9.99/meal. Free delivery, flexible scheduling, cancel anytime."
+        title="Meal Prep Subscriptions - Ash's Cravings | Your Meals, Every Week"
+        description="Get Ash's Cravings meal prep every week or every 2 weeks. Pick a bundle, choose new meals from the rotating menu each week, and skip or pause anytime. Eastvale, CA."
         keywords={[
           "meal prep subscription",
           "weekly meal delivery subscription",
@@ -23,8 +23,7 @@ export default function SubscriptionsPage() {
           "meal delivery service subscription",
           "affordable meal prep subscription"
         ]}
-        image="/og-subscription.jpg" // Create 1200x630 image
-        url="/subscription"
+        url="/subscriptions"
         type="website"
         publishedTime="2024-01-01T00:00:00.000Z"
         modifiedTime={new Date().toISOString()}
