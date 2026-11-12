@@ -75,12 +75,12 @@ const About = () => {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="/brand/about-grandma.jpg"
-                            alt="Young Ash and her grandma Maria Elena making pupusas from scratch"
+                            alt="Young Ash and her grandma making pupusas from scratch"
                             loading="lazy"
                             className="w-full h-full object-cover object-[center_30%]"
                         />
                         <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
-                            Me &amp; my grandma Maria Elena ♡
+                            Making pupusas with my grandma ♡
                         </figcaption>
                     </motion.figure>
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
@@ -89,20 +89,12 @@ const About = () => {
                             In the kitchen with <em className="italic text-brand-tobacco">my grandmas</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            I&apos;ve been in the kitchen my whole life. I was blessed with two of the best grandmas
-                            in the world, my grandma Maria Elena and my grandma Alicia. They both helped raise me,
-                            and they&apos;re the best chefs I know. Growing up right next to them is how I learned
-                            to cook, Mexican food most of all.
+                            I grew up in the kitchen, right beside my two grandmas, the best chefs I know.
+                            Everything I know about cooking, I learned from them.
                         </p>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            In the photo, that&apos;s me and my grandma Maria Elena making pupusas from scratch. She
-                            made the best ones, and I loved making them with her. She passed a couple of years ago,
-                            but that love is in everything I make.
-                        </p>
-                        <p className="text-lg text-foreground/85 leading-relaxed">
-                            My grandma Alicia is still the best and still makes our family go round. They both
-                            taught me the love of making people happy through food, and that&apos;s what
-                            Ash&apos;s Cravings is all about.
+                            They taught me that food is how you show love, and that love goes into everything
+                            I make.
                         </p>
                     </motion.div>
                 </div>
