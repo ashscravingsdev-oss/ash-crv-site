@@ -1,4 +1,4 @@
-﻿import { Navigation } from "@/components/nav";
+import { Navigation } from "@/components/nav";
 import AnnouncementBar from "@/components/home/announcement-bar";
 import HeroSection from "@/components/home/hero";
 import Cravings from "@/components/home/cravings";
@@ -9,6 +9,7 @@ import OurStory from "@/components/home/our-story";
 import Newsletter from "@/components/home/newsletter";
 import MochaBand from "@/components/home/mocha-band";
 import InstagramStrip from "@/components/home/instagram-strip";
+import Reviews from "@/components/home/reviews";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
 
@@ -28,6 +29,7 @@ export default function HomePage() {
       <Cravings />
       <HowItWorks />
       <FeaturedProducts />
+      <Reviews />
       <CakesFeature />
       <OurStory />
       <InstagramStrip />

@@ -82,9 +82,8 @@ const CakeInquiryForm = () => {
                         Tell me about your <em className="italic text-brand-tobacco">celebration</em>
                     </CardTitle>
                     <p className="text-muted-foreground">
-                        Tell me your idea and I&apos;ll send you a private link to your cake with the price and details, so you
-                        can check out in a minute (no account needed). Cakes need at least 1 week&apos;s notice. Need it sooner?
-                        Message me and I&apos;ll see what I can do.
+                        Tell me your idea and I&apos;ll send you a private link with your price, so you can order in a minute.
+                        Cakes need at least 1 week&apos;s notice. Need it sooner? Message me!
                     </p>
                 </CardHeader>
                 <CardContent>

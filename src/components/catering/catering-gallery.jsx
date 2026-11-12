@@ -3,19 +3,18 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 
-// Past events, one photo per spread (no repeats of the same table, and none
-// of the photos already shown bigger higher up the page). The first one is
-// shown big.
+// Past events, one photo per spread (no two shots of the same table, and none
+// of the photos shown bigger higher up the page). The first one is shown big.
 const photos = [
     { src: "/gallery/catering/catering-01.jpg", alt: "Grazing board with veggies, grapes, cheeses and a spinach dip" },
-    { src: "/gallery/catering/catering-14.jpg", alt: "Party table with brie bites, berries and a big glazed tray" },
+    { src: "/gallery/catering/catering-21.jpg", alt: "Crostini with whipped cheese, blueberry compote, walnuts and thyme" },
     { src: "/gallery/catering/catering-13.jpg", alt: "Deviled eggs garnished with cranberries and parsley" },
-    { src: "/gallery/catering/catering-05.jpg", alt: "Dessert table with chocolate-covered strawberries, cupcakes and deviled eggs" },
+    { src: "/gallery/catering/catering-22.jpg", alt: "Shower table with white chocolate strawberries, rosette cupcakes, pretzel rods and deviled eggs" },
+    { src: "/gallery/catering/catering-14.jpg", alt: "Party table with brie bites, berries and a big glazed tray" },
     { src: "/gallery/catering/catering-09.jpg", alt: "Fall party spread with crostini, pasta salad cups and mini desserts" },
     { src: "/gallery/catering/catering-02.jpg", alt: "Tray of pesto and caprese toasts on ciabatta" },
+    { src: "/gallery/catering/catering-23.jpg", alt: "Truffle parmesan potato bites, deviled eggs and bacon crostini" },
     { src: "/gallery/catering/catering-19.jpg", alt: "Caprese skewers with tomato, mozzarella and basil" },
-    { src: "/gallery/catering/catering-04.jpg", alt: "Event table with roasted potatoes, deviled eggs and mini desserts" },
-    { src: "/gallery/catering/catering-12.jpg", alt: "Chocolate chip muffins in paper wraps" },
 ];
 
 const CateringGallery = () => {
@@ -57,6 +56,16 @@ const CateringGallery = () => {
                     </button>
                 ))}
             </div>
+            <p className="text-center mt-8">
+                <a
+                    href="https://www.instagram.com/ashscravings"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs uppercase tracking-[0.18em] text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5"
+                >
+                    More on Instagram @ashscravings →
+                </a>
+            </p>
             <PhotoLightbox photos={photos} index={viewing} onIndexChange={setViewing} />
         </motion.div>
     );

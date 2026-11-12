@@ -25,6 +25,8 @@ const removedCakes = [
 // they display left-to-right, top-to-bottom in this order.
 const featuredCakes = [
     "cake-54.jpg",
+    "cake-55.jpg",
+    "cake-56.jpg",
     "cake-51.jpg",
     "cake-48.jpg",
     "cake-50.jpg",
@@ -38,13 +40,17 @@ const featuredCakes = [
     "cake-01.jpg",
     "cake-22.jpg",
     "cake-27.jpg",
-    "cake-39.jpg",
-    "cake-43.jpg",
-    // "cake-34.jpg" moved under "Show more" to keep the grid even
+    // "cake-39.jpg", "cake-43.jpg" and "cake-34.jpg" moved under "Show more" to keep the grid even
 ];
 
 // A little note on special cakes, and a real description for screen readers
 const cakeNotes = {
+    "cake-55.jpg": {
+        alt: "White cake with blue piped bows and a gold 'Destiny' topper, cut open so rainbow sprinkles spill out",
+    },
+    "cake-56.jpg": {
+        alt: "Two mini cakes and cupcakes piped with funny 30th birthday doodles",
+    },
     "cake-54.jpg": {
         note: "For my grandma ♡",
         alt: "Peach piped cake with baby's breath and a photo of Ash's grandma Maria Elena holding a cake",
@@ -52,7 +58,7 @@ const cakeNotes = {
 };
 
 const allCakes = Array.from(
-    { length: 54 },
+    { length: 56 },
     (_, i) => `cake-${String(i + 1).padStart(2, "0")}.jpg`
 ).filter((f) => !removedCakes.includes(f));
 
@@ -141,7 +147,7 @@ const CustomCakes = () => {
                         <span className="text-brand-matcha">■</span> Recent cakes
                     </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
-                        Every one, <em className="italic text-brand-tobacco">one of a kind</em>
+                        Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                         {visibleCakes.map((filename, idx) => (
