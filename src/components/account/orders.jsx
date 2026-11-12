@@ -107,6 +107,11 @@ const Orders = () => {
                                             <span className="text-muted-foreground">
                                                 {item.quantity}x{" "}
                                                 {item.product?.name || item.bundle?.name || "Item"}
+                                                {item.picked_items?.length > 0 && (
+                                                    <span className="block text-xs mt-0.5">
+                                                        {item.picked_items.map((p) => `${p.quantity}x ${p.name}`).join(" + ")}
+                                                    </span>
+                                                )}
                                             </span>
                                             <span className="font-medium">
                                                 ${(parseFloat(item.unit_price) * item.quantity).toFixed(2)}

@@ -229,6 +229,15 @@ const Cart = () => {
                                                                 <p className="text-sm text-muted-foreground">
                                                                     {item.product.description}
                                                                 </p>
+                                                            ) : item.bundle && item.selected_products?.length > 0 ? (
+                                                                <div className="text-sm text-muted-foreground">
+                                                                    {item.selected_products.map((pick, i) => (
+                                                                        <span key={pick.product_id}>
+                                                                            {pick.quantity}x {products?.find((p) => p.id === pick.product_id)?.name || "Meal"}
+                                                                            {i < item.selected_products.length - 1 ? ' + ' : ''}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
                                                             ) : item.bundle ? (
                                                                 <div className="text-sm text-muted-foreground">
                                                                     {item.bundle.products?.map((p, i) => (

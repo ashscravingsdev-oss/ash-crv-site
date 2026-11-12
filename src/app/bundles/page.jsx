@@ -9,8 +9,8 @@ export default function BundlesPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Meal Prep Bundles & Packages - Ash's Cravings | Save Up to 25%"
-        description="Save time and money with our healthy meal prep bundles. Weekly packages, family bundles, and customized meal plans with fresh ingredients delivered to your door."
+        title="Build Your Meal Prep Bundle - Ash's Cravings | Pick Any Meals"
+        description="Build your own meal prep bundle from Ash's Cravings: pick your size, then mix and match any meals from this week's menu. Made from scratch in Eastvale, CA."
         keywords={[
           "meal prep bundles",
           "weekly meal packages",
