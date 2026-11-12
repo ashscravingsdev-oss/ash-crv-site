@@ -70,8 +70,20 @@ const About = () => {
 
             {/* Grandma */}
             <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-24">
-                    <motion.div {...reveal} className="max-w-3xl mx-auto text-center space-y-6">
+                <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+                    <motion.figure {...reveal} className="relative order-2 md:order-1 max-w-lg w-full mx-auto md:mx-0 aspect-[9/10] rounded-[18px] overflow-hidden bg-background">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/brand/about-grandma.jpg"
+                            alt="Young Ash rolling dough with her grandma at the kitchen island"
+                            loading="lazy"
+                            className="w-full h-full object-cover object-[center_30%]"
+                        />
+                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                            Me &amp; my grandma ♡
+                        </figcaption>
+                    </motion.figure>
+                    <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
                         <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Where it all started</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
                             In the kitchen with <em className="italic text-brand-tobacco">my grandma</em>
