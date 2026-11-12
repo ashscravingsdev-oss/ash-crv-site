@@ -15,16 +15,13 @@ const DessertList = () => {
 
     return (
         <div className="space-y-6">
-            <ol className="border-t border-brand-espresso/25">
-                {list.map((g, i) => (
+            <ul className="border-t border-brand-espresso/25">
+                {list.map((g) => (
                     <li key={g.name} className="border-b border-dashed border-border">
                         <Link
                             href={`/menu?tab=desserts&d=${dessertSlug(g.name)}`}
-                            className="group grid grid-cols-[2.25rem_1fr_auto] gap-x-3 sm:gap-x-4 py-5 -mx-3 px-3 rounded-xl transition-colors hover:bg-brand-latte/40 focus-visible:bg-brand-latte/40 outline-none"
+                            className="group grid grid-cols-[1fr_auto] gap-x-4 sm:gap-x-6 py-5 -mx-3 px-3 rounded-xl transition-colors hover:bg-brand-latte/40 focus-visible:bg-brand-latte/40 outline-none"
                         >
-                            <span className="font-serif italic text-xl text-brand-tobacco pt-0.5" aria-hidden="true">
-                                {String(i + 1).padStart(2, "0")}
-                            </span>
                             <span className="min-w-0">
                                 <span className="block font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">
                                     {g.name}
@@ -45,7 +42,7 @@ const DessertList = () => {
                         </Link>
                     </li>
                 ))}
-            </ol>
+            </ul>
 
             <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading leading-relaxed">
                 One flavor per dozen · 2 dozen minimum per flavor · 10 days&apos; notice · 50% deposit

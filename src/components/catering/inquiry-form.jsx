@@ -88,15 +88,14 @@ const InquiryForm = () => {
     if (status === "success") {
         return (
             <div className="max-w-3xl mx-auto">
-                <Card>
+                <Card className="rounded-2xl">
                     <CardContent className="flex flex-col items-center text-center gap-3 py-16">
                         <CheckCircle2 className="h-10 w-10 text-primary" />
-                        <CardTitle className="text-2xl">
-                            Thank you! Your request has been sent — I&apos;ll get back to
-                            you soon.
+                        <CardTitle className="font-serif text-3xl font-semibold text-brand-espresso">
+                            Thank you! I got your request.
                         </CardTitle>
                         <p className="text-muted-foreground max-w-md">
-                            I'll follow up with a custom quote.
+                            I&apos;ll get back to you soon with a menu idea and your quote.
                         </p>
                     </CardContent>
                 </Card>
@@ -106,11 +105,17 @@ const InquiryForm = () => {
 
     return (
         <div className="max-w-3xl mx-auto">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-2xl">Request a Quote</CardTitle>
+            <Card className="rounded-2xl">
+                <CardHeader className="space-y-2">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
+                        <span className="text-brand-matcha">■</span> Plan your event
+                    </p>
+                    <CardTitle className="font-serif text-4xl font-medium text-brand-heading">
+                        Tell me about your <em className="italic text-brand-tobacco">event</em>
+                    </CardTitle>
                     <p className="text-muted-foreground">
-                        Tell me about your event and I'll put together a custom quote
+                        Share a few details and I&apos;ll put together a menu and a custom quote for you. Events need at
+                        least 3 weeks&apos; notice, and a 50% deposit holds your date.
                     </p>
                 </CardHeader>
                 <CardContent>
@@ -270,10 +275,10 @@ const InquiryForm = () => {
                         <Button
                             type="submit"
                             size="lg"
-                            className="w-full"
+                            className="w-full h-12 font-mono text-xs uppercase tracking-[0.18em]"
                             disabled={status === "sending"}
                         >
-                            {status === "sending" ? "Sending..." : "Submit Inquiry"}
+                            {status === "sending" ? "Sending..." : "Send my request"}
                         </Button>
                     </form>
                 </CardContent>
