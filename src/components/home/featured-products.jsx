@@ -12,7 +12,7 @@ export default function FeaturedProducts() {
 
     useEffect(() => {
         if (products.length === 0) {
-            dispatch(fetchProducts())
+            dispatch(fetchProducts({ order_type: 'meal_prep', limit: 100 }))
         }
     }, [dispatch, products.length])
 

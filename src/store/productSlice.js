@@ -14,6 +14,8 @@ export const fetchProducts = createAsyncThunk(
             if (params.status) queryParams.append('status', params.status);
             if (params.sortBy) queryParams.append('sortBy', params.sortBy);
             if (params.sortOrder) queryParams.append('sortOrder', params.sortOrder);
+            // 'meal_prep' for the weekly menu, 'special_order' for desserts and cakes
+            if (params.order_type) queryParams.append('order_type', params.order_type);
 
             const queryString = queryParams.toString();
             const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/products${queryString ? `?${queryString}` : ''}`;

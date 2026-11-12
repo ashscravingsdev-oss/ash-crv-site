@@ -11,6 +11,8 @@ import DeliverySchedule from './delivery-schedule'
 import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
+import SpecialCheckout from './special-checkout'
+import { cartIsSpecial } from "@/lib/special-orders"
 import { Loader2, ShoppingBag } from "lucide-react" 
 import { toast } from "sonner"
 import { apiRequest } from "@/lib/apiRequest"
@@ -75,6 +77,14 @@ const Checkout = () => {
     useEffect(() => {
         dispatch(fetchCart())
     }, [dispatch])
+
+    // Desserts, cakes and custom items can check out without an account;
+    // weekly meal prep still needs one (for picks and subscriptions).
+    const special = cartIsSpecial(items)
+    const needsLogin = !isLoggedIn && !cartLoading && cart && items?.length > 0 && !special
+    useEffect(() => {
+        if (needsLogin) router.replace('/login?redirect=' + encodeURIComponent('/checkout'))
+    }, [needsLogin, router])
 
     useEffect(() => {
         if (cart?.id) {
@@ -261,6 +271,21 @@ const Checkout = () => {
             </div>
         )
     }
+
+    if (special) {
+        return (
+            <SpecialCheckout
+                cart={cart}
+                items={items}
+                subtotal={subtotal}
+                taxTotal={taxTotal}
+                couponDiscount={couponDiscount}
+                currentUser={currentUser}
+            />
+        )
+    }
+
+    if (needsLogin) return null
 
     return (
         <div className="container mx-auto px-4 pt-8">

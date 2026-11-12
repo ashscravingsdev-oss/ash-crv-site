@@ -63,7 +63,7 @@ const CakeInquiryForm = () => {
                             Thank you! I got your request.
                         </CardTitle>
                         <p className="text-muted-foreground max-w-md">
-                            I&apos;ll get back to you soon with a custom quote.
+                            I&apos;ll get back to you soon with your quote and a private link to order.
                         </p>
                     </CardContent>
                 </Card>
@@ -82,8 +82,9 @@ const CakeInquiryForm = () => {
                         Tell me about your <em className="italic text-brand-tobacco">celebration</em>
                     </CardTitle>
                     <p className="text-muted-foreground">
-                        I&apos;ll send you a custom quote. Cakes need at least 1 week&apos;s notice. Need it sooner? Message me
-                        and I&apos;ll see what I can do.
+                        Tell me your idea and I&apos;ll send you a private link to your cake with the price and details, so you
+                        can check out in a minute (no account needed). Cakes need at least 1 week&apos;s notice. Need it sooner?
+                        Message me and I&apos;ll see what I can do.
                     </p>
                 </CardHeader>
                 <CardContent>

@@ -54,8 +54,8 @@ const ProductItem = ({ product }) => {
             console.error("Failed to add to cart:", error)
 
             // Handle inventory errors
-            if (error?.message) {
-                toast.error(error.message)
+            if (typeof error === "string" || error?.message) {
+                toast.error(typeof error === "string" ? error : error.message)
             } else {
                 toast.error("Failed to add item to cart")
             }

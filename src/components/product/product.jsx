@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { Minus, Plus, ShoppingCart, Heart, LoaderCircle, Check, ShoppingBag } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
@@ -20,6 +21,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const Product = ({ slug }) => {
     const dispatch = useDispatch()
+    const router = useRouter()
     const {
         product,
         products,
@@ -60,8 +62,15 @@ const Product = ({ slug }) => {
     }, [dispatch, slug])
 
     useEffect(() => {
-        dispatch(fetchProducts({ status: 'active' }))
+        dispatch(fetchProducts({ status: 'active', order_type: 'meal_prep', limit: 100 }))
     }, [dispatch])
+
+    // Dessert flavors are ordered by the dozen from the Desserts shop
+    useEffect(() => {
+        if (product?.slug === slug && product?.order_type === 'special_order') {
+            router.replace('/menu?tab=desserts')
+        }
+    }, [product, slug, router])
 
     // Fetch cart on mount
     useEffect(() => {
