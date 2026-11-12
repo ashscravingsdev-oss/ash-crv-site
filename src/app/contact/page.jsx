@@ -10,7 +10,7 @@ export default function ContactPage() {
     <div className="min-h-screen">
       <SEO
         title="Contact Ash's Cravings - Customer Support & Meal Delivery Inquiries"
-        description="Get in touch with Ash's Cravings for meal delivery questions, catering inquiries, or customer support. We're here to help with your healthy eating journey."
+        description="Get in touch with Ash's Cravings for meal delivery questions, event orders, or customer support. We're here to help with your healthy eating journey."
         keywords={[
           "contact Ash's Cravings",
           "customer service meal delivery",

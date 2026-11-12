@@ -1,67 +1,34 @@
-'use client'
 import React from 'react'
-import { motion } from "framer-motion";
-import { fadeUp, slideInLeft } from "@/lib/animations";
+import Link from "next/link";
 
 const OurStory = () => {
     return (
-        <section id="our-story" className="container mx-auto px-4 py-16">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-                <motion.div
-                    variants={slideInLeft}
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.7 }}
-                    className="relative order-2 md:order-1"
-                >
-                    <motion.div
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.3 }}
-                        className="aspect-square rounded-2xl overflow-hidden bg-muted"
-                    >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/brand/about-hero.jpg"
-                            alt="Ash's Cravings in the kitchen"
-                            loading="lazy"
-                            className="w-full h-full object-cover"
-                        />
-                    </motion.div>
-                </motion.div>
+        <section id="our-story" className="container mx-auto px-4 py-16 md:py-24">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+                <div className="order-2 md:order-1 aspect-[4/5] max-w-lg w-full rounded-[18px] overflow-hidden bg-muted">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/brand/about-hero.jpg"
+                        alt="Ash in the kitchen"
+                        loading="lazy"
+                        className="w-full h-full object-cover"
+                    />
+                </div>
 
-                <motion.div
-                    className="space-y-6 order-1 md:order-2"
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, amount: 0.3 }}
-                    variants={{
-                        animate: {
-                            transition: {
-                                staggerChildren: 0.1
-                            }
-                        }
-                    }}
-                >
-                    <motion.h2
-                        variants={fadeUp}
-                        className="text-3xl md:text-4xl font-bold text-balance"
-                    >
-                        Our Story
-                    </motion.h2>
-
-                    <motion.p
-                        variants={fadeUp}
-                        className="text-lg text-muted-foreground leading-relaxed"
-                    >
-                        At Ash's Cravings, we believe in nourishing the body without
-                        sacrificing flavor. Every meal is made fresh with organic
-                        ingredients and homestyle care, crafted by a chef passionate
-                        about real food and balanced nutrition. Whether you're fueling
-                        your week or treating yourself, our menu brings comfort,
-                        convenience, and quality to every bite.
-                    </motion.p>
-                </motion.div>
+                <div className="space-y-5 order-1 md:order-2">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ My story</p>
+                    <h2 className="font-serif font-medium text-5xl md:text-6xl leading-none text-brand-heading">
+                        Hi, I’m <em className="italic">Ash</em>
+                    </h2>
+                    <p className="text-lg text-foreground/85 leading-relaxed">
+                        I’m sooo obsessed with food. I love cooking every kind of cuisine, and I’m always hungry! I love
+                        living healthy and feeling good, but I still have my cravings, of course, so I make them my way,
+                        with real, fresh food. That’s Ash’s Cravings.
+                    </p>
+                    <Link href="/about" className="inline-block font-medium border-b border-dashed border-brand-tobacco">
+                        Read my story →
+                    </Link>
+                </div>
             </div>
         </section>
     )

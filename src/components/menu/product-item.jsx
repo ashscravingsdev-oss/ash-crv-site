@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { addToCart } from "@/store/cartSlice"
 import { useState } from "react"
 import { ShoppingCart, Loader2, Check } from "lucide-react"
+import { toast } from "sonner"
+import { bestSellerLabel } from "@/lib/menu-pins"
 
 const ProductItem = ({ product }) => {
     const dispatch = useDispatch()
@@ -67,15 +69,21 @@ const ProductItem = ({ product }) => {
         item.product_id === product.id && item.product_id !== null
     )
     const isInCart = !!cartItem
+    const badge = bestSellerLabel(product)
 
     return (
         <Link href={`/menu/${product.slug}`}>
             <motion.div
-                whileHover={{ y: -8 }}
+                whileHover={{ y: -4 }}
                 transition={{ duration: 0.2 }}
                 className="h-full"
             >
-                <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full">
+                <Card className="relative overflow-hidden rounded-2xl hover:shadow-lg transition-shadow h-full">
+                    {badge && (
+                        <span className="absolute top-3 left-3 z-10 rounded-full bg-primary text-primary-foreground px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] shadow-md">
+                            ★ {badge}
+                        </span>
+                    )}
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
@@ -95,9 +103,9 @@ const ProductItem = ({ product }) => {
                             transition={{ delay: 0.1 }}
                             className="flex items-center gap-2 mb-2"
                         >
-                            <Badge variant="secondary" className="text-xs">
-                                {product.category?.name || "Uncategorized"}
-                            </Badge>
+                            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
+                                ■ {product.category?.name || "Menu"}
+                            </span>
 
                             {isInCart && (
                                 <Badge variant="outline" className="text-xs border-green-500 text-green-500">
@@ -110,7 +118,7 @@ const ProductItem = ({ product }) => {
                             initial={{ opacity: 0, y: 5 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.15 }}
-                            className="text-xl font-semibold mb-2"
+                            className="font-serif text-2xl font-semibold leading-tight mb-2 text-brand-espresso"
                         >
                             {product.name}
                         </motion.h3>
@@ -124,24 +132,21 @@ const ProductItem = ({ product }) => {
                             {product.description}
                         </motion.p>
 
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.25 }}
-                            className="flex items-center justify-between text-sm text-muted-foreground mb-4"
-                        >
-                            <span>{product.nutrition_info?.calories || 0} cal</span>
-                            <span>{product.nutrition_info?.protein || 0}g protein</span>
-                        </motion.div>
+                        {(Number(product.nutrition_info?.calories) > 0 || Number(product.nutrition_info?.protein) > 0) && (
+                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
+                                {Number(product.nutrition_info?.calories) > 0 && <span>{product.nutrition_info.calories} cal</span>}
+                                {Number(product.nutrition_info?.protein) > 0 && <span>{product.nutrition_info.protein}g protein</span>}
+                            </div>
+                        )}
 
                         <motion.div
                             initial={{ opacity: 0, y: 5 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="flex items-center justify-between"
+                            className="flex items-center justify-between pt-3 border-t border-dashed border-border"
                             onClick={(e) => e.preventDefault()} // Prevent link click on price/button area
                         >
-                            <span className="text-2xl font-bold">${product.price}</span>
+                            <span className="font-serif text-3xl font-semibold text-brand-espresso">${Number(product.price) % 1 === 0 ? Number(product.price) : product.price}</span>
 
                             <motion.div
                                 whileHover={{ scale: 1.05 }}
@@ -156,7 +161,7 @@ const ProductItem = ({ product }) => {
                                         product.inventory?.stock_quantity === 0
                                     }
                                     className={`
-                                        relative min-w-[120px]
+                                        relative min-w-[120px] font-mono text-xs uppercase tracking-[0.12em]
                                         ${showSuccess ? 'bg-green-600 hover:bg-green-700' : ''}
                                         ${product.inventory?.stock_quantity === 0 ? 'opacity-50 cursor-not-allowed' : ''}
                                     `}

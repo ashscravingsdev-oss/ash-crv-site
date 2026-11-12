@@ -25,8 +25,8 @@ const Features = () => {
                     {[
                         {
                             icon: <Leaf className="h-6 w-6 text-primary" />,
-                            title: "Organic, On Purpose",
-                            description: "I choose organic, local ingredients because that's genuinely how I cook — not a marketing checkbox."
+                            title: "Fresh, On Purpose",
+                            description: "I cook with fresh ingredients because that's genuinely how I cook — not a marketing checkbox."
                         },
                         {
                             icon: <ChefHat className="h-6 w-6 text-primary" />,

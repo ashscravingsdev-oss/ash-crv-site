@@ -1,158 +1,146 @@
 'use client'
 import React from 'react'
-import { Card, CardContent } from "@/components/ui/card";
-import { Leaf, Users, Award, Heart } from "lucide-react";
+import Link from "next/link";
 import { motion } from "framer-motion"
-import { fadeUp, scaleUp } from "@/lib/animations"
+import { fadeUp } from "@/lib/animations"
+
 const values = [
     {
-        icon: Leaf,
-        title: "Organic Quality",
-        description: "Only the finest organic ingredients from trusted local farms"
+        title: "Real, fresh food",
+        description: "Every meal, cake and dessert is made from scratch, fresh each week.",
     },
     {
-        icon: Users,
-        title: "Community First",
-        description: "Supporting local farmers and sustainable practices"
+        title: "Made with love",
+        description: "The way my grandma taught me, with the goal of making you happy.",
     },
     {
-        icon: Award,
-        title: "Excellence",
-        description: "Chef-crafted recipes using restaurant-quality techniques"
+        title: "Made for you",
+        description: "No rice, extra veggies, extra protein, allergies. Just tell me and I'll make it work.",
     },
-    {
-        icon: Heart,
-        title: "Your Health",
-        description: "Nutritionally balanced meals designed by experts"
-    }
 ]
+
+const reveal = {
+    initial: "initial",
+    whileInView: "animate",
+    viewport: { once: true, amount: 0.2 },
+    variants: fadeUp,
+}
 
 const About = () => {
     return (
         <>
-            {/* Hero Section */}
-            <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="relative text-primary-foreground py-16 md:py-24 overflow-hidden"
-            >
-                <div className="absolute inset-0">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/brand/about-hero.jpg"
-                        alt="Ash's Cravings catering spread"
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-primary/80" />
+            {/* Intro */}
+            <section className="container mx-auto px-4 pt-10 pb-16 md:pt-14 md:pb-24">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+                    <motion.div {...reveal} className="space-y-5">
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ My story</p>
+                        <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
+                            Hi, I&apos;m <em className="italic">Ash</em>
+                        </h1>
+                        <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                            I&apos;m sooo obsessed with food. I love cooking all types of food from all different
+                            cuisines, and honestly, I eat all day. I&apos;m always hungry!
+                        </p>
+                        <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                            So it&apos;s a blessing to get to have <em className="font-serif text-2xl md:text-[1.6rem] italic text-brand-heading">real</em>, fresh food every day, not the garbage
+                            they&apos;re feeding us. I love living a healthy life and feeling good, and I know food is
+                            the way. But I still have my cravings, of course, so I make them my way.
+                        </p>
+                        <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                            That&apos;s Ash&apos;s Cravings. When you eat my food, I just want you to feel happy and
+                            the most satisfied.
+                        </p>
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        className="aspect-[4/5] max-w-lg w-full md:ml-auto rounded-[18px] overflow-hidden bg-muted"
+                    >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/brand/about-hero.jpg"
+                            alt="Ash in the kitchen"
+                            className="w-full h-full object-cover"
+                        />
+                    </motion.div>
                 </div>
-                <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ duration: 0.3 }}
-                    className="relative container mx-auto px-4 text-center"
-                >
-                    <motion.h1
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-bold mb-4 text-balance"
-                    >
-                        Our Story
-                    </motion.h1>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
-                    >
-                        Fresh. Organic. Chef-Crafted meals.
-                    </motion.p>
-                </motion.div>
-            </motion.section>
-
-            {/* Mission Section */}
-            <section className="container mx-auto px-4 py-16">
-                <motion.div
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true }}
-                    variants={fadeUp}
-                    className="max-w-3xl mx-auto text-center mb-16"
-                >
-                    <motion.h2
-                        variants={fadeUp}
-                        className="text-3xl md:text-4xl font-bold mb-6"
-                    >
-                        Our Mission
-                    </motion.h2>
-
-                    <motion.p
-                        variants={fadeUp}
-                        className="text-lg text-muted-foreground leading-relaxed"
-                    >
-                        At Ash's Cravings, we believe in nourishing the body without sacrificing flavor.
-                        Every meal is made fresh with organic ingredients and homestyle care, crafted by
-                        a chef passionate about real food and balanced nutrition. Whether you're fueling
-                        your week or treating yourself, our menu brings comfort, convenience, and quality
-                        to every bite.
-                    </motion.p>
-                </motion.div>
-
-                {/* Values Grid */}
-                <motion.div
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={{
-                        animate: {
-                            transition: {
-                                staggerChildren: 0.1
-                            }
-                        }
-                    }}
-                    className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-                >
-                    {values.map((value, index) => {
-                        const Icon = value.icon
-                        return (
-                            <motion.div
-                                key={index}
-                                variants={scaleUp}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -5, scale: 1.02 }}
-                            >
-                                <Card className="overflow-hidden h-full">
-                                    <CardContent className="pt-6 text-center h-full">
-                                        <motion.div
-                                            whileHover={{ rotate: 5, scale: 1.1 }}
-                                            className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4"
-                                        >
-                                            <Icon className="h-8 w-8 text-primary" />
-                                        </motion.div>
-
-                                        <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
-
-                                        <motion.p
-                                            initial={{ opacity: 0 }}
-                                            whileInView={{ opacity: 1 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: 0.1 }}
-                                            className="text-muted-foreground text-sm leading-relaxed"
-                                        >
-                                            {value.description}
-                                        </motion.p>
-                                    </CardContent>
-                                </Card>
-                            </motion.div>
-                        )
-                    })}
-                </motion.div>
             </section>
 
+            {/* Grandma */}
+            <section className="bg-muted">
+                <div className="container mx-auto px-4 py-16 md:py-24">
+                    <motion.div {...reveal} className="max-w-3xl mx-auto text-center space-y-6">
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Where it all started</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
+                            In the kitchen with <em className="italic">my grandma</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            I&apos;ve been in the kitchen my whole life. Ever since I was little, I was right next
+                            to my grandma. She has always been the number one chef I know. She taught me so much
+                            and really helped me find my love for food and cooking.
+                        </p>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            We both truly shared the love of making people happy through food. She&apos;s passed
+                            now, but that love is in everything I make.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Culinary school + Ash's Cravings */}
+            <section className="container mx-auto px-4 py-16 md:py-24">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-16">
+                    <motion.div {...reveal} className="space-y-4">
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Culinary school</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            Class of <em className="italic">2024</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
+                            couple of years ago. I graduated in 2024, and now I get to cook for you every week.
+                        </p>
+                    </motion.div>
+                    <motion.div {...reveal} className="space-y-4">
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Outside the kitchen</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            My <em className="italic">little family</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I
+                            love so much, and our toy poodle, Cash, my baby boy.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Values */}
+            <section className="bg-muted">
+                <div className="container mx-auto px-4 py-16 md:py-20">
+                    <div className="grid md:grid-cols-3 gap-5">
+                        {values.map((value) => (
+                            <motion.div {...reveal} key={value.title} className="bg-background rounded-2xl p-6 md:p-8 space-y-2">
+                                <h3 className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso">{value.title}</h3>
+                                <p className="text-muted-foreground leading-relaxed">{value.description}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-10">
+                        <Link
+                            href="/menu"
+                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
+                        >
+                            Order meal prep <span aria-hidden="true">→</span>
+                        </Link>
+                        <Link
+                            href="/custom-cakes"
+                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
+                        >
+                            Request a cake <span aria-hidden="true">→</span>
+                        </Link>
+                    </div>
+                </div>
+            </section>
         </>
     )
 }

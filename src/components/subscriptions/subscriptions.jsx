@@ -23,12 +23,12 @@ const faqs = [
     {
         id: "billing",
         question: "When am I billed for my subscription?",
-        answer: "To give our kitchen time to source the freshest ingredients, we bill every Saturday at 8:05 PM—right after our 8:00 PM cutoff. This ensures your order is locked in and ready to be prepped for Monday or Tuesday delivery."
+        answer: "Your card is charged right after the Sunday cutoff. That locks in your order so I can shop and cook it fresh for Monday or Tuesday delivery."
     },
     {
         id: "skip-week",
         question: "Can I skip a week if I am traveling?",
-        answer: "Absolutely. In your account dashboard, just tap \"Skip Next Delivery\" before the Saturday 8:00 PM cutoff. You won’t be charged, and your subscription will resume automatically with the following delivery."
+        answer: "Absolutely. In your account dashboard, just tap \"Skip Next Delivery\" before the Sunday cutoff. You won’t be charged, and your subscription will resume automatically with the following delivery."
     },
     {
         id: "delivery-days",
@@ -61,7 +61,7 @@ const steps = [
     {
         icon: Truck,
         title: "Fresh, Automated Delivery",
-        description: "We deliver every Monday & Tuesday, 10 AM – 7 PM. Orders placed before Saturday 8:00 PM arrive the following week. No effort, no stress—just fresh food at your door."
+        description: "We deliver every Monday & Tuesday, 10 AM – 7 PM. Order by Sunday and your meals arrive that Monday or Tuesday. No effort, no stress—just fresh food at your door."
     }
 ];
 
@@ -187,7 +187,7 @@ const Subscriptions = () => {
                     <div className="bg-white rounded-xl p-6 shadow-sm border">
                         <Pause className="h-10 w-10 text-primary mx-auto mb-4" />
                         <h4 className="font-semibold mb-2">Total Flexibility</h4>
-                        <p className="text-sm text-muted-foreground">Pause or skip any delivery before the Saturday 8:00 PM cutoff. Your subscription waits until you're ready.</p>
+                        <p className="text-sm text-muted-foreground">Pause or skip any delivery before the Sunday cutoff. Your subscription waits until you're ready.</p>
                     </div>
                     <div className="bg-white rounded-xl p-6 shadow-sm border">
                         <Repeat className="h-10 w-10 text-primary mx-auto mb-4" />

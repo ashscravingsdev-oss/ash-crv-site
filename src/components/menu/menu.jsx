@@ -10,6 +10,7 @@ import { motion } from "framer-motion"
 import { fadeUp, fadeIn } from "@/lib/animations"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories, fetchProducts } from "@/store/productSlice"
+import { bestSellerRank } from "@/lib/menu-pins"
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -58,8 +59,13 @@ const Menu = () => {
                 const protA = a.nutrition_info?.protein || 0
                 const protB = b.nutrition_info?.protein || 0
                 return protB - protA
-            default:
-                return 0
+            default: {
+                // "Most Popular": best sellers first, everything else keeps its order
+                const ra = bestSellerRank(a)
+                const rb = bestSellerRank(b)
+                if (ra === rb) return 0
+                return ra < rb ? -1 : 1
+            }
         }
     })
 
@@ -109,7 +115,7 @@ const Menu = () => {
                 className="mb-8"
             >
                 <h1 className="text-4xl font-bold mb-2">Our Menu</h1>
-                <p className="text-lg text-muted-foreground">Fresh, healthy meals and juices delivered daily</p>
+                <p className="text-lg text-muted-foreground">Fresh meals and juices, made from scratch and delivered every Monday &amp; Tuesday</p>
             </motion.div>
 
             {/* Search and Sort */}

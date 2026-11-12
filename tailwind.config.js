@@ -7,7 +7,21 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+				serif: ['var(--font-serif)', 'Georgia', 'serif'],
+				mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
+			},
 			colors: {
+				brand: {
+					cream: '#FBF6EC',
+					sand: '#EFE4D2',
+					latte: '#E4D5BE',
+					tobacco: '#9C7A54',
+					mocha: '#6B4A33',
+					heading: '#5C3D28',
+					espresso: '#2B1C14',
+				},
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				card: {

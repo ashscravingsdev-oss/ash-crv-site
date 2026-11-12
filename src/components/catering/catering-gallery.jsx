@@ -17,7 +17,7 @@ const CateringGallery = () => {
             className="mb-16"
         >
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-                Catering Gallery
+                Event Gallery
             </h2>
             <p className="text-muted-foreground text-center mb-8">
                 A look at spreads we&apos;ve served for past events
@@ -29,7 +29,7 @@ const CateringGallery = () => {
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={src}
-                                alt={`Catering spread ${idx + 1}`}
+                                alt={`Event spread ${idx + 1}`}
                                 loading="lazy"
                                 className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
                             />

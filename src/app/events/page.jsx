@@ -3,12 +3,12 @@ import { Footer } from "@/components/footer";
 import Catering from '@/components/catering/catering'
 import SEO from "@/components/seo";
 
-export default function CateringPage() {
+export default function EventsPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Ash's Cravings Catering - Healthy Event Catering & Corporate Meal Delivery"
-        description="Impress your guests with chef-prepared healthy catering for corporate events, weddings, and special occasions. Custom menus, fresh ingredients, and professional service."
+        title="Events & Private Chef - Ash's Cravings | Party Food, Office Lunches & Chef Dinners in Eastvale, CA"
+        description="Food for your events from Ash's Cravings: breakfast burritos, sandwich trays and dessert tables for birthdays, showers and office orders, plus private chef dinners at your home in Eastvale, CA."
         keywords={[
           "healthy catering service",
           "corporate meal delivery",
@@ -23,7 +23,7 @@ export default function CateringPage() {
           "corporate wellness catering",
           "catering delivery service"
         ]}
-        url="/catering"
+        url="/events"
         type="website"
         publishedTime="2024-01-01T00:00:00.000Z"
         modifiedTime={new Date().toISOString()}

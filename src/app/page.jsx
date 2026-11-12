@@ -1,7 +1,10 @@
 ﻿import { Navigation } from "@/components/nav";
+import AnnouncementBar from "@/components/home/announcement-bar";
 import HeroSection from "@/components/home/hero";
+import Cravings from "@/components/home/cravings";
 import HowItWorks from "@/components/home/how-it-works";
 import FeaturedProducts from "@/components/home/featured-products";
+import CakesFeature from "@/components/home/cakes-feature";
 import OurStory from "@/components/home/our-story";
 import Newsletter from "@/components/home/newsletter";
 import { Footer } from "@/components/footer";
@@ -12,17 +15,20 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Ash's Cravings - Healthy Meal Prep & Wellness Juices Delivered"
-        description="Premium meal prep and cold-pressed juices delivered to your door. Fresh, nutritious, and delicious meals crafted by expert chefs."
-        keywords={["meal prep", "healthy meals", "food delivery", "wellness juices"]}
+        title="Ash's Cravings | Meal Prep, Custom Cakes & Desserts in Eastvale, CA"
+        description="Made-from-scratch meal prep, custom cakes, dessert cups and food for your events in Eastvale, CA. Made fresh, with love."
+        keywords={["meal prep", "custom cakes", "desserts", "event catering", "Eastvale"]}
       />
+      <AnnouncementBar />
       <Navigation />
       <HeroSection />
+      <Cravings />
       <HowItWorks />
       <FeaturedProducts />
+      <CakesFeature />
       <OurStory />
       <Newsletter />
-      <Footer />
+      <Footer flush />
     </div>
   );
 }
