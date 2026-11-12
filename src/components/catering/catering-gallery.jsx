@@ -8,10 +8,10 @@ import PhotoLightbox from "@/components/ui/photo-lightbox";
 // shown big.
 const photos = [
     { src: "/gallery/catering/catering-01.jpg", alt: "Grazing board with veggies, grapes, cheeses and a spinach dip" },
-    { src: "/gallery/catering/catering-15.jpg", alt: "Smoked salmon bites on little gold forks" },
-    { src: "/gallery/catering/catering-13.jpg", alt: "Deviled eggs garnished with paprika and herbs" },
+    { src: "/gallery/catering/catering-14.jpg", alt: "Party table with brie bites, berries and a big glazed tray" },
+    { src: "/gallery/catering/catering-13.jpg", alt: "Deviled eggs garnished with cranberries and parsley" },
+    { src: "/gallery/catering/catering-05.jpg", alt: "Dessert table with chocolate-covered strawberries, cupcakes and deviled eggs" },
     { src: "/gallery/catering/catering-09.jpg", alt: "Fall party spread with crostini, pasta salad cups and mini desserts" },
-    { src: "/gallery/catering/catering-17.jpg", alt: "Bridal shower table styled with greenery and a welcome mirror" },
     { src: "/gallery/catering/catering-02.jpg", alt: "Tray of pesto and caprese toasts on ciabatta" },
     { src: "/gallery/catering/catering-19.jpg", alt: "Caprese skewers with tomato, mozzarella and basil" },
     { src: "/gallery/catering/catering-04.jpg", alt: "Event table with roasted potatoes, deviled eggs and mini desserts" },

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import InquiryForm from "./inquiry-form";
 import CateringGallery from "./catering-gallery";
+import FactStrip from "@/components/ui/fact-strip";
 
 // Gentle fade-up as each section scrolls into view (same as the About page)
 const reveal = {
@@ -13,31 +14,31 @@ const reveal = {
 };
 
 const facts = [
-    { label: "Plan ahead", value: "at least 3 weeks" },
-    { label: "Deposit to hold your date", value: "50%" },
-    { label: "Ready to serve", value: "delivered & set up" },
+    { value: "3 weeks", label: "to plan ahead" },
+    { value: "50%", label: "holds your date" },
+    { value: "Set up", label: "& ready to serve" },
 ];
 
 const occasions = [
     {
         title: "Birthdays & celebrations",
         text: "First birthdays, milestone parties and everything in between. I'll build a spread around your theme and your guest list.",
-        photo: "/gallery/catering/catering-05.jpg",
-        alt: "Dessert table with chocolate-covered strawberries, cupcakes and deviled eggs",
+        photo: "/gallery/events/birthdays.jpg",
+        alt: "Fruit display with watermelon, pineapple, grapes and strawberries",
         position: "object-center",
     },
     {
         title: "Showers & private parties",
         text: "Baby showers, bridal showers, graduations and backyard nights. It feels homemade, and you don't lift a finger.",
-        photo: "/gallery/catering/catering-11.jpg",
-        alt: "Rows of charcuterie cups with Ash's Cravings stickers at a baby shower",
-        position: "object-[center_30%]",
+        photo: "/gallery/events/showers.jpg",
+        alt: "Charcuterie cups with Ash's Cravings stickers at a baby shower",
+        position: "object-center",
     },
     {
         title: "Office mornings & lunches",
         text: "Breakfast burritos, sandwich trays and easy bites your team will actually look forward to.",
-        photo: "/gallery/catering/catering-08.jpg",
-        alt: "Baskets of sandwiches on toasted bread",
+        photo: "/gallery/events/office.jpg",
+        alt: "Basket of turkey sandwiches with arugula on toasted bread",
         position: "object-center",
     },
 ];
@@ -49,7 +50,7 @@ const favorites = [
     },
     {
         name: "Sandwich trays",
-        text: "Chipotle Chicken Club · Pesto Caprese Ciabatta · The Italian",
+        text: "Chipotle Chicken Club · Pesto Caprese Ciabatta · Turkey Provolone",
     },
     {
         name: "Charcuterie cups",
@@ -86,11 +87,11 @@ const Catering = () => {
                             <span className="text-brand-matcha">■</span> Events &amp; private chef
                         </p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
-                            Spreads worth <em className="italic text-brand-tobacco">sharing</em>
+                            Made to <em className="italic text-brand-tobacco">gather around</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed max-w-xl">
-                            Breakfast burritos, sandwich trays, grazing spreads and dessert tables, all made from scratch
-                            and set up pretty. For birthdays, showers, office mornings and everything in between.
+                            Breakfast burritos, sandwich trays, little bites and dessert tables, made from scratch and set
+                            up pretty for your party, shower or office.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
                             <a
@@ -114,23 +115,16 @@ const Catering = () => {
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-14.jpg" alt="Party table with brie bites, berries and a big glazed tray" className="col-span-3 row-span-2 w-full h-full object-cover object-[40%_center] rounded-[18px]" />
+                        <img src="/gallery/catering/catering-17.jpg" alt="Bridal shower table with greenery, a welcome mirror and trays of bites" className="col-span-3 row-span-2 w-full h-full object-cover object-[30%_center] rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-07.jpg" alt="Fruit display with watermelon, pineapple, grapes and berries" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/catering/catering-15.jpg" alt="Smoked salmon bites on little gold forks" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/gallery/catering/catering-16.jpg" alt="Platters of crostini topped with tomatoes and herbs" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
                 {/* Quick facts */}
-                <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-12">
-                    {facts.map((f) => (
-                        <div key={f.label} className="rounded-2xl border border-border bg-card p-4 md:p-5">
-                            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">{f.label}</dt>
-                            <dd className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso mt-1">{f.value}</dd>
-                        </div>
-                    ))}
-                </dl>
+                <FactStrip facts={facts} className="mt-12" />
             </section>
 
             {/* Occasions */}
@@ -157,6 +151,11 @@ const Catering = () => {
                         ))}
                     </div>
                 </div>
+            </section>
+
+            {/* Past events */}
+            <section className="container mx-auto px-4 pt-16 md:pt-20">
+                <CateringGallery />
             </section>
 
             {/* Crowd favorites */}
@@ -195,11 +194,6 @@ const Catering = () => {
                         ))}
                     </motion.ul>
                 </div>
-            </section>
-
-            {/* Past events */}
-            <section className="container mx-auto px-4 pb-16 md:pb-20">
-                <CateringGallery />
             </section>
 
             {/* Private chef (new, trying it out) */}

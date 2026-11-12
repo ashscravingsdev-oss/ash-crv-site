@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
 import DessertList from "@/components/desserts/dessert-list";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
+import FactStrip from "@/components/ui/fact-strip";
 
 // Photos removed from the gallery (redundant/weak shots) — kept out of both
 // featuredCakes and allCakes below.
@@ -65,9 +66,9 @@ const cakePhotos = [...featuredCakes, ...remainingCakes].map((filename, idx) => 
 }));
 
 const perks = [
-    { label: "6\" custom cakes", value: "from $125" },
-    { label: "Order ahead", value: "at least 1 week" },
-    { label: "Deposit to hold your date", value: "50%" },
+    { value: "From $125", label: "6\" custom cakes" },
+    { value: "1 week", label: "to order ahead" },
+    { value: "50%", label: "holds your date" },
 ]
 
 const CustomCakes = () => {
@@ -127,14 +128,7 @@ const CustomCakes = () => {
                 </div>
 
                 {/* Quick facts */}
-                <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-12">
-                    {perks.map((p) => (
-                        <div key={p.label} className="rounded-2xl border border-border bg-card p-4 md:p-5">
-                            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">{p.label}</dt>
-                            <dd className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso mt-1">{p.value}</dd>
-                        </div>
-                    ))}
-                </dl>
+                <FactStrip facts={perks} className="mt-12" />
                 <p className="text-sm text-muted-foreground mt-3">
                     Bigger sizes, tiers, fillings and design details are priced from there.
                 </p>
