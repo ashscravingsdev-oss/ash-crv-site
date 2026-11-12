@@ -9,6 +9,7 @@ import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
 import { useDesserts } from "@/lib/use-desserts"
 import { DESSERT_MIN_DOZENS, dessertSlug, flavorLabel, money, priceRange } from "@/lib/special-orders"
+import WakingNote from "@/components/ui/waking-note"
 
 /** One dessert: pick a flavor, how many dozen, add. */
 const DessertCard = ({ group, highlight }) => {
@@ -157,8 +158,9 @@ const DessertGrid = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center py-16">
+            <div className="flex flex-col items-center gap-4 py-16">
                 <Loader2 className="h-7 w-7 animate-spin text-primary" />
+                <WakingNote />
             </div>
         )
     }
