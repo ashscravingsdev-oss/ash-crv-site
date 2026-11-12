@@ -13,6 +13,7 @@ import { fetchCategories, fetchProducts } from "@/store/productSlice"
 import { bestSellerRank } from "@/lib/menu-pins"
 import { isMenuProduct } from "@/lib/special-orders"
 import DessertGrid from "@/components/desserts/dessert-grid"
+import WakingNote from "@/components/ui/waking-note"
 
 const DESSERTS = "Desserts"
 // Ash's tab order (by category name); anything new she adds goes after these
@@ -97,6 +98,7 @@ const Menu = () => {
     if (loading) {
         return (
             <div className="container mx-auto px-4 pt-8">
+                <WakingNote className="mb-6" />
                 {/* Header skeleton */}
                 <div className="mb-8">
                     <div className="h-8 bg-gray-200 rounded w-1/4 mb-2 animate-pulse"></div>

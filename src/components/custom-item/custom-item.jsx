@@ -8,6 +8,7 @@ import { Loader2, Check } from "lucide-react"
 import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
 import { DEPOSIT_RATE, FREE_DELIVERY_MILES, money } from "@/lib/special-orders"
+import WakingNote from "@/components/ui/waking-note"
 
 const explore = [
     { href: "/menu", eyebrow: "Every week", title: "Meal prep", text: "Homemade meals and juices, delivered Monday and Tuesday." },
@@ -77,8 +78,9 @@ const CustomItem = ({ token }) => {
 
     if (status === "loading") {
         return (
-            <div className="flex justify-center py-32">
+            <div className="flex flex-col items-center gap-4 py-32">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <WakingNote />
             </div>
         )
     }
