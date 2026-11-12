@@ -70,7 +70,7 @@ const HowItWorks = () => {
         {
             number: "3",
             title: "Schedule Your Delivery",
-            description: "Pick your preferred delivery day and time window. Remember to order by Saturday 8:00 PM for next week's delivery.",
+            description: "Pick your preferred delivery day and time window. Remember to order by Sunday for Monday or Tuesday delivery.",
             icon: <Calendar className="h-10 w-10" />,
             color: "bg-primary text-primary-foreground",
             content: (
@@ -84,7 +84,7 @@ const HowItWorks = () => {
                             <div className="space-y-3 text-sm text-muted-foreground">
                                 <p>✓ Monday or Tuesday delivery</p>
                                 <p>✓ 10:00 AM - 7:00 PM window</p>
-                                <p>✓ Saturday 8:00 PM cutoff</p>
+                                <p>✓ Order by Sunday</p>
                             </div>
                         </div>
                     </CardContent>
@@ -331,7 +331,7 @@ const HowItWorks = () => {
                                     }}
                                 >
                                     {[
-                                        { icon: <Clock className="h-6 w-6 text-primary" />, label: "Weekly Cutoff", value: "Saturday 8:00 PM" },
+                                        { icon: <Clock className="h-6 w-6 text-primary" />, label: "Weekly Cutoff", value: "Sunday" },
                                         { icon: <Calendar className="h-6 w-6 text-primary" />, label: "Delivery Days", value: "Monday & Tuesday" },
                                         { icon: <Truck className="h-6 w-6 text-primary" />, label: "Delivery Window", value: "10:00 AM - 7:00 PM" }
                                     ].map((item, index) => (

@@ -18,7 +18,7 @@ const faqs = [
         questions: [
             {
                 q: "When do you deliver?",
-                a: "I deliver every Monday and Tuesday. You'll pick your day and delivery window at checkout. Order by Saturday at 8 PM to get your meals that Monday or Tuesday.",
+                a: "I deliver every Monday and Tuesday. You'll pick your day and delivery window at checkout. Order by Sunday to get your meals that Monday or Tuesday.",
             },
             {
                 q: "Is there a delivery fee? Can I pick up instead?",
@@ -55,7 +55,7 @@ const faqs = [
             },
             {
                 q: "Can I skip a week?",
-                a: "Of course! Skip it from your account before Saturday at 8 PM and you won't be charged that week.",
+                a: "Of course! Skip it from your account before Sunday and you won't be charged that week.",
             },
             {
                 q: "How do I cancel my subscription?",
@@ -118,7 +118,7 @@ const faqs = [
             },
             {
                 q: "What if I need to cancel?",
-                a: "Meal prep: you can change or cancel anytime before Saturday at 8 PM. After that, I've already shopped for your meals, so I can't refund that week. Cakes, desserts, events and private chef nights: your deposit holds your date and isn't refundable, since I turn other orders away for you. If you cancel at least 7 days before, I'll happily move your deposit to a new date one time. Life happens, so just talk to me!",
+                a: "Meal prep: you can change or cancel anytime before Sunday. After that, I've already shopped for your meals, so I can't refund that week. Cakes, desserts, events and private chef nights: your deposit holds your date and isn't refundable, since I turn other orders away for you. If you cancel at least 7 days before, I'll happily move your deposit to a new date one time. Life happens, so just talk to me!",
             },
         ],
     },

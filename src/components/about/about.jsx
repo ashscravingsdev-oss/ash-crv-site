@@ -92,7 +92,7 @@ const About = () => {
                             Class of <em className="italic">2024</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            Ash&apos;s Cravings was the first thing on my mind when I started culinary school a
+                            Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
                             couple of years ago. I graduated in 2024, and now I get to cook for you every week.
                         </p>
                     </motion.div>
