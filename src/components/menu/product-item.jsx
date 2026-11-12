@@ -80,7 +80,7 @@ const ProductItem = ({ product }) => {
             >
                 <Card className="relative overflow-hidden rounded-2xl hover:shadow-lg transition-shadow h-full">
                     {badge && (
-                        <span className="absolute top-3 left-3 z-10 rounded-full bg-primary text-primary-foreground px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] shadow-md">
+                        <span className="absolute top-3 left-3 z-10 rounded-full bg-brand-matcha-light text-brand-espresso px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] shadow-md">
                             ★ {badge}
                         </span>
                     )}
@@ -104,7 +104,7 @@ const ProductItem = ({ product }) => {
                             className="flex items-center gap-2 mb-2"
                         >
                             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
-                                ■ {product.category?.name || "Menu"}
+                                <span className="text-brand-matcha">■</span> {product.category?.name || "Menu"}
                             </span>
 
                             {isInCart && (

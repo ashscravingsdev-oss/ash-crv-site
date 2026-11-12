@@ -21,6 +21,9 @@ module.exports = {
 					mocha: '#6B4A33',
 					heading: '#5C3D28',
 					espresso: '#2B1C14',
+					matcha: '#93A85F',
+					'matcha-light': '#DCE5BC',
+					'matcha-dark': '#4E6127',
 				},
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
@@ -94,11 +97,16 @@ module.exports = {
 					to: {
 						height: '0'
 					}
+				},
+				marquee: {
+					from: { transform: 'translateX(0)' },
+					to: { transform: 'translateX(-50%)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				marquee: 'marquee 40s linear infinite'
 			}
 		}
 	},

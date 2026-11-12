@@ -7,6 +7,8 @@ import FeaturedProducts from "@/components/home/featured-products";
 import CakesFeature from "@/components/home/cakes-feature";
 import OurStory from "@/components/home/our-story";
 import Newsletter from "@/components/home/newsletter";
+import MochaBand from "@/components/home/mocha-band";
+import InstagramStrip from "@/components/home/instagram-strip";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
 
@@ -22,11 +24,13 @@ export default function HomePage() {
       <AnnouncementBar />
       <Navigation />
       <HeroSection />
+      <MochaBand />
       <Cravings />
       <HowItWorks />
       <FeaturedProducts />
       <CakesFeature />
       <OurStory />
+      <InstagramStrip />
       <Newsletter />
       <Footer flush />
     </div>

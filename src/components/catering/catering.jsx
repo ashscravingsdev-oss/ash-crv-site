@@ -190,9 +190,9 @@ const Catering = () => {
                         />
                     </div>
                     <div className="p-6 md:p-10 flex flex-col justify-center space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ New · Private chef</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> New · Private chef</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl leading-[1.05] text-brand-heading">
-                            Your own chef, <em className="italic">for the night</em>
+                            Your own chef, <em className="italic text-brand-matcha-dark">for the night</em>
                         </h2>
                         <p className="text-foreground/85 leading-relaxed">
                             I come to your home, cook in your kitchen and make a dinner just for you and your people.

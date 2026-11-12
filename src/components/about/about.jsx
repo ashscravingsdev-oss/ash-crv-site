@@ -33,9 +33,9 @@ const About = () => {
             <section className="container mx-auto px-4 pt-10 pb-16 md:pt-14 md:pb-24">
                 <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
                     <motion.div {...reveal} className="space-y-5">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ My story</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> My story</p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
-                            Hi, I&apos;m <em className="italic">Ash</em>
+                            Hi, I&apos;m <em className="italic text-brand-matcha-dark">Ash</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
                             I&apos;m sooo obsessed with food. I love cooking all types of food from all different
@@ -71,9 +71,9 @@ const About = () => {
             <section className="bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-24">
                     <motion.div {...reveal} className="max-w-3xl mx-auto text-center space-y-6">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Where it all started</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Where it all started</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
-                            In the kitchen with <em className="italic">my grandma</em>
+                            In the kitchen with <em className="italic text-brand-matcha-dark">my grandma</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             I&apos;ve been in the kitchen my whole life. Ever since I was little, I was right next
@@ -92,9 +92,9 @@ const About = () => {
             <section className="container mx-auto px-4 py-16 md:py-24">
                 <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                     <motion.div {...reveal} className="space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Culinary school</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Culinary school</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                            Class of <em className="italic">2024</em>
+                            Class of <em className="italic text-brand-matcha-dark">2024</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
@@ -102,9 +102,9 @@ const About = () => {
                         </p>
                     </motion.div>
                     <motion.div {...reveal} className="space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ Outside the kitchen</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Outside the kitchen</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                            My <em className="italic">little family</em>
+                            My <em className="italic text-brand-matcha-dark">little family</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I
