@@ -16,7 +16,7 @@ const HeroSection = () => {
                 >
                     <motion.p
                         variants={fadeUp}
-                        className="inline-block font-mono text-xs uppercase tracking-[0.18em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-1.5"
+                        className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-1.5"
                     >
                         ■ Fresh meal prep, delivered weekly
                     </motion.p>
