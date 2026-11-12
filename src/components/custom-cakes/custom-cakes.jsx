@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
 import DessertList from "@/components/desserts/dessert-list";
+import PhotoLightbox from "@/components/ui/photo-lightbox";
 
 // Photos removed from the gallery (redundant/weak shots) — kept out of both
 // featuredCakes and allCakes below.
@@ -56,6 +57,13 @@ const allCakes = Array.from(
 
 const remainingCakes = allCakes.filter((f) => !featuredCakes.includes(f));
 
+// Every cake, in gallery order, for the full-size viewer
+const cakePhotos = [...featuredCakes, ...remainingCakes].map((filename, idx) => ({
+    src: `/gallery/cakes/${filename}`,
+    alt: cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`,
+    note: cakeNotes[filename]?.note,
+}));
+
 const perks = [
     { label: "6\" custom cakes", value: "from $125" },
     { label: "Order ahead", value: "at least 1 week" },
@@ -78,6 +86,7 @@ const DessertPhoto = ({ src, alt, flex, position = "object-center", tall = false
 
 const CustomCakes = () => {
     const [showAll, setShowAll] = useState(false);
+    const [viewing, setViewing] = useState(null);
     const visibleCakes = showAll ? [...featuredCakes, ...remainingCakes] : featuredCakes;
 
     return (
@@ -157,21 +166,29 @@ const CustomCakes = () => {
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
                         {visibleCakes.map((filename, idx) => (
                             <figure key={filename} className="relative aspect-square overflow-hidden rounded-2xl bg-background">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                    src={`/gallery/cakes/${filename}`}
-                                    alt={cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setViewing(idx)}
+                                    aria-label="See the whole photo"
+                                    className="block w-full h-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-tobacco rounded-2xl"
+                                >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src={`/gallery/cakes/${filename}`}
+                                        alt={cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`}
+                                        loading="lazy"
+                                        className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
+                                    />
+                                </button>
                                 {cakeNotes[filename]?.note && (
-                                    <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                                    <figcaption className="pointer-events-none absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
                                         {cakeNotes[filename].note}
                                     </figcaption>
                                 )}
                             </figure>
                         ))}
                     </div>
+                    <PhotoLightbox photos={cakePhotos} index={viewing} onIndexChange={setViewing} />
                     {!showAll && remainingCakes.length > 0 && (
                         <div className="flex justify-center pt-8">
                             <button
