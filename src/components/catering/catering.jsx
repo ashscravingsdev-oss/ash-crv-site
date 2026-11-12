@@ -29,7 +29,7 @@ const cateringServices = [
         ],
     },
     {
-        title: "Corporate & Office Catering",
+        title: "Office & Corporate Orders",
         description:
             "Meetings, lunch-and-learns, and office events — fresh, easy food your team will actually look forward to.",
         features: [
@@ -70,7 +70,7 @@ const Catering = () => {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-bold mb-4 text-balance"
                     >
-                        Catering Services
+                        Party Packs
                     </motion.h1>
 
                     <motion.p
@@ -79,7 +79,7 @@ const Catering = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
                     >
-                        Healthy, delicious catering for events of any size
+                        Breakfast burritos, sandwich trays and dessert tables for parties of any size
                     </motion.p>
                 </motion.div>
             </motion.section>

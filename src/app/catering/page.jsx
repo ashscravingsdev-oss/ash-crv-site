@@ -7,8 +7,8 @@ export default function CateringPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Ash's Cravings Catering - Healthy Event Catering & Corporate Meal Delivery"
-        description="Impress your guests with chef-prepared healthy catering for corporate events, weddings, and special occasions. Custom menus, fresh ingredients, and professional service."
+        title="Party Packs - Ash's Cravings | Party Trays & Dessert Tables in Eastvale, CA"
+        description="Party Packs from Ash's Cravings: breakfast burritos, sandwich trays and dessert tables for birthdays, showers and office events in Eastvale, CA."
         keywords={[
           "healthy catering service",
           "corporate meal delivery",

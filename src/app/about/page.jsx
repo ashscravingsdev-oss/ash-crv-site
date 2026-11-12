@@ -9,7 +9,7 @@ export default function AboutPage() {
     <div className="min-h-screen">
       <SEO
         title="About Ash's Cravings - Our Story, Mission & Commitment to Healthy Eating"
-        description="Discover Ash's Cravings' mission to bring fresh, organic, chef-crafted meals to Eastvale, CA. Learn about our commitment to fresh, nutritious meals made with real ingredients."
+        description="Meet Ash, the maker behind Ash's Cravings: made-from-scratch meal prep, custom cakes and desserts in Eastvale, CA."
         keywords={[
           "about ash's cravings",
           "our story",

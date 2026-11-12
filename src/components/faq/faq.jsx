@@ -35,7 +35,7 @@ const faqs = [
         questions: [
             {
                 q: "How much do meals cost?",
-                a: "Individual meals range from $7.99 to $14.99 depending on the item. Our subscription plans offer better value, starting at $79.99 per week with savings up to 10% for monthly subscribers.",
+                a: "Meals are $17 each, or mix and match 5 meals for $80 or 10 meals for $160.",
             },
             {
                 q: "Can I customize my meal selection?",
@@ -68,8 +68,8 @@ const faqs = [
         category: "Food Quality & Safety",
         questions: [
             {
-                q: "Are ingredients organic?",
-                a: "Yes! We source 100% organic ingredients from certified farms. We partner with over 30 local organic farms to ensure the highest quality and freshness.",
+                q: "What ingredients do you use?",
+                a: "Fresh ingredients, cooked from scratch every week. If you have an allergy or a question about a specific ingredient, just message me before you order.",
             },
             {
                 q: "How long do meals stay fresh?",

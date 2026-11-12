@@ -4,27 +4,30 @@
 
 @layer base {
   :root {
-    /* Ash's Cravings brand palette: cream background, espresso text, sage accent, sand secondary/borders */
-    --background: 37 14% 92%;
-    --foreground: 25 19% 26%;
-    --card: 39 45% 97%;
-    --card-foreground: 25 19% 26%;
-    --popover: 39 45% 97%;
-    --popover-foreground: 25 19% 26%;
-    --primary: 25 19% 26%;
-    --primary-foreground: 39 45% 97%;
-    --secondary: 37 37% 74%;
-    --secondary-foreground: 25 19% 26%;
-    --muted: 37 30% 86%;
-    --muted-foreground: 25 15% 38%;
-    --accent: 74 20% 62%;
-    --accent-foreground: 25 19% 26%;
+    /* Ash's Cravings palette (Nov 2026 refresh): cream page, sand sections, mocha buttons, espresso text */
+    --background: 40 65% 95%;
+    --foreground: 21 37% 12%;
+    --card: 43 100% 99%;
+    --card-foreground: 21 37% 12%;
+    --popover: 43 100% 99%;
+    --popover-foreground: 21 37% 12%;
+    --primary: 25 35% 31%;
+    --primary-foreground: 40 65% 95%;
+    --secondary: 37 48% 88%;
+    --secondary-foreground: 21 37% 12%;
+    --muted: 37 48% 88%;
+    --muted-foreground: 26 18% 30%;
+    --accent: 36 41% 82%;
+    --accent-foreground: 21 37% 12%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 37 37% 74%;
-    --input: 37 37% 74%;
-    --ring: 74 20% 62%;
+    --border: 37 38% 82%;
+    --input: 37 38% 82%;
+    --ring: 32 30% 47%;
     --radius: 0.75rem;
+    --font-serif: 'Cormorant Garamond';
+    --font-sans: 'Jost';
+    --font-mono: 'DM Mono';
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 120 15% 22%;
     --sidebar-primary: 145 60% 45%;
@@ -79,5 +82,11 @@
 @layer base {
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer base {
+  h1, h2 {
+    font-family: var(--font-serif), Georgia, serif;
   }
 }

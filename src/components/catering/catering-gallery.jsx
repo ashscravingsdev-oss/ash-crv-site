@@ -17,7 +17,7 @@ const CateringGallery = () => {
             className="mb-16"
         >
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-                Catering Gallery
+                Party Pack Gallery
             </h2>
             <p className="text-muted-foreground text-center mb-8">
                 A look at spreads we&apos;ve served for past events

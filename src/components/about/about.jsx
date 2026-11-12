@@ -7,8 +7,8 @@ import { fadeUp, scaleUp } from "@/lib/animations"
 const values = [
     {
         icon: Leaf,
-        title: "Organic Quality",
-        description: "Only the finest organic ingredients from trusted local farms"
+        title: "Made From Scratch",
+        description: "Every meal, cake and dessert is made by hand, fresh each week"
     },
     {
         icon: Users,
@@ -66,7 +66,7 @@ const About = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
                     >
-                        Fresh. Organic. Chef-Crafted meals.
+                        Made fresh, with love.
                     </motion.p>
                 </motion.div>
             </motion.section>
@@ -91,11 +91,10 @@ const About = () => {
                         variants={fadeUp}
                         className="text-lg text-muted-foreground leading-relaxed"
                     >
-                        At Ash's Cravings, we believe in nourishing the body without sacrificing flavor.
-                        Every meal is made fresh with organic ingredients and homestyle care, crafted by
-                        a chef passionate about real food and balanced nutrition. Whether you're fueling
-                        your week or treating yourself, our menu brings comfort, convenience, and quality
-                        to every bite.
+                        Everything at Ash's Cravings is made from scratch, from weekly meal prep that
+                        actually tastes amazing to custom cakes with every little detail done by hand.
+                        Whether you're fueling your week or treating yourself, if you're craving it,
+                        I'll make it with love.
                     </motion.p>
                 </motion.div>
 

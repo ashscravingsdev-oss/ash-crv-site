@@ -43,7 +43,7 @@ export function Navigation() {
     { label: "Home", href: "/" },
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
-    { label: "Catering", href: "/catering" },
+    { label: "Party Packs", href: "/catering" },
     { label: "Custom Cakes", href: "/custom-cakes" },
     { label: "Subscriptions", href: "/subscriptions" },
   ];
@@ -133,7 +133,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-sm font-medium transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
+                className={`text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
                   }`}

@@ -9,9 +9,9 @@ function TikTokIcon(props) {
   );
 }
 
-export function Footer() {
+export function Footer({ flush = false }) {
   return (
-    <footer className="bg-muted mt-24 border-t border-border">
+    <footer className={`bg-background border-t border-border ${flush ? "" : "mt-24"}`}>
       <div className="container mx-auto px-4 py-12 ">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-start">
           {/* Brand */}
@@ -25,7 +25,7 @@ export function Footer() {
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Fresh. Organic. Chef-Crafted meals. Deliveries Mondays &amp; Tuesdays
+              Made fresh, with love. Meal prep, party packs, cakes &amp; desserts
               in Eastvale, CA.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed italic">
@@ -55,7 +55,7 @@ export function Footer() {
 
           {/* Shop */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Shop</h3>
+            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Shop</h3>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -86,7 +86,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Company</h3>
+            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Company</h3>
             <ul className="space-y-3">
               <li>
                 <Link
@@ -117,7 +117,7 @@ export function Footer() {
                   href="/catering"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Catering
+                  Party Packs
                 </Link>
               </li>
               <li>
@@ -133,7 +133,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Support</h3>
+            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Support</h3>
             <ul className="space-y-3">
               <li>
                 <Link

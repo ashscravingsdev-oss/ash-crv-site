@@ -11,14 +11,6 @@ const ProductInfo = ({ product }) => {
                     {product.category.name}
                 </Badge>
                 <h1 className="text-4xl font-bold mb-4 text-balance">{product.name}</h1>
-                <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                            <Star key={i}className="h-5 w-5 fill-amber-500 text-amber-500" />
-                        ))}
-                    </div>
-                    <span className="text-md text-muted-foreground">(128 reviews)</span>
-                </div>
                 <p className="text-lg text-muted-foreground leading-relaxed">{product.description}</p>
             </div>
 
@@ -30,10 +22,6 @@ const ProductInfo = ({ product }) => {
                 <div className="flex items-center gap-2">
                     <Drumstick className="h-4 w-4 text-primary" />
                     <span>{product.nutrition_info.protein}g protein</span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Leaf className="h-4 w-4 text-primary" />
-                    <span>Organic</span>
                 </div>
             </div>
 

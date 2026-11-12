@@ -1,93 +1,64 @@
 "use client"
 
 import { useEffect } from "react"
-import { Button } from "@/components/ui/button";
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts } from "@/store/productSlice"
 import ProductItem from "@/components/menu/product-item"
 import Link from "next/link";
-import { motion } from "framer-motion"
-import { fadeUp } from "@/lib/animations"
 
 export default function FeaturedProducts() {
     const dispatch = useDispatch()
-    const { products, loading } = useSelector((state) => state.products)
+    const { products, loading, error } = useSelector((state) => state.products)
 
-    // Fetch products only if not already loaded (or re-fetch every mount)
     useEffect(() => {
         if (products.length === 0) {
             dispatch(fetchProducts())
         }
     }, [dispatch, products.length])
 
-    // Take only the first 3 products
     const featuredProducts = products.slice(0, 3)
+    // Show placeholders until the first fetch finishes, instead of flashing "no products"
+    const showSkeleton = loading || (products.length === 0 && !error)
 
     return (
-        <section className="bg-muted py-16 md:py-24">
-            <div className="container mx-auto px-4">
-                <motion.div
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true }}
-                    variants={fadeUp}
-                    className="text-center mb-12"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">Fresh Picks for You</h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                        Our chef‑crafted meals and cold‑pressed juices, delivered to your door.
-                    </p>
-                </motion.div>
+        <section className="container mx-auto px-4 pt-12 pb-16 md:pb-24">
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-8 md:mb-10">
+                <div className="space-y-2">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">■ This week’s menu</p>
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                        Fresh <em className="italic">picks</em>
+                    </h2>
+                </div>
+                <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-2">
+                    $17 each · 5 for $80 · 10 for $160
+                </p>
+            </div>
 
-                {/* Product Grid – same styling as Menu */}
-                {loading ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="animate-pulse bg-muted rounded-xl h-80" />
-                        ))}
-                    </div>
-                ) : featuredProducts.length > 0 ? (
-                    <motion.div
-                        initial="initial"
-                        animate="animate"
-                        variants={{
-                            animate: {
-                                transition: {
-                                    staggerChildren: 0.1,
-                                },
-                            },
-                        }}
-                        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    >
-                        {featuredProducts.map((product, index) => (
-                            <motion.div
-                                key={product.id}
-                                variants={fadeUp}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                layout
-                            >
-                                <ProductItem product={product} />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                ) : (
-                    <div className="text-center py-12">
-                        <p className="text-muted-foreground">No products available at the moment.</p>
-                    </div>
-                )}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
-                    className="text-center mt-8"
+            {showSkeleton ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="animate-pulse bg-muted rounded-2xl h-96" />
+                    ))}
+                </div>
+            ) : featuredProducts.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {featuredProducts.map((product) => (
+                        <ProductItem key={product.id} product={product} />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <p className="text-muted-foreground">This week’s menu is coming soon.</p>
+                </div>
+            )}
+
+            <div className="text-center mt-10">
+                <Link
+                    href="/menu"
+                    className="inline-flex items-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
                 >
-                    <Button size="lg" variant="outline" asChild>
-                        <Link href="/menu">View Full Menu</Link>
-                    </Button>
-                </motion.div>
+                    View full menu <span aria-hidden="true">→</span>
+                </Link>
             </div>
         </section>
     )
