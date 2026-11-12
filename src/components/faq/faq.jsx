@@ -72,11 +72,11 @@ const faqs = [
             },
             {
                 q: "How much are custom cakes?",
-                a: "My 6\" cakes start at $125. The final price depends on the size, design, flavors and fillings, and I'll send you a quote.",
+                a: "My 6\" cakes start at $125. The final price depends on the size, design, flavors and fillings. I'll send you a quote with a private link to order, no account needed.",
             },
             {
                 q: "Do you sell desserts by the dozen?",
-                a: "Yes! Dessert cups, chocolate-covered strawberries and more, starting at $44 a dozen.",
+                a: "Yes! Cookies, mini cupcakes, cheesecakes, brownies, chocolate strawberries and dessert cups, from $44 a dozen. Each flavor is a 2 dozen minimum, and I need 10 days' notice. You can order them right on the Cakes & Desserts page or the Menu.",
             },
         ],
     },
@@ -110,7 +110,7 @@ const faqs = [
             },
             {
                 q: "Do I need to pay a deposit?",
-                a: "For cakes, desserts, events and private chef nights, a 50% deposit holds your date. The rest is due before your pickup or event.",
+                a: "For cakes, desserts, events and private chef nights, a 50% deposit holds your date. For cakes and desserts you order on the site, the rest is charged automatically to the same card on your date. If anything changes, I'll refund the difference.",
             },
             {
                 q: "What if I need to cancel?",

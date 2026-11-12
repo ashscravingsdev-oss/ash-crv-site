@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Minus, Plus, Trash2, ShoppingBag, Loader2, Tag, XCircle } from "lucide-react"
+import { cartIsSpecial } from "@/lib/special-orders"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -49,7 +50,7 @@ const Cart = () => {
     }, [dispatch, sessionId])
 
     useEffect(() => {
-        dispatch(fetchProducts({ status: 'active' }))
+        dispatch(fetchProducts({ status: 'active', order_type: 'meal_prep', limit: 100 }))
     }, [dispatch])
 
     // Calculate totals when cart changes
@@ -75,7 +76,7 @@ const Cart = () => {
                 dispatch(calculateCartTotals(cart.id))
             }
         } catch (error) {
-            toast.error(error?.message || "Failed to update quantity")
+            toast.error(typeof error === "string" ? error : error?.message || "Failed to update quantity")
         } finally {
             setUpdatingId(null)
         }
@@ -275,18 +276,18 @@ const Cart = () => {
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                                                disabled={item.quantity <= 1 || isUpdating}
+                                                                disabled={item.quantity <= Math.max(1, item.product?.min_quantity || 1) || isUpdating || !!item.product?.purchase_limit}
                                                             >
                                                                 <Minus className="h-4 w-4" />
                                                             </Button>
-                                                            <span className="w-12 text-center font-semibold">
-                                                                {item.quantity}
+                                                            <span className="min-w-12 px-1 text-center font-semibold">
+                                                                {item.quantity}{item.product?.order_type === "special_order" && item.product?.min_quantity > 1 ? " dozen" : ""}
                                                             </span>
                                                             <Button
                                                                 variant="ghost"
                                                                 size="icon"
                                                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                                                disabled={isUpdating}
+                                                                disabled={isUpdating || !!item.product?.purchase_limit}
                                                             >
                                                                 <Plus className="h-4 w-4" />
                                                             </Button>
@@ -304,7 +305,8 @@ const Cart = () => {
                         })}
                     </AnimatePresence>
 
-                    {/* Upsell Suggestions - Static for now */}
+                    {/* Upsell Suggestions (meal prep only; desserts check out on their own) */}
+                    {!cartIsSpecial(items) && (
                     <Card className="bg-muted border-none">
                         <CardContent className="p-6">
                             <h3 className="font-semibold mb-4">You might also like</h3>
@@ -341,6 +343,7 @@ const Cart = () => {
                             </div>
                         </CardContent>
                     </Card>
+                    )}
                 </div>
 
                 {/* Order Summary */}
@@ -431,6 +434,13 @@ const Cart = () => {
                                 <span>Total</span>
                                 <span>${total.toFixed(2)}</span>
                             </div>
+
+                            {cartIsSpecial(items) && (
+                                <p className="text-sm text-muted-foreground">
+                                    You&apos;ll pick your date at checkout. Today you pay a 50% deposit, and the rest
+                                    is charged on your date.
+                                </p>
+                            )}
 
                             <Button
                                 size="lg"

@@ -30,4 +30,7 @@ export function saveFrequency(value) {
 export const frequencyLabel = (value) => FREQUENCIES.find((f) => f.value === value)?.short || value
 
 // A cart can become a subscription only if every line is a bundle
-export const cartCanSubscribe = (items) => Array.isArray(items) && items.length > 0 && items.every((i) => !!i.bundle_id)
+// Bundles can repeat (re-picked each week), and so can custom meal plans Ash
+// makes to repeat. Everything else is a one-time order.
+export const cartCanSubscribe = (items) =>
+    Array.isArray(items) && items.length > 0 && items.every((i) => !!i.bundle_id || !!i.product?.allow_subscription)

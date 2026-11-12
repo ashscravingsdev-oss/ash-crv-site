@@ -11,6 +11,9 @@ import { fadeUp, fadeIn } from "@/lib/animations"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories, fetchProducts } from "@/store/productSlice"
 import { bestSellerRank } from "@/lib/menu-pins"
+import DessertShop from "@/components/desserts/dessert-shop"
+
+const DESSERTS = "Desserts"
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -25,12 +28,23 @@ const Menu = () => {
     const [sortBy, setSortBy] = useState("popular")
  
     useEffect(() => {
-        dispatch(fetchProducts())
+        dispatch(fetchProducts({ order_type: 'meal_prep', limit: 100 }))
     }, [dispatch])
 
     useEffect(() => {
         dispatch(fetchCategories())
     }, [dispatch])
+
+    // Open straight to desserts from links like /menu?tab=desserts
+    useEffect(() => {
+        if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("tab") === "desserts") {
+            setSelectedCategory(DESSERTS)
+        }
+    }, [])
+
+    // Only show categories that have something on this week's menu (dessert
+    // flavors live under their own categories and are shopped in the Desserts tab)
+    const menuCategories = categories.filter((c) => products.some((p) => p.is_active && p.category?.name === c.name))
 
     // Filter products based on search and category
     const filteredProducts = products.filter((product) => {
@@ -179,7 +193,7 @@ const Menu = () => {
                 </motion.div>
 
                 {/* Category Buttons */}
-                {categories.map((category, index) => (
+                {menuCategories.map((category, index) => (
                     <motion.div
                         key={category.id}
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -195,8 +209,36 @@ const Menu = () => {
                         </Button>
                     </motion.div>
                 ))}
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 + ((menuCategories.length + 1) * 0.03) }}
+                >
+                    <Button
+                        variant={selectedCategory === DESSERTS ? "default" : "outline"}
+                        onClick={() => setSelectedCategory(DESSERTS)}
+                        className="whitespace-nowrap"
+                    >
+                        {DESSERTS}
+                    </Button>
+                </motion.div>
             </motion.div>
 
+            {selectedCategory === DESSERTS ? (
+                <div className="space-y-4">
+                    <div>
+                        <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading">
+                            Sweets by <em className="italic text-brand-tobacco">the dozen</em>
+                        </h2>
+                        <p className="text-muted-foreground mt-1">
+                            Made fresh for your date. Desserts check out on their own, separate from meal prep.
+                        </p>
+                    </div>
+                    <DessertShop requestHref="/custom-cakes#request" />
+                </div>
+            ) : (
+            <>
             {/* Product Grid */}
             {sortedProducts.length > 0 ? (
                 <motion.div
@@ -243,6 +285,35 @@ const Menu = () => {
                         </Button>
                     )}
                 </motion.div>
+            )}
+
+            {/* Desserts teaser at the end of the weekly menu */}
+            {selectedCategory === "All" && !searchQuery && (
+                <div className="mt-10 rounded-[22px] border border-border bg-card p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 justify-between">
+                    <div>
+                        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-brand-heading">
+                            <span className="text-brand-matcha">■</span> Desserts
+                        </p>
+                        <p className="font-serif text-3xl text-brand-espresso mt-1">
+                            Sweets by <em className="italic text-brand-tobacco">the dozen</em>
+                        </p>
+                        <p className="text-muted-foreground mt-1">
+                            Cookies, mini cupcakes, cheesecakes, brownies, chocolate strawberries and dessert cups.
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setSelectedCategory(DESSERTS)
+                            window.scrollTo({ top: 0, behavior: "smooth" })
+                        }}
+                        className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors shrink-0"
+                    >
+                        Shop desserts <span aria-hidden="true">→</span>
+                    </button>
+                </div>
+            )}
+            </>
             )}
         </motion.div>
     )

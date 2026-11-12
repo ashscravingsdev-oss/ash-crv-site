@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
+import DessertShop from "@/components/desserts/dessert-shop";
 
 // Photos removed from the gallery (redundant/weak shots) — kept out of both
 // featuredCakes and allCakes below.
@@ -21,25 +22,26 @@ const removedCakes = [
 // clicked. Swap any of these to change which 15 cakes are featured — order matters,
 // they display left-to-right, top-to-bottom in this order.
 const featuredCakes = [
-    "cake-01.jpg",
-    "cake-02.jpg",
-    "cake-03.jpg",
-    "cake-04.jpg",
-    "cake-05.jpg",
+    "cake-51.jpg",
+    "cake-48.jpg",
+    "cake-50.jpg",
+    "cake-52.jpg",
+    "cake-49.jpg",
+    "cake-53.jpg",
+    "cake-37.jpg",
     "cake-06.jpg",
-    "cake-09.jpg",
-    "cake-10.jpg",
-    "cake-11.jpg",
-    "cake-13.jpg",
-    "cake-14.jpg",
-    "cake-15.jpg",
-    "cake-16.jpg",
+    "cake-05.jpg",
     "cake-17.jpg",
-    "cake-18.jpg",
+    "cake-01.jpg",
+    "cake-22.jpg",
+    "cake-27.jpg",
+    "cake-39.jpg",
+    "cake-43.jpg",
+    "cake-34.jpg",
 ];
 
 const allCakes = Array.from(
-    { length: 47 },
+    { length: 53 },
     (_, i) => `cake-${String(i + 1).padStart(2, "0")}.jpg`
 ).filter((f) => !removedCakes.includes(f));
 
@@ -49,12 +51,6 @@ const perks = [
     { label: "6\" custom cakes", value: "from $125" },
     { label: "Order ahead", value: "at least 1 week" },
     { label: "Deposit to hold your date", value: "50%" },
-]
-
-const dozens = [
-    { name: "Sweet Bites", price: "$44" },
-    { name: "Signature Sweets", price: "$50" },
-    { name: "Premium Sweets", price: "$60" },
 ]
 
 const CustomCakes = () => {
@@ -93,7 +89,7 @@ const CustomCakes = () => {
                                 href="#desserts"
                                 className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
                             >
-                                See desserts <span aria-hidden="true">→</span>
+                                Shop desserts <span aria-hidden="true">→</span>
                             </a>
                         </div>
                     </motion.div>
@@ -104,11 +100,11 @@ const CustomCakes = () => {
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with peonies" className="col-span-3 row-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-51.jpg" alt="Vintage piped cake topped with cherries and red bows" className="col-span-3 row-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-05.jpg" alt="Chocolate-covered strawberries and dessert cups" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/strawberry-cheesecake.jpg" alt="Strawberry cheesecake" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -173,31 +169,40 @@ const CustomCakes = () => {
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            Dessert cups, chocolate-covered strawberries, cheesecake bites and more, made fresh for birthdays,
-                            showers, holidays or just because.
+                            Cookies, mini cupcakes, cheesecakes, brownies, chocolate-covered strawberries and dessert cups,
+                            made fresh for birthdays, showers, holidays or just because. Pick your favorites below and
+                            check out right here.
                         </p>
-                        <dl className="divide-y divide-dashed divide-border border-y border-dashed border-border">
-                            {dozens.map((d) => (
-                                <div key={d.name} className="flex items-baseline justify-between gap-6 py-4">
-                                    <dt className="font-serif text-2xl font-semibold text-brand-espresso">{d.name}</dt>
-                                    <dd className="font-serif text-2xl text-brand-espresso">
-                                        {d.price} <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">a dozen</span>
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
                         <p className="text-sm text-muted-foreground">
                             Want a whole dessert table for your event? See <a href="/events" className="underline">Events</a>.
                         </p>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
+                        <figure className="row-span-2 relative rounded-[18px] overflow-hidden bg-brand-latte">
+                            <video
+                                className="w-full h-full object-cover"
+                                src="/video/dessert-boxes.mp4"
+                                poster="/video/dessert-boxes-poster.jpg"
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                preload="metadata"
+                                aria-label="Ash packing up a dessert order with Ash's Cravings stickers"
+                            />
+                            <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                                Packed with love ♡
+                            </figcaption>
+                        </figure>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-05.jpg" alt="Dessert cups and chocolate-covered strawberries" className="col-span-2 aspect-[16/10] w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/dessert-boxes-1.jpg" alt="Boxes of chocolate-covered strawberries, mini cheesecakes and rice krispie pops" className="aspect-square w-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-23.jpg" alt="Holiday cupcakes" className="aspect-square w-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-19.jpg" alt="Christmas mini cakes" className="aspect-square w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/desserts/dessert-boxes-2.jpg" alt="Mini cheesecakes, chocolate pretzels and cow-print strawberries" className="aspect-square w-full object-cover rounded-[18px]" />
                     </div>
+                </div>
+
+                <div className="mt-12">
+                    <DessertShop requestHref="#request" />
                 </div>
             </section>
 

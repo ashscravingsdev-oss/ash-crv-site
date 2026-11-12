@@ -2,12 +2,10 @@
 import { Footer } from "@/components/footer";
 import Checkout from '@/components/checkout/checkout'
 import SEO from "@/components/seo";
-import ProtectedRoute from '@/components/ProtectedRoute';
 
 
 export default function CheckoutPage() {
   return (
-    <ProtectedRoute>
       <div className="min-h-screen">
         <SEO
           title="Checkout - Ash's Cravings | Complete Your Meal Delivery Order"
@@ -36,6 +34,5 @@ export default function CheckoutPage() {
         <Checkout />
         <Footer />
       </div>
-    </ProtectedRoute>
   );
 }
