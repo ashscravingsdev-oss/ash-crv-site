@@ -11,17 +11,23 @@ import { fadeUp, fadeIn } from "@/lib/animations"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories, fetchProducts } from "@/store/productSlice"
 import { bestSellerRank } from "@/lib/menu-pins"
-import DessertShop from "@/components/desserts/dessert-shop"
+import { isMenuProduct } from "@/lib/special-orders"
+import DessertGrid from "@/components/desserts/dessert-grid"
 
 const DESSERTS = "Desserts"
+// Ash's tab order (by category name); anything new she adds goes after these
+const TAB_ORDER = ["Meals", "Juices", DESSERTS, "Wellness Shots"]
+const TAB_LABELS = { Meals: "Meal Prep" }
 
 const Menu = () => {
     const dispatch = useDispatch()
     const {
-        products,
+        products: allProducts,
         categories,
         loading
     } = useSelector((state) => state.products)
+    // Desserts live in their own tab, never in the weekly grid
+    const products = allProducts.filter(isMenuProduct)
 
     const [selectedCategory, setSelectedCategory] = useState("All")
     const [searchQuery, setSearchQuery] = useState("")
@@ -45,6 +51,10 @@ const Menu = () => {
     // Only show categories that have something on this week's menu (dessert
     // flavors live under their own categories and are shopped in the Desserts tab)
     const menuCategories = categories.filter((c) => products.some((p) => p.is_active && p.category?.name === c.name))
+    const tabNames = [
+        ...TAB_ORDER.filter((n) => n === DESSERTS || menuCategories.some((c) => c.name === n)),
+        ...menuCategories.map((c) => c.name).filter((n) => !TAB_ORDER.includes(n)),
+    ]
 
     // Filter products based on search and category
     const filteredProducts = products.filter((product) => {
@@ -192,37 +202,23 @@ const Menu = () => {
                     </Button>
                 </motion.div>
 
-                {/* Category Buttons */}
-                {menuCategories.map((category, index) => (
+                {/* Category Buttons: Meal Prep, Juices, Desserts, Wellness Shots */}
+                {tabNames.map((name, index) => (
                     <motion.div
-                        key={category.id}
+                        key={name}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.1 + ((index + 1) * 0.03) }}
                     >
                         <Button
-                            variant={selectedCategory === category.name ? "default" : "outline"}
-                            onClick={() => setSelectedCategory(category.name)}
+                            variant={selectedCategory === name ? "default" : "outline"}
+                            onClick={() => setSelectedCategory(name)}
                             className="whitespace-nowrap"
                         >
-                            {category.name}
+                            {TAB_LABELS[name] || name}
                         </Button>
                     </motion.div>
                 ))}
-
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1 + ((menuCategories.length + 1) * 0.03) }}
-                >
-                    <Button
-                        variant={selectedCategory === DESSERTS ? "default" : "outline"}
-                        onClick={() => setSelectedCategory(DESSERTS)}
-                        className="whitespace-nowrap"
-                    >
-                        {DESSERTS}
-                    </Button>
-                </motion.div>
             </motion.div>
 
             {selectedCategory === DESSERTS ? (
@@ -235,7 +231,7 @@ const Menu = () => {
                             Made fresh for your date. Desserts check out on their own, separate from meal prep.
                         </p>
                     </div>
-                    <DessertShop requestHref="/custom-cakes#request" />
+                    <DessertGrid />
                 </div>
             ) : (
             <>

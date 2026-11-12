@@ -1,0 +1,27 @@
+{
+  "note": "Ash's dessert menu: one product per flavor, priced per dozen. Blondies are $60 as a guess (not on the price sheet).",
+  "settings": { "order_type": "special_order", "payment_plan": "deposit", "min_quantity": 2, "lead_time_days": 10, "initial_stock": 999, "min_stock_level": 0 },
+  "desserts": [
+    { "category": "Dessert Cups", "code": "DC", "suffix": "Dessert Cups", "flavors": [
+      ["Banana Cream", 60], ["Banana Pudding", 60], ["Strawberry Shortcake", 60], ["Cheesecake", 60], ["Strawberry", 60], ["Mango", 60],
+      ["Blueberry", 60], ["Tiramisu", 60], ["Tres Leches", 60], ["Chocolate Mousse", 60], ["Fresas con Crema", 60]
+    ]},
+    { "category": "Cookies", "code": "CK", "suffix": "Cookies", "flavors": [
+      ["Chocolate Chip", 44], ["Red Velvet", 44], ["Snickerdoodle", 44], ["Sugar", 44], ["Chocolate Crinkle", 44], ["Oatmeal Raisin", 44],
+      ["Lemon", 44], ["Confetti", 44], ["White Chocolate Macadamia Nut", 44], ["Peanut Butter", 44], ["Gingerdoodle", 44]
+    ]},
+    { "category": "Cheesecakes", "code": "CC", "suffix": "Mini Cheesecakes", "flavors": [
+      ["Original", 50], ["Blueberry", 60], ["Chocolate Swirl", 60], ["Strawberry", 60], ["Oreo", 60], ["Chocolate Chip Salted Caramel", 60]
+    ]},
+    { "category": "Mini Cupcakes", "code": "MC", "suffix": "Mini Cupcakes", "flavors": [
+      ["Vanilla Bean", 44], ["Chocolate", 44], ["Red Velvet", 44], ["Strawberry", 44], ["Oreo", 44], ["Confetti", 44],
+      ["Lemon", 44], ["Tres Leches", 44], ["Tiramisu", 44]
+    ]},
+    { "category": "Brownies", "code": "BR", "suffix": "", "flavors": [
+      ["Classic Brownies", 60], ["Blondies", 60], ["Strawberry Shortcake Brownies", 60], ["S'mores Bars", 50], ["Lemon Bars", 50], ["Chocolate Chip Cookie Bars", 44]
+    ]},
+    { "category": "Chocolate Strawberries", "code": "CS", "suffix": "Strawberries", "flavors": [
+      ["Milk Chocolate", 50], ["Dark Chocolate", 50], ["White Chocolate", 50], ["Drizzled & Topped", 60]
+    ]}
+  ]
+}

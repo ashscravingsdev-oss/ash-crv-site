@@ -1,9 +1,9 @@
 const photos = [
-    { src: "/gallery/meals/salmon-meal-prep.jpg", alt: "Salmon meal prep with Ash's Cravings stickers" },
+    { src: "/gallery/catering/catering-02.jpg", alt: "Avocado and tomato toasts for an event" },
     { src: "/gallery/cakes/cake-17.jpg", alt: "Cupcake flower bouquet" },
     { src: "/gallery/desserts/dessert-boxes-1.jpg", alt: "Dessert boxes with chocolate-covered strawberries and mini cheesecakes" },
     { src: "/gallery/cakes/cake-27.jpg", alt: "Strawberry-topped celebration cake" },
-    { src: "/gallery/cakes/cake-05.jpg", alt: "50th birthday cake with peonies" },
+    { src: "/gallery/cakes/cake-01.jpg", alt: "White cake with pink and red rosettes" },
     { src: "/gallery/cakes/cake-39.jpg", alt: "Cake topped with cherries" },
 ]
 

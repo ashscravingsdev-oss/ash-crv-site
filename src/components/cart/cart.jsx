@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Minus, Plus, Trash2, ShoppingBag, Loader2, Tag, XCircle } from "lucide-react"
-import { cartIsSpecial } from "@/lib/special-orders"
+import { cartIsSpecial, isMenuProduct } from "@/lib/special-orders"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -312,7 +312,7 @@ const Cart = () => {
                             <h3 className="font-semibold mb-4">You might also like</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {products
-                                    ?.filter(p => p.is_active && !items.some(item => item.product_id === p.id))
+                                    ?.filter(p => p.is_active && isMenuProduct(p) && !items.some(item => item.product_id === p.id))
                                     .slice(0, 4)
                                     .map((product) => (
                                         <Link

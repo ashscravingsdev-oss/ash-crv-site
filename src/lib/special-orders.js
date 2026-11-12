@@ -53,6 +53,7 @@ export const money = (n) => {
 // "Red Velvet Cookies" → "Red Velvet" for the flavor chips
 const SUFFIXES = ["Mini Cheesecakes", "Cheesecakes", "Mini Cupcakes", "Dessert Cups", "Chocolate Strawberries", "Strawberries", "Cookies"]
 export const flavorLabel = (product) => {
+    if (product?.flavor) return product.flavor
     const name = String(product?.name || "")
     if (/brownie|bar/i.test(product?.category?.name || "")) return name
     for (const s of SUFFIXES) {
@@ -95,3 +96,14 @@ export const priceRange = (items = []) => {
     const hi = Math.max(...prices)
     return lo === hi ? money(lo) : `${money(lo)}–${money(hi)}`
 }
+
+export const dessertSlug = (name) =>
+    String(name).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")
+
+// Weekly menu items only: never a dessert flavor or someone's private custom item.
+// (Also guards against an older backend that ignores the order_type filter.)
+export const isMenuProduct = (p) =>
+    !!p &&
+    p.order_type !== "special_order" &&
+    p.visibility !== "private" &&
+    !DESSERT_ORDER.some((d) => d.toLowerCase() === String(p.category?.name || "").toLowerCase())
