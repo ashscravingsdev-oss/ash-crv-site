@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { addToCart } from "@/store/cartSlice"
 import { useState } from "react"
 import { ShoppingCart, Loader2, Check } from "lucide-react"
+import { toast } from "sonner"
+import { bestSellerLabel } from "@/lib/menu-pins"
 
 const ProductItem = ({ product }) => {
     const dispatch = useDispatch()
@@ -67,6 +69,7 @@ const ProductItem = ({ product }) => {
         item.product_id === product.id && item.product_id !== null
     )
     const isInCart = !!cartItem
+    const badge = bestSellerLabel(product)
 
     return (
         <Link href={`/menu/${product.slug}`}>
@@ -75,7 +78,12 @@ const ProductItem = ({ product }) => {
                 transition={{ duration: 0.2 }}
                 className="h-full"
             >
-                <Card className="overflow-hidden rounded-2xl hover:shadow-lg transition-shadow h-full">
+                <Card className="relative overflow-hidden rounded-2xl hover:shadow-lg transition-shadow h-full">
+                    {badge && (
+                        <span className="absolute top-3 left-3 z-10 rounded-full bg-primary text-primary-foreground px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] shadow-md">
+                            ★ {badge}
+                        </span>
+                    )}
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         transition={{ duration: 0.3 }}
