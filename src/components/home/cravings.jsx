@@ -1,18 +1,13 @@
 "use client"
 import Link from "next/link";
-import { useSelector } from "react-redux";
 
 const Cravings = () => {
-    const { products } = useSelector((state) => state.products)
-    const mealPhoto =
-        products?.find((p) => p.category?.name === "Meals" && p.image_url)?.image_url ||
-        "/brand/home-hero.jpg"
-
+    // Four photos picked to sit together: bright, warm, soft colors
     const tiles = [
-        { title: "Meal Prep", line: "Eat good all week", href: "/menu", img: mealPhoto, alt: "Meal prep bowl" },
-        { title: "Cakes & Desserts", line: "Made to wow", href: "/custom-cakes", img: "/gallery/cakes/cake-06.jpg", alt: "Green vintage-piped cake with red bows" },
-        { title: "Events", line: "Feed the whole crew", href: "/events", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table" },
-        { title: "Private Chef", line: "Dinner at your place", href: "/events#private-chef", img: "/gallery/catering/catering-03.jpg", alt: "Meatballs and baked mac and cheese cooking on the stove" },
+        { title: "Meal Prep", line: "Eat good all week", href: "/menu", img: "/gallery/meals/salmon-meal-prep.jpg", alt: "Salmon meal prep with an Ash's Cravings sticker" },
+        { title: "Cakes & Desserts", line: "Made to wow", href: "/custom-cakes", img: "/gallery/cakes/cake-05.jpg", alt: "50th birthday cake with blush garden roses" },
+        { title: "Events", line: "Feed the whole crew", href: "/events", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table with greenery" },
+        { title: "Private Chef", line: "Dinner at your place", href: "/events#private-chef", img: "/gallery/catering/catering-15.jpg", alt: "Smoked salmon bites with gold forks" },
     ]
 
     return (

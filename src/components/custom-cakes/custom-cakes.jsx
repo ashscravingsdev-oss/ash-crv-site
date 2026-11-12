@@ -100,11 +100,11 @@ const CustomCakes = () => {
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-51.jpg" alt="Vintage piped cake topped with cherries and red bows" className="col-span-3 row-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with blush garden roses and a gold topper" className="col-span-3 row-span-2 w-full h-full object-cover object-[45%_center] rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-01.jpg" alt="White cake with pink and red rosettes" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/desserts/strawberry-cheesecake.jpg" alt="Strawberry cheesecake" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-43.jpg" alt="Cream vintage heart cake piped with 'engaged'" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -195,9 +195,9 @@ const CustomCakes = () => {
                             </figcaption>
                         </figure>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/desserts/dessert-boxes-1.jpg" alt="Boxes of chocolate-covered strawberries, mini cheesecakes and rice krispie pops" className="aspect-square w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-17.jpg" alt="Cupcake flower bouquet in pinks and yellows" className="aspect-square w-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/desserts/dessert-boxes-2.jpg" alt="Mini cheesecakes, chocolate pretzels and cow-print strawberries" className="aspect-square w-full object-cover rounded-[18px]" />
+                        <img src="/gallery/catering/catering-05.jpg" alt="Dessert table with chocolate-covered strawberries and pink cupcakes" className="aspect-square w-full object-cover rounded-[18px]" />
                     </div>
                 </div>
 
