@@ -1,4 +1,4 @@
-const items = ["Meal prep", "Cakes & desserts", "Events", "Private chef", "Made fresh, with love"]
+const items = ["Meal prep", "Cold-pressed juices", "Custom cakes", "Sweets by the dozen", "Events", "Private chef", "Made fresh, with love"]
 
 // A slow, endless ribbon of words. Each half holds the list twice so it always fills wide screens.
 const Half = ({ hidden }) => (

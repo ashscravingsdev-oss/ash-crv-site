@@ -71,40 +71,16 @@ const cakePhotos = [...featuredCakes, ...remainingCakes].map((filename, idx) => 
     note: cakeNotes[filename]?.note,
 }));
 
-// Cake flavors, fillings and frostings. ♡ marks the fan favorites.
+// Cake flavors, written to make you hungry. Short and sweet.
 const flavors = [
-    {
-        label: "Cake",
-        items: [
-            { name: "Chocolate", fave: true },
-            { name: "Strawberry", fave: true },
-            { name: "Cookies & Cream", fave: true },
-            { name: "Vanilla Bean" },
-            { name: "Red Velvet" },
-            { name: "Tres Leches" },
-            { name: "Confetti" },
-            { name: "Lemon" },
-        ],
-    },
-    {
-        label: "Filling",
-        items: [
-            { name: "Fresh strawberries & cream" },
-            { name: "Chocolate ganache" },
-            { name: "Cookies & cream" },
-            { name: "Dulce de leche" },
-            { name: "Lemon curd" },
-        ],
-    },
-    {
-        label: "Frosting",
-        items: [
-            { name: "Vanilla buttercream" },
-            { name: "Chocolate buttercream" },
-            { name: "Cream cheese" },
-            { name: "Whipped cream" },
-        ],
-    },
+    { name: "Midnight Chocolate", text: "Deep, dark and fudgy, with silky chocolate ganache between every layer." },
+    { name: "Strawberries & Cream", text: "Soft vanilla cake, fresh strawberries and clouds of whipped cream." },
+    { name: "Cookies & Cream", text: "Vanilla bean cake packed with crushed cookies and cookies-and-cream filling." },
+    { name: "Vanilla Bean", text: "Classic, buttery and speckled with real vanilla bean. Never boring." },
+    { name: "Red Velvet", text: "Velvety cocoa cake with tangy cream cheese frosting." },
+    { name: "Tres Leches", text: "Soaked in three milks until it melts in your mouth. My grandma's favorite." },
+    { name: "Lemon Dream", text: "Bright lemon cake with lemon curd and a cloud of whipped cream." },
+    { name: "Confetti", text: "Birthday in a bite: vanilla cake with rainbow sprinkles baked right in." },
 ]
 
 const perks = [
@@ -232,28 +208,19 @@ const CustomCakes = () => {
                         <span className="text-brand-matcha">■</span> Flavors
                     </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                        Pick your <em className="italic text-brand-tobacco">favorite</em>
+                        Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
                     </h2>
                 </div>
-                <div className="grid sm:grid-cols-3 gap-8 sm:gap-6 max-w-4xl mx-auto text-center">
-                    {flavors.map((group) => (
-                        <div key={group.label}>
-                            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-brand-heading pb-3 mb-3 border-b border-dashed border-border">
-                                {group.label}
-                            </p>
-                            <ul className="space-y-1.5">
-                                {group.items.map((f) => (
-                                    <li key={f.name} className="font-serif text-xl md:text-[1.4rem] text-brand-espresso">
-                                        {f.name}
-                                        {f.fave && <span className="text-brand-tobacco text-base ml-1.5" aria-label="fan favorite">♡</span>}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
+                <ul className="grid sm:grid-cols-2 gap-x-12 max-w-4xl mx-auto border-t border-brand-espresso/25">
+                    {flavors.map((f) => (
+                        <li key={f.name} className="border-b border-dashed border-border py-5">
+                            <p className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{f.name}</p>
+                            <p className="mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">{f.text}</p>
+                        </li>
                     ))}
-                </div>
+                </ul>
                 <p className="text-center text-sm text-muted-foreground mt-8">
-                    <span className="text-brand-tobacco">♡</span> fan favorites · Mix and match, or ask me for something special
+                    Any flavor, any filling. Tell me what you&apos;re craving and I&apos;ll make it happen.
                 </p>
             </section>
 
