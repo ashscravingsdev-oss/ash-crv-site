@@ -6,8 +6,8 @@ import { fadeUp } from "@/lib/animations"
 
 const values = [
     {
-        title: "Made from scratch",
-        description: "Every meal, cake and dessert is made by hand, fresh each week.",
+        title: "Real, fresh food",
+        description: "Every meal, cake and dessert is made from scratch, fresh each week.",
     },
     {
         title: "Made with love",
@@ -38,12 +38,17 @@ const About = () => {
                             Hi, I&apos;m <em className="italic">Ash</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                            I&apos;m the chef behind Ash&apos;s Cravings. I make weekly meal prep, custom cakes,
-                            desserts, food for your events and private chef dinners, all from scratch,
-                            right here in Eastvale.
+                            I&apos;m sooo obsessed with food. I love cooking all types of food from all different
+                            cuisines, and honestly, I eat all day. I&apos;m always hungry!
                         </p>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                            When you eat my food, I just want you to feel happy and the most satisfied.
+                            So it&apos;s a blessing to get to have <em className="font-serif text-2xl md:text-[1.6rem] italic text-brand-heading">real</em>, fresh food every day, not the garbage
+                            they&apos;re feeding us. I love living a healthy life and feeling good, and I know food is
+                            the way. But I still have my cravings, of course, so I make them my way.
+                        </p>
+                        <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                            That&apos;s Ash&apos;s Cravings. When you eat my food, I just want you to feel happy and
+                            the most satisfied.
                         </p>
                     </motion.div>
                     <motion.div
