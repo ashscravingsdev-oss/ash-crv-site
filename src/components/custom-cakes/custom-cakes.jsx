@@ -45,7 +45,7 @@ const featuredCakes = [
 const cakeNotes = {
     "cake-54.jpg": {
         note: "For my grandma ♡",
-        alt: "Peach piped cake with baby's breath and a photo of Ash's grandma holding a cake",
+        alt: "Peach piped cake with baby's breath and a photo of Ash's grandma Maria Elena holding a cake",
     },
 };
 

@@ -75,12 +75,12 @@ const About = () => {
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src="/brand/about-grandma.jpg"
-                            alt="Young Ash and her grandma making pupusas from scratch"
+                            alt="Young Ash and her grandma Maria Elena making pupusas from scratch"
                             loading="lazy"
                             className="w-full h-full object-cover object-[center_30%]"
                         />
                         <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
-                            Making pupusas with my grandma ♡
+                            Me &amp; my grandma Maria Elena ♡
                         </figcaption>
                     </motion.figure>
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
