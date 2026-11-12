@@ -50,6 +50,8 @@ const CustomItem = ({ token }) => {
     const inCart = !!cart?.items?.some((i) => i.product_id === item?.id)
     const price = Number(item?.price || 0)
     const deposit = item?.payment_plan === "deposit"
+    // A custom meal plan rides along with weekly meal prep (and can repeat)
+    const mealPlan = item?.order_type === "meal_prep"
 
     const handleOrder = async () => {
         if (inCart) {
@@ -163,11 +165,26 @@ const CustomItem = ({ token }) => {
                                             <dd>{money(price - price * DEPOSIT_RATE)}</dd>
                                         </div>
                                     )}
+                                    {mealPlan ? (
+                                        <>
+                                            <div className="flex justify-between gap-6 py-3">
+                                                <dt className="text-muted-foreground">Delivery</dt>
+                                                <dd>Monday or Tuesday, or pick up</dd>
+                                            </div>
+                                            {item.allow_subscription && (
+                                                <div className="flex justify-between gap-6 py-3">
+                                                    <dt className="text-muted-foreground">How often</dt>
+                                                    <dd>One time, every week or every 2 weeks</dd>
+                                                </div>
+                                            )}
+                                        </>
+                                    ) : (
                                     <div className="flex justify-between gap-6 py-3">
                                         <dt className="text-muted-foreground">Delivery</dt>
                                         <dd>Free within {FREE_DELIVERY_MILES} miles, or pick up</dd>
                                     </div>
-                                    {item.lead_time_days > 0 && (
+                                    )}
+                                    {!mealPlan && item.lead_time_days > 0 && (
                                         <div className="flex justify-between gap-6 py-3">
                                             <dt className="text-muted-foreground">Your date</dt>
                                             <dd>Pick it at checkout ({item.lead_time_days}+ days out)</dd>
@@ -194,7 +211,9 @@ const CustomItem = ({ token }) => {
                                     </button>
                                 )}
                                 <p className="text-sm text-muted-foreground">
-                                    No account needed. Something not quite right? Message me before you order and I&apos;ll fix it.
+                                    {mealPlan
+                                        ? "You'll sign in or make a quick account at checkout, so you can skip or pause anytime. Something not quite right? Message me before you order and I'll fix it."
+                                        : "No account needed. Something not quite right? Message me before you order and I'll fix it."}
                                 </p>
                             </>
                         ) : (
