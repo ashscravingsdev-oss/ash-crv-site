@@ -15,7 +15,7 @@ const WakingNote = ({ className = "" }) => {
     if (!waking) return null
     return (
         <p role="status" className={`text-center text-sm text-muted-foreground ${className}`}>
-            Warming up the kitchen… the first visit can take up to a minute.
+            Preheating… this can take up to a minute the first time.
         </p>
     )
 }
