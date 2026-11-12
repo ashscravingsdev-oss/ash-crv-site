@@ -51,10 +51,29 @@ const Bundles = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, sortedBundles.map((b) => b.id).join(",")])
 
-    // Default to the smallest bundle
+    // Group bundles by what they're mostly made of (e.g. "Meals", "Juices"),
+    // using the category that fills the most spots in each bundle.
+    const groups = useMemo(() => {
+        const byName = new Map()
+        sortedBundles.forEach((b) => {
+            const slots = bundleTemplates[b.id]?.slots || []
+            const main = [...slots].sort((x, y) => y.required - x.required)[0]
+            const name = main?.categoryName || "Bundles"
+            if (!byName.has(name)) byName.set(name, [])
+            byName.get(name).push(b)
+        })
+        // Meal prep first, then everything else
+        return [...byName.entries()].sort(([a], [b]) => (/meal/i.test(b) ? 1 : 0) - (/meal/i.test(a) ? 1 : 0))
+    }, [sortedBundles, bundleTemplates])
+
+    // Default to the first meal bundle (or the first bundle) once every template is in
+    const templatesReady = sortedBundles.length > 0 && sortedBundles.every((b) => {
+        const t = bundleTemplates[b.id]
+        return t && !t.loading
+    })
     useEffect(() => {
-        if (!selectedId && sortedBundles.length > 0) setSelectedId(sortedBundles[0].id)
-    }, [selectedId, sortedBundles])
+        if (!selectedId && templatesReady && groups.length > 0 && groups[0][1].length > 0) setSelectedId(groups[0][1][0].id)
+    }, [selectedId, templatesReady, groups])
 
     const selectedBundle = sortedBundles.find((b) => b.id === selectedId)
     const template = selectedId ? bundleTemplates[selectedId] : null
@@ -139,7 +158,7 @@ const Bundles = () => {
                     Build your <em className="italic text-brand-tobacco">bundle</em>
                 </h1>
                 <p className="text-lg md:text-xl text-foreground/85 max-w-2xl mx-auto leading-relaxed">
-                    Pick your size, then mix and match any meals from this week&apos;s menu. All one flavor or a little
+                    Pick a bundle, then mix and match your favorites from this week&apos;s menu. All one flavor or a little
                     of everything, it&apos;s up to you.
                 </p>
             </motion.div>
@@ -153,41 +172,54 @@ const Bundles = () => {
                     <p className="text-center text-muted-foreground py-16">Bundles are coming soon!</p>
                 ) : (
                     <>
-                        {/* Step 1: size */}
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">01 · Pick your size</p>
-                        <div className="grid grid-cols-2 gap-3 md:gap-4 mb-12">
-                            {sortedBundles.map((b) => {
-                                const req = requiredFor(b.id)
-                                const active = b.id === selectedId
-                                return (
-                                    <button
-                                        key={b.id}
-                                        type="button"
-                                        onClick={() => chooseBundle(b.id)}
-                                        className={`text-left rounded-2xl border-2 p-4 md:p-6 transition-colors ${active ? "border-primary bg-card" : "border-border bg-card/60 hover:border-brand-tobacco"}`}
-                                        aria-pressed={active}
-                                    >
-                                        <div className="flex items-start justify-between gap-2">
-                                            <span className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso leading-tight">
-                                                {req > 0 ? `${req} meals` : b.name}
-                                            </span>
-                                            <span className={`h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${active ? "border-primary bg-primary" : "border-brand-tobacco"}`}>
-                                                {active && <Check className="h-3 w-3 text-primary-foreground" />}
-                                            </span>
-                                        </div>
-                                        <p className="font-serif text-3xl md:text-4xl font-semibold text-brand-espresso mt-2">{money(b.price)}</p>
-                                        {req > 0 && (
-                                            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mt-1">
-                                                {money(Number(b.price) / req)} a meal
-                                            </p>
-                                        )}
-                                    </button>
-                                )
-                            })}
+                        {/* Step 1: bundle */}
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">01 · Pick your bundle</p>
+                        <div className="space-y-6 mb-12">
+                            {groups.map(([groupName, list]) => (
+                                <div key={groupName}>
+                                    {groups.length > 1 && (
+                                        <h2 className="font-serif text-2xl md:text-3xl font-medium text-brand-heading mb-3">{groupName}</h2>
+                                    )}
+                                    <div className="grid grid-cols-2 gap-3 md:gap-4">
+                                        {list.map((b) => {
+                                            const slotsFor = bundleTemplates[b.id]?.slots || []
+                                            const req = requiredFor(b.id)
+                                            const active = b.id === selectedId
+                                            return (
+                                                <button
+                                                    key={b.id}
+                                                    type="button"
+                                                    onClick={() => chooseBundle(b.id)}
+                                                    className={`flex flex-col justify-start text-left rounded-2xl border-2 p-4 md:p-6 transition-colors ${active ? "border-primary bg-card" : "border-border bg-card/60 hover:border-brand-tobacco"}`}
+                                                    aria-pressed={active}
+                                                >
+                                                    <div className="flex items-start justify-between gap-2">
+                                                        <span className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso leading-tight">
+                                                            {b.name}
+                                                        </span>
+                                                        <span className={`h-5 w-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-1 ${active ? "border-primary bg-primary" : "border-brand-tobacco"}`}>
+                                                            {active && <Check className="h-3 w-3 text-primary-foreground" />}
+                                                        </span>
+                                                    </div>
+                                                    {b.description && (
+                                                        <p className="text-sm text-muted-foreground mt-1 leading-snug">{b.description}</p>
+                                                    )}
+                                                    <p className="font-serif text-3xl md:text-4xl font-semibold text-brand-espresso mt-2">{money(b.price)}</p>
+                                                    {slotsFor.length === 1 && req > 0 && (
+                                                        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mt-1">
+                                                            {money(Number(b.price) / req)} each
+                                                        </p>
+                                                    )}
+                                                </button>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
                         {/* Step 2: meals */}
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">02 · Pick your meals</p>
+                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">02 · Pick your favorites</p>
                         {!template || template.loading ? (
                             <div className="flex justify-center py-12">
                                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
