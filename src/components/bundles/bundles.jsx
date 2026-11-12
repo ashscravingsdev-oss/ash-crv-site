@@ -10,6 +10,7 @@ import { fadeUp } from "@/lib/animations"
 import { fetchActiveBundles } from "@/store/bundleSlice"
 import { fetchBundleTemplate, fetchCategoryProducts } from "@/store/subscriptionSelectionSlice"
 import { addToCart } from "@/store/cartSlice"
+import { FREQUENCIES, frequencyLabel, getSavedFrequency, saveFrequency } from "@/lib/order-frequency"
 
 const money = (n) => {
     const v = Number(n || 0)
@@ -33,6 +34,17 @@ const Bundles = () => {
     const [picks, setPicks] = useState({})
     const [adding, setAdding] = useState(false)
     const [justAdded, setJustAdded] = useState(false)
+    const [frequency, setFrequency] = useState("one-time")
+
+    // Preselect "how often" from a link like /bundles?subscribe=weekly, or the last choice
+    useEffect(() => {
+        let fromUrl = null
+        try {
+            fromUrl = new URLSearchParams(window.location.search).get("subscribe")
+        } catch {}
+        const pick = FREQUENCIES.some((f) => f.value === fromUrl) ? fromUrl : getSavedFrequency()
+        if (pick) setFrequency(pick)
+    }, [])
 
     useEffect(() => {
         dispatch(fetchActiveBundles())
@@ -137,7 +149,12 @@ const Bundles = () => {
                     selected_products: Object.entries(picks).map(([product_id, quantity]) => ({ product_id, quantity })),
                 })
             ).unwrap()
-            toast.success(`${selectedBundle.name} added to your cart!`)
+            saveFrequency(frequency)
+            toast.success(
+                frequency === "one-time"
+                    ? `${selectedBundle.name} added to your cart!`
+                    : `${selectedBundle.name} added! It'll repeat ${frequencyLabel(frequency)}.`
+            )
             setPicks({})
             setJustAdded(true)
         } catch (error) {
@@ -303,6 +320,42 @@ const Bundles = () => {
                 )}
             </div>
 
+            {/* Step 3: how often */}
+            {sortedBundles.length > 0 && (
+                <div className="container mx-auto px-4 max-w-5xl mt-10">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">03 · How often?</p>
+                    <div className="grid grid-cols-3 gap-2 md:gap-3">
+                        {FREQUENCIES.map((f) => {
+                            const active = frequency === f.value
+                            return (
+                                <button
+                                    key={f.value}
+                                    type="button"
+                                    onClick={() => setFrequency(f.value)}
+                                    aria-pressed={active}
+                                    className={`rounded-2xl border-2 px-3 py-4 text-center font-serif text-lg md:text-2xl font-semibold transition-colors ${active ? "border-primary bg-card text-brand-espresso" : "border-border bg-card/60 text-brand-espresso/80 hover:border-brand-tobacco"}`}
+                                >
+                                    {f.label}
+                                </button>
+                            )
+                        })}
+                    </div>
+                    {frequency !== "one-time" && (
+                        <div className="mt-4 rounded-2xl bg-muted p-4 md:p-5 text-sm md:text-base text-foreground/85 leading-relaxed space-y-2">
+                            <p>
+                                <span className="font-semibold text-brand-espresso">How your subscription works:</span> your bundle
+                                repeats {frequencyLabel(frequency)}. My menu changes, so you can pick new favorites from your
+                                account before the Sunday cutoff.
+                            </p>
+                            <p>
+                                If you don&apos;t pick, I&apos;ll repeat your last picks and swap anything that&apos;s off the
+                                menu for a chef&apos;s choice. Skip a week or pause anytime.
+                            </p>
+                        </div>
+                    )}
+                </div>
+            )}
+
             {/* Sticky summary */}
             {selectedBundle && totalRequired > 0 && (
                 <div className="sticky bottom-0 z-20 bg-background/95 backdrop-blur border-t border-border mt-6">
@@ -310,7 +363,7 @@ const Bundles = () => {
                         <div className="flex-1 min-w-0">
                             <p className="font-serif text-xl md:text-2xl font-semibold text-brand-espresso leading-tight">
                                 {totalPicked} of {totalRequired} picked
-                                <span className="text-muted-foreground font-normal"> · {money(selectedBundle.price)}</span>
+                                <span className="text-muted-foreground font-normal"> · {money(selectedBundle.price)}{frequency !== "one-time" ? ` ${frequencyLabel(frequency)}` : ""}</span>
                             </p>
                             <div className="h-1.5 rounded-full bg-muted mt-2 overflow-hidden">
                                 <div

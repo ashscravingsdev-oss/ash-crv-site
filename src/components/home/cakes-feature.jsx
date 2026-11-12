@@ -17,10 +17,6 @@ const CakesFeature = () => {
                             <span>6” custom cakes</span>
                             <span className="font-mono text-sm">from $125</span>
                         </div>
-                        <div className="flex justify-between py-3 border-b border-dashed border-brand-tobacco">
-                            <span>Tasting box, 4 flavors</span>
-                            <span className="font-mono text-sm">$55</span>
-                        </div>
                     </div>
                     <Link
                         href="/custom-cakes"

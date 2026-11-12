@@ -1,7 +1,10 @@
 "use client"
 
+import Link from "next/link"
+
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { FREQUENCIES, frequencyLabel } from "@/lib/order-frequency"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -78,6 +81,7 @@ const DeliverySchedule = ({
     setTip,
     frequency,
     setFrequency,
+    canSubscribe = true,
     deliveryFee,
     rushFee,
     requiresAdminApproval,
@@ -420,38 +424,51 @@ const DeliverySchedule = ({
                     )}
                 </div>
 
-                {/* Delivery Frequency */}
+                {/* How often (subscriptions are for bundles only) */}
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <RefreshCw className="w-4 h-4" />
-                        Delivery Frequency *
+                        How often? *
                     </Label>
                     <RadioGroup value={frequency} onValueChange={setFrequency}>
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                            {[
-                                { value: "one-time", label: "One-time" },
-                                { value: "weekly", label: "Weekly" },
-                                { value: "biweekly", label: "Bi-Weekly" },
-                                { value: "monthly", label: "Monthly" }
-                            ].map((option) => (
-                                <Label
-                                    key={option.value}
-                                    htmlFor={`freq-${option.value}`}
-                                    className={`border border-border rounded-lg p-3 text-center cursor-pointer transition-all ${frequency === option.value
-                                        ? "bg-primary text-primary-foreground border-primary"
-                                        : "hover:border-primary/50"
-                                        }`}
-                                >
-                                    <RadioGroupItem
-                                        value={option.value}
-                                        id={`freq-${option.value}`}
-                                        className="sr-only"
-                                    />
-                                    <div className="font-semibold text-sm">{option.label}</div>
-                                </Label>
-                            ))}
+                        <div className="grid grid-cols-3 gap-2">
+                            {FREQUENCIES.map((option) => {
+                                const disabled = option.value !== "one-time" && !canSubscribe
+                                return (
+                                    <Label
+                                        key={option.value}
+                                        htmlFor={`freq-${option.value}`}
+                                        className={`border border-border rounded-lg p-3 text-center transition-all ${disabled
+                                            ? "opacity-40 cursor-not-allowed"
+                                            : "cursor-pointer"} ${frequency === option.value
+                                            ? "bg-primary text-primary-foreground border-primary"
+                                            : disabled ? "" : "hover:border-primary/50"
+                                            }`}
+                                    >
+                                        <RadioGroupItem
+                                            value={option.value}
+                                            id={`freq-${option.value}`}
+                                            disabled={disabled}
+                                            className="sr-only"
+                                        />
+                                        <div className="font-semibold text-sm">{option.label}</div>
+                                    </Label>
+                                )
+                            })}
                         </div>
                     </RadioGroup>
+                    {!canSubscribe ? (
+                        <p className="text-sm text-muted-foreground">
+                            Subscriptions are for <Link href="/bundles" className="underline">bundles</Link>, so you can pick new
+                            meals from my menu each week. Single items can be ordered one time.
+                        </p>
+                    ) : frequency !== "one-time" ? (
+                        <p className="text-sm text-muted-foreground">
+                            Your bundle repeats {frequencyLabel(frequency)}. Pick new meals from your account before the Sunday
+                            cutoff, or I&apos;ll repeat your last picks (with a chef&apos;s choice for anything off the menu).
+                            Skip or pause anytime.
+                        </p>
+                    ) : null}
                 </div>
 
                 {/* Tip */}

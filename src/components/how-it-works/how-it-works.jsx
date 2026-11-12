@@ -1,436 +1,157 @@
 'use client'
 import React from 'react'
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-    ShoppingCart,
-    CheckCircle2,
-    Calendar,
-    Truck,
-    UtensilsCrossed,
-    Clock,
-    Package,
-    Heart,
-    ArrowRight
-} from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion"
-import { fadeUp, fadeIn, scaleUp } from "@/lib/animations"
+import { fadeUp } from "@/lib/animations"
+
+const steps = [
+    { n: "01", title: "Pick your meals", text: "Choose from this week's menu, or build a bundle and mix and match your favorites." },
+    { n: "02", title: "Order by Sunday", text: "Check out by Sunday and pick Monday or Tuesday delivery, or pick up." },
+    { n: "03", title: "I cook it fresh", text: "Everything is made from scratch with real, fresh ingredients." },
+    { n: "04", title: "Heat and enjoy", text: "About 2 minutes in the microwave, or the air fryer if you're like me. Best within 3 to 4 days." },
+]
+
+const details = [
+    { label: "Delivery days", value: "Monday & Tuesday" },
+    { label: "Order by", value: "Sunday" },
+    { label: "Delivery fee", value: "Based on your address, shown at checkout" },
+    { label: "Pickup", value: "Available, just message me" },
+]
+
+const prices = [
+    { label: "Single meal", value: "$17" },
+    { label: "5 meals", value: "$80" },
+    { label: "10 meals", value: "$160" },
+]
 
 const HowItWorks = () => {
-    const steps = [
-        {
-            number: "1",
-            title: "Browse Our Fresh Menu",
-            description: "Explore our weekly rotating selection of chef-designed meals and cold-pressed wellness juices. Filter by dietary preferences, calories, or ingredients to find your perfect match.",
-            icon: <ShoppingCart className="h-10 w-10" />,
-            color: "bg-primary text-primary-foreground",
-            content: (
-                <Card className=" h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                        <div className="flex flex-col items-center text-center space-y-4">
-                            <div className="p-4 rounded-full bg-secondary/20">
-                                <ShoppingCart className="h-12 w-12 text-primary" />
-                            </div>
-                            <h3 className="text-xl font-semibold">Weekly Menu Preview</h3>
-                            <div className="space-y-3 text-sm text-muted-foreground">
-                                <p>✓ 20+ fresh options each week</p>
-                                <p>✓ Nutrition info clearly displayed</p>
-                                <p>✓ Chef's specials highlighted</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )
-        },
-        {
-            number: "2",
-            title: "Customize Your Order",
-            description: "Add your favorite extras, sides, and supplements. Choose between flexible subscription plans or one-time orders that fit your lifestyle.",
-            icon: <CheckCircle2 className="h-10 w-10" />,
-            color: "bg-primary text-primary-foreground",
-            content: (
-                <Card className=" h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                        <div className="flex flex-col items-center text-center space-y-4">
-                            <div className="p-4 rounded-full bg-secondary/20">
-                                <CheckCircle2 className="h-12 w-12 text-primary" />
-                            </div>
-                            <h3 className="text-xl font-semibold">Customization Options</h3>
-                            <div className="space-y-3 text-sm text-muted-foreground">
-                                <p>✓ Add protein boosts +$3</p>
-                                <p>✓ Choose portion sizes</p>
-                                <p>✓ Select weekly or bi-weekly</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )
-        },
-        {
-            number: "3",
-            title: "Schedule Your Delivery",
-            description: "Pick your preferred delivery day and time window. Remember to order by Sunday for Monday or Tuesday delivery.",
-            icon: <Calendar className="h-10 w-10" />,
-            color: "bg-primary text-primary-foreground",
-            content: (
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                        <div className="flex flex-col items-center text-center space-y-4">
-                            <div className="p-4 rounded-full bg-secondary/20">
-                                <Calendar className="h-12 w-12 text-primary" />
-                            </div>
-                            <h3 className="text-xl font-semibold">Delivery Schedule</h3>
-                            <div className="space-y-3 text-sm text-muted-foreground">
-                                <p>✓ Monday or Tuesday delivery</p>
-                                <p>✓ 10:00 AM - 7:00 PM window</p>
-                                <p>✓ Order by Sunday</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )
-        },
-        {
-            number: "4",
-            title: "Enjoy Fresh Meals",
-            description: "Receive fresh, never-frozen meals in eco-friendly packaging. Heat and eat in minutes—no cooking, no cleanup, just delicious, nutritious food.",
-            icon: <Truck className="h-10 w-10" />,
-            color: "bg-primary text-primary-foreground",
-            content: (
-                <Card className=" h-full hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6">
-                        <div className="flex flex-col items-center text-center space-y-4">
-                            <div className="p-4 rounded-full bg-secondary/20">
-                                <Truck className="h-12 w-12 text-primary" />
-                            </div>
-                            <h3 className="text-xl font-semibold">Fresh Delivery</h3>
-                            <div className="space-y-3 text-sm text-muted-foreground">
-                                <p>✓ Insulated eco-friendly packaging</p>
-                                <p>✓ 2-3 minute heat time</p>
-                                <p>✓ Skip or pause anytime</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )
-        }
-    ];
-
-    const benefits = [
-        {
-            icon: <Clock className="h-6 w-6" />,
-            title: "Save 5+ Hours Weekly",
-            description: "No grocery shopping, prepping, or cleanup needed"
-        },
-        {
-            icon: <Package className="h-6 w-6" />,
-            title: "Fresh Never Frozen",
-            description: "Prepared fresh daily, delivered at peak freshness"
-        },
-        {
-            icon: <UtensilsCrossed className="h-6 w-6" />,
-            title: "Chef-Crafted",
-            description: "Designed by nutritionists and professional chefs"
-        },
-        {
-            icon: <Heart className="h-6 w-6" />,
-            title: "Flexible Plans",
-            description: "Skip weeks, change plans, or cancel anytime"
-        }
-    ];
-
     return (
-        <>
-            {/* Hero Section */}
-            <motion.section
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="bg-primary text-primary-foreground py-16 md:py-24 overflow-hidden"
-            >
-                <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ duration: 0.3 }}
-                    className="container mx-auto px-4 text-center"
-                >
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                    >
-                        <h1 className="text-4xl md:text-5xl font-bold mb-4 text-balance">
-                            How It Works
-                        </h1>
-                    </motion.div>
-
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
-                    >
-                        Get fresh, healthy meals delivered in 4 simple steps. No commitment,
-                        no cooking required—just delicious, nutritious food ready when you are.
-                    </motion.p>
+        <div>
+            {/* Hero */}
+            <section className="container mx-auto px-4 pt-10 pb-14 md:pt-14 md:pb-20 text-center">
+                <motion.div initial="initial" animate="animate" variants={fadeUp} className="max-w-3xl mx-auto space-y-5">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
+                        <span className="text-brand-matcha">■</span> How it works
+                    </p>
+                    <h1 className="font-serif font-medium text-5xl md:text-7xl leading-[0.98] text-brand-heading">
+                        Fresh meals, <em className="italic text-brand-tobacco">no stress</em>
+                    </h1>
+                    <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                        Homemade meal prep, made from scratch and delivered every Monday and Tuesday in Eastvale.
+                    </p>
                 </motion.div>
-            </motion.section>
+            </section>
 
-            <div className='container mx-auto px-4 pt-16'>
-                {/* Steps with Alternating Layout */}
-                <div className="space-y-16 md:space-y-20 mb-20">
-                    {steps.map((step, index) => (
-                        <motion.div
-                            key={step.number}
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.3 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}
-                        >
-                            {/* Text Content - Alternates sides */}
-                            <motion.div
-                                className={`${index % 2 === 1 ? 'lg:col-start-2' : ''}`}
-                                whileHover={{ x: index % 2 === 0 ? -5 : 5 }}
-                                transition={{ duration: 0.2 }}
-                            >
-                                <div className="flex items-center gap-4 mb-6">
-                                    <motion.div
-                                        whileHover={{ rotate: 5, scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className={`w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 ${step.color}`}
-                                    >
-                                        <span className="font-bold text-xl">{step.number}</span>
-                                    </motion.div>
-                                    <motion.h2
-                                        initial={{ opacity: 0, x: index % 2 === 0 ? -10 : 10 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: 0.2 }}
-                                        className="text-2xl md:text-3xl font-bold"
-                                    >
-                                        {step.title}
-                                    </motion.h2>
-                                </div>
-                                <motion.p
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.3 }}
-                                    className="text-muted-foreground text-lg leading-relaxed lg:ml-18"
-                                >
-                                    {step.description}
-                                </motion.p>
-                            </motion.div>
-
-                            {/* Card - Alternates sides */}
-                            <motion.div
-                                className={`${index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}`}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                {step.content}
-                            </motion.div>
-                        </motion.div>
+            {/* Steps */}
+            <section className="container mx-auto px-4 pb-16 md:pb-20">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {steps.map((s) => (
+                        <div key={s.n} className="bg-card border border-border rounded-2xl p-6 space-y-2">
+                            <p className="font-serif italic text-3xl text-brand-tobacco">{s.n}</p>
+                            <h2 className="font-serif text-2xl font-semibold text-brand-espresso">{s.title}</h2>
+                            <p className="text-muted-foreground leading-relaxed">{s.text}</p>
+                        </div>
                     ))}
                 </div>
+            </section>
 
-                {/* Benefits Section */}
-                <motion.div
-                    initial="initial"
-                    whileInView="animate"
-                    viewport={{ once: true }}
-                    variants={fadeUp}
-                    className="mb-16"
-                >
-                    <motion.h2
-                        variants={fadeUp}
-                        className="text-3xl font-bold mb-8 text-center"
-                    >
-                        Why Choose Ash's Cravings
-                    </motion.h2>
+            {/* Two ways to order */}
+            <section className="bg-muted">
+                <div className="container mx-auto px-4 py-16 md:py-20">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading text-center mb-3">
+                        <span className="text-brand-matcha">■</span> Two ways to order
+                    </p>
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
+                        One time or <em className="italic text-brand-tobacco">every week</em>
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-5 max-w-5xl mx-auto">
+                        <div className="bg-background rounded-2xl p-6 md:p-8 flex flex-col">
+                            <h3 className="font-serif text-3xl font-semibold text-brand-espresso">Order this week</h3>
+                            <p className="text-foreground/85 leading-relaxed mt-3 flex-1">
+                                Grab single meals and juices from the menu, or build a bundle of 5 or 10 meals. Perfect if
+                                you want to try things out or just need a good week.
+                            </p>
+                            <div className="flex flex-wrap gap-3 pt-6">
+                                <Link href="/menu" className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.16em]">
+                                    See the menu →
+                                </Link>
+                                <Link href="/bundles" className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.16em]">
+                                    Build a bundle →
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="bg-background rounded-2xl p-6 md:p-8 flex flex-col border-2 border-primary">
+                            <h3 className="font-serif text-3xl font-semibold text-brand-espresso">Subscribe</h3>
+                            <p className="text-foreground/85 leading-relaxed mt-3 flex-1">
+                                Your bundle shows up every week or every 2 weeks. My menu changes, so you pick new favorites
+                                from your account each week. Forget to pick? I&apos;ll repeat your last picks and swap
+                                anything that&apos;s off the menu for a chef&apos;s choice. Skip or pause anytime.
+                            </p>
+                            <div className="flex flex-wrap gap-3 pt-6">
+                                <Link href="/bundles?subscribe=weekly" className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.16em]">
+                                    Start a subscription →
+                                </Link>
+                                <Link href="/subscriptions" className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.16em]">
+                                    Learn more →
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                    <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                        initial="initial"
-                        whileInView="animate"
-                        viewport={{ once: true, amount: 0.2 }}
-                        variants={{
-                            animate: {
-                                transition: {
-                                    staggerChildren: 0.1
-                                }
-                            }
-                        }}
-                    >
-                        {benefits.map((benefit, index) => (
-                            <motion.div
-                                key={benefit.title}
-                                variants={scaleUp}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -5, scale: 1.02 }}
-                            >
-                                <div className="p-6 rounded-xl border bg-card group h-full">
-                                    <motion.div
-                                        whileHover={{ rotate: 5, scale: 1.1 }}
-                                        className="mb-4 p-3 rounded-lg bg-secondary/20 text-primary w-fit"
-                                    >
-                                        {benefit.icon}
-                                    </motion.div>
-                                    <h3 className="text-lg font-semibold mb-2">
-                                        {benefit.title}
-                                    </h3>
-                                    <p className="text-sm text-muted-foreground">{benefit.description}</p>
+            {/* Details + pricing */}
+            <section className="container mx-auto px-4 py-16 md:py-20">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-16 max-w-5xl mx-auto">
+                    <div>
+                        <h2 className="font-serif font-medium text-4xl text-brand-heading mb-6">
+                            The <em className="italic text-brand-tobacco">details</em>
+                        </h2>
+                        <dl className="divide-y divide-dashed divide-border border-y border-dashed border-border">
+                            {details.map((d) => (
+                                <div key={d.label} className="flex justify-between gap-6 py-4">
+                                    <dt className="font-mono text-xs uppercase tracking-[0.14em] text-brand-heading pt-1">{d.label}</dt>
+                                    <dd className="text-right text-foreground/85">{d.value}</dd>
                                 </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </motion.div>
+                            ))}
+                        </dl>
+                    </div>
+                    <div>
+                        <h2 className="font-serif font-medium text-4xl text-brand-heading mb-6">
+                            Meal <em className="italic text-brand-tobacco">prices</em>
+                        </h2>
+                        <dl className="divide-y divide-dashed divide-border border-y border-dashed border-border">
+                            {prices.map((p) => (
+                                <div key={p.label} className="flex justify-between gap-6 py-4">
+                                    <dt className="text-lg text-foreground/85">{p.label}</dt>
+                                    <dd className="font-serif text-2xl font-semibold text-brand-espresso">{p.value}</dd>
+                                </div>
+                            ))}
+                        </dl>
+                        <p className="text-sm text-muted-foreground mt-4">
+                            Juice and ginger shot bundles are on the <Link href="/bundles" className="underline">Bundles</Link> page.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-                {/* Delivery Info Card */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-12"
-                >
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        transition={{ duration: 0.2 }}
-                    >
-                        <Card>
-                            <CardContent className="p-8">
-                                <motion.h2
-                                    initial={{ opacity: 0, y: 10 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.1 }}
-                                    className="text-2xl font-bold mb-6 text-center"
-                                >
-                                    Delivery Details
-                                </motion.h2>
-
-                                <motion.div
-                                    className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center"
-                                    initial="initial"
-                                    whileInView="animate"
-                                    viewport={{ once: true }}
-                                    variants={{
-                                        animate: {
-                                            transition: {
-                                                staggerChildren: 0.1
-                                            }
-                                        }
-                                    }}
-                                >
-                                    {[
-                                        { icon: <Clock className="h-6 w-6 text-primary" />, label: "Weekly Cutoff", value: "Sunday" },
-                                        { icon: <Calendar className="h-6 w-6 text-primary" />, label: "Delivery Days", value: "Monday & Tuesday" },
-                                        { icon: <Truck className="h-6 w-6 text-primary" />, label: "Delivery Window", value: "10:00 AM - 7:00 PM" }
-                                    ].map((item, index) => (
-                                        <motion.div
-                                            key={item.label}
-                                            variants={fadeUp}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            viewport={{ once: true }}
-                                            transition={{ delay: index * 0.1 }}
-                                            className="space-y-3"
-                                        >
-                                            <motion.div
-                                                whileHover={{ rotate: 5 }}
-                                                className="p-3 rounded-lg bg-secondary/20 inline-block"
-                                            >
-                                                {item.icon}
-                                            </motion.div>
-                                            <div>
-                                                <p className="text-sm text-muted-foreground mb-1">{item.label}</p>
-                                                <p className="text-lg font-semibold">{item.value}</p>
-                                            </div>
-                                        </motion.div>
-                                    ))}
-                                </motion.div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                </motion.div>
-
-                {/* CTA Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-center"
-                >
-                    <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            <h2 className="text-3xl font-bold mb-4">
-                                Ready to Start Eating Better?
-                            </h2>
-                        </motion.div>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto"
-                        >
-                            Save time and eat healthier with Ash's Cravings.
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.3 }}
-                            className="flex flex-col sm:flex-row gap-4 justify-center"
-                        >
-                            <motion.div >
-                                <Button size="lg" asChild className="gap-2">
-                                    <Link href="/menu">
-                                        Browse This Week's Menu
-                                        <ArrowRight className="ml-2" size={20} />
-                                    </Link>
-                                </Button>
-                            </motion.div>
-
-                            <motion.div  >
-                                <Button size="lg" variant="outline" asChild>
-                                    <Link href="/subscriptions">View Subscription Plans</Link>
-                                </Button>
-                            </motion.div>
-                        </motion.div>
-
-                        <motion.p
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.4 }}
-                            className="text-sm text-muted-foreground mt-6"
-                        >
-                            No commitment required • Free delivery over $85 • Skip or cancel anytime
-                        </motion.p>
-                    </motion.div>
-                </motion.div>
-            </div>
-        </>
+            {/* CTA */}
+            <section className="bg-muted">
+                <div className="container mx-auto px-4 py-14 text-center space-y-4">
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                        What are you <em className="italic text-brand-tobacco">craving?</em>
+                    </h2>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                        <Link href="/menu" className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em]">
+                            Order meal prep <span aria-hidden="true">→</span>
+                        </Link>
+                        <Link href="/faq" className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em]">
+                            Questions? See the FAQ <span aria-hidden="true">→</span>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+        </div>
     )
 }
 

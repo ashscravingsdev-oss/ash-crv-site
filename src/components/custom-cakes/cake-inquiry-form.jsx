@@ -17,6 +17,13 @@ const initialFormState = {
     details: "",
 };
 
+// Cakes need at least a week's notice
+const earliestDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split("T")[0];
+};
+
 const CakeInquiryForm = () => {
     const [form, setForm] = useState(initialFormState);
     const [status, setStatus] = useState("idle"); // idle | sending | success | error
@@ -31,14 +38,14 @@ const CakeInquiryForm = () => {
 
         try {
             await submitToWeb3Forms({
-                subject: "New Custom Cake Request — Ash's Cravings Website",
+                subject: "New Cake & Dessert Request — Ash's Cravings Website",
                 replyto: form.email,
                 Name: form.name,
                 Email: form.email,
                 Phone: form.phone,
                 "Event Date": form.eventDate,
                 "Number of Servings": form.servings,
-                "Cake Details": form.details,
+                "Cake / Dessert Details": form.details,
             });
             setStatus("success");
         } catch (err) {
@@ -52,13 +59,11 @@ const CakeInquiryForm = () => {
                 <Card>
                     <CardContent className="flex flex-col items-center text-center gap-3 py-16">
                         <CheckCircle2 className="h-10 w-10 text-primary" />
-                        <CardTitle className="text-2xl">
-                            Thank you! Your request has been sent — we&apos;ll get back to
-                            you soon.
+                        <CardTitle className="font-serif text-3xl font-semibold text-brand-espresso">
+                            Thank you! I got your request.
                         </CardTitle>
                         <p className="text-muted-foreground max-w-md">
-                            We&apos;ve received your cake request and will follow up with
-                            a custom quote soon.
+                            I&apos;ll get back to you soon with a custom quote.
                         </p>
                     </CardContent>
                 </Card>
@@ -68,11 +73,17 @@ const CakeInquiryForm = () => {
 
     return (
         <div className="max-w-3xl mx-auto">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-2xl">Request a Cake</CardTitle>
+            <Card className="rounded-2xl">
+                <CardHeader className="space-y-2">
+                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
+                        <span className="text-brand-matcha">■</span> Request a cake or desserts
+                    </p>
+                    <CardTitle className="font-serif text-4xl font-medium text-brand-heading">
+                        Tell me about your <em className="italic text-brand-tobacco">celebration</em>
+                    </CardTitle>
                     <p className="text-muted-foreground">
-                        Tell us about your celebration and we&apos;ll send a custom quote
+                        I&apos;ll send you a custom quote. Cakes need at least 1 week&apos;s notice. Need it sooner? Message me
+                        and I&apos;ll see what I can do.
                     </p>
                 </CardHeader>
                 <CardContent>
@@ -129,6 +140,7 @@ const CakeInquiryForm = () => {
                                     id="cakeEventDate"
                                     type="date"
                                     required
+                                    min={earliestDate()}
                                     value={form.eventDate}
                                     onChange={updateField("eventDate")}
                                 />
@@ -136,11 +148,11 @@ const CakeInquiryForm = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="cakeServings">Number of Servings</Label>
+                            <Label htmlFor="cakeServings">How many people (or dozens)?</Label>
                             <Input
                                 id="cakeServings"
-                                type="number"
-                                placeholder="25"
+                                type="text"
+                                placeholder="25 people, or 3 dozen"
                                 required
                                 value={form.servings}
                                 onChange={updateField("servings")}
@@ -148,10 +160,10 @@ const CakeInquiryForm = () => {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="cakeDetails">Cake Details</Label>
+                            <Label htmlFor="cakeDetails">Tell me your idea</Label>
                             <Textarea
                                 id="cakeDetails"
-                                placeholder="Flavor, theme, colors, inspiration — tell us your vision"
+                                placeholder="Cake size, flavor, theme, colors, inspiration, or which desserts you'd like"
                                 rows={8}
                                 value={form.details}
                                 onChange={updateField("details")}
@@ -161,7 +173,7 @@ const CakeInquiryForm = () => {
                         {status === "error" && (
                             <div className="rounded-md border border-destructive/30 bg-destructive/10 text-destructive text-sm p-3">
                                 Something went wrong sending your request. Please try
-                                again, or reach us directly at{" "}
+                                again, or reach me directly at{" "}
                                 <a href="mailto:Ashscravings@gmail.com" className="underline">
                                     Ashscravings@gmail.com
                                 </a>{" "}
@@ -176,10 +188,10 @@ const CakeInquiryForm = () => {
                         <Button
                             type="submit"
                             size="lg"
-                            className="w-full"
+                            className="w-full h-12 font-mono text-xs uppercase tracking-[0.18em]"
                             disabled={status === "sending"}
                         >
-                            {status === "sending" ? "Sending..." : "Submit Request"}
+                            {status === "sending" ? "Sending..." : "Send my request"}
                         </Button>
                     </form>
                 </CardContent>

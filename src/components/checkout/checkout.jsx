@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect } from "react"
 import { fetchCart, calculateCartTotals } from "@/store/cartSlice"
 import { useDispatch, useSelector } from "react-redux"
+import { cartCanSubscribe, getSavedFrequency } from "@/lib/order-frequency"
 import Cookies from "js-cookie"
 import DeliveryInfo from './delivery-info'
 import DeliverySchedule from './delivery-schedule'
@@ -40,6 +41,11 @@ const Checkout = () => {
     const [deliveryDay, setDeliveryDay] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
     const [frequency, setFrequency] = useState("one-time");
+    // Start with whatever they chose on the Bundles page
+    useEffect(() => {
+        const saved = getSavedFrequency()
+        if (saved) setFrequency(saved)
+    }, [])
 
     const [rushFee, setRushFee] = useState(0);
     const [requiresAdminApproval, setRequiresAdminApproval] = useState(false);
@@ -57,6 +63,10 @@ const Checkout = () => {
 
     // ----- Cart totals from Redux -----
     const { cart, loading: cartLoading, items, subtotal, taxTotal, couponDiscount, coupon } = useSelector(state => state.cart)
+    // Subscriptions are for bundle-only carts; anything else is a one-time order
+    useEffect(() => {
+        if (cart?.items && !cartCanSubscribe(cart.items) && frequency !== "one-time") setFrequency("one-time")
+    }, [cart?.items, frequency])
     const isFreeDeliveryCoupon = coupon?.type === 'free_delivery';
 
     const tipAmount = Number.parseFloat(tip) || 0
@@ -284,6 +294,7 @@ const Checkout = () => {
                                 setTip={setTip}
                                 frequency={frequency}
                                 setFrequency={setFrequency}
+                                canSubscribe={cartCanSubscribe(cart?.items)}
                                 deliveryFee={deliveryFee}
                                 rushFee={rushFee}
                                 requiresAdminApproval={requiresAdminApproval}

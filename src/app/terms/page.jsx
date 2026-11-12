@@ -163,7 +163,7 @@ export default function TermsPage() {
               5.2 Subscription Management
             </h3>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              You may pause, skip, or cancel your subscription at any time
+              You may pause or skip your subscription at any time
               through your account settings. To avoid being charged for the next
               billing cycle, you must skip or cancel before the Sunday
               cutoff ahead of your next scheduled delivery.
