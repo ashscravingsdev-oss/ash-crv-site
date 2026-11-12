@@ -1,50 +1,60 @@
 "use client";
-import { Card } from "@/components/ui/card";
-import { motion } from "framer-motion";
 import { useState } from "react";
+import { motion } from "framer-motion";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 
-const cateringPhotos = Array.from({ length: 20 }, (_, i) => {
-    const num = String(i + 1).padStart(2, "0");
-    return `/gallery/catering/catering-${num}.jpg`;
-});
-
-const photos = cateringPhotos.map((src, idx) => ({ src, alt: `Event spread ${idx + 1}` }));
+// Past events, one photo per spread (no repeats of the same table, and none
+// of the photos already shown bigger higher up the page). The first one is
+// shown big.
+const photos = [
+    { src: "/gallery/catering/catering-01.jpg", alt: "Grazing board with veggies, grapes, cheeses and a spinach dip" },
+    { src: "/gallery/catering/catering-15.jpg", alt: "Smoked salmon bites on little gold forks" },
+    { src: "/gallery/catering/catering-13.jpg", alt: "Deviled eggs garnished with paprika and herbs" },
+    { src: "/gallery/catering/catering-09.jpg", alt: "Fall party spread with crostini, pasta salad cups and mini desserts" },
+    { src: "/gallery/catering/catering-17.jpg", alt: "Bridal shower table styled with greenery and a welcome mirror" },
+    { src: "/gallery/catering/catering-02.jpg", alt: "Tray of pesto and caprese toasts on ciabatta" },
+    { src: "/gallery/catering/catering-19.jpg", alt: "Caprese skewers with tomato, mozzarella and basil" },
+    { src: "/gallery/catering/catering-04.jpg", alt: "Event table with roasted potatoes, deviled eggs and mini desserts" },
+    { src: "/gallery/catering/catering-12.jpg", alt: "Chocolate chip muffins in paper wraps" },
+];
 
 const CateringGallery = () => {
     const [viewing, setViewing] = useState(null);
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.6 }}
-            className="mb-16"
+            transition={{ duration: 0.35 }}
         >
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">
-                Event Gallery
-            </h2>
-            <p className="text-muted-foreground text-center mb-8">
-                A look at spreads we&apos;ve served for past events
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                {cateringPhotos.map((src, idx) => (
-                    <Card key={src} className="overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => setViewing(idx)}
-                            aria-label="See the whole photo"
-                            className="block w-full aspect-square overflow-hidden relative cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-tobacco"
-                        >
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={src}
-                                alt={`Event spread ${idx + 1}`}
-                                loading="lazy"
-                                className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-                            />
-                        </button>
-                    </Card>
+            <div className="text-center mb-10">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">
+                    <span className="text-brand-matcha">■</span> Past events
+                </p>
+                <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                    A peek at <em className="italic text-brand-tobacco">past spreads</em>
+                </h2>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+                {photos.map((p, idx) => (
+                    <button
+                        key={p.src}
+                        type="button"
+                        onClick={() => setViewing(idx)}
+                        aria-label="See the whole photo"
+                        className={`relative aspect-square overflow-hidden rounded-2xl bg-brand-latte cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-tobacco ${
+                            idx === 0 ? "col-span-2 row-span-2" : ""
+                        }`}
+                    >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={p.src}
+                            alt={p.alt}
+                            loading="lazy"
+                            className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
+                        />
+                    </button>
                 ))}
             </div>
             <PhotoLightbox photos={photos} index={viewing} onIndexChange={setViewing} />
