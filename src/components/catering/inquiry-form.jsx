@@ -63,7 +63,7 @@ const InquiryForm = () => {
 
         try {
             await submitToWeb3Forms({
-                subject: "New Catering Inquiry — Ash's Cravings Website",
+                subject: "New Event Inquiry — Ash's Cravings Website",
                 replyto: form.email,
                 "Contact Name": form.contactName,
                 "Company/Organization": form.company,
@@ -91,11 +91,11 @@ const InquiryForm = () => {
                     <CardContent className="flex flex-col items-center text-center gap-3 py-16">
                         <CheckCircle2 className="h-10 w-10 text-primary" />
                         <CardTitle className="text-2xl">
-                            Thank you! Your request has been sent — we&apos;ll get back to
+                            Thank you! Your request has been sent — I&apos;ll get back to
                             you soon.
                         </CardTitle>
                         <p className="text-muted-foreground max-w-md">
-                            Our catering team will follow up with a custom proposal.
+                            I'll follow up with a custom quote.
                         </p>
                     </CardContent>
                 </Card>
@@ -109,7 +109,7 @@ const InquiryForm = () => {
                 <CardHeader>
                     <CardTitle className="text-2xl">Request a Quote</CardTitle>
                     <p className="text-muted-foreground">
-                        Tell us about your event and we'll create a custom proposal
+                        Tell me about your event and I'll put together a custom quote
                     </p>
                 </CardHeader>
                 <CardContent>
@@ -250,7 +250,7 @@ const InquiryForm = () => {
                             </Label>
                             <Textarea
                                 id="details"
-                                placeholder="Tell us about your event, dietary restrictions, etc."
+                                placeholder="Tell me about your event, dietary restrictions, etc."
                                 rows={5}
                                 value={form.details}
                                 onChange={updateField("details")}

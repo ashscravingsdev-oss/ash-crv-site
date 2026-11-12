@@ -43,7 +43,7 @@ export function Navigation() {
     { label: "Home", href: "/" },
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
-    { label: "Party Packs", href: "/catering" },
+    { label: "Events", href: "/events" },
     { label: "Custom Cakes", href: "/custom-cakes" },
     { label: "Subscriptions", href: "/subscriptions" },
   ];

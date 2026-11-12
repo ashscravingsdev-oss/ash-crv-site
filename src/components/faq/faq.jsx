@@ -77,7 +77,7 @@ const faqs = [
             },
             {
                 q: "How are meals prepared?",
-                a: "All meals are prepared in our certified commercial kitchen by professional chefs. We follow strict food safety protocols and prepare meals fresh daily for delivery.",
+                a: "I make every meal myself, from scratch, fresh each week before delivery day.",
             },
         ],
     },

@@ -41,7 +41,7 @@ const About = () => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/brand/about-hero.jpg"
-                        alt="Ash's Cravings catering spread"
+                        alt="Ash's Cravings event spread"
                         className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-primary/80" />

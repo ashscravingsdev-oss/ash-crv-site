@@ -10,7 +10,7 @@ const Cravings = () => {
 
     const tiles = [
         { title: "Meal Prep", line: "Eat good all week", href: "/menu", img: mealPhoto, alt: "Meal prep bowl" },
-        { title: "Party Packs", line: "Feed the whole crew", href: "/catering", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table" },
+        { title: "Events", line: "Feed the whole crew", href: "/events", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table" },
         { title: "Cakes", line: "Made to wow", href: "/custom-cakes", img: "/gallery/cakes/cake-06.jpg", alt: "Green vintage-piped cake with red bows" },
         { title: "Desserts", line: "Little sweet things", href: "/menu", img: "/gallery/catering/catering-05.jpg", alt: "Chocolate-covered strawberries and dessert cups" },
     ]

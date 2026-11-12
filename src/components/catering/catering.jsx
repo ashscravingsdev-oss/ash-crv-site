@@ -54,10 +54,10 @@ const Catering = () => {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                         src="/brand/catering-hero.jpg"
-                        alt="Ash's Cravings catering spread"
+                        alt="Ash's Cravings event spread"
                         className="w-full h-full object-cover object-center"
                     />
-                    <div className="absolute inset-0 bg-primary/40" />
+                    <div className="absolute inset-0 bg-brand-espresso/60" />
                 </div>
                 <motion.div
                     whileHover={{ scale: 1.01 }}
@@ -70,7 +70,7 @@ const Catering = () => {
                         transition={{ delay: 0.1 }}
                         className="text-4xl md:text-5xl font-bold mb-4 text-balance"
                     >
-                        Party Packs
+                        Events
                     </motion.h1>
 
                     <motion.p
@@ -79,7 +79,7 @@ const Catering = () => {
                         transition={{ delay: 0.2 }}
                         className="text-lg text-primary-foreground/90 max-w-2xl mx-auto"
                     >
-                        Breakfast burritos, sandwich trays and dessert tables for parties of any size
+                        Breakfast burritos, sandwich trays and dessert tables for parties, showers and office orders of any size
                     </motion.p>
                 </motion.div>
             </motion.section>

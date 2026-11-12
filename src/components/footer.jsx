@@ -25,7 +25,7 @@ export function Footer({ flush = false }) {
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Made fresh, with love. Meal prep, party packs, cakes &amp; desserts
+              Made fresh, with love. Meal prep, events, cakes &amp; desserts
               in Eastvale, CA.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed italic">
@@ -114,10 +114,10 @@ export function Footer({ flush = false }) {
               </li>
               <li>
                 <Link
-                  href="/catering"
+                  href="/events"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Party Packs
+                  Events
                 </Link>
               </li>
               <li>

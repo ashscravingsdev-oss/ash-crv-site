@@ -1,6 +1,6 @@
 export default function SEO({
     title = "Ash's Cravings - Healthy Meal Prep",
-    description = "Made-from-scratch meal prep, custom cakes, desserts and party packs in Eastvale, CA. Made fresh, with love.",
+    description = "Made-from-scratch meal prep, custom cakes, desserts and food for your events in Eastvale, CA. Made fresh, with love.",
     keywords = ["meal prep", "healthy meals", "food delivery", "wellness"],
     image = "/og-default.jpg",
     url,

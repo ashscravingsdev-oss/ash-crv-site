@@ -16,8 +16,8 @@ export default function HomePage() {
     <div className="min-h-screen">
       <SEO
         title="Ash's Cravings | Meal Prep, Custom Cakes & Desserts in Eastvale, CA"
-        description="Made-from-scratch meal prep, custom cakes, dessert cups and party packs in Eastvale, CA. Made fresh, with love."
-        keywords={["meal prep", "custom cakes", "desserts", "party packs", "Eastvale"]}
+        description="Made-from-scratch meal prep, custom cakes, dessert cups and food for your events in Eastvale, CA. Made fresh, with love."
+        keywords={["meal prep", "custom cakes", "desserts", "event catering", "Eastvale"]}
       />
       <AnnouncementBar />
       <Navigation />
