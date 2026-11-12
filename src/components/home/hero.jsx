@@ -25,7 +25,7 @@ const HeroSection = () => {
                         variants={fadeUp}
                         className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl xl:text-[5.5rem] text-brand-heading text-balance"
                     >
-                        What are you <em className="italic text-brand-matcha-dark">craving?</em>
+                        What are you <em className="italic text-brand-tobacco">craving?</em>
                     </motion.h1>
 
                     <motion.p

@@ -143,7 +143,7 @@ const FAQ = () => {
             <div className="text-center mb-12">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3"><span className="text-brand-matcha">■</span> FAQ</p>
                 <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading mb-4">
-                    Questions? <em className="italic text-brand-matcha-dark">I&apos;ve got you</em>
+                    Questions? <em className="italic text-brand-tobacco">I&apos;ve got you</em>
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
                     Everything you might want to know before you order. Can&apos;t find your answer? Just message me.

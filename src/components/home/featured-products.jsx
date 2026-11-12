@@ -26,7 +26,7 @@ export default function FeaturedProducts() {
                 <div className="space-y-2">
                     <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> This week’s menu</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                        Fresh <em className="italic text-brand-matcha-dark">picks</em>
+                        Fresh <em className="italic text-brand-tobacco">picks</em>
                     </h2>
                 </div>
                 <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso bg-brand-matcha-light rounded-full px-4 py-2">

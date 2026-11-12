@@ -8,7 +8,7 @@ const Newsletter = () => {
                 <div className="max-w-2xl mx-auto text-center space-y-4">
                     <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Join the list</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
-                        Get <em className="italic text-brand-matcha-dark">$10 off</em> your first order
+                        Get <em className="italic text-brand-tobacco">$10 off</em> your first order
                     </h2>
                     <p className="text-lg text-foreground/85">
                         The weekly menu, new cake designs and little deals, straight to your inbox.

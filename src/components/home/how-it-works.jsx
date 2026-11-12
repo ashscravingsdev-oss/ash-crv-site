@@ -12,7 +12,7 @@ const HowItWorks = () => {
             <div className="text-center mb-10 md:mb-12 space-y-2">
                 <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> How it works</p>
                 <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                    Fresh meals, <em className="italic text-brand-matcha-dark">no stress</em>
+                    Fresh meals, <em className="italic text-brand-tobacco">no stress</em>
                 </h2>
             </div>
 
