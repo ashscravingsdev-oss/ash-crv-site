@@ -138,7 +138,7 @@ const CustomCakes = () => {
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with blush garden roses and a gold topper" className="col-span-3 row-span-2 w-full h-full object-cover object-[45%_center] rounded-[18px]" />
+                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with blush garden roses and a gold topper" className="col-span-3 row-span-2 w-full h-full object-cover object-center rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/gallery/cakes/cake-01.jpg" alt="White cake with pink and red rosettes" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                         {/* eslint-disable-next-line @next/next/no-img-element */}
