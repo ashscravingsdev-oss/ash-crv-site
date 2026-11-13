@@ -13,9 +13,9 @@ import FactStrip from "@/components/ui/fact-strip"
 import WakingNote from "@/components/ui/waking-note"
 
 const facts = [
-    { value: "1 week", label: "to order ahead" },
+    { value: "December", label: "two pickup days" },
     { value: "Gift box", label: "for every cake" },
-    { value: "50%", label: "holds your date" },
+    { value: "Paid", label: "at checkout" },
 ]
 
 // The two mini cake products in the admin (by slug), in the order they show
@@ -149,8 +149,10 @@ const Christmas = () => {
                             {options.map(({ option, product }) => (
                                 <Option key={option.slug} option={option} product={product} />
                             ))}
-                            <p className="text-sm text-muted-foreground">
-                                At checkout, tell me your design pick (or &quot;surprise me&quot;) in the notes.
+                            <p className="text-sm text-muted-foreground leading-relaxed">
+                                They&apos;ll be ready on two days in December. At checkout, choose the day you&apos;d like
+                                yours and add your design pick (or &quot;surprise me&quot;) in the notes. I&apos;ll text
+                                you to confirm your day.
                             </p>
                         </div>
                     ) : (
