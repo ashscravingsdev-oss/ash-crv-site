@@ -33,8 +33,7 @@ const HeroSection = () => {
                         className="text-lg md:text-xl text-foreground/85 leading-relaxed max-w-xl"
                     >
                         Homemade meal prep delivered every week, plus custom cakes, desserts, events and private chef nights,{" "}
-                        <span className="border-b-2 border-dashed border-brand-tobacco">made fresh, with love</span>{" "}
-                        in Eastvale.
+                        <span className="border-b-2 border-dashed border-brand-tobacco">made fresh, with love</span>.
                     </motion.p>
 
                     <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 pt-2">

@@ -25,8 +25,7 @@ export function Footer({ flush = false }) {
               />
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Made fresh, with love. Meal prep, cakes &amp; desserts, events and private chef dinners
-              in Eastvale, CA.
+              Made fresh, with love. Meal prep, cakes &amp; desserts, events and private chef dinners.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed italic">
               Nothing added. Nothing hidden.
