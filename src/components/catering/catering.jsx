@@ -185,10 +185,18 @@ const Catering = () => {
                             <li key={f.name} className="border-b border-dashed border-border py-5">
                                 <p className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{f.name}</p>
                                 <p className="mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">{f.text}</p>
-                                {f.href && (
+                                {f.href ? (
                                     <Link href={f.href} className="inline-block mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-tobacco underline underline-offset-4">
                                         See desserts →
                                     </Link>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => window.dispatchEvent(new CustomEvent("ash:want", { detail: f.name }))}
+                                        className="inline-block mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-tobacco underline underline-offset-4"
+                                    >
+                                        Get a quote →
+                                    </button>
                                 )}
                             </li>
                         ))}

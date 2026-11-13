@@ -191,7 +191,7 @@ const DessertGrid = () => {
                 <div className="rounded-2xl bg-muted px-5 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <p className="text-sm text-foreground/85">
                         <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading mr-2">In your cart</span>
-                        {lines.map((l) => `${l.quantity} dozen ${l.product?.name}`).join(" · ")}
+                        {lines.map((l) => `${l.quantity}${l.product?.min_quantity > 1 ? " dozen" : " ×"} ${l.product?.name}`).join(" · ")}
                     </p>
                     <Link href="/cart" className="shrink-0 font-mono text-xs uppercase tracking-[0.16em] text-brand-tobacco underline underline-offset-4">
                         Checkout →
