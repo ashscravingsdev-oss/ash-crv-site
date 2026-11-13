@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Minus, Plus, Trash2, ShoppingBag, Loader2, Tag, XCircle } from "lucide-react"
-import { cartIsSpecial, isMenuProduct } from "@/lib/special-orders"
+import { cartHasDeposit, cartIsSpecial, isMenuProduct } from "@/lib/special-orders"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -437,8 +437,8 @@ const Cart = () => {
 
                             {cartIsSpecial(items) && (
                                 <p className="text-sm text-muted-foreground">
-                                    You&apos;ll pick your date at checkout. Today you pay a 50% deposit, and the rest
-                                    is charged on your date.
+                                    You&apos;ll pick your date at checkout.
+                                    {cartHasDeposit(items) && " Today you pay a 50% deposit, and the rest is charged on your date."}
                                 </p>
                             )}
 

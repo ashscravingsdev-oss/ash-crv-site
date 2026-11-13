@@ -25,8 +25,11 @@ const Menu = () => {
     const {
         products: allProducts,
         categories,
-        loading
+        productsLoading,
+        productsLoaded,
     } = useSelector((state) => state.products)
+    // Keep the loading view up until the menu itself arrives (categories can land first)
+    const loading = productsLoading || !productsLoaded
     // Desserts live in their own tab, never in the weekly grid
     const products = allProducts.filter(isMenuProduct)
 

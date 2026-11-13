@@ -31,7 +31,7 @@ const Contact = () => {
                         variants={fadeUp}
                         className="text-lg text-muted-foreground max-w-2xl mx-auto"
                     >
-                        Have a question or feedback? We'd love to hear from you!
+                        Have a question, or want something special? Send me a message and I&apos;ll get back to you.
                     </motion.p>
                 </motion.div>
 

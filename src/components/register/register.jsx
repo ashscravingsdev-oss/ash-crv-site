@@ -206,7 +206,7 @@ const Register = () => {
             <Card className="max-w-md mx-auto">
                 <CardHeader className="text-center">
                     <CardTitle className="text-3xl">Create Account</CardTitle>
-                    <CardDescription>Join Ash's Cravings and start your healthy journey</CardDescription>
+                    <CardDescription>Order faster and keep track of your orders</CardDescription>
                 </CardHeader>
                 <CardContent>
                     {apiError && (

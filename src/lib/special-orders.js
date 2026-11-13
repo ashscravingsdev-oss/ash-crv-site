@@ -17,6 +17,14 @@ export const DESSERT_ORDER = [
     "Chocolate Strawberries",
 ]
 
+// Christmas mini cakes are ready on two days in December. Once Ash picks them,
+// put both dates here ('YYYY-MM-DD') and checkout will offer just those days.
+// Until then, checkout keeps Christmas orders inside the window below.
+export const CHRISTMAS_DAYS = []
+export const CHRISTMAS_WINDOW = { from: "2026-12-01", to: "2026-12-24" }
+export const isChristmasItem = (item) => /^christmas-mini-cake/.test(String(item?.product?.slug || ""))
+export const cartHasChristmas = (items = []) => items.some(isChristmasItem)
+
 export const isSpecialProduct = (p) => p?.order_type === "special_order"
 export const isSpecialItem = (item) => isSpecialProduct(item?.product)
 export const cartIsSpecial = (items = []) => items.length > 0 && items.some(isSpecialItem)

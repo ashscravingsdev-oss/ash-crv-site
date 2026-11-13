@@ -12,6 +12,8 @@
 const BACKEND = (process.env.NEXT_PUBLIC_BACKEND_URL || "").replace(/\/+$/, "")
 const BACKEND_ROOT = BACKEND.replace(/\/api$/, "")
 const RETRY_DELAYS_MS = [2000, 3000, 5000, 5000, 10000, 10000, 15000, 15000, 15000, 15000]
+const SLOW_MS = 3500 // a read slower than this means the kitchen is still waking up
+let pending = 0
 
 // Lets the menu say "waking up the kitchen" while it waits
 let waking = false
@@ -49,23 +51,27 @@ function install() {
         if (!isBackendUrl(input) || (method !== "GET" && method !== "HEAD")) {
             return realFetch(input, init)
         }
-        for (let attempt = 0; ; attempt++) {
-            try {
-                const res = await realFetch(input, init)
-                if (res.status !== 503 || attempt >= RETRY_DELAYS_MS.length) {
-                    setWaking(false)
-                    return res
+        // Sometimes Render just holds the request open while it wakes (up to a
+        // minute) instead of answering 503, so a slow read also counts as waking.
+        pending++
+        const slow = setTimeout(() => setWaking(true), SLOW_MS)
+        try {
+            for (let attempt = 0; ; attempt++) {
+                try {
+                    const res = await realFetch(input, init)
+                    if (res.status !== 503 || attempt >= RETRY_DELAYS_MS.length) return res
+                } catch (err) {
+                    // Render's waking page has no CORS headers, so the browser reports
+                    // it as a network error; an aborted request should stay aborted.
+                    if (err?.name === "AbortError" || attempt >= RETRY_DELAYS_MS.length) throw err
                 }
-            } catch (err) {
-                // Render's waking page has no CORS headers, so the browser reports
-                // it as a network error; an aborted request should stay aborted.
-                if (err?.name === "AbortError" || attempt >= RETRY_DELAYS_MS.length) {
-                    setWaking(false)
-                    throw err
-                }
+                setWaking(true)
+                await sleep(RETRY_DELAYS_MS[attempt])
             }
-            setWaking(true)
-            await sleep(RETRY_DELAYS_MS[attempt])
+        } finally {
+            clearTimeout(slow)
+            pending = Math.max(0, pending - 1)
+            if (pending === 0) setWaking(false)
         }
     }
 

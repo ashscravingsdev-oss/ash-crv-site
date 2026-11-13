@@ -94,7 +94,7 @@ const InquiryForm = () => {
             setStatus("success");
         } catch (err) {
             setErrorMessage(
-                "Something went wrong sending your request. Please try again, or reach us directly at Ashscravings@gmail.com or 951-224-7740."
+                "Something went wrong sending your request. Please try again, or reach me directly at Ashscravings@gmail.com or 951-224-7740."
             );
             setStatus("error");
         }
