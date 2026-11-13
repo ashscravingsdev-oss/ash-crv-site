@@ -41,6 +41,7 @@ export function Navigation() {
 
   const menuItems = [
     { label: "Home", href: "/" },
+    { label: "My Story", href: "/about" },
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
     { label: "Events", href: "/events" },
@@ -128,12 +129,12 @@ export function Navigation() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8 mt-2">
+          <div className="hidden lg:flex items-center gap-6 xl:gap-8 mt-2">
             {menuItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
+                className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
                   }`}
@@ -262,7 +263,7 @@ export function Navigation() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden hover:bg-accent mt-2"
+                  className="lg:hidden hover:bg-accent mt-2"
                 >
                   <Menu className="h-5 w-5 text-foreground" />
                   <span className="sr-only">Menu</span>
