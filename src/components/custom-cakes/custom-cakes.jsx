@@ -74,6 +74,7 @@ const cakePhotos = [...featuredCakes, ...remainingCakes].map((filename, idx) => 
 // Cake flavors, written to make you hungry. Short and sweet.
 const flavors = [
     { name: "Midnight Chocolate", text: "Deep, dark and fudgy, with silky chocolate ganache between every layer." },
+    { name: "Strawberry Velvet", text: "Pretty in pink, soft and bursting with real strawberry. Dreamy with cream cheese or vanilla buttercream." },
     { name: "Strawberries & Cream", text: "Soft vanilla cake, fresh strawberries and clouds of whipped cream." },
     { name: "Cookies & Cream", text: "Vanilla bean cake packed with crushed cookies and cookies-and-cream filling." },
     { name: "Vanilla Bean", text: "Classic, buttery and speckled with real vanilla bean. Never boring." },

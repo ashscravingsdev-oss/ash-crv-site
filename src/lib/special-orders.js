@@ -70,6 +70,8 @@ export const groupDesserts = (products = []) => {
     const groups = new Map()
     for (const p of products) {
         if (!p?.is_active) continue
+        // Only by-the-dozen desserts here; mini cakes and other single items have their own section
+        if (!(parseInt(p.min_quantity, 10) > 1)) continue
         const name = p.category?.name || "Desserts"
         if (!groups.has(name)) groups.set(name, [])
         groups.get(name).push(p)

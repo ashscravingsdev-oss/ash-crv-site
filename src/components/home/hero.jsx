@@ -74,7 +74,7 @@ const HeroSection = () => {
 
                     {/* Seasonal card — remove after the holidays */}
                     <Link
-                        href="/custom-cakes"
+                        href="/christmas"
                         className="absolute left-0 sm:-left-6 bottom-0 w-[250px] flex items-center gap-3 bg-background p-3 shadow-xl [clip-path:polygon(14px_0,calc(100%-14px)_0,100%_14px,100%_calc(100%-14px),calc(100%-14px)_100%,14px_100%,0_calc(100%-14px),0_14px)]"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -86,7 +86,7 @@ const HeroSection = () => {
                         <span className="flex flex-col">
                             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-heading"><span className="text-brand-matcha">■</span> New this season</span>
                             <span className="font-serif text-xl font-semibold leading-tight text-brand-espresso">Christmas Mini Cakes</span>
-                            <span className="text-sm font-medium text-brand-espresso border-b border-dashed border-brand-tobacco self-start">Request yours →</span>
+                            <span className="text-sm font-medium text-brand-espresso border-b border-dashed border-brand-tobacco self-start">Order yours →</span>
                         </span>
                     </Link>
                 </motion.div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -44,6 +44,21 @@ const initialFormState = {
 
 const InquiryForm = () => {
     const [form, setForm] = useState(initialFormState);
+
+    // "Order this" on a crowd favorite drops it into the details box
+    useEffect(() => {
+        const onWant = (e) => {
+            const item = e.detail;
+            setForm((prev) => ({
+                ...prev,
+                details: prev.details.includes(item) ? prev.details : `${item}${prev.details ? "\n" + prev.details : ""}`,
+            }));
+            document.getElementById("request-a-quote")?.scrollIntoView({ behavior: "smooth" });
+            setTimeout(() => document.getElementById("details")?.focus(), 500);
+        };
+        window.addEventListener("ash:want", onWant);
+        return () => window.removeEventListener("ash:want", onWant);
+    }, []);
     const [status, setStatus] = useState("idle"); // idle | sending | success | error
     const [errorMessage, setErrorMessage] = useState("");
 
