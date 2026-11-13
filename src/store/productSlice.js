@@ -76,6 +76,9 @@ const productSlice = createSlice({
     name: 'products',
     initialState: {
         loading: false,
+        // The menu waits on these, not on `loading`, which categories also flip
+        productsLoading: false,
+        productsLoaded: false,
         error: null,
         success: false,
         categories: [],
@@ -96,14 +99,19 @@ const productSlice = createSlice({
         builder
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
+                state.productsLoading = true;
                 state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
                 state.loading = false;
+                state.productsLoading = false;
+                state.productsLoaded = true;
                 state.products = action.payload.products;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
+                state.productsLoading = false;
+                state.productsLoaded = true;
                 state.error = action.payload || action.error.message;
             })
             // Fetch Categories
