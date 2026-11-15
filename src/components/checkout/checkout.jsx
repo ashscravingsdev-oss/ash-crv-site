@@ -13,7 +13,8 @@ import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
 import SpecialCheckout from './special-checkout'
 import { cartIsSpecial } from "@/lib/special-orders"
-import { Loader2, ShoppingBag } from "lucide-react" 
+import { Loader2 } from "lucide-react"
+import EmptyCart from "@/components/cart/empty-cart"
 import { toast } from "sonner"
 import { apiRequest } from "@/lib/apiRequest"
 import { Card, CardContent } from "@/components/ui/card"
@@ -270,18 +271,7 @@ const Checkout = () => {
     }
 
     if (!cartLoading && (!items || items.length === 0)) {
-        return (
-            <div className="container mx-auto px-4 pt-16">
-                <Card className="max-w-md mx-auto text-center p-12">
-                    <ShoppingBag className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-                    <p className="text-muted-foreground mb-6">Add some delicious meals to get started!</p>
-                    <Button asChild>
-                        <Link href="/menu">Browse Menu</Link>
-                    </Button>
-                </Card>
-            </div>
-        )
+        return <EmptyCart />
     }
 
     if (special) {

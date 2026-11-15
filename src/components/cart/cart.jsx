@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Minus, Plus, Trash2, ShoppingBag, Loader2, Tag, XCircle } from "lucide-react"
+import { Minus, Plus, Trash2, Loader2, Tag, XCircle } from "lucide-react"
+import EmptyCart from "./empty-cart"
 import { cartHasDeposit, cartIsSpecial, isMenuProduct } from "@/lib/special-orders"
 import Link from "next/link"
 import { useState, useEffect } from "react"
@@ -176,18 +177,7 @@ const Cart = () => {
     }
 
     if (!items || items.length === 0) {
-        return (
-            <div className="container mx-auto px-4 py-16">
-                <Card className="max-w-md mx-auto text-center p-12">
-                    <ShoppingBag className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">Your cart is empty</h2>
-                    <p className="text-muted-foreground mb-6">Add some delicious meals to get started!</p>
-                    <Button asChild>
-                        <Link href="/menu">Browse Menu</Link>
-                    </Button>
-                </Card>
-            </div>
-        )
+        return <EmptyCart />
     }
 
     return (
