@@ -125,6 +125,30 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
         return null
     }
 
+    // Places the order with a card or wallet token; throws if it fails
+    const placeOrder = async (cardToken) => {
+        const pickup = method === "pickup"
+        const body = {
+            cart_id: cart.id,
+            session_id: isLoggedIn ? undefined : Cookies.get("session_id"),
+            guest: isLoggedIn ? undefined : { name: guest.name.trim(), email: guest.email.trim(), phone: guest.phone.trim() },
+            fulfillment_method: method,
+            address: pickup ? PICKUP_ADDRESS : addressData.address,
+            latitude: pickup ? undefined : addressData.latitude,
+            longitude: pickup ? undefined : addressData.longitude,
+            delivery_date: date,
+            delivery_day: weekdayOf(date),
+            delivery_time_slot: timeSlot,
+            order_notes: notes.trim() || undefined,
+            frequency: "one-time",
+            cardToken,
+            totals: { subtotal, tax: taxTotal, discount: couponDiscount || 0, tipAmount: 0, total },
+        }
+        const result = await apiRequest("/checkout/create-order", { method: "POST", body: JSON.stringify(body) })
+        const key = result.order?.viewKey ? `&key=${encodeURIComponent(result.order.viewKey)}` : ""
+        window.location.href = `/order-confirmation?orderId=${result.order.id}${key}`
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         const problem = missing()
@@ -135,30 +159,31 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
         setSubmitting(true)
         try {
             const card = await square.tokenize()
-            const pickup = method === "pickup"
-            const body = {
-                cart_id: cart.id,
-                session_id: isLoggedIn ? undefined : Cookies.get("session_id"),
-                guest: isLoggedIn ? undefined : { name: guest.name.trim(), email: guest.email.trim(), phone: guest.phone.trim() },
-                fulfillment_method: method,
-                address: pickup ? PICKUP_ADDRESS : addressData.address,
-                latitude: pickup ? undefined : addressData.latitude,
-                longitude: pickup ? undefined : addressData.longitude,
-                delivery_date: date,
-                delivery_day: weekdayOf(date),
-                delivery_time_slot: timeSlot,
-                order_notes: notes.trim() || undefined,
-                frequency: "one-time",
-                cardToken: card.token,
-                totals: { subtotal, tax: taxTotal, discount: couponDiscount || 0, tipAmount: 0, total },
-            }
-            const result = await apiRequest("/checkout/create-order", { method: "POST", body: JSON.stringify(body) })
-            const key = result.order?.viewKey ? `&key=${encodeURIComponent(result.order.viewKey)}` : ""
-            window.location.href = `/order-confirmation?orderId=${result.order.id}${key}`
+            await placeOrder(card.token)
         } catch (err) {
             console.error("Order submission error:", err)
             toast.error(err?.message || "Something went wrong placing your order. Please try again.")
             setSubmitting(false)
+        }
+    }
+
+    // Apple Pay / Google Pay: check the form first (must stay synchronous)
+    const walletCheck = () => {
+        const problem = missing()
+        if (problem) {
+            toast.error(problem)
+            return false
+        }
+        return true
+    }
+
+    const payWithWallet = async ({ token }) => {
+        setSubmitting(true)
+        try {
+            await placeOrder(token)
+        } catch (err) {
+            setSubmitting(false)
+            throw err
         }
     }
 
@@ -326,7 +351,14 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
 
                     {/* 3. Pay */}
                     <div className="space-y-3">
-                        <PaymentMethod onSquareReady={setSquare} onPaymentError={(m) => toast.error(m || "Payment system error")} />
+                        <PaymentMethod
+                            onSquareReady={setSquare}
+                            onPaymentError={(m) => toast.error(m || "Payment system error")}
+                            amount={total}
+                            walletsEnabled={!deposit}
+                            beforeWallet={walletCheck}
+                            onWalletToken={payWithWallet}
+                        />
                         {deposit && (
                             <label className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 text-sm cursor-pointer">
                                 <input type="checkbox" className="mt-1 h-4 w-4 accent-[hsl(var(--primary))]" checked={agree} onChange={(e) => setAgree(e.target.checked)} />

@@ -157,58 +157,70 @@ const Checkout = () => {
             try {
                 // Tokenize card using Square
                 const cardToken = await squarePayment.tokenize();
-
-                // Compute next occurrence of the selected delivery day
-                const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-                const today = new Date();
-                const currentDayIndex = today.getDay();
-                const targetDayIndex = daysOfWeek.indexOf(deliveryDay.toLowerCase());
-                let daysUntil = targetDayIndex - currentDayIndex;
-                if (daysUntil <= 0) daysUntil += 7;
-                const deliveryDateObj = new Date(today);
-                deliveryDateObj.setDate(today.getDate() + daysUntil);
-                const delivery_date = deliveryDateObj.toISOString().split('T')[0];
-
-                const orderData = {
-                    cart_id: cart.id,
-                    address: addressData.address,
-                    latitude: addressData.latitude,
-                    longitude: addressData.longitude,
-                    delivery_day: deliveryDay,
-                    delivery_time_slot: deliveryTime,
-                    delivery_date,
-                    delivery_fee: deliveryFee,
-                    tip: tip,
-                    frequency: frequency,
-                    requires_admin_approval: requiresAdminApproval,
-                    totals: {
-                        subtotal,
-                        discount: couponDiscount || 0,
-                        tax: taxTotal,
-                        tipAmount,
-                        deliveryFee,
-                        rushFee: isRush ? rushFee : 0,
-                        total
-                    },
-                    cardToken: cardToken.token,
-                    couponId: cart?.coupon_id || null,
-                };
-                console.log(orderData)
-
-                const result = await apiRequest('/checkout/create-order', {
-                    method: 'POST',
-                    body: JSON.stringify(orderData),
-                });
-
-                toast.success("Order placed successfully!");
-                window.location.href = `/order-confirmation?orderId=${result.order.id}`;
-
+                await placeOrder(cardToken.token);
             } catch (error) {
                 console.error("Order submission error:", error);
                 toast.error("Failed to place order. Please try again.");
             } finally {
                 setIsSubmitting(false);
             }
+        }
+    }
+
+    // Places the order with a card or wallet (Apple Pay / Google Pay) token; throws if it fails
+    const placeOrder = async (token) => {
+            // Compute next occurrence of the selected delivery day
+            const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+            const today = new Date();
+            const currentDayIndex = today.getDay();
+            const targetDayIndex = daysOfWeek.indexOf(deliveryDay.toLowerCase());
+            let daysUntil = targetDayIndex - currentDayIndex;
+            if (daysUntil <= 0) daysUntil += 7;
+            const deliveryDateObj = new Date(today);
+            deliveryDateObj.setDate(today.getDate() + daysUntil);
+            const delivery_date = deliveryDateObj.toISOString().split('T')[0];
+
+            const orderData = {
+                cart_id: cart.id,
+                address: addressData.address,
+                latitude: addressData.latitude,
+                longitude: addressData.longitude,
+                delivery_day: deliveryDay,
+                delivery_time_slot: deliveryTime,
+                delivery_date,
+                delivery_fee: deliveryFee,
+                tip: tip,
+                frequency: frequency,
+                requires_admin_approval: requiresAdminApproval,
+                totals: {
+                    subtotal,
+                    discount: couponDiscount || 0,
+                    tax: taxTotal,
+                    tipAmount,
+                    deliveryFee,
+                    rushFee: isRush ? rushFee : 0,
+                    total
+                },
+                cardToken: token,
+                couponId: cart?.coupon_id || null,
+            };
+
+            const result = await apiRequest('/checkout/create-order', {
+                method: 'POST',
+                body: JSON.stringify(orderData),
+            });
+
+            toast.success("Order placed successfully!");
+            window.location.href = `/order-confirmation?orderId=${result.order.id}`;
+    }
+
+    const payWithWallet = async ({ token }) => {
+        setIsSubmitting(true);
+        try {
+            await placeOrder(token);
+        } catch (error) {
+            setIsSubmitting(false);
+            throw error;
         }
     }
 
@@ -334,6 +346,10 @@ const Checkout = () => {
                                 onSquareReady={handleSquareReady}
                                 onPaymentError={handlePaymentError}
                                 requiresAdminApproval={requiresAdminApproval}
+                                amount={total}
+                                walletsEnabled={frequency === 'one-time' && !requiresAdminApproval}
+                                beforeWallet={() => !isSubmitting}
+                                onWalletToken={payWithWallet}
                             />
                         )}
 
