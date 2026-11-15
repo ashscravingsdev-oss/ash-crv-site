@@ -13,7 +13,7 @@ export default function SEO({
     noindex = false,
     nofollow = false,
 }) {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ashscravings.com";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ashscravings.com";
     const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
     const fullImageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
 
