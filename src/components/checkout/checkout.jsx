@@ -139,6 +139,19 @@ const Checkout = () => {
         }
     }, [step, addressData, coupon]);
 
+    // Ash cooks a set number of meals a week: check what's left for the chosen week
+    const [mealsLeft, setMealsLeft] = useState(null) // { left, full } | null
+    useEffect(() => {
+        if (!deliveryDay) return setMealsLeft(null)
+        let alive = true
+        apiRequest(`/delivery/meals-left?date=${nextDeliveryDate(deliveryDay)}`)
+            .then((r) => alive && setMealsLeft(r))
+            .catch(() => alive && setMealsLeft(null))
+        return () => {
+            alive = false
+        }
+    }, [deliveryDay])
+
     const handleAddressSelect = (locationData) => {
         setAddressData(locationData)
     }
@@ -161,7 +174,7 @@ const Checkout = () => {
                 await placeOrder(cardToken.token);
             } catch (error) {
                 console.error("Order submission error:", error);
-                toast.error("Failed to place order. Please try again.");
+                toast.error(error?.message || "Failed to place order. Please try again.");
             } finally {
                 setIsSubmitting(false);
             }
@@ -170,16 +183,7 @@ const Checkout = () => {
 
     // Places the order with a card or wallet (Apple Pay / Google Pay) token; throws if it fails
     const placeOrder = async (token) => {
-            // Compute next occurrence of the selected delivery day
-            const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-            const today = new Date();
-            const currentDayIndex = today.getDay();
-            const targetDayIndex = daysOfWeek.indexOf(deliveryDay.toLowerCase());
-            let daysUntil = targetDayIndex - currentDayIndex;
-            if (daysUntil <= 0) daysUntil += 7;
-            const deliveryDateObj = new Date(today);
-            deliveryDateObj.setDate(today.getDate() + daysUntil);
-            const delivery_date = deliveryDateObj.toISOString().split('T')[0];
+            const delivery_date = nextDeliveryDate(deliveryDay);
 
             const orderData = {
                 cart_id: cart.id,
@@ -230,7 +234,7 @@ const Checkout = () => {
             case 1:
                 return addressData.address.trim() !== '';
             case 2:
-                return deliveryDay && deliveryTime;
+                return deliveryDay && deliveryTime && !mealsLeft?.full;
             case 3:
                 return squarePayment !== null;
             default:
@@ -343,6 +347,19 @@ const Checkout = () => {
                             />
                         )}
 
+                        {step >= 2 && mealsLeft && (mealsLeft.full || mealsLeft.left <= 10) && (
+                            <p
+                                role="status"
+                                className={`mt-6 rounded-lg border px-4 py-3 text-sm ${
+                                    mealsLeft.full ? "border-red-200 bg-red-50 text-red-700" : "border-amber-200 bg-amber-50 text-amber-800"
+                                }`}
+                            >
+                                {mealsLeft.full
+                                    ? "I'm fully booked for that week! Message me and I'll see what I can do."
+                                    : `Heads up: I only have ${mealsLeft.left} meal${mealsLeft.left === 1 ? "" : "s"} left for that week.`}
+                            </p>
+                        )}
+
                         <div className="flex gap-4 mt-6">
                             {step > 1 && (
                                 <Button
@@ -382,6 +399,18 @@ const Checkout = () => {
             </div>
         </div>
     )
+}
+
+
+// The next date (YYYY-MM-DD) that falls on the chosen delivery weekday
+function nextDeliveryDate(deliveryDay) {
+    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    const today = new Date();
+    let daysUntil = daysOfWeek.indexOf(String(deliveryDay).toLowerCase()) - today.getDay();
+    if (daysUntil <= 0) daysUntil += 7;
+    const d = new Date(today);
+    d.setDate(today.getDate() + daysUntil);
+    return d.toISOString().split("T")[0];
 }
 
 export default Checkout

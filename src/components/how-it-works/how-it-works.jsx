@@ -8,7 +8,7 @@ const steps = [
     { n: "01", title: "Pick your meals", text: "Choose from this week's menu, or build a bundle and mix and match your favorites." },
     { n: "02", title: "Order by Sunday", text: "Check out by Sunday and pick Monday or Tuesday delivery, or pick up." },
     { n: "03", title: "I cook it fresh", text: "Everything is made from scratch with real, fresh ingredients." },
-    { n: "04", title: "Heat and enjoy", text: "About 2 minutes in the microwave, or the air fryer if you're like me. Best within 3 to 4 days." },
+    { n: "04", title: "Heat and enjoy", text: "Vent the lid and microwave 2 to 2½ minutes, stirring halfway. Best within 4 days." },
 ]
 
 const details = [

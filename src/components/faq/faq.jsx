@@ -34,7 +34,7 @@ const faqs = [
             },
             {
                 q: "How do I reheat my meals?",
-                a: "The microwave works perfect, about 2 minutes. My favorite way is in my mini oven or the air fryer.",
+                a: "Vent the lid by lifting one corner, then microwave for 2 to 2½ minutes, stirring halfway through. Enjoy within 4 days, and keep it in the fridge until then.\n\nA few dishes need a little extra care:\n• Salmon: heat at 50% power so it stays tender.\n• Burritos: take off the foil first.\n• Sauce cups, tzatziki and salad: take them out before heating.\n\nMy favorite way? The air fryer or my mini oven!",
             },
             {
                 q: "Can I make swaps or work around allergies?",
@@ -173,7 +173,7 @@ const FAQ = () => {
                                     <AccordionTrigger className="text-left hover:no-underline">
                                         <span className="font-semibold">{faq.q}</span>
                                     </AccordionTrigger>
-                                    <AccordionContent className="text-muted-foreground leading-relaxed">
+                                    <AccordionContent className="text-muted-foreground leading-relaxed whitespace-pre-line">
                                         {faq.a}
                                     </AccordionContent>
                                 </AccordionItem>

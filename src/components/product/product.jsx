@@ -13,6 +13,7 @@ import { isMenuProduct } from "@/lib/special-orders"
 import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
+import ReheatCard from './reheat-card'
 import SEO from '../seo'
 import { fetchProductBySlug, fetchProducts } from '@/store/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
@@ -435,6 +436,9 @@ const Product = ({ slug }) => {
                         </div>
                     </div>
                 </div>
+
+                {/* How to reheat (meals only) */}
+                <ReheatCard product={product} />
 
                 {/* Ingredients & Allergens */}
                 <ProductNutrition product={product} />

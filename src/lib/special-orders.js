@@ -17,10 +17,14 @@ export const DESSERT_ORDER = [
     "Chocolate Strawberries",
 ]
 
-// Christmas mini cakes are ready on two days in December. Once Ash picks them,
-// put both dates here ('YYYY-MM-DD') and checkout will offer just those days.
-// Until then, checkout keeps Christmas orders inside the window below.
-export const CHRISTMAS_DAYS = []
+// Christmas mini cakes are ready on two days in December. Each day stops taking
+// orders at the end of its "closes" day (Pacific time). Checkout offers only the
+// days still open; once both close, the Christmas page says orders are closed.
+// The order server checks the same days (utils/special-orders.js in the backend).
+export const CHRISTMAS_DAYS = [
+    { date: "2026-12-19", closes: "2026-12-12" },
+    { date: "2026-12-23", closes: "2026-12-16" },
+]
 export const CHRISTMAS_WINDOW = { from: "2026-12-01", to: "2026-12-24" }
 export const isChristmasItem = (item) => /^christmas-mini-cake/.test(String(item?.product?.slug || ""))
 export const cartHasChristmas = (items = []) => items.some(isChristmasItem)
@@ -42,6 +46,18 @@ export const dateFromToday = (days = 0) => {
     d.setUTCDate(d.getUTCDate() + days)
     return d.toISOString().split("T")[0]
 }
+
+// Christmas days still taking orders today
+export const christmasOpenDays = () => {
+    const today = dateFromToday(0)
+    return CHRISTMAS_DAYS.filter((d) => today <= d.closes)
+}
+
+// "Dec 12"
+export const shortDate = (dateStr) =>
+    new Date(`${String(dateStr).slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", {
+        month: "short", day: "numeric", timeZone: "UTC",
+    })
 
 export const weekdayOf = (dateStr) =>
     new Date(`${dateStr}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" }).toLowerCase()

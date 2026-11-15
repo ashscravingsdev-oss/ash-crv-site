@@ -8,12 +8,12 @@ import { motion } from "framer-motion"
 import { Loader2, Minus, Plus, Check } from "lucide-react"
 import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
-import { money } from "@/lib/special-orders"
+import { CHRISTMAS_DAYS, christmasOpenDays, money, shortDate } from "@/lib/special-orders"
 import FactStrip from "@/components/ui/fact-strip"
 import WakingNote from "@/components/ui/waking-note"
 
 const facts = [
-    { value: "December", label: "two pickup days" },
+    { value: "2 days", label: "Dec 19 & Dec 23" },
     { value: "Gift box", label: "for every cake" },
     { value: "Paid", label: "at checkout" },
 ]
@@ -100,8 +100,15 @@ const Option = ({ option, product }) => {
     )
 }
 
+const weekday = (d) =>
+    new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" })
+
 const Christmas = () => {
     const [products, setProducts] = useState(null)
+    // Worked out in the browser, so the page never shows a day that has closed
+    const [openDays, setOpenDays] = useState(CHRISTMAS_DAYS)
+    useEffect(() => setOpenDays(christmasOpenDays()), [])
+    const closed = openDays.length === 0
 
     useEffect(() => {
         let alive = true
@@ -144,15 +151,37 @@ const Christmas = () => {
                             <Loader2 className="h-6 w-6 animate-spin text-primary" />
                             <WakingNote className="text-left" />
                         </div>
+                    ) : closed ? (
+                        <div className="rounded-2xl border border-dashed border-border bg-card p-6 space-y-2">
+                            <p className="font-serif text-2xl text-brand-espresso">Christmas orders are closed</p>
+                            <p className="text-muted-foreground">
+                                Thank you for all the love this season! Craving something sweet?{" "}
+                                <Link href="/custom-cakes" className="underline font-medium text-brand-tobacco">
+                                    See my cakes &amp; desserts
+                                </Link>
+                                .
+                            </p>
+                        </div>
                     ) : options.length ? (
                         <div className="space-y-3 pt-2">
+                            <ul className="rounded-2xl border border-border bg-card divide-y divide-border">
+                                {openDays.map((d) => (
+                                    <li key={d.date} className="flex items-baseline justify-between gap-3 px-5 py-3">
+                                        <span className="font-serif text-xl text-brand-espresso">
+                                            {weekday(d.date)}, {shortDate(d.date)}
+                                        </span>
+                                        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
+                                            Order by {shortDate(d.closes)}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
                             {options.map(({ option, product }) => (
                                 <Option key={option.slug} option={option} product={product} />
                             ))}
                             <p className="text-sm text-muted-foreground leading-relaxed">
-                                They&apos;ll be ready on two days in December. At checkout, choose the day you&apos;d like
-                                yours and add your design pick (or &quot;surprise me&quot;) in the notes. I&apos;ll text
-                                you to confirm your day.
+                                Choose your day at checkout and add your design pick (or &quot;surprise me&quot;) in the
+                                notes.
                             </p>
                         </div>
                     ) : (

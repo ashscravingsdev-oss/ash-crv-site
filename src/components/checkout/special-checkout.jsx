@@ -14,8 +14,9 @@ import { apiRequest } from "@/lib/apiRequest"
 import MapPicker from "./map-picker"
 import PaymentMethod from "./payment-method"
 import {
-    CHRISTMAS_DAYS,
-    CHRISTMAS_WINDOW,
+    christmasOpenDays,
+    isChristmasItem,
+    shortDate,
     DEPOSIT_RATE,
     FREE_DELIVERY_MILES,
     cartHasChristmas,
@@ -60,14 +61,17 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const mapRef = useRef(null)
     const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN
 
-    const lead = Math.max(1, leadDaysFor(items))
-    const earliest = dateFromToday(lead)
-
-    // Christmas mini cakes only go out on Ash's December days
+    // Christmas mini cakes only go out on Ash's December days, each with its own
+    // order-by date; anything else in the cart still needs its usual notice
     const christmas = cartHasChristmas(items)
-    const christmasDays = christmas ? CHRISTMAS_DAYS.filter((d) => d >= earliest) : []
-    const minDate = christmas && CHRISTMAS_WINDOW.from > earliest ? CHRISTMAS_WINDOW.from : earliest
-    const maxDate = christmas ? CHRISTMAS_WINDOW.to : undefined
+    const others = items.filter((i) => !isChristmasItem(i))
+    const lead = Math.max(1, leadDaysFor(christmas ? others : items))
+    const earliest = dateFromToday(lead)
+    const openDays = christmas ? christmasOpenDays() : []
+    const christmasDays = openDays.filter((d) => !others.length || d.date >= earliest)
+    const christmasClosed = christmas && christmasDays.length === 0
+    const minDate = earliest
+    const maxDate = undefined
 
     const [guest, setGuest] = useState({ name: "", email: "", phone: "" })
     const [method, setMethod] = useState("delivery")
@@ -112,10 +116,15 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
             if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(guest.email.trim())) return "Please add a valid email"
             if (guest.phone.replace(/\D/g, "").length < 10) return "Please add your phone number"
         }
+        if (christmasClosed) {
+            return openDays.length
+                ? "Some items in your cart need more notice than my Christmas days allow. Please order them separately."
+                : "Christmas mini cake orders are closed. Thank you so much!"
+        }
         if (!date) return "Please pick your date"
-        if (christmasDays.length && !christmasDays.includes(date)) return "Please pick one of my Christmas pickup days"
-        if (date < minDate) return `Please pick ${prettyDate(minDate)} or later`
-        if (maxDate && date > maxDate) return `Please pick a day by ${prettyDate(maxDate)}`
+        if (christmas) {
+            if (!christmasDays.some((d) => d.date === date)) return "Please pick one of my Christmas days"
+        } else if (date < minDate) return `Please pick ${prettyDate(minDate)} or later`
         if (method === "delivery") {
             if (!addressData.address || !addressData.latitude) return "Please choose your delivery address on the map"
             if (distance && !distance.deliverable) return `That address is outside my free delivery area. Please choose pickup.`
@@ -242,32 +251,43 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="s-date">Date</Label>
-                                    {christmasDays.length ? (
-                                        <div className="flex flex-col gap-2">
-                                            {christmasDays.map((d) => (
-                                                <button
-                                                    key={d}
-                                                    type="button"
-                                                    onClick={() => setDate(d)}
-                                                    aria-pressed={date === d}
-                                                    className={`rounded-lg border px-3 py-2 text-sm text-left ${
-                                                        date === d ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-brand-tobacco"
-                                                    }`}
-                                                >
-                                                    {prettyDate(d)}
-                                                </button>
-                                            ))}
-                                        </div>
+                                    {christmas ? (
+                                        christmasClosed ? (
+                                            <p className="rounded-lg border border-dashed border-border px-3 py-3 text-sm text-muted-foreground">
+                                                {openDays.length
+                                                    ? "Some items in your cart need more notice than my Christmas days allow. Please order them separately."
+                                                    : "Christmas mini cake orders are closed. Thank you so much!"}
+                                            </p>
+                                        ) : (
+                                            <div className="flex flex-col gap-2" role="group" aria-label="Christmas days">
+                                                {christmasDays.map((d) => (
+                                                    <button
+                                                        key={d.date}
+                                                        type="button"
+                                                        onClick={() => setDate(d.date)}
+                                                        aria-pressed={date === d.date}
+                                                        className={`rounded-lg border px-3 py-2.5 text-left ${
+                                                            date === d.date ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-brand-tobacco"
+                                                        }`}
+                                                    >
+                                                        <span className="block text-sm font-medium">{prettyDate(d.date)}</span>
+                                                        <span className={`block text-xs ${date === d.date ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                                                            Orders close {shortDate(d.closes)}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )
                                     ) : (
                                         <Input id="s-date" type="date" min={minDate} max={maxDate} value={date} onChange={(e) => setDate(e.target.value)} required />
                                     )}
-                                    <p className="text-xs text-muted-foreground">
-                                        {christmas
-                                            ? christmasDays.length
-                                                ? "Christmas cakes are ready on these two days. Pick the one you'd like."
-                                                : "Christmas cakes are ready on two days in December. Pick the day you'd like and I'll text you to confirm."
-                                            : <>{lead} days&apos; notice, so {prettyDate(earliest)} or later. Need it sooner? Message me!</>}
-                                    </p>
+                                    {!christmasClosed && (
+                                        <p className="text-xs text-muted-foreground">
+                                            {christmas
+                                                ? "My Christmas mini cakes are ready on these days. Pick the one you'd like."
+                                                : <>{lead} days&apos; notice, so {prettyDate(earliest)} or later. Need it sooner? Message me!</>}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Time</Label>
