@@ -49,10 +49,10 @@ export function Navigation() {
     { label: "Subscriptions", href: "/subscriptions" },
   ];
 
-  // In Navigation component - simplified
+  // Load the cart once, and again when someone signs in or out
   useEffect(() => {
-    dispatch(fetchCart()); // No need to pass params
-  }, [dispatch, isAuthenticated]); // Just depend on auth state
+    dispatch(fetchCart());
+  }, [dispatch, isAuthenticated]);
 
   // In Navigation component
   const handleLogout = async () => {
@@ -83,21 +83,6 @@ export function Navigation() {
       console.error('Logout error:', error);
     }
   };
-
-  // In Navigation component
-  useEffect(() => {
-    // Always fetch cart when auth state changes
-    const loadCart = async () => {
-      await dispatch(fetchCart());
-    };
-
-    loadCart();
-  }, [dispatch, isAuthenticated]); // Depend on isAuthenticated
-
-  // Also watch for changes in cart items to update UI
-  useEffect(() => {
-    console.log('Cart updated:', items);
-  }, [items]);
 
   const getUserInitials = () => {
     if (!user) return "U";
