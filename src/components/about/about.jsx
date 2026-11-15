@@ -3,6 +3,7 @@ import React from 'react'
 import Link from "next/link";
 import { motion } from "framer-motion"
 import { fadeUp } from "@/lib/animations"
+import { Cashy } from "@/components/ui/cashy"
 
 const values = [
     {
@@ -122,6 +123,15 @@ const About = () => {
                             When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I
                             love so much, and our toy poodle, Cash, my baby boy.
                         </p>
+                        <figure className="flex items-center gap-4 pt-2">
+                            <Cashy className="w-20 shrink-0" title="Cashy the toy poodle" />
+                            <figcaption className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-espresso leading-relaxed">
+                                This is Cashy ♡<br />
+                                <span className="normal-case tracking-normal font-sans text-sm text-muted-foreground">
+                                    He was in my very first logo, too.
+                                </span>
+                            </figcaption>
+                        </figure>
                     </motion.div>
                 </div>
             </section>

@@ -7,7 +7,8 @@ import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
+import { Cashy, Sparkles } from "@/components/ui/cashy";
 import Link from "next/link";
 import SEO from "@/components/seo";
 import Cookies from "js-cookie";
@@ -154,10 +155,15 @@ function OrderConfirmationContent() {
       <div className="container mx-auto px-4 py-16">
         <Card className="max-w-2xl mx-auto text-center">
           <CardContent className="p-12">
-            <CheckCircle2 className="h-20 w-20 text-primary mx-auto mb-6" />
-            <h1 className="text-4xl font-bold mb-4">Order Confirmed!</h1>
+            <div className="relative mx-auto mb-6 w-36">
+              <Sparkles className="absolute -top-3 left-1/2 w-44 -translate-x-1/2" />
+              <Cashy className="relative w-28 mx-auto" title="Cashy the toy poodle" />
+            </div>
+            <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading mb-4">
+              Thank you!
+            </h1>
             <p className="text-lg text-muted-foreground mb-6">
-              Thank you for your order. We've sent a confirmation email to your inbox.
+              Your order is in, and Cashy and I are so excited. I&apos;ve sent a confirmation email to your inbox.
             </p>
 
             <div className="bg-muted rounded-lg p-6 mb-8">
