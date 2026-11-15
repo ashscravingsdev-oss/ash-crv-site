@@ -122,6 +122,23 @@ const About = () => {
                             When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I
                             love so much, and our toy poodle, Cash, my baby boy.
                         </p>
+                        <figure className="flex items-center gap-5 pt-3">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src="/brand/first-logo.jpg"
+                                alt="Ash's first logo: a round cream badge with cooking doodles and Cashy the poodle"
+                                loading="lazy"
+                                className="w-32 h-32 md:w-36 md:h-36 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
+                            />
+                            <figcaption className="space-y-1">
+                                <span className="block font-mono text-[11px] uppercase tracking-[0.14em] text-brand-espresso">
+                                    My very first logo ♡
+                                </span>
+                                <span className="block text-sm text-muted-foreground leading-relaxed">
+                                    My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
+                                </span>
+                            </figcaption>
+                        </figure>
                     </motion.div>
                 </div>
             </section>
