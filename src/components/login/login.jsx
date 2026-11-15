@@ -8,6 +8,7 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import Link from "next/link";
@@ -193,9 +194,8 @@ export default function LoginPage() {
                         {/* Password field with React Hook Form validation */}
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input
+                            <PasswordInput
                                 id="password"
-                                type="password"
                                 placeholder="Enter your password"
                                 {...register("password", {
                                     onChange: () => {
