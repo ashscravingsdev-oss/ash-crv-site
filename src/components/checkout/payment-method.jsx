@@ -7,12 +7,48 @@ import { Lock, Loader2, AlertCircle, Info } from "lucide-react"
 
 const SQUARE_SCRIPT_TIMEOUT = 15000;
 
-const PaymentMethod = ({ onSquareReady, onPaymentError, requiresAdminApproval = false, }) => {
+// The SDK must match the app ID: sandbox IDs only work with the sandbox SDK,
+// production IDs only with the production one. Deriving it means switching
+// Square to live only needs the new app + location IDs.
+const sdkUrlFor = (appId) =>
+    String(appId).startsWith("sandbox-")
+        ? "https://sandbox.web.squarecdn.com/v1/square.js"
+        : "https://web.squarecdn.com/v1/square.js";
+
+const money = (n) => (Math.round(Number(n || 0) * 100) / 100).toFixed(2);
+
+/**
+ * Square card form, plus Apple Pay / Google Pay buttons when `walletsEnabled`.
+ * Wallets are only for orders charged in full right now: a wallet payment
+ * can't be saved to charge again later (deposits, subscriptions, approvals).
+ *
+ * `beforeWallet()` runs first, synchronously (Apple Pay must open straight
+ * from the tap); return false to stop, e.g. when the form isn't filled in.
+ * `onWalletToken({ token })` then places the order with the wallet's token.
+ */
+const PaymentMethod = ({
+    onSquareReady,
+    onPaymentError,
+    requiresAdminApproval = false,
+    amount = 0,
+    walletsEnabled = false,
+    beforeWallet,
+    onWalletToken,
+}) => {
     const [squareLoading, setSquareLoading] = useState(true);
     const [squareError, setSquareError] = useState(null);
     const cardContainerRef = useRef(null);
     const cardRef = useRef(null);
     const [isMounted, setIsMounted] = useState(false);
+    const paymentsRef = useRef(null);
+    const paymentRequestRef = useRef(null);
+    const googlePayRef = useRef(null);
+    const applePayRef = useRef(null);
+    const googlePayContainerRef = useRef(null);
+    const walletsStartedRef = useRef(false);
+    const [googlePayReady, setGooglePayReady] = useState(false);
+    const [applePayReady, setApplePayReady] = useState(false);
+    const [walletBusy, setWalletBusy] = useState(false);
 
     // 1. Wait for the component to mount first
     useEffect(() => {
@@ -42,7 +78,7 @@ const PaymentMethod = ({ onSquareReady, onPaymentError, requiresAdminApproval = 
 
                 // 2. Load Square SDK safely (Check if already available globally)
                 if (!window.Square) {
-                    const sdkUrl = process.env.NEXT_PUBLIC_SQUARE_SDK_URL || 'https://sandbox.web.squarecdn.com/v1/square.js';
+                    const sdkUrl = sdkUrlFor(appId);
 
                     // Check if an existing script tag is already trying to load it
                     let existingScript = document.querySelector(`script[src="${sdkUrl}"]`);
@@ -84,6 +120,7 @@ const PaymentMethod = ({ onSquareReady, onPaymentError, requiresAdminApproval = 
                 if (!active) return;
 
                 const payments = window.Square.payments(appId, locationId);
+                paymentsRef.current = payments;
                 const card = await payments.card();
                 cardRef.current = card;
 
@@ -133,18 +170,94 @@ const PaymentMethod = ({ onSquareReady, onPaymentError, requiresAdminApproval = 
             clearTimeout(timeoutId);
 
             // Clean up the card element instance 
-            if (cardRef.current) {
-                try {
-                    cardRef.current.destroy();
-                    cardRef.current = null;
-                } catch (e) {
-                    console.warn("Error destroying card instance:", e);
+            for (const ref of [cardRef, googlePayRef, applePayRef]) {
+                if (ref.current) {
+                    try {
+                        ref.current.destroy();
+                    } catch (e) {
+                        console.warn("Error destroying Square payment method:", e);
+                    }
+                    ref.current = null;
                 }
             }
             // Note: We deliberately do not remove the script element here anymore. 
             // Keeping it in the head once loaded prevents duplicate script appending issues across re-renders.
         };
     }, [isMounted]);
+
+    // Apple Pay / Google Pay: set up once the card form is ready and wallets are allowed
+    useEffect(() => {
+        if (squareLoading || squareError || !walletsEnabled || walletsStartedRef.current) return;
+        const payments = paymentsRef.current;
+        if (!payments) return;
+        walletsStartedRef.current = true;
+
+        const paymentRequest = payments.paymentRequest({
+            countryCode: "US",
+            currencyCode: "USD",
+            total: { amount: money(amount), label: "Ash's Cravings" },
+        });
+        paymentRequestRef.current = paymentRequest;
+
+        ;(async () => {
+            try {
+                const googlePay = await payments.googlePay(paymentRequest);
+                if (googlePayContainerRef.current) {
+                    await googlePay.attach(googlePayContainerRef.current, { buttonColor: "black", buttonSizeMode: "fill", buttonType: "short" });
+                    googlePayRef.current = googlePay;
+                    setGooglePayReady(true);
+                }
+            } catch (e) {
+                console.info("Google Pay isn't available here:", e?.message || e);
+            }
+            try {
+                // Only works in Safari on Apple devices, once the domain is verified with Square
+                const applePay = await payments.applePay(paymentRequest);
+                applePayRef.current = applePay;
+                setApplePayReady(true);
+            } catch (e) {
+                console.info("Apple Pay isn't available here:", e?.message || e);
+            }
+        })();
+    }, [squareLoading, squareError, walletsEnabled, amount]);
+
+    // Keep the wallet sheet's total in step with the order total
+    useEffect(() => {
+        if (paymentRequestRef.current && amount > 0) {
+            try {
+                paymentRequestRef.current.update({ total: { amount: money(amount), label: "Ash's Cravings" } });
+            } catch (e) {
+                console.warn("Couldn't update wallet total:", e);
+            }
+        }
+    }, [amount]);
+
+    const payWithWallet = (methodRef) => {
+        const method = methodRef.current;
+        if (!method || walletBusy) return;
+        if (beforeWallet && beforeWallet() === false) return;
+        // Call tokenize right away: Apple Pay only opens straight from the tap
+        const pending = method.tokenize();
+        setWalletBusy(true);
+        ;(async () => {
+            try {
+                const result = await pending;
+                if (result.status === "OK") {
+                    if (onWalletToken) await onWalletToken({ token: result.token });
+                } else if (result.status !== "Cancel") {
+                    throw new Error(result.errors?.[0]?.message || result.errors?.[0]?.detail || "That payment didn't go through. Please try again or use a card.");
+                }
+            } catch (e) {
+                console.error("Wallet payment error:", e);
+                if (onPaymentError) onPaymentError(e?.message);
+            } finally {
+                setWalletBusy(false);
+            }
+        })();
+    };
+
+    const showWallets = walletsEnabled && (googlePayReady || applePayReady);
+
     // ✅ Always render the container — just show/hide content
     return (
         <Card>
@@ -179,6 +292,37 @@ const PaymentMethod = ({ onSquareReady, onPaymentError, requiresAdminApproval = 
                         </AlertDescription>
                     </Alert>
                 )}
+
+                {/* Apple Pay / Google Pay. The Google Pay box stays in the DOM so Square can attach to it */}
+                <div className={showWallets ? "space-y-3" : "hidden"}>
+                    <div className="flex flex-col gap-3">
+                        {applePayReady && (
+                            <button
+                                type="button"
+                                aria-label="Pay with Apple Pay"
+                                onClick={() => payWithWallet(applePayRef)}
+                                disabled={walletBusy}
+                                className="apple-pay-button"
+                            />
+                        )}
+                        {/* Square draws Google's own button in here; its clicks bubble up to this box */}
+                        <div
+                            ref={googlePayContainerRef}
+                            onClick={() => payWithWallet(googlePayRef)}
+                            className={googlePayReady ? "h-12 w-full cursor-pointer" : "hidden"}
+                        />
+                    </div>
+                    {walletBusy && (
+                        <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                            <Loader2 className="h-4 w-4 animate-spin" /> Placing your order...
+                        </p>
+                    )}
+                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                        <span className="h-px flex-1 bg-border" />
+                        or pay with card
+                        <span className="h-px flex-1 bg-border" />
+                    </div>
+                </div>
 
                 {/* Square Card Container — ALWAYS in DOM */}
                 <div
