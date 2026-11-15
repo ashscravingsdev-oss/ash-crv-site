@@ -5,9 +5,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import SEO from "@/components/seo";
 import Cookies from "js-cookie";
@@ -47,45 +45,28 @@ function OrderConfirmationContent() {
     fetchOrder();
   }, [orderId, viewKey]);
 
-  // Get payment info
-  const payment =
-    order?.payments?.find((p) => p.status === "succeeded") || order?.payments?.[0];
-  const cardBrand = payment?.payment_method || "Card";
-  const lastFour =
-    payment?.card_last_four ||
-    payment?.stripe_payment_intent_id?.slice(-4) ||
-    "----";
+  const money = (n) => `$${Number(n || 0).toFixed(2)}`;
 
-  // Format delivery day nicely
-  const formatDeliveryDay = (day, timeSlot) => {
+  // "Saturday, December 12" for cakes and desserts, "Sunday" for weekly meal prep
+  const formatDay = () => {
     if (order?.order_type === "special_order" && order?.delivery_date) {
-      const d = new Date(`${String(order.delivery_date).slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", {
+      return new Date(`${String(order.delivery_date).slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric", timeZone: "UTC",
       });
-      return `${d}, ${timeSlot || ""}`;
     }
-    if (!day) return "Scheduled";
-    const formattedDay = day.charAt(0).toUpperCase() + day.slice(1);
-    return `${formattedDay}, ${timeSlot || ""}`;
+    const day = order?.delivery_day;
+    return day ? day.charAt(0).toUpperCase() + day.slice(1) : "Scheduled";
   };
 
   // ── Loading State ──
   if (loading) {
     return (
       <div className="min-h-screen">
-        <SEO
-          title="Order Confirmation - Ash's Cravings"
-          description="Confirming your order..."
-        />
+        <SEO title="Order Confirmation - Ash's Cravings" description="Confirming your order..." />
         <Navigation />
-        <div className="container mx-auto px-4 py-16">
-          <Card className="max-w-2xl mx-auto text-center">
-            <CardContent className="p-12">
-              <Loader2 className="h-16 w-16 text-primary mx-auto mb-4 animate-spin" />
-              <h1 className="text-2xl font-bold mb-2">Loading your order...</h1>
-              <p className="text-muted-foreground">Please wait while we fetch your order details</p>
-            </CardContent>
-          </Card>
+        <div className="container mx-auto px-4 py-24 text-center">
+          <Loader2 className="h-8 w-8 text-brand-tobacco mx-auto mb-4 animate-spin" />
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">Loading your order…</p>
         </div>
         <Footer />
       </div>
@@ -96,140 +77,173 @@ function OrderConfirmationContent() {
   if (error || !order) {
     return (
       <div className="min-h-screen">
-        <SEO
-          title="Order Confirmation - Ash's Cravings"
-          description="Order confirmation"
-        />
+        <SEO title="Order Confirmation - Ash's Cravings" description="Order confirmation" />
         <Navigation />
-        <div className="container mx-auto px-4 py-16">
-          <Card className="max-w-2xl mx-auto text-center">
-            <CardContent className="p-12">
-              <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-              <h1 className="text-2xl font-bold mb-2">Something went wrong</h1>
-              <p className="text-muted-foreground mb-6">
-                {error || "Order not found"}
-              </p>
-              <div className="space-y-3">
-                <Button size="lg" className="w-full" asChild>
-                  <Link href="/menu">Continue Shopping</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <section className="container mx-auto px-4 py-16 md:py-24 text-center max-w-xl space-y-4">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
+            <span className="text-brand-matcha">■</span> Your order
+          </p>
+          <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+            Hmm, I couldn&apos;t <em className="italic text-brand-tobacco">find it</em>
+          </h1>
+          <p className="text-lg text-foreground/80">
+            If you just paid, your receipt is in your email. Questions? Message me and I&apos;ll sort it out.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+            <Link href="/contact" className={primaryBtn}>Message me <span aria-hidden="true">→</span></Link>
+            <Link href="/menu" className={outlineBtn}>See the menu</Link>
+          </div>
+        </section>
         <Footer />
       </div>
     );
   }
 
-  const {
-    order_number,
-    statistics,
-    delivery_day,
-    delivery_time_slot,
-    total_amount,
-  } = order;
+  const { order_number, statistics, delivery_time_slot } = order;
+  const pickup = order.fulfillment_method === "pickup";
+  const firstName = String(order.user?.username || "").trim().split(/\s+/)[0];
+  const email = order.user?.email;
+  const total = Number(order.total_amount || statistics?.total_amount || 0);
+  const subtotal = Number(order.subtotal || 0);
+  const tax = Number(order.tax_total || 0);
+  const deliveryFee = Number(order.delivery_fee || 0);
+  const rushFee = Number(order.rush_fee || 0);
+  // Whatever's left between the lines and the total is a coupon (or a tip)
+  const gap = Math.round((total - subtotal - tax - deliveryFee - rushFee) * 100) / 100;
+  const deposit = order.payment_plan === "deposit";
+  const items = Array.isArray(order.items) ? order.items : [];
+
+  const steps = [
+    { title: "Check your email", text: email ? `Your receipt is on its way to ${email}.` : "Your receipt is on its way to your inbox." },
+    { title: "I'll text you", text: pickup ? "With the pickup address, and if I have any questions." : "If I have any questions about your order." },
+    { title: pickup ? "Pickup day" : "Delivery day", text: [formatDay(), delivery_time_slot].filter(Boolean).join(" · ") },
+  ];
 
   return (
     <div className="min-h-screen">
       <SEO
-        title={`Order Confirmed #${order_number || orderId} - Ash's Cravings | Your Meal Delivery is Confirmed`}
-        description={`Thank you for your Ash's Cravings order! Your order #${order_number || orderId} has been confirmed. Delivery scheduled for ${formatDeliveryDay(delivery_day, delivery_time_slot)}. View order details and next steps.`}
-        keywords={[
-          "order confirmation Ash's Cravings",
-          "thank you for your order",
-          "meal delivery confirmed",
-          `order #${order_number || orderId}`,
-          "delivery confirmation",
-          "order status confirmed",
-          "meal prep order receipt",
-        ]}
+        title={`Order Confirmed #${order_number || orderId} - Ash's Cravings`}
+        description={`Thank you for your Ash's Cravings order #${order_number || orderId}.`}
         url="/order-confirmation"
         type="website"
-        publishedTime={new Date().toISOString()}
-        modifiedTime={new Date().toISOString()}
       />
       <Navigation />
 
-      <div className="container mx-auto px-4 py-16">
-        <Card className="max-w-2xl mx-auto text-center">
-          <CardContent className="p-12">
-            <CheckCircle2 className="h-20 w-20 text-primary mx-auto mb-6" />
-            <h1 className="text-4xl font-bold mb-4">Order Confirmed!</h1>
-            <p className="text-lg text-muted-foreground mb-6">
-              Thank you for your order. We've sent a confirmation email to your inbox.
-            </p>
-
-            <div className="bg-muted rounded-lg p-6 mb-8">
-              <div className="grid md:grid-cols-2 gap-6 text-left">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Order Number</p>
-                  <p className="font-semibold">#{order_number || orderId}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">
-                    {order.fulfillment_method === "pickup" ? "Pickup" : "Delivery"}
-                  </p>
-                  <p className="font-semibold">
-                    {formatDeliveryDay(delivery_day, delivery_time_slot)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Order Total</p>
-                  <p className="font-semibold">
-                    ${Number(total_amount || statistics?.total_amount || 0).toFixed(2)}
-                  </p>
-                </div>
-                {order.payment_plan === "deposit" && (
-                  <div className="md:col-span-2 rounded-md bg-background p-4 text-sm space-y-1">
-                    <div className="flex justify-between">
-                      <span>Paid today (50% deposit)</span>
-                      <span className="font-semibold">${Number(order.deposit_amount || 0).toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-muted-foreground">
-                      <span>{order.balance_status === "paid" ? "Balance (paid)" : "Charged on your date"}</span>
-                      <span>${Number(order.balance_due || 0).toFixed(2)}</span>
-                    </div>
-                  </div>
-                )}
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Payment Method</p>
-                  <p className="font-semibold capitalize">
-                    {cardBrand} •••• {lastFour}
-                  </p>
-                </div>
-                {order.delivery_address && order.fulfillment_method !== "pickup" && (
-                  <div className="md:col-span-2">
-                    <p className="text-sm text-muted-foreground mb-1">Delivery Address</p>
-                    <p className="font-semibold">{order.delivery_address.address}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
+      <section className="container mx-auto px-4 pt-10 pb-4 md:pt-16">
+        <div className="max-w-5xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-start">
+          {/* Thank you + what happens next */}
+          <div className="space-y-6">
             <div className="space-y-3">
-              {isLoggedIn ? (
-                <Button size="lg" className="w-full" asChild>
-                  <Link href={`/account/orders`}>View Order Details</Link>
-                </Button>
-              ) : (
-                <p className="text-sm text-muted-foreground pb-2">
-                  Want to see your orders anytime? <Link href="/forgot-password" className="underline">Set a password</Link> for{" "}
-                  {order.user?.email || "your email"} and you&apos;re all set.
-                </p>
-              )}
-              <Button size="lg" variant="outline" className="w-full bg-transparent" asChild>
-                <Link href="/menu">See this week&apos;s menu</Link>
-              </Button>
-              <Button size="lg" variant="ghost" className="w-full" asChild>
-                <Link href="/custom-cakes">Cakes &amp; desserts</Link>
-              </Button>
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
+                <span className="text-brand-matcha">■</span> Order #{order_number || orderId}
+              </p>
+              <h1 className="font-serif font-medium text-5xl md:text-6xl leading-[1.02] text-brand-heading">
+                Thank you{firstName ? <>, <em className="italic text-brand-tobacco">{firstName}</em></> : null}!
+              </h1>
+              <p className="text-lg text-foreground/80 leading-relaxed">
+                Your order is in, and I can&apos;t wait to make it for you.
+              </p>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+
+            <ol className="border-t border-border">
+              {steps.map((s, i) => (
+                <li key={s.title} className="flex gap-5 py-4 border-b border-border">
+                  <span className="font-mono text-xs tracking-[0.14em] text-brand-tobacco pt-1">0{i + 1}</span>
+                  <div>
+                    <p className="font-serif text-2xl font-semibold leading-tight text-brand-espresso">{s.title}</p>
+                    <p className="text-muted-foreground mt-0.5">{s.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <div className="hidden lg:flex gap-3 pt-2">
+              <Link href="/menu" className={primaryBtn}>Back to the menu <span aria-hidden="true">→</span></Link>
+              {isLoggedIn && <Link href="/account/orders" className={outlineBtn}>My orders</Link>}
+            </div>
+          </div>
+
+          {/* Receipt */}
+          <div className="rounded-[18px] bg-muted p-6 md:p-8">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Your order</p>
+            {items.length > 0 && (
+              <ul className="space-y-2.5 pb-4 border-b border-dashed border-brand-tobacco/30">
+                {items.map((it) => (
+                  <li key={it.id} className="flex justify-between gap-4">
+                    <span>
+                      {it.product?.name || it.bundle?.name || "Item"}
+                      <span className="text-muted-foreground"> × {it.quantity}</span>
+                    </span>
+                    <span className="tabular-nums">{money(Number(it.unit_price || 0) * Number(it.quantity || 1))}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <dl className="space-y-1.5 py-4 text-sm border-b border-dashed border-brand-tobacco/30">
+              {subtotal > 0 && <Row label="Subtotal" value={money(subtotal)} />}
+              {tax > 0 && <Row label="Tax" value={money(tax)} />}
+              {!pickup && <Row label="Delivery" value={deliveryFee > 0 ? money(deliveryFee) : "Free"} />}
+              {rushFee > 0 && <Row label="Rush fee" value={money(rushFee)} />}
+              {gap < 0 && <Row label="Discount" value={`−${money(-gap)}`} />}
+              {gap > 0 && <Row label="Tip" value={money(gap)} />}
+            </dl>
+            <div className="flex justify-between items-baseline pt-4">
+              <span className="font-serif text-2xl font-semibold text-brand-espresso">Total</span>
+              <span className="font-serif text-2xl font-semibold text-brand-espresso tabular-nums">{money(total)}</span>
+            </div>
+            {deposit ? (
+              <dl className="mt-3 space-y-1.5 text-sm">
+                <Row label="Paid today (50% deposit)" value={money(order.deposit_amount)} strong />
+                <Row
+                  label={order.balance_status === "paid" ? "Balance (paid)" : "Rest charged on your date"}
+                  value={money(order.balance_due)}
+                />
+              </dl>
+            ) : (
+              <p className="mt-2 text-sm text-muted-foreground">Paid in full</p>
+            )}
+
+            <div className="mt-6 pt-5 border-t border-border/70 space-y-1 text-sm">
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
+                {pickup ? "Pickup in Eastvale" : "Delivering to"}
+              </p>
+              <p className="text-foreground/85">
+                {pickup ? "I'll text you the address." : String(order.delivery_address?.address || "Your address").replace(/, United States$/, "")}
+              </p>
+            </div>
+          </div>
+
+          {/* Buttons sit under the receipt on phones */}
+          <div className="flex flex-col gap-3 lg:hidden">
+            <Link href="/menu" className={primaryBtn}>Back to the menu <span aria-hidden="true">→</span></Link>
+            {isLoggedIn && <Link href="/account/orders" className={outlineBtn}>My orders</Link>}
+          </div>
+        </div>
+
+        {!isLoggedIn && (
+          <p className="max-w-5xl mx-auto text-sm text-muted-foreground mt-10 text-center lg:text-left">
+            Want to see your orders anytime?{" "}
+            <Link href="/forgot-password" className="underline underline-offset-4 hover:text-foreground">Set a password</Link>{" "}
+            for {email || "your email"} and you&apos;re all set.
+          </p>
+        )}
+      </section>
 
       <Footer />
+    </div>
+  );
+}
+
+const primaryBtn =
+  "inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors";
+const outlineBtn =
+  "inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors";
+
+function Row({ label, value, strong = false }) {
+  return (
+    <div className="flex justify-between gap-4">
+      <dt className={strong ? "text-foreground" : "text-muted-foreground"}>{label}</dt>
+      <dd className={`tabular-nums ${strong ? "font-semibold" : ""}`}>{value}</dd>
     </div>
   );
 }
@@ -242,19 +256,11 @@ export default function OrderConfirmationPage() {
     <Suspense
       fallback={
         <div className="min-h-screen">
-          <SEO
-            title="Order Confirmation - Ash's Cravings"
-            description="Confirming your order..."
-          />
+          <SEO title="Order Confirmation - Ash's Cravings" description="Confirming your order..." />
           <Navigation />
-          <div className="container mx-auto px-4 py-16">
-            <Card className="max-w-2xl mx-auto text-center">
-              <CardContent className="p-12">
-                <Loader2 className="h-16 w-16 text-primary mx-auto mb-4 animate-spin" />
-                <h1 className="text-2xl font-bold mb-2">Loading your order...</h1>
-                <p className="text-muted-foreground">Please wait while we fetch your order details</p>
-              </CardContent>
-            </Card>
+          <div className="container mx-auto px-4 py-24 text-center">
+            <Loader2 className="h-8 w-8 text-brand-tobacco mx-auto mb-4 animate-spin" />
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">Loading your order…</p>
           </div>
           <Footer />
         </div>
