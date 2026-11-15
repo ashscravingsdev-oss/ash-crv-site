@@ -199,6 +199,18 @@ const PaymentMethod = ({
         });
         paymentRequestRef.current = paymentRequest;
 
+        // Each wallet sets itself up on its own, so a slow Google Pay
+        // (common on iPhones and iPads) can never keep Apple Pay from showing
+        ;(async () => {
+            try {
+                // Apple devices only (Safari, or any iPhone/iPad browser on iOS 16+)
+                const applePay = await payments.applePay(paymentRequest);
+                applePayRef.current = applePay;
+                setApplePayReady(true);
+            } catch (e) {
+                console.info("Apple Pay isn't available here:", e?.message || e);
+            }
+        })();
         ;(async () => {
             try {
                 const googlePay = await payments.googlePay(paymentRequest);
@@ -209,14 +221,6 @@ const PaymentMethod = ({
                 }
             } catch (e) {
                 console.info("Google Pay isn't available here:", e?.message || e);
-            }
-            try {
-                // Only works in Safari on Apple devices, once the domain is verified with Square
-                const applePay = await payments.applePay(paymentRequest);
-                applePayRef.current = applePay;
-                setApplePayReady(true);
-            } catch (e) {
-                console.info("Apple Pay isn't available here:", e?.message || e);
             }
         })();
     }, [squareLoading, squareError, walletsEnabled, amount]);

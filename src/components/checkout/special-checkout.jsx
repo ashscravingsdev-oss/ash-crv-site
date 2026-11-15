@@ -72,7 +72,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const [guest, setGuest] = useState({ name: "", email: "", phone: "" })
     const [method, setMethod] = useState("delivery")
     const [addressData, setAddressData] = useState({ address: "", latitude: null, longitude: null })
-    const [distance, setDistance] = useState(null) // { miles, deliverable } | null
+    const [distance, setDistance] = useState(null) // { deliverable } | null (no miles, on purpose)
     const [checking, setChecking] = useState(false)
     const [date, setDate] = useState("")
     const [timeSlot, setTimeSlot] = useState(TIME_WINDOWS[1].value)
@@ -118,7 +118,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
         if (maxDate && date > maxDate) return `Please pick a day by ${prettyDate(maxDate)}`
         if (method === "delivery") {
             if (!addressData.address || !addressData.latitude) return "Please choose your delivery address on the map"
-            if (distance && !distance.deliverable) return `Free delivery is within ${FREE_DELIVERY_MILES} miles. Please choose pickup.`
+            if (distance && !distance.deliverable) return `That address is outside my free delivery area. Please choose pickup.`
         }
         if (!square) return "The card form is still loading"
         if (deposit && !agree) return "Please check the box about your remaining balance"
@@ -321,16 +321,16 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                         mapHeight={320}
                                         placeholder="Search for your address..."
                                     />
-                                    {checking && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Checking distance…</p>}
+                                    {checking && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Checking your address…</p>}
                                     {!checking && distance && distance.deliverable && (
                                         <p className="text-sm text-green-700 flex items-center gap-2">
-                                            <CheckCircle2 className="h-4 w-4" /> About {distance.miles} miles away. Delivery is free!
+                                            <CheckCircle2 className="h-4 w-4 shrink-0" /> You&apos;re in my delivery area. Delivery is free!
                                         </p>
                                     )}
                                     {!checking && distance && !distance.deliverable && (
                                         <p className="text-sm text-destructive flex items-center gap-2">
-                                            <AlertTriangle className="h-4 w-4" /> That&apos;s about {Math.round(distance.miles)} miles away. Free delivery is
-                                            within {FREE_DELIVERY_MILES} miles, so please choose pickup or message me.
+                                            <AlertTriangle className="h-4 w-4 shrink-0" /> That&apos;s outside my free delivery area ({FREE_DELIVERY_MILES} miles around
+                                            Eastvale), so please choose pickup or message me.
                                         </p>
                                     )}
                                 </div>
