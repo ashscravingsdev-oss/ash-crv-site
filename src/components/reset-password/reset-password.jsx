@@ -10,6 +10,7 @@ import {
     CardDescription,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/ui/password-input"
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -221,9 +222,8 @@ function ResetPasswordContent() {
                         {/* New Password */}
                         <div className="space-y-2">
                             <Label htmlFor="password">New Password</Label>
-                            <Input
+                            <PasswordInput
                                 id="password"
-                                type="password"
                                 placeholder="Enter new password"
                                 {...register("password", {
                                     onChange: () => handleInputChange("password"),
@@ -242,9 +242,8 @@ function ResetPasswordContent() {
                         {/* Confirm Password */}
                         <div className="space-y-2">
                             <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                            <Input
+                            <PasswordInput
                                 id="confirmPassword"
-                                type="password"
                                 placeholder="Confirm new password"
                                 {...register("confirmPassword", {
                                     onChange: () => handleInputChange("confirmPassword"),
