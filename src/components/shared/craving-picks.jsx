@@ -11,7 +11,7 @@ const picks = () => [
         : { title: "Events", line: "Feed the whole crew", href: "/events", img: "/gallery/catering/catering-16.jpg", alt: "Party platters on a styled table" },
 ]
 
-/** Three photo links to the main parts of the site (empty cart, page not found) */
+/** Three photo links to the main parts of the site (shown in the empty cart) */
 export default function CravingPicks({ className = "" }) {
     return (
         <ul className={`grid gap-3 sm:grid-cols-3 sm:gap-5 ${className}`}>
