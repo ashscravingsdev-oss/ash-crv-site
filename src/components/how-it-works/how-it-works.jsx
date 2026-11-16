@@ -6,16 +6,16 @@ import { fadeUp } from "@/lib/animations"
 
 const steps = [
     { n: "01", title: "Pick your meals", text: "Choose from this week's menu, or build a bundle and mix and match your favorites." },
-    { n: "02", title: "Order by Sunday", text: "Check out by Sunday and pick Monday or Tuesday delivery, or pick up." },
+    { n: "02", title: "Order by Sunday", text: "Check out by Sunday for Tuesday delivery or pickup." },
     { n: "03", title: "I cook it fresh", text: "Everything is made from scratch with real, fresh ingredients." },
     { n: "04", title: "Heat and enjoy", text: "Vent the lid and microwave 2 to 2½ minutes, stirring halfway. Best within 4 days." },
 ]
 
 const details = [
-    { label: "Delivery days", value: "Monday & Tuesday" },
+    { label: "Delivery day", value: "Tuesday" },
     { label: "Order by", value: "Sunday" },
     { label: "Delivery fee", value: "Based on your address, shown at checkout" },
-    { label: "Pickup", value: "Available, just message me" },
+    { label: "Pickup", value: "Free, choose it at checkout" },
 ]
 
 const prices = [
@@ -37,7 +37,7 @@ const HowItWorks = () => {
                         Fresh meals, <em className="italic text-brand-tobacco">no stress</em>
                     </h1>
                     <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                        Homemade meal prep, made from scratch and delivered every Monday and Tuesday in Eastvale.
+                        Homemade meal prep, made from scratch and ready every Tuesday in Eastvale.
                     </p>
                 </motion.div>
             </section>
@@ -68,7 +68,7 @@ const HowItWorks = () => {
                         <div className="bg-background rounded-2xl p-6 md:p-8 flex flex-col">
                             <h3 className="font-serif text-3xl font-semibold text-brand-espresso">Order this week</h3>
                             <p className="text-foreground/85 leading-relaxed mt-3 flex-1">
-                                Grab single meals and juices from the menu, or build a bundle of 5 or 10 meals. Perfect if
+                                Grab single meals from the menu, or build a bundle of 5 or 10 meals. Perfect if
                                 you want to try things out or just need a good week.
                             </p>
                             <div className="flex flex-wrap gap-3 pt-6">
@@ -129,7 +129,7 @@ const HowItWorks = () => {
                             ))}
                         </dl>
                         <p className="text-sm text-muted-foreground mt-4">
-                            Juice and ginger shot bundles are on the <Link href="/bundles" className="underline">Bundles</Link> page.
+                            Ginger shot bundles are on the <Link href="/bundles" className="underline">Bundles</Link> page.
                         </p>
                     </div>
                 </div>

@@ -143,8 +143,8 @@ const Menu = () => {
                 variants={fadeUp}
                 className="mb-8"
             >
-                <h1 className="text-4xl font-bold mb-2">Our Menu</h1>
-                <p className="text-lg text-muted-foreground">Fresh meals and juices, made from scratch and delivered every Monday &amp; Tuesday</p>
+                <h1 className="text-4xl font-bold mb-2">The Menu</h1>
+                <p className="text-lg text-muted-foreground">Fresh meals, made from scratch. Delivery or pickup every Tuesday</p>
             </motion.div>
 
             {/* Search and Sort */}

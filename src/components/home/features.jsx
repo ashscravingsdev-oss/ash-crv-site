@@ -36,7 +36,7 @@ const Features = () => {
                         {
                             icon: <Truck className="h-6 w-6 text-primary" />,
                             title: "Fresh to Your Door",
-                            description: "Deliveries Mondays & Tuesdays, cooked and packed the same day so it reaches you as fresh as it left my kitchen."
+                            description: "Delivery and pickup on Tuesdays, cooked and packed the same day so it reaches you as fresh as it left my kitchen."
                         }
                     ].map((feature, index) => (
                         <motion.div key={index} variants={fadeUp}>
