@@ -3,7 +3,7 @@ import React from 'react'
 const steps = [
     { number: "01", title: "Pick your meals", description: "Mix and match from this week’s menu. Order by Sunday." },
     { number: "02", title: "I cook it fresh", description: "Everything is made from scratch, with love." },
-    { number: "03", title: "Delivered fresh", description: "Every Monday and Tuesday, or pick up. Just heat and enjoy." },
+    { number: "03", title: "Delivered fresh", description: "Delivery or pickup every Tuesday. Just heat and enjoy." },
 ]
 
 const HowItWorks = () => {

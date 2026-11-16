@@ -11,7 +11,7 @@ import { DEPOSIT_RATE, FREE_DELIVERY_MILES, money } from "@/lib/special-orders"
 import WakingNote from "@/components/ui/waking-note"
 
 const explore = [
-    { href: "/menu", eyebrow: "Every week", title: "Meal prep", text: "Homemade meals and juices, delivered Monday and Tuesday." },
+    { href: "/menu", eyebrow: "Every week", title: "Meal prep", text: "Homemade meals, with delivery or pickup every Tuesday." },
     { href: "/menu?tab=desserts", eyebrow: "By the dozen", title: "Desserts", text: "Cookies, cupcakes, cheesecakes, strawberries and more." },
     { href: "/subscriptions", eyebrow: "Set it and forget it", title: "Subscriptions", text: "Your favorites every week or every 2 weeks." },
     { href: "/about", eyebrow: "Hi, I'm Ash!", title: "My story", text: "Why I cook everything from scratch." },
@@ -171,7 +171,7 @@ const CustomItem = ({ token }) => {
                                         <>
                                             <div className="flex justify-between gap-6 py-3">
                                                 <dt className="text-muted-foreground">Delivery</dt>
-                                                <dd>Monday or Tuesday, or pick up</dd>
+                                                <dd>Tuesday, delivery or pickup</dd>
                                             </div>
                                             {item.allow_subscription && (
                                                 <div className="flex justify-between gap-6 py-3">
