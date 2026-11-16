@@ -19,6 +19,9 @@ const DESSERTS = "Desserts"
 // Ash's tab order (by category name); anything new she adds goes after these
 const TAB_ORDER = ["Meals", "Juices", DESSERTS, "Wellness Shots"]
 const TAB_LABELS = { Meals: "Meal Prep" }
+// Juices are paused for the winter. While none are on the menu, a small note says
+// they're coming back; it goes away on its own once Ash turns them back on (or Feb 1).
+const JUICE_NOTE_UNTIL = new Date("2027-02-01T08:00:00Z")
 
 const Menu = () => {
     const dispatch = useDispatch()
@@ -145,6 +148,11 @@ const Menu = () => {
             >
                 <h1 className="text-4xl font-bold mb-2">The Menu</h1>
                 <p className="text-lg text-muted-foreground">Fresh meals, made from scratch. Delivery or pickup every Tuesday</p>
+                {!loading && !tabNames.includes("Juices") && new Date() < JUICE_NOTE_UNTIL && (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                        My juices are taking a winter break. They&apos;ll be back in the new year!
+                    </p>
+                )}
             </motion.div>
 
             {/* Search and Sort */}

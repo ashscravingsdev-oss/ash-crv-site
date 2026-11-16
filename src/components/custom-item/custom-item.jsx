@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Loader2, Check } from "lucide-react"
 import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
-import { DEPOSIT_RATE, FREE_DELIVERY_MILES, money } from "@/lib/special-orders"
+import { DEPOSIT_RATE, money } from "@/lib/special-orders"
 import WakingNote from "@/components/ui/waking-note"
 
 const explore = [
@@ -183,7 +183,7 @@ const CustomItem = ({ token }) => {
                                     ) : (
                                     <div className="flex justify-between gap-6 py-3">
                                         <dt className="text-muted-foreground">Delivery</dt>
-                                        <dd>Free within {FREE_DELIVERY_MILES} miles, or pick up</dd>
+                                        <dd>To your door, or free pickup</dd>
                                     </div>
                                     )}
                                     {!mealPlan && item.lead_time_days > 0 && (
