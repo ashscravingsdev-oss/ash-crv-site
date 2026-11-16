@@ -8,16 +8,13 @@ export default function MenuPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Our Menu - Ash's Cravings | Healthy Meal Prep & Wellness Juices"
-        description="Browse our chef-prepared healthy meals, meal prep bowls, and cold-pressed juices. Customize your order with fresh ingredients and get delivery in 30 minutes."
+        title="Menu - Ash's Cravings | Fresh Meal Prep in Eastvale, CA"
+        description="See this week's menu from Ash's Cravings: homemade meal prep, made from scratch in Eastvale, CA. Order by Sunday for delivery or pickup on Tuesday."
         keywords={[
           "meal prep delivery",
           "healthy food menu",
-          "fresh juices",
           "chef-prepared meals",
-          "nutritionist-approved",
           "meal prep bowls",
-          "cold-pressed juices",
           "weekly meal delivery",
           "healthy lunch delivery",
           "fresh meal prep"

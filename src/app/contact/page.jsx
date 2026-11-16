@@ -9,8 +9,8 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Contact Ash's Cravings - Customer Support & Meal Delivery Inquiries"
-        description="Get in touch with Ash's Cravings for meal delivery questions, event orders, or customer support. We're here to help with your healthy eating journey."
+        title="Contact - Ash's Cravings | Meal Prep, Cakes & Events in Eastvale, CA"
+        description="Message Ash's Cravings about meal prep, custom cakes, desserts, or events in Eastvale, CA. I'd love to hear from you."
         keywords={[
           "contact Ash's Cravings",
           "customer service meal delivery",
@@ -20,7 +20,7 @@ export default function ContactPage() {
           "Ash's Cravings phone number",
           "meal delivery customer service",
           "food subscription support",
-          "catering inquiries",
+          "event food inquiries",
           "contact us meal prep",
           "Ash's Cravings email",
           "meal delivery questions"
