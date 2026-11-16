@@ -26,7 +26,7 @@ const SubscriptionPicker = () => {
     return (
         <Layout
             title="Pick Your Meals"
-            description="Choose what fills your build-your-own bundles each cycle, or let us repeat your last order."
+            description="Choose what fills your build-your-own bundles each cycle, or let me repeat your last order."
         >
             <div className="lg:col-span-3 space-y-6">
                 {loading ? (

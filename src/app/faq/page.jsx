@@ -8,7 +8,7 @@ export default function FAQPage() {
     <div className="min-h-screen">
       <SEO
         title="Ash's Cravings FAQ - Meal Prep Subscription Questions Answered"
-        description="Find answers to common questions about our meal prep subscriptions, delivery, pricing, cancellation, and more. Everything you need to know about Ash's Cravings."
+        description="Answers to common questions about Ash's Cravings: meal prep delivery and pickup, subscriptions, reheating, custom cakes, and desserts."
         keywords={[
           "meal prep FAQ",
           "Ash's Cravings frequently asked questions",
