@@ -12,6 +12,7 @@ import PaymentMethod from './payment-method'
 import OrderSummary from './order-summary'
 import CheckoutProgress from './checkout-progress'
 import SpecialCheckout from './special-checkout'
+import { PICKUP_ADDRESS } from './fulfillment-choice'
 import { cartIsSpecial } from "@/lib/special-orders"
 import { Loader2 } from "lucide-react"
 import EmptyCart from "@/components/cart/empty-cart"
@@ -33,7 +34,11 @@ const Checkout = () => {
     const currentUser = userCookie ? JSON.parse(userCookie) : null
     const isLoggedIn = !!currentUser
 
-    // ----- Address state -----
+    // ----- Delivery or pickup -----
+    const [method, setMethod] = useState("delivery")
+    const pickup = method === "pickup"
+
+    // ----- Address state (delivery only; a pickup never uses it) -----
     const [addressData, setAddressData] = useState({
         address: '',
         latitude: null,
@@ -42,6 +47,8 @@ const Checkout = () => {
 
     // ----- Step 2 & 3 state -----
     const [deliveryDay, setDeliveryDay] = useState("")
+    // The date that goes with the chosen day ('YYYY-MM-DD'), worked out in the schedule step
+    const [deliveryDate, setDeliveryDate] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
     const [frequency, setFrequency] = useState("one-time");
     // Start with whatever they chose on the Bundles page
@@ -72,8 +79,14 @@ const Checkout = () => {
     }, [cart?.items, frequency])
     const isFreeDeliveryCoupon = coupon?.type === 'free_delivery';
 
+    // Pickup is always free: no delivery fee, no rush fee, never "needs approval".
+    // Everything below uses these, so nothing from a delivery can leak into a pickup.
+    const fee = pickup ? 0 : deliveryFee
+    const rush = !pickup && isRush ? rushFee : 0
+    const needsApproval = !pickup && requiresAdminApproval
+
     const tipAmount = Number.parseFloat(tip) || 0
-    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (deliveryFee || 0) + (isRush ? rushFee : 0);
+    const total = subtotal + taxTotal - (couponDiscount || 0) + tipAmount + (fee || 0) + rush;
 
     useEffect(() => {
         dispatch(fetchCart())
@@ -120,7 +133,7 @@ const Checkout = () => {
                 );
                 return true;
             } else {
-                toast.error("Delivery not available for this location. Please choose a closer address.");
+                toast.error("I don't deliver to that address yet. Please choose pickup, or message me.");
                 setDeliveryFee(null);
                 return false;
             }
@@ -134,34 +147,58 @@ const Checkout = () => {
     };
 
     useEffect(() => {
-        if (step === 2 && addressData.latitude && addressData.longitude) {
+        if (step === 2 && !pickup && addressData.latitude && addressData.longitude) {
             calculateDeliveryFee();
         }
-    }, [step, addressData, coupon]);
+    }, [step, addressData, coupon, pickup]);
 
     // Ash cooks a set number of meals a week: check what's left for the chosen week
     const [mealsLeft, setMealsLeft] = useState(null) // { left, full } | null
     useEffect(() => {
-        if (!deliveryDay) return setMealsLeft(null)
+        if (!deliveryDate) return setMealsLeft(null)
         let alive = true
-        apiRequest(`/delivery/meals-left?date=${nextDeliveryDate(deliveryDay)}`)
+        apiRequest(`/delivery/meals-left?date=${deliveryDate}`)
             .then((r) => alive && setMealsLeft(r))
             .catch(() => alive && setMealsLeft(null))
         return () => {
             alive = false
         }
-    }, [deliveryDay])
+    }, [deliveryDate])
+
+    // The order server refuses an order whose day or delivery fee no longer matches
+    // what this page shows (the weekly cutoff passed while the page sat open, or a
+    // fee changed). Say why, and go back to the step that shows the fresh value.
+    const showOrderError = (error) => {
+        toast.error(error?.message || "Failed to place order. Please try again.")
+        if (error?.code === "DELIVERY_DATE_CHANGED") setStep(2)
+        if (error?.code === "DELIVERY_FEE_CHANGED") setStep(1)
+    }
 
     const handleAddressSelect = (locationData) => {
         setAddressData(locationData)
+    }
+
+    // Switching between delivery and pickup starts the fees fresh: a delivery fee,
+    // rush choice or approval only ever belongs to the delivery it was worked out for
+    const handleMethodChange = (next) => {
+        if (next === method) return
+        setMethod(next)
+        setDeliveryFee(null)
+        setRushFee(0)
+        setIsRush(false)
+        setRequiresAdminApproval(false)
+        setFreeDeliveryThreshold(null)
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (step === 1) {
-            const feeCalculated = await calculateDeliveryFee();
-            if (!feeCalculated) return;
+            // Pickup has no address and no fee to look up
+            if (!pickup) {
+                const feeCalculated = await calculateDeliveryFee();
+                if (!feeCalculated) return;
+            }
             setStep(step + 1);
         } else if (step < 3) {
             setStep(step + 1);
@@ -174,7 +211,7 @@ const Checkout = () => {
                 await placeOrder(cardToken.token);
             } catch (error) {
                 console.error("Order submission error:", error);
-                toast.error(error?.message || "Failed to place order. Please try again.");
+                showOrderError(error);
             } finally {
                 setIsSubmitting(false);
             }
@@ -183,27 +220,29 @@ const Checkout = () => {
 
     // Places the order with a card or wallet (Apple Pay / Google Pay) token; throws if it fails
     const placeOrder = async (token) => {
-            const delivery_date = nextDeliveryDate(deliveryDay);
+            const delivery_date = deliveryDate;
 
             const orderData = {
                 cart_id: cart.id,
-                address: addressData.address,
-                latitude: addressData.latitude,
-                longitude: addressData.longitude,
+                fulfillment_method: method,
+                // A pickup sends no address of its own (the server prices it as free either way)
+                address: pickup ? PICKUP_ADDRESS : addressData.address,
+                latitude: pickup ? null : addressData.latitude,
+                longitude: pickup ? null : addressData.longitude,
                 delivery_day: deliveryDay,
                 delivery_time_slot: deliveryTime,
                 delivery_date,
-                delivery_fee: deliveryFee,
+                delivery_fee: fee,
                 tip: tip,
                 frequency: frequency,
-                requires_admin_approval: requiresAdminApproval,
+                requires_admin_approval: needsApproval,
                 totals: {
                     subtotal,
                     discount: couponDiscount || 0,
                     tax: taxTotal,
                     tipAmount,
-                    deliveryFee,
-                    rushFee: isRush ? rushFee : 0,
+                    deliveryFee: fee,
+                    rushFee: rush,
                     total
                 },
                 cardToken: token,
@@ -225,6 +264,8 @@ const Checkout = () => {
             await placeOrder(token);
         } catch (error) {
             setIsSubmitting(false);
+            if (error?.code === "DELIVERY_DATE_CHANGED") setStep(2)
+            if (error?.code === "DELIVERY_FEE_CHANGED") setStep(1)
             throw error;
         }
     }
@@ -232,9 +273,9 @@ const Checkout = () => {
     const canProceed = () => {
         switch (step) {
             case 1:
-                return addressData.address.trim() !== '';
+                return pickup || addressData.address.trim() !== '';
             case 2:
-                return deliveryDay && deliveryTime && !mealsLeft?.full;
+                return deliveryDay && deliveryDate && deliveryTime && !mealsLeft?.full;
             case 3:
                 return squarePayment !== null;
             default:
@@ -252,7 +293,7 @@ const Checkout = () => {
 
     // Determine button text and disabled state
     const getButtonText = () => {
-        if (step === 1 && feeLoading) return "Calculating delivery fee...";
+        if (step === 1 && feeLoading && !pickup) return "Calculating delivery fee...";
         if (isSubmitting) return (
             <span className="flex items-center justify-center gap-2">
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -309,6 +350,8 @@ const Checkout = () => {
                                     email: currentUser?.email || '',
                                     phone: currentUser?.phone || '',
                                 }}
+                                method={method}
+                                onMethodChange={handleMethodChange}
                                 addressData={addressData}
                                 onAddressSelect={handleAddressSelect}
                                 mapboxAccessToken={mapboxAccessToken}
@@ -326,22 +369,25 @@ const Checkout = () => {
                                 frequency={frequency}
                                 setFrequency={setFrequency}
                                 canSubscribe={cartCanSubscribe(cart?.items)}
-                                deliveryFee={deliveryFee}
-                                rushFee={rushFee}
-                                requiresAdminApproval={requiresAdminApproval}
-                                freeDeliveryThreshold={freeDeliveryThreshold}
-                                isRush={isRush}
+                                deliveryFee={fee}
+                                rushFee={pickup ? 0 : rushFee}
+                                requiresAdminApproval={needsApproval}
+                                freeDeliveryThreshold={pickup ? null : freeDeliveryThreshold}
+                                isRush={!pickup && isRush}
                                 setIsRush={setIsRush}
                                 feeLoading={feeLoading}
+                                pickup={pickup}
+                                onDateChange={setDeliveryDate}
                             />
                         )}
                         {step === 3 && (
                             <PaymentMethod
                                 onSquareReady={handleSquareReady}
                                 onPaymentError={handlePaymentError}
-                                requiresAdminApproval={requiresAdminApproval}
+                                requiresAdminApproval={needsApproval}
                                 amount={total}
-                                walletsEnabled={frequency === 'one-time' && !requiresAdminApproval}
+                                walletsEnabled={frequency === 'one-time' && !needsApproval}
+                                walletNote={frequency !== 'one-time' ? "Apple Pay and Google Pay work for one-time orders. A subscription needs a card on file, so each order can be charged automatically." : undefined}
                                 beforeWallet={() => !isSubmitting}
                                 onWalletToken={payWithWallet}
                             />
@@ -375,7 +421,7 @@ const Checkout = () => {
                             <Button
                                 type="submit"
                                 className="flex-1"
-                                disabled={!canProceed() || feeLoading || isSubmitting}
+                                disabled={!canProceed() || (feeLoading && !pickup) || isSubmitting}
                             >
                                 {getButtonText()}
                             </Button>
@@ -388,29 +434,19 @@ const Checkout = () => {
                     discount={couponDiscount || 0}
                     tax={taxTotal}
                     tipAmount={tipAmount}
-                    deliveryFee={deliveryFee}
+                    deliveryFee={fee}
                     total={total}
-                    rushFee={isRush ? rushFee : 0}
-                    freeDeliveryThreshold={freeDeliveryThreshold}
-                    requiresAdminApproval={requiresAdminApproval}
-                    isFreeDeliveryCoupon={isFreeDeliveryCoupon}
+                    rushFee={rush}
+                    freeDeliveryThreshold={pickup ? null : freeDeliveryThreshold}
+                    requiresAdminApproval={needsApproval}
+                    isFreeDeliveryCoupon={!pickup && isFreeDeliveryCoupon}
                     coupon={coupon} // pass the coupon object for display
+                    pickup={pickup}
                 />
             </div>
         </div>
     )
 }
 
-
-// The next date (YYYY-MM-DD) that falls on the chosen delivery weekday
-function nextDeliveryDate(deliveryDay) {
-    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const today = new Date();
-    let daysUntil = daysOfWeek.indexOf(String(deliveryDay).toLowerCase()) - today.getDay();
-    if (daysUntil <= 0) daysUntil += 7;
-    const d = new Date(today);
-    d.setDate(today.getDate() + daysUntil);
-    return d.toISOString().split("T")[0];
-}
 
 export default Checkout

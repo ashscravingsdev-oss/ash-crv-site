@@ -10,18 +10,18 @@ export default function EventsPage() {
         title="Events & Private Chef - Ash's Cravings | Party Food, Office Lunches & Chef Dinners in Eastvale, CA"
         description="Food for your events from Ash's Cravings: breakfast burritos, sandwich trays and dessert tables for birthdays, showers and office orders, plus private chef dinners at your home in Eastvale, CA."
         keywords={[
-          "healthy catering service",
+          "event food Eastvale",
           "corporate meal delivery",
-          "event catering healthy",
-          "office catering fresh meals",
-          "wedding catering nutritious",
-          "business lunch catering",
-          "special event catering",
-          "fresh food catering",
-          "chef-prepared catering",
-          "nutritious event catering",
-          "corporate wellness catering",
-          "catering delivery service"
+          "party food trays",
+          "office lunch trays",
+          "dessert tables",
+          "business lunch trays",
+          "birthday party food",
+          "baby shower food",
+          "private chef dinners",
+          "breakfast burrito trays",
+          "sandwich trays",
+          "food for events in Eastvale CA"
         ]}
         url="/events"
         type="website"

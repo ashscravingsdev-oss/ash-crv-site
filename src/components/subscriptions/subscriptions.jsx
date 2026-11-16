@@ -17,7 +17,7 @@ const steps = [
     {
         n: "01",
         title: "Pick a bundle",
-        text: "Choose 5 or 10 meals (or a juice bundle) and how often: every week or every 2 weeks.",
+        text: "Choose 5 or 10 meals and how often: every week or every 2 weeks.",
     },
     {
         n: "02",
@@ -32,7 +32,7 @@ const steps = [
     {
         n: "04",
         title: "Delivered fresh",
-        text: "Every Monday or Tuesday, or pick up. Just heat and enjoy.",
+        text: "Delivery or pickup every Tuesday. Just heat and enjoy.",
     },
 ]
 
@@ -54,7 +54,7 @@ const faqs = [
     },
     {
         q: "Can I subscribe to single meals?",
-        a: "Subscriptions are for bundles, so you can pick new meals every week as my menu changes. Single meals and juices can always be ordered one time.",
+        a: "Subscriptions are for bundles, so you can pick new meals every week as my menu changes. Single meals can always be ordered one time.",
     },
     {
         q: "Can I skip a week or stop?",

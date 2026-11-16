@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar, Clock, Loader2, RefreshCw, AlertTriangle, Info, Zap, ShieldCheck, Truck } from "lucide-react"
 import { toast } from "sonner"
 import { apiRequest } from "@/lib/apiRequest"
+import { nextMealPrepDate, rolledToNextWeek, prettyMealDate } from "@/lib/meal-prep-dates"
 
 // ---------- Helpers ----------
 
@@ -23,54 +24,7 @@ const formatTime = (timeString) => {
     return `${displayHour}:${minutes} ${ampm}`
 }
 
-const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    })
-}
-
-// Next occurrence of a weekday (0-6) after a given date, without time
-const getNextDayOfWeek = (dayName, afterDate = new Date(), timeEnd = null) => {
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    const targetDay = days.indexOf(dayName.toLowerCase())
-    const from = new Date(afterDate)
-    from.setHours(0, 0, 0, 0)            // start from midnight of the given date
-    const currentDay = from.getDay()
-    let daysUntilTarget = targetDay - currentDay
-    if (daysUntilTarget < 0) daysUntilTarget += 7
-    const result = new Date(from)
-    result.setDate(from.getDate() + daysUntilTarget)
-
-    // If the result is today, verify that the delivery window hasn't ended yet
-    if (timeEnd && result.getTime() === from.getTime()) {
-        const now = new Date()
-        const [endHours, endMinutes] = timeEnd.split(':').map(Number)
-        const endTime = new Date(result)
-        endTime.setHours(endHours, endMinutes, 0, 0)
-        if (now >= endTime) {
-            // Already past today's window → move to next week
-            result.setDate(result.getDate() + 7)
-        }
-    }
-    return result
-}
-
-// Get this week's cutoff date (the upcoming occurrence)
-const getThisWeekCutoff = (cutoffDay, cutoffTime) => {
-    const now = new Date()
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    const targetDay = days.indexOf(cutoffDay.toLowerCase())
-    const todayDay = now.getDay()
-    let daysUntilTarget = targetDay - todayDay
-    if (daysUntilTarget < 0) daysUntilTarget += 7
-    const cutoffDate = new Date(now)
-    cutoffDate.setDate(now.getDate() + daysUntilTarget)
-    const [hours, minutes, seconds] = cutoffTime.split(":").map(Number)
-    cutoffDate.setHours(hours, minutes, seconds, 0)
-    return cutoffDate
-}
+const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1)
 
 const DeliverySchedule = ({
     deliveryDay,
@@ -89,13 +43,18 @@ const DeliverySchedule = ({
     isRush,
     setIsRush,
     feeLoading,
+    pickup = false,
+    onDateChange,
 }) => {
+    // Pickup uses the same days and time windows as delivery; only the words change
+    const how = pickup ? "pickup" : "delivery"
+    const How = pickup ? "Pickup" : "Delivery"
+
     const [loading, setLoading] = useState(true)
     const [timeRules, setTimeRules] = useState([])
     const [cutoffRule, setCutoffRule] = useState(null)
     const [availableDays, setAvailableDays] = useState([])
     const [timeSlots, setTimeSlots] = useState([])
-    const [isWeekOpen, setIsWeekOpen] = useState(true)
 
     const tipOptions = [
         { value: "0", label: "No Tip" },
@@ -111,13 +70,13 @@ const DeliverySchedule = ({
             try {
                 const data = await apiRequest('/delivery/time-rules');
                 if (!data.rules || data.rules.length === 0) {
-                    toast.error("No delivery slots available")
+                    toast.error(`No ${how} slots available`)
                     setLoading(false)
                     return
                 }
                 const activeRules = data.rules.filter(r => r.is_active)
                 if (activeRules.length === 0) {
-                    toast.error("No active delivery time rules found")
+                    toast.error(`No active ${how} time rules found`)
                     setLoading(false)
                     return
                 }
@@ -130,70 +89,40 @@ const DeliverySchedule = ({
                 }
             } catch (err) {
                 console.error("Failed to load delivery rules", err)
-                toast.error("Could not load delivery schedule")
+                toast.error(`Could not load ${how} schedule`)
             } finally {
                 setLoading(false)
             }
         }
         fetchRules()
-    }, [])
-    // ---------- Compute available delivery days ----------
+    }, [how])
+    // ---------- The date each delivery day goes out next ----------
+    // nextMealPrepDate is the one place that knows (weekly cutoff, never today,
+    // Pacific time). The order server checks the date against the same rule.
     useEffect(() => {
         if (timeRules.length === 0) return
-
-        const now = new Date()
-
-        let startAfter = now
-        let weekOpen = true
-
-        if (cutoffRule) {
-            const thisWeekCutoff = getThisWeekCutoff(
-                cutoffRule.cutoff_day,
-                cutoffRule.cutoff_time
-            )
-
-            weekOpen = now < thisWeekCutoff
-
-            setIsWeekOpen(weekOpen)
-
-            if (!weekOpen) {
-                const dayAfter = new Date(thisWeekCutoff)
-
-                dayAfter.setDate(
-                    dayAfter.getDate() + 1
-                )
-
-                dayAfter.setHours(0, 0, 0, 0)
-
-                startAfter = dayAfter
-
-                console.log(
-                    "Week closed. Starting from:",
-                    startAfter.toString()
-                )
-            }
-        }
-
-        const upcoming = timeRules.map(rule => {
-            const nextDate = getNextDayOfWeek(
-                rule.delivery_day,
-                startAfter,
-                rule.time_end          // ✅ tell the function when the window closes today
-            )
-            return {
+        const upcoming = timeRules
+            .map((rule) => ({
                 value: rule.delivery_day,
-                label: rule.delivery_day.charAt(0).toUpperCase() + rule.delivery_day.slice(1),
-                date: formatDate(nextDate),
-                fullDate: nextDate,
+                label: capitalize(rule.delivery_day),
+                date: nextMealPrepDate(rule.delivery_day, cutoffRule), // 'YYYY-MM-DD'
+                rolled: rolledToNextWeek(rule.delivery_day, cutoffRule),
                 time_start: rule.time_start,
                 time_end: rule.time_end,
                 ruleId: rule.id,
-            }
-        }).sort((a, b) => a.fullDate - b.fullDate)
-
+            }))
+            .filter((day) => day.date)
+            .sort((a, b) => a.date.localeCompare(b.date))
         setAvailableDays(upcoming.slice(0, 4))
-
     }, [timeRules, cutoffRule])
+
+    const selectedDay = availableDays.find((d) => d.value === deliveryDay)
+    const selectedDate = selectedDay?.date || ""
+
+    // Tell the checkout which date goes with the chosen day
+    useEffect(() => {
+        onDateChange?.(selectedDate)
+    }, [selectedDate, onDateChange])
 
     // ---------- When selected day changes, regenerate time slots ----------
     useEffect(() => {
@@ -210,17 +139,8 @@ const DeliverySchedule = ({
         const startHour = parseInt(selected.time_start.split(':')[0], 10)
         const endHour = parseInt(selected.time_end.split(':')[0], 10)
 
-        const now = new Date()
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        const selectedDate = new Date(selected.fullDate)
-        selectedDate.setHours(0, 0, 0, 0)
-        const isToday = selectedDate.getTime() === today.getTime()
-
         const slots = []
         for (let hour = startHour; hour < endHour; hour++) {
-            // Skip hours that are already in the past (only relevant for today)
-            if (isToday && hour <= now.getHours()) continue
-
             const start = formatTime(`${hour.toString().padStart(2, '0')}:00:00`)
             const end = formatTime(`${(hour + 1).toString().padStart(2, '0')}:00:00`)
             slots.push(`${start} - ${end}`)
@@ -252,7 +172,7 @@ const DeliverySchedule = ({
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Delivery Schedule</CardTitle>
+                    <CardTitle>{How} Schedule</CardTitle>
                 </CardHeader>
                 <CardContent className="flex justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -266,46 +186,43 @@ const DeliverySchedule = ({
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Delivery Schedule</CardTitle>
+                    <CardTitle>{How} Schedule</CardTitle>
                 </CardHeader>
                 <CardContent className="py-8 text-center">
                     <AlertTriangle className="mx-auto h-8 w-8 text-yellow-500 mb-2" />
-                    <p className="text-muted-foreground">Delivery is currently unavailable.</p>
+                    <p className="text-muted-foreground">{How} is currently unavailable.</p>
                 </CardContent>
             </Card>
         )
     }
 
-    // ---------- Cutoff display ----------
-    const cutoffDisplay = cutoffRule ? (
-        <div className={`p-4 rounded-lg flex items-start gap-3 ${isWeekOpen ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"
-            }`}>
-            {isWeekOpen ? (
-                <Clock className="w-5 h-5 text-green-600 mt-0.5" />
+    // ---------- Cutoff note ----------
+    const cutoffWhen = cutoffRule ? `${capitalize(cutoffRule.cutoff_day)} at ${formatTime(cutoffRule.cutoff_time)}` : ""
+    const cutoffDisplay = cutoffRule && selectedDay ? (
+        <div className={`p-4 rounded-lg flex items-start gap-3 ${selectedDay.rolled ? "bg-amber-50 border border-amber-200" : "bg-green-50 border border-green-200"}`}>
+            {selectedDay.rolled ? (
+                <Info className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
             ) : (
-                <Info className="w-5 h-5 text-amber-600 mt-0.5" />
+                <Clock className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
             )}
-            <div>
-                <p className={`text-sm font-semibold ${isWeekOpen ? "text-green-800" : "text-amber-800"}`}>
-                    {isWeekOpen ? "Order now for this week's delivery" : "Next week delivery window"}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                    Orders placed after {cutoffRule.cutoff_day.charAt(0).toUpperCase() + cutoffRule.cutoff_day.slice(1)} at {formatTime(cutoffRule.cutoff_time)} will be delivered the following week.
-                </p>
-            </div>
+            <p className={`text-sm ${selectedDay.rolled ? "text-amber-800" : "text-green-800"}`}>
+                {selectedDay.rolled
+                    ? `This week's orders closed ${cutoffWhen}, so your meals will ${pickup ? "be ready" : "come"} ${prettyMealDate(selectedDate)}.`
+                    : `Order by ${cutoffWhen} for ${how} on ${prettyMealDate(selectedDate)}.`}
+            </p>
         </div>
     ) : null
 
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Delivery Schedule</CardTitle>
+                <CardTitle>{How} Schedule</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 {cutoffDisplay}
 
-                {/* Delivery Fees & Details */}
-                {deliveryFee !== null && !feeLoading && (
+                {/* Delivery Fees & Details (delivery only: pickup is free, with no rush option) */}
+                {!pickup && deliveryFee !== null && !feeLoading && (
                     <div className="space-y-3 border rounded-lg p-4 bg-muted/30">
                         <Label className="flex items-center gap-2 text-base font-semibold">
                             <Truck className="w-4 h-4" />
@@ -368,22 +285,22 @@ const DeliverySchedule = ({
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        Delivery Day *
+                        {How} Day *
                     </Label>
                     <Select value={deliveryDay} onValueChange={setDeliveryDay} required>
                         <SelectTrigger>
-                            <SelectValue placeholder="Select a delivery day" />
+                            <SelectValue placeholder={`Select a ${how} day`} />
                         </SelectTrigger>
                         <SelectContent>
                             {availableDays.map(option => (
                                 <SelectItem key={option.value} value={option.value}>
-                                    {option.label} ({option.date})
+                                    {prettyMealDate(option.date)}
                                 </SelectItem>
                             ))}
                         </SelectContent>
                     </Select>
                     {availableDays.length === 0 && (
-                        <p className="text-sm text-muted-foreground">No delivery days available.</p>
+                        <p className="text-sm text-muted-foreground">No {how} days available.</p>
                     )}
                 </div>
 
@@ -392,7 +309,7 @@ const DeliverySchedule = ({
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Delivery Time *
+                        {How} Time *
                     </Label>
 
                     {timeSlots.length > 0 ? (
@@ -410,16 +327,16 @@ const DeliverySchedule = ({
                                 </SelectContent>
                             </Select>
                             <p className="text-xs text-muted-foreground">
-                                Choose a one-hour window for your delivery.
+                                Choose a one-hour window for your {how}.
                             </p>
                         </>
                     ) : deliveryDay ? (
                         <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 p-3 rounded-lg">
-                            No available time slots for this day. Please choose another delivery day.
+                            No available time slots for this day. Please choose another {how} day.
                         </p>
                     ) : (
                         <p className="text-sm text-muted-foreground">
-                            Select a delivery day to see available time slots.
+                            Select a {how} day to see available time slots.
                         </p>
                     )}
                 </div>
@@ -473,7 +390,7 @@ const DeliverySchedule = ({
 
                 {/* Tip */}
                 <div className="space-y-3">
-                    <Label>Add a Tip for Your Driver</Label>
+                    <Label>{pickup ? "Add a Tip" : "Add a Tip for Your Driver"}</Label>
                     <RadioGroup value={tip} onValueChange={setTip}>
                         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                             {tipOptions.map((option) => (

@@ -6,8 +6,8 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Privacy Policy - Ash's Cravings | How We Protect Your Data"
-        description="Learn how Ash's Cravings collects, uses, and protects your personal information. Our commitment to your privacy and data security in meal delivery services."
+        title="Privacy Policy - Ash's Cravings"
+        description="How Ash's Cravings collects, uses, and protects your personal information when you order."
         keywords={[
           "privacy policy ashscravings",
           "meal delivery privacy",
@@ -17,7 +17,6 @@ export default function PrivacyPage() {
           "customer data security",
           "privacy statement",
           "data collection policy",
-          "gdpr compliance",
           "california privacy rights",
           "privacy practices",
           "information security policy"

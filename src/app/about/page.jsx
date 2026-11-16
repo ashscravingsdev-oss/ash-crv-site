@@ -12,11 +12,11 @@ export default function AboutPage() {
         description="Meet Ash, the culinary school-trained chef behind Ash's Cravings: made-from-scratch meal prep, custom cakes, desserts, events and private chef dinners in Eastvale, CA."
         keywords={[
           "about ash's cravings",
-          "our story",
+          "my story",
           "company mission",
           "healthy meal delivery company",
-          "meal prep company about us",
-          "our commitment to quality",
+          "about Ash",
+          "made from scratch",
           "fresh ingredients mission",
           "nutrition-focused company",
           "sustainable meal delivery",

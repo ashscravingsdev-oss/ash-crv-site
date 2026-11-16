@@ -25,6 +25,9 @@ const money = (n) => (Math.round(Number(n || 0) * 100) / 100).toFixed(2);
  * `beforeWallet()` runs first, synchronously (Apple Pay must open straight
  * from the tap); return false to stop, e.g. when the form isn't filled in.
  * `onWalletToken({ token })` then places the order with the wallet's token.
+ *
+ * `walletNote` is a short line shown when wallets are off for this order, so
+ * customers know why they only see the card form.
  */
 const PaymentMethod = ({
     onSquareReady,
@@ -34,6 +37,7 @@ const PaymentMethod = ({
     walletsEnabled = false,
     beforeWallet,
     onWalletToken,
+    walletNote,
 }) => {
     const [squareLoading, setSquareLoading] = useState(true);
     const [squareError, setSquareError] = useState(null);
@@ -327,6 +331,10 @@ const PaymentMethod = ({
                         <span className="h-px flex-1 bg-border" />
                     </div>
                 </div>
+
+                {!walletsEnabled && walletNote && !squareLoading && !squareError && (
+                    <p className="text-sm text-muted-foreground">{walletNote}</p>
+                )}
 
                 {/* Square Card Container — ALWAYS in DOM */}
                 <div

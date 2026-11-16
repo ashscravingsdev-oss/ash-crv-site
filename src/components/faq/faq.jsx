@@ -18,11 +18,11 @@ const faqs = [
         questions: [
             {
                 q: "When do you deliver?",
-                a: "I deliver every Monday and Tuesday. You'll pick your day and delivery window at checkout. Order by Sunday to get your meals that Monday or Tuesday.",
+                a: "I deliver every Tuesday, and you can pick up on Tuesdays too. You'll choose your time window at checkout. Order by Sunday to get your meals that Tuesday.",
             },
             {
                 q: "Is there a delivery fee? Can I pick up instead?",
-                a: "Delivery has a fee based on your address, and you'll see it at checkout before you pay. You can also pick up your order. Just message me and we'll set it up.",
+                a: "Delivery has a fee based on your address, and you'll see it at checkout before you pay. Pickup is free: choose it at checkout and I'll text you the address.",
             },
             {
                 q: "What if I'm not home for delivery?",
