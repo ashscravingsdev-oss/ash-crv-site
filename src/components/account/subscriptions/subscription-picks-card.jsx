@@ -72,7 +72,9 @@ const SubscriptionPicksCard = ({ subscription }) => {
             <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
                 <CardTitle>{freqLabel} Plan</CardTitle>
                 <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Next delivery: {nextDeliveryLabel}</span>
+                    <span className="text-sm text-muted-foreground">
+                        Next {subscription.fulfillment_method === "pickup" ? "pickup" : "delivery"}: {nextDeliveryLabel}
+                    </span>
                     {locked ? (
                         <Badge variant="outline" className="gap-1">
                             <Lock className="h-3 w-3" /> Locked

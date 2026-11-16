@@ -25,10 +25,12 @@ const ActiveSubscription = ({
                 </Badge>
             </CardHeader>
             <CardContent className="space-y-4">
-                {/* Next Delivery + Skip/Unskip buttons */}
+                {/* Next Delivery (or Pickup) + Skip/Unskip buttons */}
                 <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
                     <div>
-                        <p className="text-sm text-muted-foreground">Next Delivery</p>
+                        <p className="text-sm text-muted-foreground">
+                            {subscription.fulfillment_method === "pickup" ? "Next Pickup" : "Next Delivery"}
+                        </p>
                         <p className="font-semibold">
                             {subscription.next_delivery_date
                                 ? new Date(subscription.next_delivery_date).toLocaleDateString("en-US", {

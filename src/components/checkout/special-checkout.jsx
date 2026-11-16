@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { apiRequest } from "@/lib/apiRequest"
 import MapPicker from "./map-picker"
 import PaymentMethod from "./payment-method"
+import { Choice, PICKUP_ADDRESS } from "./fulfillment-choice"
 import {
     christmasOpenDays,
     isChristmasItem,
@@ -33,24 +34,6 @@ const TIME_WINDOWS = [
     { value: "12:00 PM - 4:00 PM", label: "Afternoon", hint: "12 – 4 PM" },
     { value: "4:00 PM - 7:00 PM", label: "Evening", hint: "4 – 7 PM" },
 ]
-
-const PICKUP_ADDRESS = "Pickup in Eastvale, CA (I'll text you the address)"
-
-const Choice = ({ selected, onClick, icon: Icon, title, text }) => (
-    <button
-        type="button"
-        onClick={onClick}
-        aria-pressed={selected}
-        className={`flex-1 text-left rounded-xl border p-4 transition-colors ${
-            selected ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-brand-tobacco"
-        }`}
-    >
-        <span className="flex items-center gap-2 font-semibold text-brand-espresso">
-            <Icon className="h-4 w-4 text-primary" /> {title}
-        </span>
-        <span className="block text-sm text-muted-foreground mt-1">{text}</span>
-    </button>
-)
 
 /**
  * Checkout for desserts, cakes and custom items. No account needed: guests give

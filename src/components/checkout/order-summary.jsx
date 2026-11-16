@@ -16,6 +16,7 @@ const OrderSummary = ({
     requiresAdminApproval = false,
     isFreeDeliveryCoupon = false,
     coupon = null,
+    pickup = false,
 }) => {
     return (
         <div className="lg:col-span-1">
@@ -39,16 +40,24 @@ const OrderSummary = ({
                             </div>
                         )}
 
-                        {/* Driver Tip */}
+                        {/* Driver Tip (just "Tip" for pickup: there's no driver) */}
                         {tipAmount > 0 && (
                             <div className="flex justify-between text-sm text-green-600">
-                                <span>Driver Tip</span>
+                                <span>{pickup ? "Tip" : "Driver Tip"}</span>
                                 <span>${tipAmount.toFixed(2)}</span>
                             </div>
                         )}
 
+                        {/* Pickup is always free */}
+                        {pickup && (
+                            <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Pickup</span>
+                                <span className="font-medium text-green-600">Free</span>
+                            </div>
+                        )}
+
                         {/* Delivery Fee – handle free delivery coupon */}
-                        {deliveryFee !== null && deliveryFee !== undefined && (
+                        {!pickup && deliveryFee !== null && deliveryFee !== undefined && (
                             <div className="flex justify-between text-sm">
                                 <span className="text-muted-foreground">
                                     {isFreeDeliveryCoupon

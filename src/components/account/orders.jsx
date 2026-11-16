@@ -54,6 +54,7 @@ const Orders = () => {
         >
             <div className="lg:col-span-3 space-y-6">
                 {orders.map((order) => {
+                    const pickup = order.fulfillment_method === "pickup";
                     // Calculate discount if coupon exists (fallback to 0)
                     let discount = 0;
                     if (order.coupon) {
@@ -153,7 +154,7 @@ const Orders = () => {
                                     </div>
 
                                     <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Delivery Fee</span>
+                                        <span className="text-muted-foreground">{pickup ? "Pickup" : "Delivery Fee"}</span>
                                         <span className="font-medium">
                                             {parseFloat(order.delivery_fee) === 0 ? (
                                                 <span className="text-green-600">FREE</span>
@@ -176,7 +177,7 @@ const Orders = () => {
                                     {/* Tip – from tip relation */}
                                     {order.tip && parseFloat(order.tip.amount) > 0 && (
                                         <div className="flex justify-between">
-                                            <span className="text-muted-foreground">Driver Tip</span>
+                                            <span className="text-muted-foreground">{pickup ? "Tip" : "Driver Tip"}</span>
                                             <span className="font-medium">
                                                 ${parseFloat(order.tip.amount).toFixed(2)}
                                             </span>
