@@ -3,7 +3,6 @@
 // weekly meal prep.
 
 export const DEPOSIT_RATE = 0.5
-export const FREE_DELIVERY_MILES = 15
 export const DESSERT_MIN_DOZENS = 2
 export const DEFAULT_LEAD_DAYS = 10
 

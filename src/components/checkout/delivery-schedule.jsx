@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calendar, Clock, Loader2, RefreshCw, AlertTriangle, Info, Zap, ShieldCheck, Truck } from "lucide-react"
 import { toast } from "sonner"
 import { apiRequest } from "@/lib/apiRequest"
+import { nextMealPrepDate, rolledToNextWeek, prettyMealDate } from "@/lib/meal-prep-dates"
 
 // ---------- Helpers ----------
 
@@ -23,54 +24,7 @@ const formatTime = (timeString) => {
     return `${displayHour}:${minutes} ${ampm}`
 }
 
-const formatDate = (date) => {
-    return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    })
-}
-
-// Next occurrence of a weekday (0-6) after a given date, without time
-const getNextDayOfWeek = (dayName, afterDate = new Date(), timeEnd = null) => {
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    const targetDay = days.indexOf(dayName.toLowerCase())
-    const from = new Date(afterDate)
-    from.setHours(0, 0, 0, 0)            // start from midnight of the given date
-    const currentDay = from.getDay()
-    let daysUntilTarget = targetDay - currentDay
-    if (daysUntilTarget < 0) daysUntilTarget += 7
-    const result = new Date(from)
-    result.setDate(from.getDate() + daysUntilTarget)
-
-    // If the result is today, verify that the delivery window hasn't ended yet
-    if (timeEnd && result.getTime() === from.getTime()) {
-        const now = new Date()
-        const [endHours, endMinutes] = timeEnd.split(':').map(Number)
-        const endTime = new Date(result)
-        endTime.setHours(endHours, endMinutes, 0, 0)
-        if (now >= endTime) {
-            // Already past today's window → move to next week
-            result.setDate(result.getDate() + 7)
-        }
-    }
-    return result
-}
-
-// Get this week's cutoff date (the upcoming occurrence)
-const getThisWeekCutoff = (cutoffDay, cutoffTime) => {
-    const now = new Date()
-    const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
-    const targetDay = days.indexOf(cutoffDay.toLowerCase())
-    const todayDay = now.getDay()
-    let daysUntilTarget = targetDay - todayDay
-    if (daysUntilTarget < 0) daysUntilTarget += 7
-    const cutoffDate = new Date(now)
-    cutoffDate.setDate(now.getDate() + daysUntilTarget)
-    const [hours, minutes, seconds] = cutoffTime.split(":").map(Number)
-    cutoffDate.setHours(hours, minutes, seconds, 0)
-    return cutoffDate
-}
+const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1)
 
 const DeliverySchedule = ({
     deliveryDay,
@@ -90,6 +44,7 @@ const DeliverySchedule = ({
     setIsRush,
     feeLoading,
     pickup = false,
+    onDateChange,
 }) => {
     // Pickup uses the same days and time windows as delivery; only the words change
     const how = pickup ? "pickup" : "delivery"
@@ -100,7 +55,6 @@ const DeliverySchedule = ({
     const [cutoffRule, setCutoffRule] = useState(null)
     const [availableDays, setAvailableDays] = useState([])
     const [timeSlots, setTimeSlots] = useState([])
-    const [isWeekOpen, setIsWeekOpen] = useState(true)
 
     const tipOptions = [
         { value: "0", label: "No Tip" },
@@ -142,63 +96,33 @@ const DeliverySchedule = ({
         }
         fetchRules()
     }, [how])
-    // ---------- Compute available delivery days ----------
+    // ---------- The date each delivery day goes out next ----------
+    // nextMealPrepDate is the one place that knows (weekly cutoff, never today,
+    // Pacific time). The order server checks the date against the same rule.
     useEffect(() => {
         if (timeRules.length === 0) return
-
-        const now = new Date()
-
-        let startAfter = now
-        let weekOpen = true
-
-        if (cutoffRule) {
-            const thisWeekCutoff = getThisWeekCutoff(
-                cutoffRule.cutoff_day,
-                cutoffRule.cutoff_time
-            )
-
-            weekOpen = now < thisWeekCutoff
-
-            setIsWeekOpen(weekOpen)
-
-            if (!weekOpen) {
-                const dayAfter = new Date(thisWeekCutoff)
-
-                dayAfter.setDate(
-                    dayAfter.getDate() + 1
-                )
-
-                dayAfter.setHours(0, 0, 0, 0)
-
-                startAfter = dayAfter
-
-                console.log(
-                    "Week closed. Starting from:",
-                    startAfter.toString()
-                )
-            }
-        }
-
-        const upcoming = timeRules.map(rule => {
-            const nextDate = getNextDayOfWeek(
-                rule.delivery_day,
-                startAfter,
-                rule.time_end          // ✅ tell the function when the window closes today
-            )
-            return {
+        const upcoming = timeRules
+            .map((rule) => ({
                 value: rule.delivery_day,
-                label: rule.delivery_day.charAt(0).toUpperCase() + rule.delivery_day.slice(1),
-                date: formatDate(nextDate),
-                fullDate: nextDate,
+                label: capitalize(rule.delivery_day),
+                date: nextMealPrepDate(rule.delivery_day, cutoffRule), // 'YYYY-MM-DD'
+                rolled: rolledToNextWeek(rule.delivery_day, cutoffRule),
                 time_start: rule.time_start,
                 time_end: rule.time_end,
                 ruleId: rule.id,
-            }
-        }).sort((a, b) => a.fullDate - b.fullDate)
-
+            }))
+            .filter((day) => day.date)
+            .sort((a, b) => a.date.localeCompare(b.date))
         setAvailableDays(upcoming.slice(0, 4))
-
     }, [timeRules, cutoffRule])
+
+    const selectedDay = availableDays.find((d) => d.value === deliveryDay)
+    const selectedDate = selectedDay?.date || ""
+
+    // Tell the checkout which date goes with the chosen day
+    useEffect(() => {
+        onDateChange?.(selectedDate)
+    }, [selectedDate, onDateChange])
 
     // ---------- When selected day changes, regenerate time slots ----------
     useEffect(() => {
@@ -215,17 +139,8 @@ const DeliverySchedule = ({
         const startHour = parseInt(selected.time_start.split(':')[0], 10)
         const endHour = parseInt(selected.time_end.split(':')[0], 10)
 
-        const now = new Date()
-        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        const selectedDate = new Date(selected.fullDate)
-        selectedDate.setHours(0, 0, 0, 0)
-        const isToday = selectedDate.getTime() === today.getTime()
-
         const slots = []
         for (let hour = startHour; hour < endHour; hour++) {
-            // Skip hours that are already in the past (only relevant for today)
-            if (isToday && hour <= now.getHours()) continue
-
             const start = formatTime(`${hour.toString().padStart(2, '0')}:00:00`)
             const end = formatTime(`${(hour + 1).toString().padStart(2, '0')}:00:00`)
             slots.push(`${start} - ${end}`)
@@ -281,23 +196,20 @@ const DeliverySchedule = ({
         )
     }
 
-    // ---------- Cutoff display ----------
-    const cutoffDisplay = cutoffRule ? (
-        <div className={`p-4 rounded-lg flex items-start gap-3 ${isWeekOpen ? "bg-green-50 border border-green-200" : "bg-amber-50 border border-amber-200"
-            }`}>
-            {isWeekOpen ? (
-                <Clock className="w-5 h-5 text-green-600 mt-0.5" />
+    // ---------- Cutoff note ----------
+    const cutoffWhen = cutoffRule ? `${capitalize(cutoffRule.cutoff_day)} at ${formatTime(cutoffRule.cutoff_time)}` : ""
+    const cutoffDisplay = cutoffRule && selectedDay ? (
+        <div className={`p-4 rounded-lg flex items-start gap-3 ${selectedDay.rolled ? "bg-amber-50 border border-amber-200" : "bg-green-50 border border-green-200"}`}>
+            {selectedDay.rolled ? (
+                <Info className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
             ) : (
-                <Info className="w-5 h-5 text-amber-600 mt-0.5" />
+                <Clock className="w-5 h-5 text-green-600 mt-0.5 shrink-0" />
             )}
-            <div>
-                <p className={`text-sm font-semibold ${isWeekOpen ? "text-green-800" : "text-amber-800"}`}>
-                    {isWeekOpen ? `Order now for this week's ${how}` : `Next week ${how} window`}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                    Orders placed after {cutoffRule.cutoff_day.charAt(0).toUpperCase() + cutoffRule.cutoff_day.slice(1)} at {formatTime(cutoffRule.cutoff_time)} will be {pickup ? "ready for pickup" : "delivered"} the following week.
-                </p>
-            </div>
+            <p className={`text-sm ${selectedDay.rolled ? "text-amber-800" : "text-green-800"}`}>
+                {selectedDay.rolled
+                    ? `This week's orders closed ${cutoffWhen}, so your meals will ${pickup ? "be ready" : "come"} ${prettyMealDate(selectedDate)}.`
+                    : `Order by ${cutoffWhen} for ${how} on ${prettyMealDate(selectedDate)}.`}
+            </p>
         </div>
     ) : null
 
@@ -382,7 +294,7 @@ const DeliverySchedule = ({
                         <SelectContent>
                             {availableDays.map(option => (
                                 <SelectItem key={option.value} value={option.value}>
-                                    {option.label} ({option.date})
+                                    {prettyMealDate(option.date)}
                                 </SelectItem>
                             ))}
                         </SelectContent>

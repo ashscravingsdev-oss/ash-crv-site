@@ -20,7 +20,6 @@ import {
     isChristmasItem,
     shortDate,
     DEPOSIT_RATE,
-    FREE_DELIVERY_MILES,
     cartHasChristmas,
     cartHasDeposit,
     dateFromToday,

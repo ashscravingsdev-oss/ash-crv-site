@@ -47,6 +47,8 @@ const Checkout = () => {
 
     // ----- Step 2 & 3 state -----
     const [deliveryDay, setDeliveryDay] = useState("")
+    // The date that goes with the chosen day ('YYYY-MM-DD'), worked out in the schedule step
+    const [deliveryDate, setDeliveryDate] = useState("")
     const [deliveryTime, setDeliveryTime] = useState("")
     const [frequency, setFrequency] = useState("one-time");
     // Start with whatever they chose on the Bundles page
@@ -153,15 +155,24 @@ const Checkout = () => {
     // Ash cooks a set number of meals a week: check what's left for the chosen week
     const [mealsLeft, setMealsLeft] = useState(null) // { left, full } | null
     useEffect(() => {
-        if (!deliveryDay) return setMealsLeft(null)
+        if (!deliveryDate) return setMealsLeft(null)
         let alive = true
-        apiRequest(`/delivery/meals-left?date=${nextDeliveryDate(deliveryDay)}`)
+        apiRequest(`/delivery/meals-left?date=${deliveryDate}`)
             .then((r) => alive && setMealsLeft(r))
             .catch(() => alive && setMealsLeft(null))
         return () => {
             alive = false
         }
-    }, [deliveryDay])
+    }, [deliveryDate])
+
+    // The order server refuses an order whose day or delivery fee no longer matches
+    // what this page shows (the weekly cutoff passed while the page sat open, or a
+    // fee changed). Say why, and go back to the step that shows the fresh value.
+    const showOrderError = (error) => {
+        toast.error(error?.message || "Failed to place order. Please try again.")
+        if (error?.code === "DELIVERY_DATE_CHANGED") setStep(2)
+        if (error?.code === "DELIVERY_FEE_CHANGED") setStep(1)
+    }
 
     const handleAddressSelect = (locationData) => {
         setAddressData(locationData)
@@ -200,7 +211,7 @@ const Checkout = () => {
                 await placeOrder(cardToken.token);
             } catch (error) {
                 console.error("Order submission error:", error);
-                toast.error(error?.message || "Failed to place order. Please try again.");
+                showOrderError(error);
             } finally {
                 setIsSubmitting(false);
             }
@@ -209,7 +220,7 @@ const Checkout = () => {
 
     // Places the order with a card or wallet (Apple Pay / Google Pay) token; throws if it fails
     const placeOrder = async (token) => {
-            const delivery_date = nextDeliveryDate(deliveryDay);
+            const delivery_date = deliveryDate;
 
             const orderData = {
                 cart_id: cart.id,
@@ -253,6 +264,8 @@ const Checkout = () => {
             await placeOrder(token);
         } catch (error) {
             setIsSubmitting(false);
+            if (error?.code === "DELIVERY_DATE_CHANGED") setStep(2)
+            if (error?.code === "DELIVERY_FEE_CHANGED") setStep(1)
             throw error;
         }
     }
@@ -262,7 +275,7 @@ const Checkout = () => {
             case 1:
                 return pickup || addressData.address.trim() !== '';
             case 2:
-                return deliveryDay && deliveryTime && !mealsLeft?.full;
+                return deliveryDay && deliveryDate && deliveryTime && !mealsLeft?.full;
             case 3:
                 return squarePayment !== null;
             default:
@@ -364,6 +377,7 @@ const Checkout = () => {
                                 setIsRush={setIsRush}
                                 feeLoading={feeLoading}
                                 pickup={pickup}
+                                onDateChange={setDeliveryDate}
                             />
                         )}
                         {step === 3 && (
@@ -373,6 +387,7 @@ const Checkout = () => {
                                 requiresAdminApproval={needsApproval}
                                 amount={total}
                                 walletsEnabled={frequency === 'one-time' && !needsApproval}
+                                walletNote={frequency !== 'one-time' ? "Apple Pay and Google Pay work for one-time orders. A subscription needs a card on file, so each order can be charged automatically." : undefined}
                                 beforeWallet={() => !isSubmitting}
                                 onWalletToken={payWithWallet}
                             />
@@ -433,18 +448,5 @@ const Checkout = () => {
     )
 }
 
-
-// The next date (YYYY-MM-DD) that falls on the chosen delivery weekday
-function nextDeliveryDate(deliveryDay) {
-    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    const today = new Date();
-    let daysUntil = daysOfWeek.indexOf(String(deliveryDay).toLowerCase()) - today.getDay();
-    if (daysUntil <= 0) daysUntil += 7;
-    const d = new Date(today);
-    d.setDate(today.getDate() + daysUntil);
-    // The customer's own calendar day. (toISOString() is the UTC day, which is
-    // already tomorrow from 4 PM in California: evening orders were dated a day late.)
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-}
 
 export default Checkout
