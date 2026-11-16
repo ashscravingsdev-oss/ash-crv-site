@@ -442,7 +442,9 @@ function nextDeliveryDate(deliveryDay) {
     if (daysUntil <= 0) daysUntil += 7;
     const d = new Date(today);
     d.setDate(today.getDate() + daysUntil);
-    return d.toISOString().split("T")[0];
+    // The customer's own calendar day. (toISOString() is the UTC day, which is
+    // already tomorrow from 4 PM in California: evening orders were dated a day late.)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
 export default Checkout
