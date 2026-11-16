@@ -70,7 +70,7 @@ export default function TermsPage() {
               </li>
               <li>Cold-pressed juice and wellness beverage delivery</li>
               <li>Customized meal bundles and packages</li>
-              <li>Catering services for events and groups</li>
+              <li>Food for events and groups</li>
             </ul>
             <p className="text-muted-foreground leading-relaxed">
               We reserve the right to modify, suspend, or discontinue any aspect

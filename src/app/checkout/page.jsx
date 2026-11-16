@@ -8,8 +8,8 @@ export default function CheckoutPage() {
   return (
       <div className="min-h-screen">
         <SEO
-          title="Checkout - Ash's Cravings | Complete Your Meal Delivery Order"
-          description="Complete your Ash's Cravings order securely. Enter delivery details, choose payment method, and confirm your healthy meal delivery. Secure checkout guaranteed."
+          title="Checkout - Ash's Cravings"
+          description="Complete your Ash's Cravings order: choose delivery or pickup, pick your day, and pay securely."
           keywords={[
             "Ash's Cravings checkout",
             "meal delivery checkout",

@@ -170,7 +170,7 @@ const Cart = () => {
                 <Card className="max-w-md mx-auto text-center p-12">
                     <Loader2 className="h-16 w-16 text-muted-foreground mx-auto mb-4 animate-spin" />
                     <h2 className="text-2xl font-bold mb-2">Loading your cart...</h2>
-                    <p className="text-muted-foreground">Please wait while we fetch your items</p>
+                    <p className="text-muted-foreground">Just a moment while I get your items</p>
                 </Card>
             </div>
         )

@@ -56,7 +56,7 @@ const SubscriptionPicksCard = ({ subscription }) => {
     const handleRepeatLast = async () => {
         try {
             await dispatch(repeatLastOrder(subscription.id)).unwrap();
-            toast.success("You're all set - we'll repeat your last order for the upcoming cycle");
+            toast.success("You're all set - I'll repeat your last order for the upcoming cycle");
         } catch (err) {
             if (err?.status === 409) {
                 toast.error("Picks just locked for this cycle.");
@@ -95,7 +95,7 @@ const SubscriptionPicksCard = ({ subscription }) => {
                             <div>
                                 <p className="font-medium">Not picking this cycle?</p>
                                 <p className="text-sm text-muted-foreground">
-                                    We'll repeat your last order automatically either way - tap this to confirm it now.
+                                    I'll repeat your last order automatically either way - tap this to confirm it now.
                                 </p>
                             </div>
                             <Button variant="outline" onClick={handleRepeatLast} disabled={locked || isRepeating}>
