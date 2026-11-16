@@ -41,7 +41,8 @@ const SubscriptionPicksCard = ({ subscription }) => {
         ? subscription.frequency.charAt(0).toUpperCase() + subscription.frequency.slice(1)
         : "";
     const nextDeliveryLabel = subscription.next_delivery_date
-        ? new Date(subscription.next_delivery_date).toLocaleDateString("en-US", {
+        ? // A calendar day, read at local noon (midnight UTC would show the day before in California)
+          new Date(`${String(subscription.next_delivery_date).slice(0, 10)}T12:00:00`).toLocaleDateString("en-US", {
               weekday: "long",
               month: "short",
               day: "numeric",

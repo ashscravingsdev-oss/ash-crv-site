@@ -65,7 +65,8 @@ const Account = () => {
             id: "next-delivery",
             icon: Calendar,
             value: stats?.nextDelivery
-                ? new Date(stats.nextDelivery).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                ? // A calendar day, read at local noon (midnight UTC would show the day before in California)
+                  new Date(`${String(stats.nextDelivery).slice(0, 10)}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
                 : "—",
             label: wordFor(nextSub) === "pickup" ? "Next Pickup" : "Next Delivery",
             color: "bg-primary/10",
