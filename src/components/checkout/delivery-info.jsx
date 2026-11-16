@@ -1,22 +1,68 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, User, Mail, Phone } from "lucide-react"
+import { MapPin, User, Mail, Phone, Store, Truck } from "lucide-react"
 import MapPicker from './map-picker'
+import { Choice } from './fulfillment-choice'
 
 const DeliveryInfo = ({
-    userData,               
+    userData,
+    method = "delivery",
+    onMethodChange,
     addressData,
     onAddressSelect,
     mapboxAccessToken,
     mapRef,
 }) => {
+    const pickup = method === "pickup"
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Delivery Information</CardTitle>
+                <CardTitle>Delivery or Pickup</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
+                {/* Delivery or pickup */}
+                <div className="flex flex-col sm:flex-row gap-3">
+                    <Choice
+                        selected={!pickup}
+                        onClick={() => onMethodChange("delivery")}
+                        icon={Truck}
+                        title="Delivery"
+                        text="Right to your door"
+                    />
+                    <Choice
+                        selected={pickup}
+                        onClick={() => onMethodChange("pickup")}
+                        icon={Store}
+                        title="Pickup"
+                        text="Free, in Eastvale"
+                    />
+                </div>
+
+                {pickup ? (
+                    // No address box and no map for pickup: the address is only ever texted by Ash
+                    <p className="text-sm text-muted-foreground">
+                        Pickup is in Eastvale, CA. I&apos;ll text you the address before your pickup day.
+                    </p>
+                ) : (
+                    /* Map / Address */
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-primary" />
+                            <h3 className="text-sm font-semibold">Delivery Address *</h3>
+                        </div>
+                        <MapPicker
+                            ref={mapRef}
+                            mapboxAccessToken={mapboxAccessToken}
+                            initialAddress={addressData}
+                            onAddressSelect={onAddressSelect}
+                            mapHeight={400}
+                            placeholder="Search for delivery address..."
+                        />
+                    </div>
+                )}
+
                 {/* User Summary Card */}
                 <div className="bg-muted/30 rounded-xl p-4 flex flex-col sm:flex-row gap-4">
                     <div className="flex items-center gap-3">
@@ -40,22 +86,6 @@ const DeliveryInfo = ({
                             <p className="text-xs text-muted-foreground">Phone</p>
                         </div>
                     </div>
-                </div>
-
-                {/* Map / Address */}
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-primary" />
-                        <h3 className="text-sm font-semibold">Delivery Address *</h3>
-                    </div>
-                    <MapPicker
-                        ref={mapRef}
-                        mapboxAccessToken={mapboxAccessToken}
-                        initialAddress={addressData}
-                        onAddressSelect={onAddressSelect}
-                        mapHeight={400}
-                        placeholder="Search for delivery address..."
-                    />
                 </div>
             </CardContent>
         </Card>

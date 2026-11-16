@@ -89,7 +89,12 @@ const DeliverySchedule = ({
     isRush,
     setIsRush,
     feeLoading,
+    pickup = false,
 }) => {
+    // Pickup uses the same days and time windows as delivery; only the words change
+    const how = pickup ? "pickup" : "delivery"
+    const How = pickup ? "Pickup" : "Delivery"
+
     const [loading, setLoading] = useState(true)
     const [timeRules, setTimeRules] = useState([])
     const [cutoffRule, setCutoffRule] = useState(null)
@@ -111,13 +116,13 @@ const DeliverySchedule = ({
             try {
                 const data = await apiRequest('/delivery/time-rules');
                 if (!data.rules || data.rules.length === 0) {
-                    toast.error("No delivery slots available")
+                    toast.error(`No ${how} slots available`)
                     setLoading(false)
                     return
                 }
                 const activeRules = data.rules.filter(r => r.is_active)
                 if (activeRules.length === 0) {
-                    toast.error("No active delivery time rules found")
+                    toast.error(`No active ${how} time rules found`)
                     setLoading(false)
                     return
                 }
@@ -130,13 +135,13 @@ const DeliverySchedule = ({
                 }
             } catch (err) {
                 console.error("Failed to load delivery rules", err)
-                toast.error("Could not load delivery schedule")
+                toast.error(`Could not load ${how} schedule`)
             } finally {
                 setLoading(false)
             }
         }
         fetchRules()
-    }, [])
+    }, [how])
     // ---------- Compute available delivery days ----------
     useEffect(() => {
         if (timeRules.length === 0) return
@@ -252,7 +257,7 @@ const DeliverySchedule = ({
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Delivery Schedule</CardTitle>
+                    <CardTitle>{How} Schedule</CardTitle>
                 </CardHeader>
                 <CardContent className="flex justify-center py-8">
                     <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -266,11 +271,11 @@ const DeliverySchedule = ({
         return (
             <Card>
                 <CardHeader>
-                    <CardTitle>Delivery Schedule</CardTitle>
+                    <CardTitle>{How} Schedule</CardTitle>
                 </CardHeader>
                 <CardContent className="py-8 text-center">
                     <AlertTriangle className="mx-auto h-8 w-8 text-yellow-500 mb-2" />
-                    <p className="text-muted-foreground">Delivery is currently unavailable.</p>
+                    <p className="text-muted-foreground">{How} is currently unavailable.</p>
                 </CardContent>
             </Card>
         )
@@ -287,10 +292,10 @@ const DeliverySchedule = ({
             )}
             <div>
                 <p className={`text-sm font-semibold ${isWeekOpen ? "text-green-800" : "text-amber-800"}`}>
-                    {isWeekOpen ? "Order now for this week's delivery" : "Next week delivery window"}
+                    {isWeekOpen ? `Order now for this week's ${how}` : `Next week ${how} window`}
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                    Orders placed after {cutoffRule.cutoff_day.charAt(0).toUpperCase() + cutoffRule.cutoff_day.slice(1)} at {formatTime(cutoffRule.cutoff_time)} will be delivered the following week.
+                    Orders placed after {cutoffRule.cutoff_day.charAt(0).toUpperCase() + cutoffRule.cutoff_day.slice(1)} at {formatTime(cutoffRule.cutoff_time)} will be {pickup ? "ready for pickup" : "delivered"} the following week.
                 </p>
             </div>
         </div>
@@ -299,13 +304,13 @@ const DeliverySchedule = ({
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Delivery Schedule</CardTitle>
+                <CardTitle>{How} Schedule</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 {cutoffDisplay}
 
-                {/* Delivery Fees & Details */}
-                {deliveryFee !== null && !feeLoading && (
+                {/* Delivery Fees & Details (delivery only: pickup is free, with no rush option) */}
+                {!pickup && deliveryFee !== null && !feeLoading && (
                     <div className="space-y-3 border rounded-lg p-4 bg-muted/30">
                         <Label className="flex items-center gap-2 text-base font-semibold">
                             <Truck className="w-4 h-4" />
@@ -368,11 +373,11 @@ const DeliverySchedule = ({
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
-                        Delivery Day *
+                        {How} Day *
                     </Label>
                     <Select value={deliveryDay} onValueChange={setDeliveryDay} required>
                         <SelectTrigger>
-                            <SelectValue placeholder="Select a delivery day" />
+                            <SelectValue placeholder={`Select a ${how} day`} />
                         </SelectTrigger>
                         <SelectContent>
                             {availableDays.map(option => (
@@ -383,7 +388,7 @@ const DeliverySchedule = ({
                         </SelectContent>
                     </Select>
                     {availableDays.length === 0 && (
-                        <p className="text-sm text-muted-foreground">No delivery days available.</p>
+                        <p className="text-sm text-muted-foreground">No {how} days available.</p>
                     )}
                 </div>
 
@@ -392,7 +397,7 @@ const DeliverySchedule = ({
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        Delivery Time *
+                        {How} Time *
                     </Label>
 
                     {timeSlots.length > 0 ? (
@@ -410,16 +415,16 @@ const DeliverySchedule = ({
                                 </SelectContent>
                             </Select>
                             <p className="text-xs text-muted-foreground">
-                                Choose a one-hour window for your delivery.
+                                Choose a one-hour window for your {how}.
                             </p>
                         </>
                     ) : deliveryDay ? (
                         <p className="text-sm text-amber-600 bg-amber-50 border border-amber-200 p-3 rounded-lg">
-                            No available time slots for this day. Please choose another delivery day.
+                            No available time slots for this day. Please choose another {how} day.
                         </p>
                     ) : (
                         <p className="text-sm text-muted-foreground">
-                            Select a delivery day to see available time slots.
+                            Select a {how} day to see available time slots.
                         </p>
                     )}
                 </div>
@@ -473,7 +478,7 @@ const DeliverySchedule = ({
 
                 {/* Tip */}
                 <div className="space-y-3">
-                    <Label>Add a Tip for Your Driver</Label>
+                    <Label>{pickup ? "Add a Tip" : "Add a Tip for Your Driver"}</Label>
                     <RadioGroup value={tip} onValueChange={setTip}>
                         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                             {tipOptions.map((option) => (
