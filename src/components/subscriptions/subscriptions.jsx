@@ -37,6 +37,8 @@ const steps = [
 ]
 
 const perks = [
+    // \u00A0 keeps "fully booked" together, so the last word never wraps alone on a phone
+    "Your spot is always saved, even when I'm fully\u00A0booked",
     "Pick new meals every week, right from your account",
     "Forget to pick? I'll repeat your last picks for you",
     "Something off the menu? I'll swap in a chef's choice",
