@@ -125,7 +125,7 @@ const BundleLinePicker = ({ subscriptionId, line, locked, onLockedByServer }) =>
 
             {line.mode !== "explicit_pick" && (
                 <p className="text-sm text-muted-foreground">
-                    You haven't picked for this cycle yet - if you don't, we'll automatically repeat what you got last
+                    You haven't picked for this cycle yet - if you don't, I'll automatically repeat what you got last
                     time (with a chef's-choice swap for anything out of stock). Pick below to choose something different.
                 </p>
             )}

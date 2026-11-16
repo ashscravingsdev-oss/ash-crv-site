@@ -17,7 +17,8 @@ export default function FeaturedProducts() {
         }
     }, [dispatch, products.length])
 
-    const featuredProducts = products.filter(isMenuProduct).slice(0, 3)
+    // Only what's on the menu right now (a product that's turned off never shows)
+    const featuredProducts = products.filter((p) => p.is_active !== false && isMenuProduct(p)).slice(0, 3)
     // Show placeholders until the first fetch finishes, instead of flashing "no products"
     const showSkeleton = loading || (products.length === 0 && !error)
 

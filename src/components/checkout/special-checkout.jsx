@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Cookies from "js-cookie"
+import { useSelector } from "react-redux"
 import Link from "next/link"
 import { Loader2, MapPin, Store, Truck, CheckCircle2, AlertTriangle } from "lucide-react"
 import { toast } from "sonner"
@@ -13,11 +14,12 @@ import { Button } from "@/components/ui/button"
 import { apiRequest } from "@/lib/apiRequest"
 import MapPicker from "./map-picker"
 import PaymentMethod from "./payment-method"
+import { Choice, PICKUP_ADDRESS } from "./fulfillment-choice"
 import {
-    CHRISTMAS_DAYS,
-    CHRISTMAS_WINDOW,
+    christmasOpenDays,
+    isChristmasItem,
+    shortDate,
     DEPOSIT_RATE,
-    FREE_DELIVERY_MILES,
     cartHasChristmas,
     cartHasDeposit,
     dateFromToday,
@@ -33,24 +35,6 @@ const TIME_WINDOWS = [
     { value: "4:00 PM - 7:00 PM", label: "Evening", hint: "4 – 7 PM" },
 ]
 
-const PICKUP_ADDRESS = "Pickup in Eastvale, CA (I'll text you the address)"
-
-const Choice = ({ selected, onClick, icon: Icon, title, text }) => (
-    <button
-        type="button"
-        onClick={onClick}
-        aria-pressed={selected}
-        className={`flex-1 text-left rounded-xl border p-4 transition-colors ${
-            selected ? "border-primary bg-primary/5 ring-1 ring-primary" : "border-border hover:border-brand-tobacco"
-        }`}
-    >
-        <span className="flex items-center gap-2 font-semibold text-brand-espresso">
-            <Icon className="h-4 w-4 text-primary" /> {title}
-        </span>
-        <span className="block text-sm text-muted-foreground mt-1">{text}</span>
-    </button>
-)
-
 /**
  * Checkout for desserts, cakes and custom items. No account needed: guests give
  * their name, email and phone. 50% today, the rest charged on the date they pick.
@@ -60,19 +44,22 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const mapRef = useRef(null)
     const mapboxAccessToken = process.env.NEXT_PUBLIC_MAP_BOX_ACCESS_TOKEN
 
-    const lead = Math.max(1, leadDaysFor(items))
-    const earliest = dateFromToday(lead)
-
-    // Christmas mini cakes only go out on Ash's December days
+    // Christmas mini cakes only go out on Ash's December days, each with its own
+    // order-by date; anything else in the cart still needs its usual notice
     const christmas = cartHasChristmas(items)
-    const christmasDays = christmas ? CHRISTMAS_DAYS.filter((d) => d >= earliest) : []
-    const minDate = christmas && CHRISTMAS_WINDOW.from > earliest ? CHRISTMAS_WINDOW.from : earliest
-    const maxDate = christmas ? CHRISTMAS_WINDOW.to : undefined
+    const others = items.filter((i) => !isChristmasItem(i))
+    const lead = Math.max(1, leadDaysFor(christmas ? others : items))
+    const earliest = dateFromToday(lead)
+    const openDays = christmas ? christmasOpenDays() : []
+    const christmasDays = openDays.filter((d) => !others.length || d.date >= earliest)
+    const christmasClosed = christmas && christmasDays.length === 0
+    const minDate = earliest
+    const maxDate = undefined
 
     const [guest, setGuest] = useState({ name: "", email: "", phone: "" })
     const [method, setMethod] = useState("delivery")
     const [addressData, setAddressData] = useState({ address: "", latitude: null, longitude: null })
-    const [distance, setDistance] = useState(null) // { deliverable } | null (no miles, on purpose)
+    const [quote, setQuote] = useState(null) // { deliverable, fee } | null (no miles, on purpose)
     const [checking, setChecking] = useState(false)
     const [date, setDate] = useState("")
     const [timeSlot, setTimeSlot] = useState(TIME_WINDOWS[1].value)
@@ -81,30 +68,34 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const [square, setSquare] = useState(null)
     const [submitting, setSubmitting] = useState(false)
 
-    const total = Math.max(0, subtotal + taxTotal - (couponDiscount || 0))
+    // Delivery uses Ash's delivery zones (the order server works out the real fee again when the order is placed)
+    const freeDeliveryCoupon = useSelector((state) => state.cart.coupon)?.type === "free_delivery"
+    const deliveryFee = method === "delivery" && quote?.deliverable && !freeDeliveryCoupon ? Number(quote.fee) || 0 : 0
+    const total = Math.max(0, subtotal + taxTotal - (couponDiscount || 0) + deliveryFee)
     const deposit = cartHasDeposit(items)
     const dueToday = deposit ? Math.round(total * DEPOSIT_RATE * 100) / 100 : total
     const dueLater = Math.round((total - dueToday) * 100) / 100
 
-    // Check the free-delivery radius as soon as an address is picked
+    // As soon as an address is picked, ask if I deliver there and what the fee is
     useEffect(() => {
+        setQuote(null)
         if (method !== "delivery" || !addressData.latitude || !addressData.longitude) {
-            setDistance(null)
+            setChecking(false)
             return
         }
         let alive = true
         setChecking(true)
         apiRequest("/delivery/special-check", {
             method: "POST",
-            body: JSON.stringify({ latitude: addressData.latitude, longitude: addressData.longitude }),
+            body: JSON.stringify({ latitude: addressData.latitude, longitude: addressData.longitude, cart_total: subtotal }),
         })
-            .then((d) => alive && setDistance(d))
-            .catch(() => alive && setDistance(null))
+            .then((d) => alive && setQuote(d))
+            .catch(() => alive && setQuote(null))
             .finally(() => alive && setChecking(false))
         return () => {
             alive = false
         }
-    }, [method, addressData.latitude, addressData.longitude])
+    }, [method, addressData.latitude, addressData.longitude, subtotal])
 
     const missing = () => {
         if (!isLoggedIn) {
@@ -112,13 +103,20 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
             if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(guest.email.trim())) return "Please add a valid email"
             if (guest.phone.replace(/\D/g, "").length < 10) return "Please add your phone number"
         }
+        if (christmasClosed) {
+            return openDays.length
+                ? "Some items in your cart need more notice than my Christmas days allow. Please order them separately."
+                : "Christmas mini cake orders are closed. Thank you so much!"
+        }
         if (!date) return "Please pick your date"
-        if (christmasDays.length && !christmasDays.includes(date)) return "Please pick one of my Christmas pickup days"
-        if (date < minDate) return `Please pick ${prettyDate(minDate)} or later`
-        if (maxDate && date > maxDate) return `Please pick a day by ${prettyDate(maxDate)}`
+        if (christmas) {
+            if (!christmasDays.some((d) => d.date === date)) return "Please pick one of my Christmas days"
+        } else if (date < minDate) return `Please pick ${prettyDate(minDate)} or later`
         if (method === "delivery") {
             if (!addressData.address || !addressData.latitude) return "Please choose your delivery address on the map"
-            if (distance && !distance.deliverable) return `That address is outside my free delivery area. Please choose pickup.`
+            // The fee is part of the total, so wait for it before taking payment
+            if (!quote) return checking ? "One moment, I'm checking your address" : "I couldn't check that address. Please pick it again, or choose pickup."
+            if (!quote.deliverable) return "That address is outside my delivery area. Please choose pickup."
         }
         if (!square) return "The card form is still loading"
         if (deposit && !agree) return "Please check the box about your remaining balance"
@@ -142,7 +140,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
             order_notes: notes.trim() || undefined,
             frequency: "one-time",
             cardToken,
-            totals: { subtotal, tax: taxTotal, discount: couponDiscount || 0, tipAmount: 0, total },
+            totals: { subtotal, tax: taxTotal, discount: couponDiscount || 0, tipAmount: 0, deliveryFee, total },
         }
         const result = await apiRequest("/checkout/create-order", { method: "POST", body: JSON.stringify(body) })
         const key = result.order?.viewKey ? `&key=${encodeURIComponent(result.order.viewKey)}` : ""
@@ -242,32 +240,43 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="s-date">Date</Label>
-                                    {christmasDays.length ? (
-                                        <div className="flex flex-col gap-2">
-                                            {christmasDays.map((d) => (
-                                                <button
-                                                    key={d}
-                                                    type="button"
-                                                    onClick={() => setDate(d)}
-                                                    aria-pressed={date === d}
-                                                    className={`rounded-lg border px-3 py-2 text-sm text-left ${
-                                                        date === d ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-brand-tobacco"
-                                                    }`}
-                                                >
-                                                    {prettyDate(d)}
-                                                </button>
-                                            ))}
-                                        </div>
+                                    {christmas ? (
+                                        christmasClosed ? (
+                                            <p className="rounded-lg border border-dashed border-border px-3 py-3 text-sm text-muted-foreground">
+                                                {openDays.length
+                                                    ? "Some items in your cart need more notice than my Christmas days allow. Please order them separately."
+                                                    : "Christmas mini cake orders are closed. Thank you so much!"}
+                                            </p>
+                                        ) : (
+                                            <div className="flex flex-col gap-2" role="group" aria-label="Christmas days">
+                                                {christmasDays.map((d) => (
+                                                    <button
+                                                        key={d.date}
+                                                        type="button"
+                                                        onClick={() => setDate(d.date)}
+                                                        aria-pressed={date === d.date}
+                                                        className={`rounded-lg border px-3 py-2.5 text-left ${
+                                                            date === d.date ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-brand-tobacco"
+                                                        }`}
+                                                    >
+                                                        <span className="block text-sm font-medium">{prettyDate(d.date)}</span>
+                                                        <span className={`block text-xs ${date === d.date ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+                                                            Orders close {shortDate(d.closes)}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )
                                     ) : (
                                         <Input id="s-date" type="date" min={minDate} max={maxDate} value={date} onChange={(e) => setDate(e.target.value)} required />
                                     )}
-                                    <p className="text-xs text-muted-foreground">
-                                        {christmas
-                                            ? christmasDays.length
-                                                ? "Christmas cakes are ready on these two days. Pick the one you'd like."
-                                                : "Christmas cakes are ready on two days in December. Pick the day you'd like and I'll text you to confirm."
-                                            : <>{lead} days&apos; notice, so {prettyDate(earliest)} or later. Need it sooner? Message me!</>}
-                                    </p>
+                                    {!christmasClosed && (
+                                        <p className="text-xs text-muted-foreground">
+                                            {christmas
+                                                ? "My Christmas mini cakes are ready on these days. Pick the one you'd like."
+                                                : <>{lead} days&apos; notice, so {prettyDate(earliest)} or later. Need it sooner? Message me!</>}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Time</Label>
@@ -296,14 +305,14 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                     onClick={() => setMethod("delivery")}
                                     icon={Truck}
                                     title="Delivery"
-                                    text={`Free within ${FREE_DELIVERY_MILES} miles of Eastvale`}
+                                    text="To your door, in and around Eastvale"
                                 />
                                 <Choice
                                     selected={method === "pickup"}
                                     onClick={() => setMethod("pickup")}
                                     icon={Store}
                                     title="Pickup"
-                                    text="In Eastvale. I'll text you the address"
+                                    text="Free, in Eastvale. I'll text you the address"
                                 />
                             </div>
 
@@ -322,15 +331,15 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                         placeholder="Search for your address..."
                                     />
                                     {checking && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Checking your address…</p>}
-                                    {!checking && distance && distance.deliverable && (
+                                    {!checking && quote?.deliverable && (
                                         <p className="text-sm text-green-700 flex items-center gap-2">
-                                            <CheckCircle2 className="h-4 w-4 shrink-0" /> You&apos;re in my delivery area. Delivery is free!
+                                            <CheckCircle2 className="h-4 w-4 shrink-0" /> You&apos;re in my delivery area.{" "}
+                                            {deliveryFee > 0 ? `Delivery is ${money(deliveryFee)}.` : "Delivery is free!"}
                                         </p>
                                     )}
-                                    {!checking && distance && !distance.deliverable && (
+                                    {!checking && quote && !quote.deliverable && (
                                         <p className="text-sm text-destructive flex items-center gap-2">
-                                            <AlertTriangle className="h-4 w-4 shrink-0" /> That&apos;s outside my free delivery area ({FREE_DELIVERY_MILES} miles around
-                                            Eastvale), so please choose pickup or message me.
+                                            <AlertTriangle className="h-4 w-4 shrink-0" /> That&apos;s outside my delivery area, so please choose pickup or message me.
                                         </p>
                                     )}
                                 </div>
@@ -356,6 +365,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                             onPaymentError={(m) => toast.error(m || "Payment system error")}
                             amount={total}
                             walletsEnabled={!deposit}
+                            walletNote={deposit ? "Apple Pay and Google Pay work for orders paid in full. With a deposit, the rest is charged to your card on your date." : undefined}
                             beforeWallet={walletCheck}
                             onWalletToken={payWithWallet}
                         />
@@ -397,7 +407,14 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                     <div className="flex justify-between text-green-700"><span>Discount</span><span>-{money(couponDiscount)}</span></div>
                                 )}
                                 <div className="flex justify-between"><span className="text-muted-foreground">Tax</span><span>{money(taxTotal)}</span></div>
-                                <div className="flex justify-between"><span className="text-muted-foreground">{method === "pickup" ? "Pickup" : "Delivery"}</span><span>Free</span></div>
+                                <div className="flex justify-between">
+                                    <span className="text-muted-foreground">{method === "pickup" ? "Pickup" : "Delivery"}</span>
+                                    {method === "pickup" || quote?.deliverable ? (
+                                        <span>{deliveryFee > 0 ? money(deliveryFee) : "Free"}</span>
+                                    ) : (
+                                        <span className="text-muted-foreground">{quote ? "Not available" : "Add your address"}</span>
+                                    )}
+                                </div>
                                 <div className="flex justify-between font-semibold text-base pt-1"><span>Total</span><span>{money(total)}</span></div>
                             </div>
                             {deposit && (

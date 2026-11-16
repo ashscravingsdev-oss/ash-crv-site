@@ -43,6 +43,14 @@ const Account = () => {
         dispatch(fetchUserSubscriptions());
     }, [dispatch]);
 
+    // "pickup" or "delivery": a subscription keeps the choice made at checkout
+    const wordFor = (sub) => (sub?.fulfillment_method === "pickup" ? "pickup" : "delivery");
+    const wordForId = (subId) => wordFor((subscriptions || []).find((s) => s.id === subId));
+    // The "next" stat below is the soonest active subscription
+    const nextSub = (subscriptions || []).find(
+        (s) => s.status === "active" && s.next_delivery_date === stats?.nextDelivery
+    );
+
     // Quick stats
     const quickStats = [
         {
@@ -57,9 +65,10 @@ const Account = () => {
             id: "next-delivery",
             icon: Calendar,
             value: stats?.nextDelivery
-                ? new Date(stats.nextDelivery).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+                ? // A calendar day, read at local noon (midnight UTC would show the day before in California)
+                  new Date(`${String(stats.nextDelivery).slice(0, 10)}T12:00:00`).toLocaleDateString("en-US", { month: "short", day: "numeric" })
                 : "—",
-            label: "Next Delivery",
+            label: wordFor(nextSub) === "pickup" ? "Next Pickup" : "Next Delivery",
             color: "bg-primary/10",
             iconColor: "text-primary",
         },
@@ -100,9 +109,9 @@ const Account = () => {
             await dispatch(skipUserSubscription(subId)).unwrap();
             dispatch(fetchUserSubscriptions());
             dispatch(fetchDashboardStats());
-            toast.success("Next delivery skipped");
+            toast.success(`Next ${wordForId(subId)} skipped`);
         } catch (err) {
-            toast.error(err?.message || "Failed to skip delivery");
+            toast.error(err?.message || `Failed to skip ${wordForId(subId)}`);
         }
     };
 
@@ -111,7 +120,7 @@ const Account = () => {
             await dispatch(unskipUserSubscription(subId)).unwrap();
             dispatch(fetchUserSubscriptions());
             dispatch(fetchDashboardStats());
-            toast.success("Skipped delivery restored");
+            toast.success(`Skipped ${wordForId(subId)} restored`);
         } catch (err) {
             toast.error(err?.message || "Failed to undo skip");
         }

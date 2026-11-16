@@ -47,9 +47,9 @@ function OrderConfirmationContent() {
 
   const money = (n) => `$${Number(n || 0).toFixed(2)}`;
 
-  // "Saturday, December 12" for cakes and desserts, "Sunday" for weekly meal prep
+  // "Tuesday, November 24": the real date, so nobody has to guess which week
   const formatDay = () => {
-    if (order?.order_type === "special_order" && order?.delivery_date) {
+    if (order?.delivery_date) {
       return new Date(`${String(order.delivery_date).slice(0, 10)}T12:00:00Z`).toLocaleDateString("en-US", {
         weekday: "long", month: "long", day: "numeric", timeZone: "UTC",
       });

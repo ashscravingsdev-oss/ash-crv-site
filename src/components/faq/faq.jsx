@@ -18,11 +18,11 @@ const faqs = [
         questions: [
             {
                 q: "When do you deliver?",
-                a: "I deliver every Monday and Tuesday. You'll pick your day and delivery window at checkout. Order by Sunday to get your meals that Monday or Tuesday.",
+                a: "I deliver every Tuesday, and you can pick up on Tuesdays too. You'll choose your time window at checkout. Order by Sunday to get your meals that Tuesday.",
             },
             {
                 q: "Is there a delivery fee? Can I pick up instead?",
-                a: "Delivery has a fee based on your address, and you'll see it at checkout before you pay. You can also pick up your order. Just message me and we'll set it up.",
+                a: "Delivery has a fee based on your address, and you'll see it at checkout before you pay. Pickup is free: choose it at checkout and I'll text you the address.",
             },
             {
                 q: "What if I'm not home for delivery?",
@@ -34,7 +34,7 @@ const faqs = [
             },
             {
                 q: "How do I reheat my meals?",
-                a: "The microwave works perfect, about 2 minutes. My favorite way is in my mini oven or the air fryer.",
+                a: "Vent the lid by lifting one corner, then microwave for 2 to 2½ minutes, stirring halfway through. Enjoy within 4 days, and keep it in the fridge until then.\n\nA few dishes need a little extra care:\n• Salmon: heat at 50% power so it stays tender.\n• Burritos: take off the foil first.\n• Sauce cups, tzatziki and salad: take them out before heating.\n\nMy favorite way? The air fryer or my mini oven!",
             },
             {
                 q: "Can I make swaps or work around allergies?",
@@ -173,7 +173,7 @@ const FAQ = () => {
                                     <AccordionTrigger className="text-left hover:no-underline">
                                         <span className="font-semibold">{faq.q}</span>
                                     </AccordionTrigger>
-                                    <AccordionContent className="text-muted-foreground leading-relaxed">
+                                    <AccordionContent className="text-muted-foreground leading-relaxed whitespace-pre-line">
                                         {faq.a}
                                     </AccordionContent>
                                 </AccordionItem>
