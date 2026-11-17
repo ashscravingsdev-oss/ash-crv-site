@@ -10,6 +10,7 @@ import { Minus, Plus, ShoppingCart, Heart, LoaderCircle, Check, ShoppingBag } fr
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { isMenuProduct } from "@/lib/special-orders"
+import { isTreat } from "@/lib/treats"
 import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
@@ -171,7 +172,7 @@ const Product = ({ slug }) => {
     }
 
     const relatedProducts = products
-        ? products.filter(p => p.id !== product?.id && isMenuProduct(p)).slice(0, 3)
+        ? products.filter(p => p.id !== product?.id && isMenuProduct(p) && !isTreat(p)).slice(0, 3)
         : []
 
     if (productLoading) {
