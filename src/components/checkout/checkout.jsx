@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect } from "react"
 import { fetchCart, calculateCartTotals } from "@/store/cartSlice"
 import { useDispatch, useSelector } from "react-redux"
-import { cartCanSubscribe, getSavedFrequency } from "@/lib/order-frequency"
+import { cartCanSubscribe, cartExtras, getSavedFrequency } from "@/lib/order-frequency"
 import Cookies from "js-cookie"
 import DeliveryInfo from './delivery-info'
 import DeliverySchedule from './delivery-schedule'
@@ -73,10 +73,15 @@ const Checkout = () => {
 
     // ----- Cart totals from Redux -----
     const { cart, loading: cartLoading, items, subtotal, taxTotal, couponDiscount, coupon } = useSelector(state => state.cart)
-    // Subscriptions are for bundle-only carts; anything else is a one-time order
+    // Whether the order server takes one-time extras in a subscription cart. It says so
+    // with the delivery times (step 2); null until then.
+    const [extrasAllowed, setExtrasAllowed] = useState(null)
+    const canSubscribe = cartCanSubscribe(cart?.items, extrasAllowed === true)
+    // A subscription needs a bundle in the cart; without one it's a one-time order
     useEffect(() => {
-        if (cart?.items && !cartCanSubscribe(cart.items) && frequency !== "one-time") setFrequency("one-time")
-    }, [cart?.items, frequency])
+        if (extrasAllowed === null) return
+        if (cart?.items && !canSubscribe && frequency !== "one-time") setFrequency("one-time")
+    }, [cart?.items, frequency, extrasAllowed, canSubscribe])
     const isFreeDeliveryCoupon = coupon?.type === 'free_delivery';
 
     // Pickup is always free: no delivery fee, no rush fee, never "needs approval".
@@ -368,7 +373,9 @@ const Checkout = () => {
                                 setTip={setTip}
                                 frequency={frequency}
                                 setFrequency={setFrequency}
-                                canSubscribe={cartCanSubscribe(cart?.items)}
+                                canSubscribe={canSubscribe}
+                                extras={canSubscribe ? cartExtras(cart?.items) : []}
+                                onExtrasAllowed={setExtrasAllowed}
                                 deliveryFee={fee}
                                 rushFee={pickup ? 0 : rushFee}
                                 requiresAdminApproval={needsApproval}
