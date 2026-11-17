@@ -1,433 +1,173 @@
-﻿import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/nav";
-import SEO from "@/components/seo";
+import Policy from "@/components/policy"
+import SEO from "@/components/seo"
 
+const UPDATED = "November 17, 2026"
+
+const intro = [
+    "Ash's Cravings is me, Ash. I make meal prep, cakes, desserts and food for events in Eastvale, CA. When this page says \"I\", \"me\" or \"my\", it means Ash's Cravings.",
+    "By ordering from me or using my website, you agree to these terms. If I change them, I'll post the new version here with a new date.",
+]
+
+const sections = [
+    {
+        heading: "1. Your account",
+        blocks: [
+            {
+                list: [
+                    "Give me correct details (name, phone, address) so I can reach you and find you.",
+                    "Keep your password private, and tell me if you think someone else has used your account.",
+                    "You must be 18 or older to order.",
+                    "I can refuse or cancel an order, or close an account, at my discretion. For example, if an item runs out, a price was listed wrong, or a payment looks like fraud. If I cancel an order you've paid for, I'll refund it.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "2. Ordering and paying",
+        blocks: [
+            {
+                list: [
+                    "Prices are in US dollars and can change. You pay the price shown when you order, plus any delivery fee and tax shown at checkout.",
+                    "On the website you pay by card, through Square. For cakes, desserts, events and private chef nights, I also take Zelle or a payment link.",
+                    "Meal prep is made to order for Tuesdays. Order before the Sunday cutoff shown at checkout to get your meals that Tuesday.",
+                    "I may change or stop offering any part of what I sell at any time.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "3. Deposits",
+        blocks: [
+            {
+                list: [
+                    "Cakes, desserts, events and private chef nights need a 50% deposit to hold your date.",
+                    "For cakes and desserts ordered on the site, the rest is charged automatically to the same card on your date.",
+                    "Deposits aren't refundable, because I turn other orders away to hold your date. If you cancel at least 7 days before your date, I'll move your deposit to a new date one time.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "4. Subscriptions",
+        blocks: [
+            {
+                list: [
+                    "A subscription repeats your bundle every week or every 2 weeks until you pause or stop it.",
+                    "Your card on file is charged automatically for each order, after the Sunday cutoff for that week.",
+                    "To skip a week or pause, do it from your account before the Sunday cutoff and you won't be charged for that week.",
+                    "Anything else you add when you subscribe, like a treat or a single meal, comes with your first order only.",
+                    "If I change what a subscription costs or how it works, I'll let you know at least 30 days ahead.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "5. Delivery and pickup",
+        blocks: [
+            {
+                list: [
+                    "I deliver within my delivery area. The fee depends on your address, and you'll see it at checkout before you pay.",
+                    "Pickup is free and is in Eastvale. I'll text you the address after you order.",
+                    "Delivery windows are my best estimate. Traffic and weather can change them.",
+                    "Please give me the right address and be there for your delivery, or tell me where to leave it. I'm not responsible for an order left where you asked, or for an order that goes wrong because the address was wrong.",
+                    "If you miss your delivery or pickup, message me within 24 hours. Whether I can refund or redeliver is up to me, and it may cost extra.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "6. Changes, cancellations and refunds",
+        blocks: [
+            {
+                list: [
+                    ["Meal prep:", " you can change or cancel before the Sunday cutoff. After that I've already shopped for your meals, so that week can't be refunded."],
+                    ["Cakes, desserts, events and private chef nights:", " see Deposits above."],
+                    ["Something wrong with your order?", " Tell me within 24 hours of getting it. I'll look into it and may offer a refund, a credit or a replacement."],
+                    "Approved refunds go back to your original payment method, usually within 5 to 10 business days.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "7. Food safety and allergies",
+        blocks: [
+            {
+                list: [
+                    "Keep your food in the fridge and enjoy meals within 3 to 4 days. Once your order is delivered or picked up, storing it safely is up to you.",
+                    "Everything is made in my kitchen, which handles common allergens including nuts, dairy, eggs, soy, wheat and shellfish. I can't promise any item is free of traces of them.",
+                    "Read the ingredients and allergen notes before you order. If you have an allergy, tell me when you order. If it's severe, message me first so we can talk it through.",
+                ],
+            },
+        ],
+    },
+    {
+        heading: "8. My content",
+        blocks: [
+            { p: "The photos, recipes, text and logo on my site belong to Ash's Cravings. Please don't copy or reuse them without asking me first." },
+        ],
+    },
+    {
+        heading: "9. Limitation of liability",
+        blocks: [
+            { p: "To the fullest extent permitted by law, Ash's Cravings is not liable for any indirect, incidental, special, consequential or punitive damages arising out of or relating to your use of my services, including:" },
+            {
+                list: [
+                    "Loss of profits, revenue or business opportunities",
+                    "Food allergies or adverse reactions",
+                    "Foodborne illness or food poisoning",
+                    "Delivery delays or missed deliveries",
+                    "Loss or spoilage of food products",
+                ],
+            },
+            { p: "My total liability for any claim arising out of or relating to these terms or my services will not exceed the amount you paid for the specific order the claim is about." },
+        ],
+    },
+    {
+        heading: "10. Indemnification",
+        blocks: [
+            { p: "You agree to indemnify, defend and hold harmless Ash's Cravings, its affiliates, officers, directors, employees and agents from any claims, liabilities, damages, losses and expenses arising out of or related to your use of my services, your violation of these terms, or your violation of any rights of another party." },
+        ],
+    },
+    {
+        heading: "11. Disputes",
+        blocks: [
+            {
+                list: [
+                    ["Talk to me first.", " If you have a problem, please message me so we can try to work it out."],
+                    ["Binding arbitration.", " Any dispute that can't be resolved informally will be resolved through binding arbitration under the rules of the American Arbitration Association. The arbitration will take place in California, and judgment on the award may be entered in any court having jurisdiction."],
+                    ["Class action waiver.", " Any arbitration or proceeding is limited to the dispute between you and Ash's Cravings individually. You waive any right to take part in a class action lawsuit or class-wide arbitration."],
+                ],
+            },
+        ],
+    },
+    {
+        heading: "12. Governing law",
+        blocks: [
+            { p: "These terms are governed by the laws of California, without regard to its conflict of law provisions. Any legal action relating to your use of my services must be brought in state or federal court in California." },
+        ],
+    },
+    {
+        heading: "13. If part of these terms doesn't hold up",
+        blocks: [
+            { p: "If any part of these terms is found to be unenforceable, that part will be limited or removed to the smallest extent needed, and the rest stays in effect." },
+        ],
+    },
+    {
+        heading: "14. Contact",
+        blocks: [{ p: "Email Ashscravings@gmail.com or call 951-224-7740. Serving Eastvale, CA." }],
+    },
+]
 
 export default function TermsPage() {
-  return (
-    <div className="min-h-screen">
-      <SEO
-        title="Terms of Service - Ash's Cravings | Meal Delivery Terms & Conditions"
-        description="Read Ash's Cravings's Terms of Service for meal delivery subscriptions, orders, cancellations, and service policies. Your rights and responsibilities."
-        keywords={[
-          "terms of service Ash's Cravings",
-          "meal delivery terms",
-          "service agreement",
-          "subscription terms",
-          "delivery terms and conditions",
-          "user agreement",
-          "cancellation policy",
-          "refund policy",
-          "service terms",
-          "legal terms",
-          "customer agreement",
-          "food delivery terms"
-        ]}
-        url="/terms-of-service"
-        type="website"
-        publishedTime="2024-01-01T00:00:00.000Z"
-        modifiedTime={new Date().toISOString()}
-      />
-      <Navigation />
-      <div className="container mx-auto px-4 pt-12 max-w-4xl">
-        <h1 className="text-4xl font-bold text-foreground mb-2">
-          Terms of Service
-        </h1>
-        <p className="text-muted-foreground mb-8">
-          Last Updated: December 19, 2024
-        </p>
-
-        <div className="prose prose-neutral max-w-none">
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              1. Acceptance of Terms
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Welcome to Ash's Cravings. By accessing or using our website, mobile
-              application, or services, you agree to be bound by these Terms of
-              Service ("Terms"). If you do not agree to these Terms, please do
-              not use our services.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              These Terms constitute a legally binding agreement between you and
-              Ash's Cravings LLC ("Company," "we," "us," or "our"). We reserve the right
-              to modify these Terms at any time, and such modifications will be
-              effective immediately upon posting.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              2. Service Description
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Ash's Cravings provides meal preparation and cold-pressed juice
-              delivery services. Our services include:
-            </p>
-            <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-4">
-              <li>
-                Prepared meal delivery on a one-time or subscription basis
-              </li>
-              <li>Cold-pressed juice and wellness beverage delivery</li>
-              <li>Customized meal bundles and packages</li>
-              <li>Food for events and groups</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              We reserve the right to modify, suspend, or discontinue any aspect
-              of our services at any time without prior notice.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              3. Account Registration
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              To place orders and access certain features, you must create an
-              account. You agree to:
-            </p>
-            <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-4">
-              <li>
-                Provide accurate, current, and complete information during
-                registration
-              </li>
-              <li>Maintain and promptly update your account information</li>
-              <li>Keep your password secure and confidential</li>
-              <li>
-                Notify us immediately of any unauthorized use of your account
-              </li>
-              <li>
-                Be responsible for all activities that occur under your account
-              </li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              You must be at least 18 years old to create an account and use our
-              services. We reserve the right to refuse service, terminate
-              accounts, or cancel orders at our sole discretion.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              4. Orders and Pricing
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              4.1 Order Placement
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              All orders are subject to acceptance and availability. We reserve
-              the right to refuse or cancel any order for any reason, including
-              but not limited to product availability, errors in pricing or
-              product information, or suspected fraudulent activity.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              4.2 Pricing and Payment
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              All prices are in USD and are subject to change without notice.
-              You agree to pay all charges at the prices in effect when you
-              place your order, including applicable taxes and delivery fees. We
-              accept major credit cards, debit cards, and other payment methods
-              as displayed at checkout.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              4.3 Order Modifications
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              Meal prep orders can be changed or cancelled before the Sunday
-              order cutoff. After the cutoff, groceries have already been
-              purchased for your order, so that week cannot be refunded. Custom
-              cakes, desserts, events and private chef services require a 50%
-              deposit to hold your date. Deposits are non-refundable, but if you
-              cancel at least 7 days before your date, your deposit can be moved
-              to a new date one time.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              5. Subscriptions
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              5.1 Subscription Terms
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Subscription plans automatically renew according to your selected
-              billing cycle (weekly, bi-weekly, or monthly) until you cancel.
-              You will be charged at the beginning of each billing period.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              5.2 Subscription Management
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              You may pause or skip your subscription at any time
-              through your account settings. To avoid being charged for the next
-              billing cycle, you must skip or cancel before the Sunday
-              cutoff ahead of your next scheduled delivery.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              5.3 Subscription Changes
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              We reserve the right to modify subscription plans, pricing, or
-              terms with 30 days notice. Continued use of the subscription
-              service after such notice constitutes acceptance of the new terms.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              6. Delivery
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              6.1 Delivery Areas
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              We deliver to specific geographic areas as indicated on our
-              website. Delivery availability and fees vary by location.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              6.2 Delivery Times
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              We provide estimated delivery windows but cannot guarantee exact
-              delivery times. Delivery schedules may be affected by weather,
-              traffic, or other circumstances beyond our control.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              6.3 Delivery Requirements
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              You must provide accurate delivery information and be available to
-              receive deliveries. We are not responsible for orders left
-              unattended at your request or orders affected by incorrect
-              delivery information.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              6.4 Missed Deliveries
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              If you miss a delivery or are unable to receive your order, please
-              contact us within 24 hours. Refunds or redeliveries for missed
-              deliveries are subject to our discretion and may incur additional
-              fees.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              7. Cancellations and Refunds
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              7.1 Cancellation Policy
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Orders may be cancelled up to 48 hours before the scheduled
-              delivery time for a full refund. Cancellations made within 48
-              hours of delivery may be subject to a cancellation fee of up to
-              50% of the order value.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              7.2 Refund Policy
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              We strive for 100% customer satisfaction. If you are unsatisfied
-              with your order due to quality issues, please contact us within 24
-              hours of delivery. We will review your request and may offer a
-              refund, credit, or replacement at our discretion.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              7.3 Refund Processing
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              Approved refunds will be processed within 5-10 business days to
-              your original payment method. Subscription refunds will be applied
-              as account credits unless otherwise specified.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              8. Food Safety and Allergens
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              8.1 Food Safety
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Our meals are prepared in facilities that follow strict food
-              safety protocols. However, once delivered, proper storage and
-              handling are your responsibility. Follow all storage instructions
-              provided with your order.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              8.2 Allergen Information
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              We provide allergen information for all products. However, our
-              kitchen handles common allergens including nuts, dairy, eggs, soy,
-              wheat, and shellfish. We cannot guarantee that cross-contamination
-              will not occur.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              8.3 Customer Responsibility
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              It is your responsibility to review ingredient lists and allergen
-              information before ordering. If you have severe allergies or
-              dietary restrictions, please consult with your healthcare provider
-              before consuming our products.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              9. Intellectual Property
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              All content on our website and applications, including but not
-              limited to text, graphics, logos, images, recipes, and software,
-              is the property of Ash's Cravings and is protected by copyright,
-              trademark, and other intellectual property laws.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              You may not reproduce, distribute, modify, or create derivative
-              works from any content without our express written permission. Our
-              recipes and meal preparation methods are proprietary and
-              confidential.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              10. Limitation of Liability
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              To the fullest extent permitted by law, Ash's Cravings shall not be
-              liable for any indirect, incidental, special, consequential, or
-              punitive damages arising out of or relating to your use of our
-              services, including but not limited to:
-            </p>
-            <ul className="list-disc pl-6 text-muted-foreground space-y-2 mb-4">
-              <li>Loss of profits, revenue, or business opportunities</li>
-              <li>Food allergies or adverse reactions</li>
-              <li>Foodborne illness or food poisoning</li>
-              <li>Delivery delays or missed deliveries</li>
-              <li>Loss or spoilage of food products</li>
-            </ul>
-            <p className="text-muted-foreground leading-relaxed">
-              Our total liability for any claim arising out of or relating to
-              these Terms or our services shall not exceed the amount you paid
-              for the specific order giving rise to the claim.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              11. Indemnification
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              You agree to indemnify, defend, and hold harmless Ash's Cravings, its
-              affiliates, officers, directors, employees, and agents from any
-              claims, liabilities, damages, losses, and expenses arising out of
-              or related to your use of our services, violation of these Terms,
-              or violation of any rights of another party.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              12. Dispute Resolution
-            </h2>
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              12.1 Informal Resolution
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              If you have a dispute with Ash's Cravings, please contact our customer
-              service team first to attempt an informal resolution.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              12.2 Binding Arbitration
-            </h3>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              Any dispute that cannot be resolved informally shall be resolved
-              through binding arbitration in accordance with the rules of the
-              American Arbitration Association. The arbitration shall take place
-              in California, and judgment on the award may be entered in any
-              court having jurisdiction.
-            </p>
-
-            <h3 className="text-xl font-semibold text-foreground mb-3 mt-6">
-              12.3 Class Action Waiver
-            </h3>
-            <p className="text-muted-foreground leading-relaxed">
-              You agree that any arbitration or proceeding shall be limited to
-              the dispute between you and Ash's Cravings individually. You waive any
-              right to participate in a class action lawsuit or class-wide
-              arbitration.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              13. Governing Law
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              These Terms shall be governed by and construed in accordance with
-              the laws of California, without regard to its conflict of law
-              provisions. Any legal action or proceeding relating to your access
-              to or use of our services shall be instituted in state or federal
-              court in California.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              14. Severability
-            </h2>
-            <p className="text-muted-foreground leading-relaxed">
-              If any provision of these Terms is found to be unenforceable or
-              invalid, that provision shall be limited or eliminated to the
-              minimum extent necessary, and the remaining provisions shall
-              remain in full force and effect.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-foreground mb-4">
-              15. Contact Information
-            </h2>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              If you have any questions about these Terms of Service, please
-              contact us at:
-            </p>
-            <div className="bg-muted rounded-lg p-6">
-              <p className="text-foreground font-semibold mb-2">
-                Ash's Cravings LLC Customer Service
-              </p>
-              <p className="text-muted-foreground">
-                Email: Ashscravings@gmail.com
-              </p>
-              <p className="text-muted-foreground">Phone: 951-224-7740</p>
-              <p className="text-muted-foreground">
-                Serving Eastvale, CA
-              </p>
-            </div>
-          </section>
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
+    return (
+        <>
+            <SEO
+                title="Terms of Service - Ash's Cravings"
+                description="The terms for ordering from Ash's Cravings: orders, deposits, subscriptions, delivery and pickup, cancellations and refunds."
+                keywords={["terms of service", "Ash's Cravings"]}
+                url="/terms"
+            />
+            <Policy title="Terms of Service" updated={UPDATED} intro={intro} sections={sections} />
+        </>
+    )
 }
