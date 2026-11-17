@@ -36,6 +36,8 @@ const DeliverySchedule = ({
     frequency,
     setFrequency,
     canSubscribe = true,
+    hasExtras = false,
+    onExtrasAllowed,
     deliveryFee,
     rushFee,
     requiresAdminApproval,
@@ -69,6 +71,8 @@ const DeliverySchedule = ({
         const fetchRules = async () => {
             try {
                 const data = await apiRequest('/delivery/time-rules');
+                // The order server says here whether a subscription cart may hold one-time extras
+                onExtrasAllowed?.(data.subscription_extras === true)
                 if (!data.rules || data.rules.length === 0) {
                     toast.error(`No ${how} slots available`)
                     setLoading(false)
@@ -90,12 +94,13 @@ const DeliverySchedule = ({
             } catch (err) {
                 console.error("Failed to load delivery rules", err)
                 toast.error(`Could not load ${how} schedule`)
+                onExtrasAllowed?.(false)
             } finally {
                 setLoading(false)
             }
         }
         fetchRules()
-    }, [how])
+    }, [how, onExtrasAllowed])
     // ---------- The date each delivery day goes out next ----------
     // nextMealPrepDate is the one place that knows (weekly cutoff, never today,
     // Pacific time). The order server checks the date against the same rule.
@@ -341,7 +346,7 @@ const DeliverySchedule = ({
                     )}
                 </div>
 
-                {/* How often (subscriptions are for bundles only) */}
+                {/* How often (a subscription repeats the bundle; anything else comes once) */}
                 <div className="space-y-3">
                     <Label className="flex items-center gap-2">
                         <RefreshCw className="w-4 h-4" />
@@ -380,11 +385,16 @@ const DeliverySchedule = ({
                             meals from my menu each week. Single items can be ordered one time.
                         </p>
                     ) : frequency !== "one-time" ? (
-                        <p className="text-sm text-muted-foreground">
-                            Your bundle repeats {frequencyLabel(frequency)}. Pick new meals from your account before the Sunday
-                            cutoff, or I&apos;ll repeat your last picks (with a chef&apos;s choice for anything off the menu).
-                            Skip or pause anytime.
-                        </p>
+                        <div className="space-y-2 text-sm text-muted-foreground">
+                            <p>
+                                Your bundle repeats {frequencyLabel(frequency)}.
+                                {hasExtras && " Everything else in your cart comes with this first order only."}
+                            </p>
+                            <p>
+                                Pick new meals from your account before the Sunday cutoff, or I&apos;ll repeat your last
+                                picks (with a chef&apos;s choice for anything off the menu). Skip or pause anytime.
+                            </p>
+                        </div>
                     ) : null}
                 </div>
 

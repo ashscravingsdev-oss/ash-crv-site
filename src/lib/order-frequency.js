@@ -1,6 +1,7 @@
-// How often an order repeats. Subscriptions are for bundles only: menus rotate,
-// and bundle picks can change every week (or repeat with a chef's-choice swap
-// for anything that's off the menu). Single items can't do that.
+// How often an order repeats. Subscriptions are for bundles: menus rotate, and
+// bundle picks can change every week (or repeat with a chef's-choice swap for
+// anything that's off the menu). Single items can't do that, so in a
+// subscription cart they come with the first order only.
 
 export const FREQUENCIES = [
     { value: "one-time", label: "One time", short: "one time" },
@@ -29,8 +30,15 @@ export function saveFrequency(value) {
 
 export const frequencyLabel = (value) => FREQUENCIES.find((f) => f.value === value)?.short || value
 
-// A cart can become a subscription only if every line is a bundle
-// Bundles can repeat (re-picked each week), and so can custom meal plans Ash
-// makes to repeat. Everything else is a one-time order.
-export const cartCanSubscribe = (items) =>
-    Array.isArray(items) && items.length > 0 && items.every((i) => !!i.bundle_id || !!i.product?.allow_subscription)
+// What repeats: bundles (re-picked each week) and custom meal plans made to repeat
+export const lineRepeats = (item) => !!item?.bundle_id || !!item?.product?.allow_subscription
+
+// A cart can become a subscription if it has something that repeats. Until the
+// order server says it takes one-time extras (`extrasAllowed`), every line has
+// to repeat, which is the rule the server had before.
+export const cartCanSubscribe = (items, extrasAllowed = false) =>
+    Array.isArray(items) && items.length > 0 && (extrasAllowed ? items.some(lineRepeats) : items.every(lineRepeats))
+
+// The rest of a subscription cart (a treat, a single meal): one-time extras that
+// come with the first order only
+export const cartHasExtras = (items) => Array.isArray(items) && items.some((item) => !lineRepeats(item))
