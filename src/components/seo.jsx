@@ -16,6 +16,8 @@ export default function SEO({
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ashscravings.com";
     const fullUrl = url ? `${siteUrl}${url}` : siteUrl;
     const fullImageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
+    // The site's own link picture (public/og-default.jpg) is 1200 x 630
+    const isDefaultImage = image === "/og-default.jpg";
 
     return (
         <>
@@ -37,6 +39,13 @@ export default function SEO({
             <meta property="og:title" content={title} />
             <meta property="og:description" content={description} />
             <meta property="og:image" content={fullImageUrl} />
+            {isDefaultImage && (
+                <>
+                    <meta property="og:image:width" content="1200" />
+                    <meta property="og:image:height" content="630" />
+                    <meta property="og:image:alt" content="Ash's Cravings: meal prep, cakes and desserts in Eastvale, CA" />
+                </>
+            )}
             <meta property="og:url" content={fullUrl} />
             <meta property="og:type" content={type} />
             <meta property="og:site_name" content="Ash's Cravings" />
