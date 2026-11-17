@@ -12,6 +12,7 @@ import InstagramStrip from "@/components/home/instagram-strip";
 import Reviews from "@/components/home/reviews";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
+import BusinessSchema from "@/components/business-schema";
 
 
 export default function HomePage() {
@@ -22,6 +23,7 @@ export default function HomePage() {
         description="Made-from-scratch meal prep, custom cakes, dessert cups and food for your events in Eastvale, CA. Made fresh, with love."
         keywords={["meal prep", "custom cakes", "desserts", "event food", "Eastvale"]}
       />
+      <BusinessSchema />
       <AnnouncementBar />
       <Navigation />
       <HeroSection />

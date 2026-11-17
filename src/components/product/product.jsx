@@ -15,7 +15,6 @@ import ProductImages from './product-images'
 import ProductNutrition from './product-nutrition'
 import ProductInfo from './product-info'
 import ReheatCard from './reheat-card'
-import SEO from '../seo'
 import { fetchProductBySlug, fetchProducts } from '@/store/productSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, updateCartItem, fetchCart } from '@/store/cartSlice'
@@ -63,6 +62,12 @@ const Product = ({ slug }) => {
             dispatch(fetchProductBySlug(slug))
         }
     }, [dispatch, slug])
+
+    // The page's title and link details come from the server (app/menu/[slug]/page.jsx).
+    // This keeps the tab's title right if the page first loaded with the general one.
+    useEffect(() => {
+        if (product?.name && product?.slug === slug) document.title = `${product.name} - Ash's Cravings`
+    }, [product?.name, product?.slug, slug])
 
     useEffect(() => {
         dispatch(fetchProducts({ status: 'active', order_type: 'meal_prep', limit: 100 }))
@@ -196,13 +201,6 @@ const Product = ({ slug }) => {
 
     return (
         <>
-            <SEO
-                title={`${product.name} - Ash's Cravings`}
-                description={product.description}
-                keywords={[product.name, product.category, "healthy meal"]}
-                image={product.image}
-                url={`/menu/${product.slug}`}
-            />
             <div className="container mx-auto px-4 py-8">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
