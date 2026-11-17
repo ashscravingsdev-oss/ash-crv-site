@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchProducts } from "@/store/productSlice"
 import { isMenuProduct } from "@/lib/special-orders"
+import { isTreat } from "@/lib/treats"
 import ProductItem from "@/components/menu/product-item"
 import Link from "next/link";
 
@@ -18,7 +19,7 @@ export default function FeaturedProducts() {
     }, [dispatch, products.length])
 
     // Only what's on the menu right now (a product that's turned off never shows)
-    const featuredProducts = products.filter((p) => p.is_active !== false && isMenuProduct(p)).slice(0, 3)
+    const featuredProducts = products.filter((p) => p.is_active !== false && isMenuProduct(p) && !isTreat(p)).slice(0, 3)
     // Show placeholders until the first fetch finishes, instead of flashing "no products"
     const showSkeleton = loading || (products.length === 0 && !error)
 

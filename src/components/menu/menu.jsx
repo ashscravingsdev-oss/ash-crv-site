@@ -12,12 +12,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { fetchCategories, fetchProducts } from "@/store/productSlice"
 import { bestSellerRank } from "@/lib/menu-pins"
 import { isMenuProduct } from "@/lib/special-orders"
+import { TREATS, isTreat, sortTreats } from "@/lib/treats"
 import DessertGrid from "@/components/desserts/dessert-grid"
+import SweetCravings from "./sweet-cravings"
 import WakingNote from "@/components/ui/waking-note"
 
 const DESSERTS = "Desserts"
 // Ash's tab order (by category name); anything new she adds goes after these
-const TAB_ORDER = ["Meals", "Juices", DESSERTS, "Wellness Shots"]
+const TAB_ORDER = ["Meals", "Juices", TREATS, DESSERTS, "Wellness Shots"]
 const TAB_LABELS = { Meals: "Meal Prep" }
 // Juices are paused for the winter. While none are on the menu, a small note says
 // they're coming back; it goes away on its own once Ash turns them back on (or Feb 1).
@@ -35,6 +37,8 @@ const Menu = () => {
     const loading = productsLoading || !productsLoaded
     // Desserts live in their own tab, never in the weekly grid
     const products = allProducts.filter(isMenuProduct)
+    // Treats that are always on the menu get their own section at the end
+    const treats = sortTreats(products.filter((p) => p.is_active && isTreat(p)))
 
     const [selectedCategory, setSelectedCategory] = useState("All")
     const [searchQuery, setSearchQuery] = useState("")
@@ -63,9 +67,15 @@ const Menu = () => {
         ...menuCategories.map((c) => c.name).filter((n) => !TAB_ORDER.includes(n)),
     ]
 
+    // Looking at the whole menu, not searching: treats sit in their own section, not in the grid
+    const browsingAll = selectedCategory === "All" && !searchQuery
+    const showTreats = browsingAll && treats.length > 0
+    const treatsTab = selectedCategory === TREATS && !searchQuery && treats.length > 0
+
     // Filter products based on search and category
     const filteredProducts = products.filter((product) => {
         if (!product.is_active) return false
+        if (browsingAll && isTreat(product)) return false
 
         const matchesCategory = selectedCategory === "All" || product.category?.name === selectedCategory
         const matchesSearch =
@@ -246,6 +256,8 @@ const Menu = () => {
                     </div>
                     <DessertGrid />
                 </div>
+            ) : treatsTab ? (
+                <SweetCravings treats={sortBy === "popular" ? treats : sortedProducts} />
             ) : (
             <>
             {/* Product Grid */}
@@ -275,7 +287,7 @@ const Menu = () => {
                         </motion.div>
                     ))}
                 </motion.div>
-            ) : (
+            ) : showTreats ? null : (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -296,8 +308,11 @@ const Menu = () => {
                 </motion.div>
             )}
 
+            {/* Treats that are always on the menu, after this week's menu */}
+            {showTreats && <SweetCravings treats={treats} className={sortedProducts.length > 0 ? "mt-14" : ""} />}
+
             {/* Desserts teaser at the end of the weekly menu */}
-            {selectedCategory === "All" && !searchQuery && (
+            {browsingAll && (
                 <div className="mt-10 rounded-[22px] border border-border bg-card p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 justify-between">
                     <div>
                         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-brand-heading">
