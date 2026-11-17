@@ -40,5 +40,14 @@ export const cartCanSubscribe = (items, extrasAllowed = false) =>
     Array.isArray(items) && items.length > 0 && (extrasAllowed ? items.some(lineRepeats) : items.every(lineRepeats))
 
 // The rest of a subscription cart (a treat, a single meal): one-time extras that
-// come with the first order only
-export const cartHasExtras = (items) => Array.isArray(items) && items.some((item) => !lineRepeats(item))
+// come with the first order only. Returns their names, to say so at checkout.
+export const cartExtras = (items) =>
+    Array.isArray(items)
+        ? [...new Set(items.filter((item) => !lineRepeats(item)).map((item) => item?.product?.name || "a single item"))]
+        : []
+
+// "A", "A and B", "A, B and C"; a long list ends "and 3 more"
+export const listNames = (names) => {
+    const shown = names.length > 4 ? [...names.slice(0, 3), `${names.length - 3} more`] : names
+    return shown.length < 2 ? shown.join("") : `${shown.slice(0, -1).join(", ")} and ${shown[shown.length - 1]}`
+}

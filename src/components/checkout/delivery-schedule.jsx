@@ -4,7 +4,7 @@ import Link from "next/link"
 
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { FREQUENCIES, frequencyLabel } from "@/lib/order-frequency"
+import { FREQUENCIES, frequencyLabel, listNames } from "@/lib/order-frequency"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -36,7 +36,7 @@ const DeliverySchedule = ({
     frequency,
     setFrequency,
     canSubscribe = true,
-    hasExtras = false,
+    extras = [],
     onExtrasAllowed,
     deliveryFee,
     rushFee,
@@ -388,7 +388,7 @@ const DeliverySchedule = ({
                         <div className="space-y-2 text-sm text-muted-foreground">
                             <p>
                                 Your bundle repeats {frequencyLabel(frequency)}.
-                                {hasExtras && " Everything else in your cart comes with this first order only."}
+                                {extras.length > 0 && ` With this first order only: ${listNames(extras)}.`}
                             </p>
                             <p>
                                 Pick new meals from your account before the Sunday cutoff, or I&apos;ll repeat your last

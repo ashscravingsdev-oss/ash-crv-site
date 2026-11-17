@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { useState, useRef, useEffect } from "react"
 import { fetchCart, calculateCartTotals } from "@/store/cartSlice"
 import { useDispatch, useSelector } from "react-redux"
-import { cartCanSubscribe, cartHasExtras, getSavedFrequency } from "@/lib/order-frequency"
+import { cartCanSubscribe, cartExtras, getSavedFrequency } from "@/lib/order-frequency"
 import Cookies from "js-cookie"
 import DeliveryInfo from './delivery-info'
 import DeliverySchedule from './delivery-schedule'
@@ -374,7 +374,7 @@ const Checkout = () => {
                                 frequency={frequency}
                                 setFrequency={setFrequency}
                                 canSubscribe={canSubscribe}
-                                hasExtras={canSubscribe && cartHasExtras(cart?.items)}
+                                extras={canSubscribe ? cartExtras(cart?.items) : []}
                                 onExtrasAllowed={setExtrasAllowed}
                                 deliveryFee={fee}
                                 rushFee={pickup ? 0 : rushFee}
