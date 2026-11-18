@@ -103,6 +103,36 @@ const Option = ({ option, product }) => {
 const weekday = (d) =>
     new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" })
 
+// Each Christmas day as a little gift tag on baker's twine, like the tags on the cake boxes
+const CARD = "#FFFEFA"
+const LINE = "#E4D5BE"
+const PAGE = "#FBF6EC"
+const TWINE_BACK = "M12 56 C 8 44, 3 36, -1 24 S -3 4, -4 -8"
+const TWINE_FRONT = "M12 56 C 4 47, -4 40, -9 27 S -7 6, -4 -8"
+const DayTag = ({ day, tilt }) => (
+    <li className="relative" style={{ transform: `rotate(${tilt}deg)` }}>
+        <div className="flex h-[112px]">
+            <svg aria-hidden="true" viewBox="0 0 30 112" width="30" height="112" className="shrink-0 overflow-visible">
+                <path d="M30 0.5 H21 L0.5 28 V84 L21 111.5 H30" fill={CARD} stroke={LINE} />
+                <circle cx="12" cy="56" r="4.5" fill={PAGE} stroke={LINE} />
+                {/* the twine, looped through the hole: a thin outline, white, then red stripes */}
+                {[TWINE_BACK, TWINE_FRONT].map((d) => (
+                    <g key={d} fill="none" strokeLinecap="round">
+                        <path d={d} stroke="#9C7A54" strokeOpacity="0.35" strokeWidth="3.4" />
+                        <path d={d} stroke="#FFFDF8" strokeWidth="2.4" />
+                        <path d={d} stroke="#B0473B" strokeWidth="2.4" strokeDasharray="3 3.2" strokeLinecap="butt" />
+                    </g>
+                ))}
+            </svg>
+            <div className="-ml-px flex flex-1 flex-col justify-center rounded-r-xl border border-l-0 border-brand-latte bg-card pl-2 pr-4">
+                <span className="text-sm text-brand-heading">{weekday(day.date)}</span>
+                <span className="font-serif text-[2rem] leading-tight text-brand-espresso">{shortDate(day.date)}</span>
+                <span className="font-serif italic text-[15px] text-brand-tobacco">order by {shortDate(day.closes)}</span>
+            </div>
+        </div>
+    </li>
+)
+
 const Christmas = () => {
     const [products, setProducts] = useState(null)
     // Worked out in the browser, so the page never shows a day that has closed
@@ -164,16 +194,9 @@ const Christmas = () => {
                         </div>
                     ) : options.length ? (
                         <div className="space-y-3 pt-2">
-                            <ul className="rounded-2xl border border-border bg-card divide-y divide-border">
-                                {openDays.map((d) => (
-                                    <li key={d.date} className="flex items-baseline justify-between gap-3 px-5 py-3">
-                                        <span className="font-serif text-xl text-brand-espresso">
-                                            {weekday(d.date)}, {shortDate(d.date)}
-                                        </span>
-                                        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
-                                            Order by {shortDate(d.closes)}
-                                        </span>
-                                    </li>
+                            <ul aria-label="Christmas cake days" className="grid grid-cols-2 gap-x-5 gap-y-4 pl-4 pt-4 pb-3 max-w-md">
+                                {openDays.map((d, i) => (
+                                    <DayTag key={d.date} day={d} tilt={i % 2 ? 1.5 : -2} />
                                 ))}
                             </ul>
                             {options.map(({ option, product }) => (
