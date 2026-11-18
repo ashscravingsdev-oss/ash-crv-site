@@ -18,8 +18,9 @@ import SweetCravings from "./sweet-cravings"
 import WakingNote from "@/components/ui/waking-note"
 
 const DESSERTS = "Desserts"
-// Ash's tab order (by category name); anything new she adds goes after these
-const TAB_ORDER = ["Meals", "Juices", TREATS, DESSERTS, "Wellness Shots"]
+// Ash's tab order (by category name): food, then drinks, then anything new she
+// adds, and Desserts (ordered for a date, checked out on their own) always last
+const TAB_ORDER = ["Meals", "Snacks", TREATS, "Sweet Bites", "Juices", "Wellness Shots"]
 const TAB_LABELS = { Meals: "Meal Prep" }
 // Juices are paused for the winter. While none are on the menu, a small note says
 // they're coming back; it goes away on its own once Ash turns them back on (or Feb 1).
@@ -63,8 +64,9 @@ const Menu = () => {
     // flavors live under their own categories and are shopped in the Desserts tab)
     const menuCategories = categories.filter((c) => products.some((p) => p.is_active && p.category?.name === c.name))
     const tabNames = [
-        ...TAB_ORDER.filter((n) => n === DESSERTS || menuCategories.some((c) => c.name === n)),
-        ...menuCategories.map((c) => c.name).filter((n) => !TAB_ORDER.includes(n)),
+        ...TAB_ORDER.filter((n) => menuCategories.some((c) => c.name === n)),
+        ...menuCategories.map((c) => c.name).filter((n) => !TAB_ORDER.includes(n) && n !== DESSERTS),
+        DESSERTS,
     ]
 
     // Looking at the whole menu, not searching: treats sit in their own section, not in the grid
@@ -225,7 +227,7 @@ const Menu = () => {
                     </Button>
                 </motion.div>
 
-                {/* Category Buttons: Meal Prep, Juices, Desserts, Wellness Shots */}
+                {/* Category buttons: food, then drinks, then Desserts last */}
                 {tabNames.map((name, index) => (
                     <motion.div
                         key={name}
