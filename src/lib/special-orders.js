@@ -11,6 +11,7 @@ export const DESSERT_ORDER = [
     "Dessert Cups",
     "Cookies",
     "Cheesecakes",
+    "Cupcakes",
     "Mini Cupcakes",
     "Brownies",
     "Chocolate Strawberries",
@@ -74,7 +75,7 @@ export const money = (n) => {
 }
 
 // "Red Velvet Cookies" → "Red Velvet" for the flavor chips
-const SUFFIXES = ["Mini Cheesecakes", "Cheesecakes", "Mini Cupcakes", "Dessert Cups", "Chocolate Strawberries", "Strawberries", "Cookies"]
+const SUFFIXES = ["Mini Cheesecakes", "Cheesecakes", "Mini Cupcakes", "Cupcakes", "Dessert Cups", "Chocolate Strawberries", "Strawberries", "Cookies"]
 export const flavorLabel = (product) => {
     if (product?.flavor) return product.flavor
     const name = String(product?.name || "")

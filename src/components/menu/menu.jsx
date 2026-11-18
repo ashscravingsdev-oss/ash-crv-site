@@ -322,7 +322,7 @@ const Menu = () => {
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </p>
                         <p className="text-muted-foreground mt-1">
-                            Cookies, mini cupcakes, cheesecakes, brownies, chocolate strawberries and dessert cups.
+                            Cookies, cupcakes, cheesecakes, chocolate strawberries and dessert cups.
                         </p>
                     </div>
                     <button
