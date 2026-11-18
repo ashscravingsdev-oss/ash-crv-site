@@ -66,7 +66,8 @@ const CustomOrder = ({ token }) => {
             if (!r.ok) throw new Error(`HTTP ${r.status}`)
             const data = await r.json()
             setOrder(data)
-            setView(data.status === "open" ? "open" : data.status === "paid" ? "paid" : "cancelled")
+            if (data.status === "closed") setClosedMessage("The date for this order has passed. Please message me and I'll set up a new one.")
+            setView(data.status === "open" ? "open" : data.status === "paid" ? "paid" : data.status === "closed" ? "closed" : "cancelled")
             // Fill in what Ash already knows, without wiping anything they typed
             setGuest((g) => (g.name ? g : { ...g, name: data.customer_name || "" }))
             setAddress((a) => a || data.delivery_address || "")
@@ -175,8 +176,9 @@ const CustomOrder = ({ token }) => {
             address: delivery ? address.trim() : undefined,
             order_notes: notes.trim() || undefined,
             cardToken,
-            // The amount on screen: if I changed the order since it loaded, nothing is charged
+            // The order on screen: if I changed it since it loaded, nothing is charged
             due_today: dueToday,
+            version: order.version,
         }
         const r = await fetch(`${BACKEND}/custom-orders/${encodeURIComponent(token)}/pay`, {
             method: "POST",
