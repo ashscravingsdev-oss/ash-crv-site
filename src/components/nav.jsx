@@ -41,7 +41,6 @@ export function Navigation() {
 
   const menuItems = [
     { label: "Home", href: "/" },
-    { label: "My Story", href: "/about" },
     { label: "Menu", href: "/menu" },
     { label: "Bundles", href: "/bundles" },
     { label: "Events", href: "/events" },

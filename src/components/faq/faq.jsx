@@ -76,7 +76,7 @@ const faqs = [
             },
             {
                 q: "Do you sell desserts by the dozen?",
-                a: "Yes! Cookies, mini cupcakes, cheesecakes, brownies, chocolate strawberries and dessert cups, from $44 a dozen. Each flavor is a 2 dozen minimum, and I need 10 days' notice. You can order them right on the Cakes & Desserts page or the Menu.",
+                a: "Yes! Cookies, cupcakes, cheesecakes, chocolate strawberries and dessert cups, from $44 a dozen. Each flavor is a 2 dozen minimum, and I need 10 days' notice. You can order them right on the Cakes & Desserts page or the Menu.",
             },
         ],
     },
