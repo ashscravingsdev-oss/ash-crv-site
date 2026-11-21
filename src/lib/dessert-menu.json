@@ -1,21 +1,19 @@
 {
-  "note": "Ash's dessert menu: one product per flavor, priced per dozen. Brownies and bars are off for now.",
+  "note": "Ash's dessert menu, shown on the Cakes & Desserts page while the live menu loads. One product per flavor, priced per dozen; cheesecakes are 8-inch and priced each. Brownies and bars are off for now.",
   "settings": { "order_type": "special_order", "payment_plan": "deposit", "min_quantity": 2, "lead_time_days": 10, "initial_stock": 999, "min_stock_level": 0 },
   "desserts": [
     { "category": "Dessert Cups", "code": "DC", "suffix": "Dessert Cups", "flavors": [
-      ["Banana Cream", 60], ["Banana Pudding", 60], ["Strawberry Shortcake", 60], ["Cheesecake", 60], ["Strawberry", 60], ["Mango", 60],
-      ["Blueberry", 60], ["Tiramisu", 60], ["Tres Leches", 60], ["Chocolate Mousse", 60], ["Fresas con Crema", 60]
+      ["Banana Cream", 72], ["Chocolate Mousse", 72], ["Cookie Butter", 72], ["Ferrero Rocher", 84], ["Strawberry Cheesecake", 84], ["Tiramisu", 84]
     ]},
     { "category": "Cookies", "code": "CK", "suffix": "Cookies", "flavors": [
-      ["Chocolate Chip", 44], ["Red Velvet", 44], ["Snickerdoodle", 44], ["Sugar", 44], ["Chocolate Crinkle", 44], ["Oatmeal Raisin", 44],
-      ["Lemon", 44], ["Confetti", 44], ["White Chocolate Macadamia Nut", 44], ["Peanut Butter", 44], ["Gingerdoodle", 44]
+      ["Chocolate Chunk with Flaky Sea Salt", 54], ["Oatmeal Raisin", 44], ["Peanut Butter", 44], ["Red Velvet", 54], ["Snickerdoodle", 44],
+      ["White Chocolate Macadamia Nut", 54]
     ]},
-    { "category": "Cheesecakes", "code": "CC", "suffix": "Mini Cheesecakes", "flavors": [
-      ["Original", 50], ["Blueberry", 60], ["Chocolate Swirl", 60], ["Strawberry", 60], ["Oreo", 60], ["Chocolate Chip Salted Caramel", 60]
+    { "category": "Cheesecakes", "code": "CC", "suffix": "Cheesecake", "flavors": [
+      ["Classic", 80], ["Strawberry", 85], ["Cookies & Cream", 85], ["Cookie Butter", 85], ["Blueberry Crumble", 85], ["Apple Crumble", 85]
     ]},
     { "category": "Cupcakes", "code": "MC", "suffix": "Cupcakes", "flavors": [
-      ["Vanilla Bean", 44], ["Chocolate", 44], ["Red Velvet", 44], ["Strawberry", 44], ["Oreo", 44], ["Confetti", 44],
-      ["Lemon", 44], ["Tres Leches", 44], ["Tiramisu", 44]
+      ["Vanilla Bean", 50], ["Chocolate", 50], ["Red Velvet", 60], ["Strawberry", 60], ["Cookies & Cream", 60], ["Tres Leches", 60]
     ]},
     { "category": "Chocolate Strawberries", "code": "CS", "suffix": "Strawberries", "flavors": [
       ["Milk Chocolate", 50], ["Dark Chocolate", 50], ["White Chocolate", 50], ["Drizzled & Topped", 60]

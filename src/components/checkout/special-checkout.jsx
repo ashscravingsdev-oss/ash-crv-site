@@ -13,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { apiRequest } from "@/lib/apiRequest"
 import MapPicker from "./map-picker"
+import { useDayRoom } from "@/lib/use-day-room"
 import PaymentMethod from "./payment-method"
 import { Choice, PICKUP_ADDRESS } from "./fulfillment-choice"
 import {
@@ -22,6 +23,7 @@ import {
     DEPOSIT_RATE,
     cartHasChristmas,
     cartHasDeposit,
+    cartDayUnits,
     dateFromToday,
     leadDaysFor,
     money,
@@ -56,6 +58,14 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const minDate = earliest
     const maxDate = undefined
 
+    // How much I can still make each day (the order server checks again when the order is placed)
+    const { room } = useDayRoom()
+    const need = cartDayUnits(items)
+    const christmasFull = (day) => {
+        const r = room(day)
+        return !!r && need.christmas > r.christmas
+    }
+
     const [guest, setGuest] = useState({ name: "", email: "", phone: "" })
     const [method, setMethod] = useState("delivery")
     const [addressData, setAddressData] = useState({ address: "", latitude: null, longitude: null })
@@ -67,6 +77,22 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
     const [agree, setAgree] = useState(false)
     const [square, setSquare] = useState(null)
     const [submitting, setSubmitting] = useState(false)
+
+    // A friendly note when the picked day can't fit this order
+    const dayRoom = room(date)
+    const dayFull = !dayRoom
+        ? null
+        : need.christmas > dayRoom.christmas
+          ? dayRoom.christmas === 0
+              ? "My Christmas mini cakes for that day are all spoken for. Please pick my other day."
+              : `I only have ${dayRoom.christmas} mini ${dayRoom.christmas === 1 ? "cake" : "cakes"} left that day.`
+          : need.desserts > dayRoom.desserts
+            ? dayRoom.desserts === 0
+                ? "I'm fully booked for desserts that day. Please pick another day."
+                : `That day is almost full: I only have room for ${dayRoom.desserts} more${
+                      need.whole ? " (each dozen or cheesecake counts as one)" : " dozen"
+                  }. Please pick another day, or take ${need.desserts - dayRoom.desserts} out of your cart.`
+            : null
 
     // Delivery uses Ash's delivery zones (the order server works out the real fee again when the order is placed)
     const freeDeliveryCoupon = useSelector((state) => state.cart.coupon)?.type === "free_delivery"
@@ -112,6 +138,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
         if (christmas) {
             if (!christmasDays.some((d) => d.date === date)) return "Please pick one of my Christmas days"
         } else if (date < minDate) return `Please pick ${prettyDate(minDate)} or later`
+        if (dayFull) return dayFull
         if (method === "delivery") {
             if (!addressData.address || !addressData.latitude) return "Please choose your delivery address on the map"
             // The fee is part of the total, so wait for it before taking payment
@@ -254,14 +281,19 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                                         key={d.date}
                                                         type="button"
                                                         onClick={() => setDate(d.date)}
+                                                        disabled={christmasFull(d.date)}
                                                         aria-pressed={date === d.date}
-                                                        className={`rounded-lg border px-3 py-2.5 text-left ${
+                                                        className={`rounded-lg border px-3 py-2.5 text-left disabled:opacity-50 disabled:cursor-not-allowed ${
                                                             date === d.date ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-brand-tobacco"
                                                         }`}
                                                     >
                                                         <span className="block text-sm font-medium">{prettyDate(d.date)}</span>
                                                         <span className={`block text-xs ${date === d.date ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
-                                                            Orders close {shortDate(d.closes)}
+                                                            {room(d.date)?.christmas === 0
+                                                                ? "All spoken for"
+                                                                : christmasFull(d.date)
+                                                                  ? `Only ${room(d.date).christmas} left`
+                                                                  : `Orders close ${shortDate(d.closes)}`}
                                                         </span>
                                                     </button>
                                                 ))}
@@ -269,6 +301,9 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                                         )
                                     ) : (
                                         <Input id="s-date" type="date" min={minDate} max={maxDate} value={date} onChange={(e) => setDate(e.target.value)} required />
+                                    )}
+                                    {dayFull && (
+                                        <p role="alert" className="text-sm text-[#9A3B31]">{dayFull}</p>
                                     )}
                                     {!christmasClosed && (
                                         <p className="text-xs text-muted-foreground">

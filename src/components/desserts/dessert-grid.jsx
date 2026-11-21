@@ -8,22 +8,31 @@ import { Loader2, Minus, Plus, Check } from "lucide-react"
 import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
 import { useDesserts } from "@/lib/use-desserts"
-import { DESSERT_MIN_DOZENS, dessertSlug, flavorLabel, money, priceRange } from "@/lib/special-orders"
+import { DESSERT_MIN_DOZENS, dessertSlug, money, priceRange, soldWhole } from "@/lib/special-orders"
 import WakingNote from "@/components/ui/waking-note"
+import DessertRules from "./dessert-rules"
+import { FlavorList, flavorOption } from "./flavor-list"
 
-/** One dessert: pick a flavor, how many dozen, add. */
+/** One dessert: pick a flavor, how many (dozen, or cheesecakes), any add-ons, add. */
 const DessertCard = ({ group, highlight }) => {
     const dispatch = useDispatch()
     const router = useRouter()
     const { cart } = useSelector((state) => state.cart)
+    const whole = soldWhole(group.name)
+    const extras = group.extras || []
     const [flavorId, setFlavorId] = useState("")
-    const [dozens, setDozens] = useState(DESSERT_MIN_DOZENS)
+    const [dozens, setDozens] = useState(whole ? 1 : DESSERT_MIN_DOZENS)
+    const [extraIds, setExtraIds] = useState([])
     const [adding, setAdding] = useState(false)
     const [added, setAdded] = useState(false)
 
     const flavor = group.items.find((p) => p.id === flavorId) || null
-    const min = Math.max(DESSERT_MIN_DOZENS, flavor?.min_quantity || 0)
+    const min = whole ? Math.max(1, flavor?.min_quantity || 1) : Math.max(DESSERT_MIN_DOZENS, flavor?.min_quantity || 0)
     const mixedPrices = priceRange(group.items).includes("–")
+    const unit = (n) => (whole ? `${n} ${n === 1 ? "cheesecake" : "cheesecakes"}` : `${n} dozen`)
+    const chosenExtras = extras.filter((x) => extraIds.includes(x.id))
+    // One of each add-on per cheesecake
+    const price = flavor ? dozens * Number(flavor.price) + chosenExtras.reduce((t, x) => t + dozens * Number(x.price), 0) : 0
 
     useEffect(() => {
         if (dozens < min) setDozens(min)
@@ -39,10 +48,13 @@ const DessertCard = ({ group, highlight }) => {
             let cartId = cart?.id
             if (!cartId) cartId = (await dispatch(fetchCart()).unwrap())?.id
             await dispatch(addToCart({ cart_id: cartId, product_id: flavor.id, quantity: dozens })).unwrap()
+            for (const x of chosenExtras) {
+                await dispatch(addToCart({ cart_id: cartId, product_id: x.id, quantity: dozens })).unwrap()
+            }
             await dispatch(fetchCart())
             setAdded(true)
             setTimeout(() => setAdded(false), 2500)
-            toast.success(`${dozens} dozen ${flavor.name} added`, {
+            toast.success(`${whole ? `${dozens} ×` : `${dozens} dozen`} ${flavor.name}${chosenExtras.length ? ` + ${chosenExtras.map((x) => x.name).join(", ")}` : ""} added`, {
                 action: { label: "View cart", onClick: () => router.push("/cart") },
             })
         } catch (err) {
@@ -63,12 +75,10 @@ const DessertCard = ({ group, highlight }) => {
                 <h3 className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{group.name}</h3>
                 <p className="text-right shrink-0">
                     <span className="font-serif text-xl text-brand-espresso">{priceRange(group.items)}</span>
-                    <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">a dozen</span>
+                    <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{whole ? "each" : "a dozen"}</span>
                 </p>
             </div>
-            <p className="mt-2 text-sm italic leading-relaxed text-foreground/70 flex-1">
-                {group.items.map((p) => flavorLabel(p)).join(" · ")}
-            </p>
+            <FlavorList items={group.items} className="mt-2 text-sm flex-1" />
 
             <div className="mt-5 space-y-3">
                 <label className="block">
@@ -81,7 +91,7 @@ const DessertCard = ({ group, highlight }) => {
                         <option value="">Pick a flavor</option>
                         {group.items.map((p) => (
                             <option key={p.id} value={p.id}>
-                                {flavorLabel(p)}
+                                {flavorOption(p)}
                                 {mixedPrices ? ` · ${money(p.price)}` : ""}
                             </option>
                         ))}
@@ -91,19 +101,19 @@ const DessertCard = ({ group, highlight }) => {
                     <div className="inline-flex items-center rounded-lg border border-border bg-background">
                         <button
                             type="button"
-                            aria-label="One less dozen"
+                            aria-label={whole ? "One less cheesecake" : "One less dozen"}
                             onClick={() => setDozens((d) => Math.max(min, d - 1))}
                             disabled={dozens <= min}
                             className="h-11 w-10 grid place-items-center disabled:opacity-40"
                         >
                             <Minus className="h-4 w-4" />
                         </button>
-                        <span className="min-w-[4.25rem] text-center text-sm font-medium" aria-live="polite">
-                            {dozens} dozen
+                        <span className={`${whole ? "min-w-[6.5rem]" : "min-w-[4.25rem]"} text-center text-sm font-medium`} aria-live="polite">
+                            {unit(dozens)}
                         </span>
                         <button
                             type="button"
-                            aria-label="One more dozen"
+                            aria-label={whole ? "One more cheesecake" : "One more dozen"}
                             onClick={() => setDozens((d) => Math.min(20, d + 1))}
                             className="h-11 w-10 grid place-items-center"
                         >
@@ -123,12 +133,27 @@ const DessertCard = ({ group, highlight }) => {
                                 Added <Check className="h-4 w-4" />
                             </>
                         ) : flavor ? (
-                            `Add · ${money(dozens * Number(flavor.price))}`
+                            `Add · ${money(price)}`
                         ) : (
                             "Add to cart"
                         )}
                     </button>
                 </div>
+                {extras.map((x) => (
+                    <label key={x.id} className="flex items-center gap-2.5 text-sm text-foreground/85 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={extraIds.includes(x.id)}
+                            onChange={(e) =>
+                                setExtraIds((ids) => (e.target.checked ? [...ids, x.id] : ids.filter((id) => id !== x.id)))
+                            }
+                            className="h-4 w-4 rounded accent-brand-tobacco"
+                        />
+                        <span>
+                            Add {x.name} <span className="text-muted-foreground">· {money(x.price)}{whole ? " each" : ""}</span>
+                        </span>
+                    </label>
+                ))}
             </div>
         </div>
     )
@@ -179,9 +204,7 @@ const DessertGrid = () => {
 
     return (
         <div className="space-y-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading leading-relaxed">
-                One flavor per dozen · 2 dozen minimum per flavor · 10 days&apos; notice · 50% deposit · delivery or pickup
-            </p>
+            <DessertRules />
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {groups.map((g) => (
                     <DessertCard key={g.name} group={g} highlight={highlight === dessertSlug(g.name)} />

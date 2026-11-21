@@ -75,7 +75,7 @@ export const money = (n) => {
 }
 
 // "Red Velvet Cookies" → "Red Velvet" for the flavor chips
-const SUFFIXES = ["Mini Cheesecakes", "Cheesecakes", "Mini Cupcakes", "Cupcakes", "Dessert Cups", "Chocolate Strawberries", "Strawberries", "Cookies"]
+const SUFFIXES = ["Mini Cheesecakes", "Cheesecakes", "Cheesecake", "Mini Cupcakes", "Cupcakes", "Dessert Cups", "Chocolate Strawberries", "Strawberries", "Cookies"]
 export const flavorLabel = (product) => {
     if (product?.flavor) return product.flavor
     const name = String(product?.name || "")
@@ -89,14 +89,40 @@ export const flavorLabel = (product) => {
     return name
 }
 
-// Group the dessert products by type, in Ash's order (new types she adds go last)
+// Cheesecakes are 8" and sold whole, one at a time; everything else is by the dozen
+export const soldWhole = (groupName) => /cheesecake/i.test(String(groupName || ""))
+
+// A little add-on sold with a dessert, like whipped cream with the cheesecakes:
+// sold one at a time, under $25, and not named like its category
+// ("Cheesecakes" → "cheesecak"). The order server uses the same rule for its daily count.
+const ADDON_MAX_PRICE = 25
+const stemOf = (category) => String(category || "").trim().split(/\s+/).pop().toLowerCase().replace(/(ies|es|s)$/, "")
+export const isExtra = (p, categoryName = p?.category?.name) => {
+    const stem = stemOf(categoryName)
+    return (
+        !!stem &&
+        !(parseInt(p?.min_quantity, 10) > 1) &&
+        Number(p?.price) < ADDON_MAX_PRICE &&
+        !String(p?.name || "").toLowerCase().includes(stem)
+    )
+}
+
+const isDessertCategory = (name) => DESSERT_ORDER.some((d) => d.toLowerCase() === String(name || "").toLowerCase())
+const byAdded = (a, b) =>
+    String(a.createdAt || a.created_at || "").localeCompare(String(b.createdAt || b.created_at || "")) ||
+    a.name.localeCompare(b.name)
+
+// Group the dessert products by type, in Ash's order (new types she adds go last).
+// Each group: { name, items: the flavors, extras: add-ons like whipped cream }
 export const groupDesserts = (products = []) => {
     const groups = new Map()
     for (const p of products) {
-        if (!p?.is_active) continue
-        // Only by-the-dozen desserts here; mini cakes and other single items have their own section
-        if (!(parseInt(p.min_quantity, 10) > 1)) continue
+        if (!p?.is_active || p.visibility === "private") continue
+        // Christmas mini cakes have their own page
+        if (/^christmas-mini-cake/.test(String(p.slug || ""))) continue
         const name = p.category?.name || "Desserts"
+        // By-the-dozen desserts, plus everything in a dessert category (cheesecakes are sold whole)
+        if (!(parseInt(p.min_quantity, 10) > 1) && !isDessertCategory(name)) continue
         if (!groups.has(name)) groups.set(name, [])
         groups.get(name).push(p)
     }
@@ -106,13 +132,35 @@ export const groupDesserts = (products = []) => {
     }
     return [...groups.entries()]
         .sort((a, b) => rank(a[0]) - rank(b[0]))
-        .map(([name, items]) => ({
+        .map(([name, all]) => ({
             name,
             // Keep the order Ash added them in (her flavor list order)
-            items: items.sort((a, b) =>
-                String(a.createdAt || a.created_at || "").localeCompare(String(b.createdAt || b.created_at || "")) ||
-                a.name.localeCompare(b.name)),
+            items: all.filter((p) => !isExtra(p, name)).sort(byAdded),
+            extras: all.filter((p) => isExtra(p, name)).sort(byAdded),
         }))
+        // Add-ons only show next to a dessert that's on the menu
+        .filter((g) => g.items.length > 0)
+}
+
+// What a cart uses up of Ash's day (same counting as the order server):
+// dozens of desserts (a whole cheesecake counts as one; add-ons don't count) and
+// Christmas mini cakes (the 2-pack counts as two)
+export const cartDayUnits = (items = []) => {
+    let desserts = 0
+    let christmas = 0
+    let whole = false
+    for (const i of items) {
+        const p = i?.product
+        const qty = Number(i?.quantity) || 0
+        if (!p || i.bundle_id || p.order_type !== "special_order" || p.visibility === "private") continue
+        if (/^christmas-mini-cake/.test(String(p.slug || ""))) christmas += qty * (/set-of-2/.test(p.slug) ? 2 : 1)
+        else if (!isExtra(p)) {
+            desserts += qty
+            if (soldWhole(p.category?.name)) whole = true
+        }
+    }
+    // whole: the cart has cheesecakes (counted one each, not by the dozen)
+    return { desserts, christmas, whole }
 }
 
 export const priceRange = (items = []) => {
