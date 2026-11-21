@@ -1,6 +1,6 @@
 import { flavorLabel } from "@/lib/special-orders"
 
-// "Apple Crumble · holiday" in a flavor dropdown
+// "Apple Crumble (holiday)" in a flavor dropdown
 export const flavorOption = (p) => `${flavorLabel(p)}${p?.is_holiday ? " (holiday)" : ""}`
 
 /** A dessert's flavors written out like a menu card, with holiday flavors marked. */

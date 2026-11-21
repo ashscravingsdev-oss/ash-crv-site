@@ -93,12 +93,18 @@ export const flavorLabel = (product) => {
 export const soldWhole = (groupName) => /cheesecake/i.test(String(groupName || ""))
 
 // A little add-on sold with a dessert, like whipped cream with the cheesecakes:
-// sold one at a time and not named like its category ("Cheesecakes" → "cheesecak").
-// The order server uses the same rule for its daily count.
+// sold one at a time, under $25, and not named like its category
+// ("Cheesecakes" → "cheesecak"). The order server uses the same rule for its daily count.
+const ADDON_MAX_PRICE = 25
 const stemOf = (category) => String(category || "").trim().split(/\s+/).pop().toLowerCase().replace(/(ies|es|s)$/, "")
 export const isExtra = (p, categoryName = p?.category?.name) => {
     const stem = stemOf(categoryName)
-    return !!stem && !(parseInt(p?.min_quantity, 10) > 1) && !String(p?.name || "").toLowerCase().includes(stem)
+    return (
+        !!stem &&
+        !(parseInt(p?.min_quantity, 10) > 1) &&
+        Number(p?.price) < ADDON_MAX_PRICE &&
+        !String(p?.name || "").toLowerCase().includes(stem)
+    )
 }
 
 const isDessertCategory = (name) => DESSERT_ORDER.some((d) => d.toLowerCase() === String(name || "").toLowerCase())
@@ -126,17 +132,14 @@ export const groupDesserts = (products = []) => {
     }
     return [...groups.entries()]
         .sort((a, b) => rank(a[0]) - rank(b[0]))
-        .map(([name, all]) => {
-            const extras = all.filter((p) => isExtra(p, name))
-            // If nothing is named like the category, there are no add-ons, just flavors
-            const items = extras.length < all.length ? all.filter((p) => !extras.includes(p)) : all
-            return {
-                name,
-                // Keep the order Ash added them in (her flavor list order)
-                items: items.sort(byAdded),
-                extras: items === all ? [] : extras.sort(byAdded),
-            }
-        })
+        .map(([name, all]) => ({
+            name,
+            // Keep the order Ash added them in (her flavor list order)
+            items: all.filter((p) => !isExtra(p, name)).sort(byAdded),
+            extras: all.filter((p) => isExtra(p, name)).sort(byAdded),
+        }))
+        // Add-ons only show next to a dessert that's on the menu
+        .filter((g) => g.items.length > 0)
 }
 
 // What a cart uses up of Ash's day (same counting as the order server):
@@ -145,14 +148,19 @@ export const groupDesserts = (products = []) => {
 export const cartDayUnits = (items = []) => {
     let desserts = 0
     let christmas = 0
+    let whole = false
     for (const i of items) {
         const p = i?.product
         const qty = Number(i?.quantity) || 0
         if (!p || i.bundle_id || p.order_type !== "special_order" || p.visibility === "private") continue
         if (/^christmas-mini-cake/.test(String(p.slug || ""))) christmas += qty * (/set-of-2/.test(p.slug) ? 2 : 1)
-        else if (!isExtra(p)) desserts += qty
+        else if (!isExtra(p)) {
+            desserts += qty
+            if (soldWhole(p.category?.name)) whole = true
+        }
     }
-    return { desserts, christmas }
+    // whole: the cart has cheesecakes (counted one each, not by the dozen)
+    return { desserts, christmas, whole }
 }
 
 export const priceRange = (items = []) => {

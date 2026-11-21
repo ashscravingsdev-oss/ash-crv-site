@@ -89,7 +89,9 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
           : need.desserts > dayRoom.desserts
             ? dayRoom.desserts === 0
                 ? "I'm fully booked for desserts that day. Please pick another day."
-                : `That day is almost full: I only have room for ${dayRoom.desserts} more dozen. Please pick another day, or take ${need.desserts - dayRoom.desserts} out of your cart.`
+                : `That day is almost full: I only have room for ${dayRoom.desserts} more${
+                      need.whole ? " (each dozen or cheesecake counts as one)" : " dozen"
+                  }. Please pick another day, or take ${need.desserts - dayRoom.desserts} out of your cart.`
             : null
 
     // Delivery uses Ash's delivery zones (the order server works out the real fee again when the order is placed)
