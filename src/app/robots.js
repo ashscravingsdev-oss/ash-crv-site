@@ -4,7 +4,7 @@ export default function robots() {
         rules: {
             userAgent: "*",
             allow: "/",
-            disallow: ["/api/", "/cart", "/checkout", "/account", "/order-confirmation", "/login", "/register", "/forgot-password", "/reset-password", "/verify-code", "/custom/"],
+            disallow: ["/api/", "/cart", "/checkout", "/account", "/order-confirmation", "/login", "/register", "/forgot-password", "/reset-password", "/verify-code", "/custom/", "/order/"],
         },
         sitemap: "https://www.ashscravings.com/sitemap.xml",
         host: "https://www.ashscravings.com",
