@@ -3,6 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
 import DessertList from "@/components/desserts/dessert-list";
+import DessertRules from "@/components/desserts/dessert-rules";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 import FactStrip from "@/components/ui/fact-strip";
 
@@ -240,6 +241,7 @@ const CustomCakes = () => {
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             Made fresh for birthdays, showers, holidays or just because. Mix and match your favorites.
                         </p>
+                        <DessertRules />
                     </div>
                     <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-28 self-start">
                         <div className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[4/3] lg:aspect-[4/5]">

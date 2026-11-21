@@ -9,6 +9,7 @@ import { Loader2, Minus, Plus, Check } from "lucide-react"
 import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
 import { CHRISTMAS_DAYS, christmasOpenDays, money, shortDate } from "@/lib/special-orders"
+import { useDayRoom } from "@/lib/use-day-room"
 import FactStrip from "@/components/ui/fact-strip"
 import WakingNote from "@/components/ui/waking-note"
 
@@ -109,7 +110,8 @@ const LINE = "#E4D5BE"
 const PAGE = "#FBF6EC"
 const TWINE_BACK = "M12 56 C 8 44, 3 36, -1 24 S -3 4, -4 -8"
 const TWINE_FRONT = "M12 56 C 4 47, -4 40, -9 27 S -7 6, -4 -8"
-const DayTag = ({ day, tilt }) => (
+// left: mini cakes still open that day (null while loading)
+const DayTag = ({ day, tilt, left }) => (
     <li className="relative" style={{ transform: `rotate(${tilt}deg)` }}>
         <div className="flex h-[112px]">
             <svg aria-hidden="true" viewBox="0 0 30 112" width="30" height="112" className="shrink-0 overflow-visible">
@@ -127,7 +129,9 @@ const DayTag = ({ day, tilt }) => (
             <div className="-ml-px flex flex-1 flex-col justify-center rounded-r-xl border border-l-0 border-brand-latte bg-card pl-2 pr-4">
                 <span className="text-sm text-brand-heading">{weekday(day.date)}</span>
                 <span className="font-serif text-[2rem] leading-tight text-brand-espresso">{shortDate(day.date)}</span>
-                <span className="font-serif italic text-[15px] text-brand-tobacco">order by {shortDate(day.closes)}</span>
+                <span className="font-serif italic text-[15px] text-brand-tobacco">
+                    {left === 0 ? "all spoken for" : left != null && left <= 5 ? `only ${left} left!` : `order by ${shortDate(day.closes)}`}
+                </span>
             </div>
         </div>
     </li>
@@ -138,6 +142,7 @@ const Christmas = () => {
     // Worked out in the browser, so the page never shows a day that has closed
     const [openDays, setOpenDays] = useState(CHRISTMAS_DAYS)
     useEffect(() => setOpenDays(christmasOpenDays()), [])
+    const { room } = useDayRoom()
     const closed = openDays.length === 0
 
     useEffect(() => {
@@ -196,7 +201,7 @@ const Christmas = () => {
                         <div className="space-y-3 pt-2">
                             <ul aria-label="Christmas cake days" className="grid grid-cols-2 gap-x-5 gap-y-4 pl-4 pt-4 pb-3 max-w-md">
                                 {openDays.map((d, i) => (
-                                    <DayTag key={d.date} day={d} tilt={i % 2 ? 1.5 : -2} />
+                                    <DayTag key={d.date} day={d} tilt={i % 2 ? 1.5 : -2} left={room(d.date)?.christmas ?? null} />
                                 ))}
                             </ul>
                             {options.map(({ option, product }) => (

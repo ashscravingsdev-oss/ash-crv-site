@@ -2,12 +2,14 @@
 
 import Link from "next/link"
 import { STATIC_DESSERTS, useDesserts } from "@/lib/use-desserts"
-import { dessertSlug, flavorLabel, priceRange } from "@/lib/special-orders"
+import { dessertSlug, money, priceRange, soldWhole } from "@/lib/special-orders"
+import { FlavorList } from "./flavor-list"
 
 /**
- * The dessert list for "Sweets by the dozen": six desserts, each with its price
- * a dozen and every flavor written out underneath, like a menu card. Each one
- * opens that dessert in the Menu's Desserts tab to order.
+ * The dessert list for "Sweets by the dozen": each dessert with its price (a
+ * dozen, or each for the whole cheesecakes) and every flavor written out
+ * underneath, like a menu card. Each one opens that dessert in the Menu's
+ * Desserts tab to order. The rules sit once above this list (DessertRules).
  */
 const DessertList = () => {
     const { groups, live } = useDesserts()
@@ -26,15 +28,18 @@ const DessertList = () => {
                                 <span className="block font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">
                                     {g.name}
                                 </span>
-                                <span className="block mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">
-                                    {g.items.map((p) => flavorLabel(p)).join(" · ")}
-                                </span>
+                                <FlavorList as="span" items={g.items} className="block mt-1.5 text-[15px]" />
+                                {g.extras?.length > 0 && (
+                                    <span className="block mt-1 text-sm text-muted-foreground">
+                                        {g.extras.map((x) => `Add ${x.name}, ${money(x.price)}`).join(" · ")}
+                                    </span>
+                                )}
                             </span>
                             <span className="text-right pt-1">
                                 <span className="block font-serif text-xl md:text-2xl text-brand-espresso whitespace-nowrap">
                                     {priceRange(g.items)}
                                 </span>
-                                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">a dozen</span>
+                                <span className="block font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{soldWhole(g.name) ? "each" : "a dozen"}</span>
                                 <span className="inline-block mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-tobacco opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100 transition-opacity">
                                     Order →
                                 </span>
@@ -43,10 +48,6 @@ const DessertList = () => {
                     </li>
                 ))}
             </ul>
-
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading leading-relaxed">
-                One flavor per dozen · 2 dozen minimum per flavor · 10 days&apos; notice · 50% deposit
-            </p>
 
             <div className="flex flex-col sm:flex-row gap-3">
                 <Link
