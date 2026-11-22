@@ -89,10 +89,10 @@ export function Footer({ flush = false }) {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/#our-story"
+                  href="/about"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  About Us
+                  My Story
                 </Link>
               </li>
               <li>

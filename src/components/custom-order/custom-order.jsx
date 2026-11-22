@@ -264,7 +264,7 @@ const CustomOrder = ({ token }) => {
 
             <form onSubmit={handleSubmit} noValidate className="mt-8 grid gap-6 lg:grid-cols-2 lg:gap-10 items-start">
                 {/* The order, as I set it up */}
-                <Card className="lg:sticky lg:top-24">
+                <Card className="lg:sticky lg:top-32">
                     <CardHeader>
                         <CardTitle className="font-serif text-2xl font-medium">Order summary</CardTitle>
                     </CardHeader>

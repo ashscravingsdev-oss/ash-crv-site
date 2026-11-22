@@ -67,7 +67,7 @@ const DessertCard = ({ group, highlight }) => {
     return (
         <div
             id={`dessert-${dessertSlug(group.name)}`}
-            className={`scroll-mt-28 h-full flex flex-col rounded-2xl border bg-card p-5 md:p-6 transition-shadow ${
+            className={`scroll-mt-28 lg:scroll-mt-32 h-full flex flex-col rounded-2xl border bg-card p-5 md:p-6 transition-shadow ${
                 highlight ? "border-brand-tobacco ring-2 ring-brand-tobacco/30" : "border-border"
             }`}
         >

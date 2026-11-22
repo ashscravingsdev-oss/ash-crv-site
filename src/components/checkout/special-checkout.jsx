@@ -419,7 +419,7 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
 
                 {/* Summary */}
                 <div>
-                    <Card className="lg:sticky lg:top-24">
+                    <Card className="lg:sticky lg:top-32">
                         <CardHeader>
                             <CardTitle>Your order</CardTitle>
                         </CardHeader>

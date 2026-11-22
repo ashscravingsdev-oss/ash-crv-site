@@ -101,14 +101,14 @@ export function Navigation() {
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/logo-header-600w.png"
               alt="Ash's Cravings"
-              className="h-10 w-auto"
+              className="h-11 lg:h-[72px] w-auto"
             />
           </Link>
 
@@ -118,7 +118,7 @@ export function Navigation() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`whitespace-nowrap text-[13px] font-medium uppercase tracking-[0.12em] transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
+                className={`whitespace-nowrap text-[13px] lg:text-[15px] font-medium uppercase tracking-[0.12em] transition-colors ${pathname === item.href || pathname.startsWith(item.href + "/")
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
                   }`}
