@@ -83,15 +83,20 @@ const Photo = ({ className = "", children }) => (
 const MealCard = ({ b }) => (
     <Link
         href={START}
-        className="group flex flex-col rounded-2xl border border-border bg-card p-6 hover:border-brand-tobacco transition-colors"
+        className="group flex flex-col rounded-2xl border border-border bg-card p-6 hover:border-[color:var(--acc)] hover:shadow-md transition"
     >
         <p className="font-serif text-3xl font-semibold text-brand-espresso leading-tight">{b.name}</p>
         {b.description && <p className="text-muted-foreground mt-1">{b.description}</p>}
         <div className="mt-8 flex items-end justify-between gap-4">
             <div>
                 <p className="font-serif text-4xl font-semibold text-brand-espresso leading-none">{money(b.price)}</p>
-                <p className="text-sm text-muted-foreground mt-1.5">
-                    a delivery{perMeal(b) ? ` · ${money(perMeal(b))} a meal` : ""}
+                <p className="text-sm text-muted-foreground mt-2 flex flex-wrap items-center gap-2">
+                    a delivery
+                    {perMeal(b) > 0 && (
+                        <span className="rounded-full bg-[color:var(--acc-soft)] px-2.5 py-0.5 text-[color:var(--acc-ink)]">
+                            {money(perMeal(b))} a meal
+                        </span>
+                    )}
                 </p>
             </div>
             <span className="text-brand-tobacco whitespace-nowrap transition-transform group-hover:translate-x-1">
@@ -140,7 +145,9 @@ const PerkList = ({ className = "" }) => (
     <ul className={className}>
         {perks.map((p) => (
             <li key={p} className="flex items-start gap-3 text-lg text-foreground/85">
-                <Check className="h-5 w-5 text-primary mt-1 shrink-0" />
+                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[color:var(--acc-soft)]">
+                    <Check className="h-3.5 w-3.5 text-[color:var(--acc-ink)]" strokeWidth={3} />
+                </span>
                 <span>{p}</span>
             </li>
         ))}
@@ -148,14 +155,14 @@ const PerkList = ({ className = "" }) => (
 )
 
 const Details = () => (
-    <section className="bg-muted">
+    <section className="bg-[color:var(--acc-wash)]">
         <div className="container mx-auto px-4 py-14 md:py-16">
             <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading mb-8">
                 Good to <em className="italic text-brand-tobacco">know</em>
             </h2>
             <dl className="grid md:grid-cols-3 gap-x-10 gap-y-7">
                 {details.map((d) => (
-                    <div key={d.q} className="border-t border-brand-tobacco/25 pt-4">
+                    <div key={d.q} className="border-t-2 border-[color:var(--acc-soft)] pt-4">
                         <dt className="font-serif text-xl font-semibold text-brand-espresso">{d.q}</dt>
                         <dd className="mt-1.5 text-foreground/80 leading-relaxed">{d.a}</dd>
                     </div>
@@ -172,75 +179,82 @@ const Details = () => (
     </section>
 )
 
-/* Look A: a calm two-column page. Price per meal on the photo, perks beside the meal cards. */
-const LookA = ({ meals, others, fromPerMeal }) => (
+// Two accent colors to compare while choosing (?accent=blue); the one Ash picks stays
+const ACCENTS = {
+    green: { "--acc": "#7D9150", "--acc-soft": "#E1E8C9", "--acc-wash": "#EEF2E0", "--acc-ink": "#4E6127" },
+    blue: { "--acc": "#5C7A92", "--acc-soft": "#DCE6EE", "--acc-wash": "#EAF0F4", "--acc-ink": "#33495B" },
+}
+
+// A smaller copy of a menu photo (Cloudinary resizes it), added after any crop already in the link
+const sized = (url, px = 480) =>
+    /res\.cloudinary\.com\/.+\/upload\//.test(url || "")
+        ? url.replace(/\/upload\/((?:[^/]+\/)*?)(v\d+\/)/, `/upload/$1w_${px},h_${px},c_fill,q_auto,f_auto/$2`)
+        : url
+
+/** This week's meals, so people can see what they'd be picking from. */
+const ThisWeek = ({ menu }) =>
+    menu.length === 0 ? null : (
+        <section className="container mx-auto px-4 pb-14 md:pb-16">
+            <div className="flex items-baseline justify-between gap-4 mb-5">
+                <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading">
+                    On my menu <em className="italic text-brand-tobacco">this week</em>
+                </h2>
+                <Link href="/menu" className={`${linkClass} whitespace-nowrap`}>
+                    Full menu
+                </Link>
+            </div>
+            <div className="-mx-4 px-4 scroll-px-4 flex gap-4 overflow-x-auto snap-x pb-2 md:mx-0 md:px-0 md:overflow-visible md:gap-5">
+                {menu.slice(0, 5).map((p) => (
+                    <Link key={p.id} href={`/menu/${p.slug}`} className="group w-40 shrink-0 snap-start md:w-auto md:flex-1 md:max-w-[260px]">
+                        <div className="aspect-square overflow-hidden rounded-2xl bg-muted">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                                src={sized(p.image_url)}
+                                alt={p.name}
+                                loading="lazy"
+                                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            />
+                        </div>
+                        <p className="mt-2.5 font-serif text-lg leading-snug text-brand-espresso">{p.name}</p>
+                    </Link>
+                ))}
+            </div>
+        </section>
+    )
+
+const Page = ({ meals, others, fromPerMeal, menu }) => (
     <>
-        <section className="container mx-auto px-4 pt-8 pb-12 md:pt-14 md:pb-16">
+        <section className="container mx-auto px-4 pt-8 pb-14 md:pt-14 md:pb-20">
             <div className="grid md:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-14 items-center">
                 <motion.div initial="initial" animate="animate" variants={fadeUp} className="space-y-6 max-w-2xl">
                     <Heading />
                     <Intro />
                     <Actions />
                 </motion.div>
-                <Photo className="aspect-[4/3] md:aspect-[5/4] rounded-[18px]">
-                    {fromPerMeal > 0 && (
-                        <p className="absolute top-4 right-4 rounded-full bg-background/95 px-4 py-2 shadow-md font-serif italic text-lg text-brand-espresso">
-                            from {money(fromPerMeal)} a meal
-                        </p>
-                    )}
-                </Photo>
+                <div className="relative mr-3 mb-3 md:mr-0">
+                    {/* A soft block of color peeking out behind the photo */}
+                    <div aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 rounded-[18px] bg-[color:var(--acc-soft)]" />
+                    <Photo className="aspect-[4/3] md:aspect-[5/4] rounded-[18px]">
+                        {fromPerMeal > 0 && (
+                            <p className="absolute top-4 right-4 rounded-full bg-[color:var(--acc-ink)] px-4 py-2 shadow-md font-serif italic text-lg text-white">
+                                from {money(fromPerMeal)} a meal
+                            </p>
+                        )}
+                    </Photo>
+                </div>
             </div>
         </section>
+
+        <ThisWeek menu={menu} />
 
         <section className="container mx-auto px-4 pb-16 md:pb-20">
             <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16 items-start">
                 <div className="space-y-4 lg:pt-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                        <span className="text-brand-matcha">■</span> What you get
-                    </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Made easy, <em className="italic text-brand-tobacco">your way</em>
                     </h2>
-                    <PerkList className="space-y-3 pt-2" />
+                    <PerkList className="space-y-3.5 pt-2" />
                 </div>
-                <Bundles meals={meals} others={others} />
-            </div>
-        </section>
-    </>
-)
-
-/* Look B: a bolder page. The photo runs to the edge with a note from me, the perks sit in one row. */
-const LookB = ({ meals, others }) => (
-    <>
-        <section className="md:grid md:grid-cols-2 md:h-[540px] lg:h-[600px]">
-            <div className="container mx-auto px-4 md:px-0 md:mx-0 md:max-w-none flex items-center pt-8 pb-10 md:py-16">
-                <motion.div
-                    initial="initial"
-                    animate="animate"
-                    variants={fadeUp}
-                    className="space-y-6 max-w-xl md:ml-auto md:mr-12 lg:mr-16 md:pl-8"
-                >
-                    <Heading />
-                    <Intro />
-                    <Actions />
-                </motion.div>
-            </div>
-            <Photo className="mx-4 md:mx-0 aspect-[4/3] md:aspect-auto md:h-full rounded-[18px] md:rounded-none md:rounded-bl-[28px]">
-                <div className="hidden md:block absolute left-8 bottom-8 max-w-[280px] rounded-xl bg-background/95 px-5 py-4 shadow-lg">
-                    <p className="font-serif italic text-xl leading-snug text-brand-espresso">Cooked fresh by me, packed for your week.</p>
-                    <p className="mt-1 text-sm text-muted-foreground">Ash</p>
-                </div>
-            </Photo>
-        </section>
-
-        <section className="container mx-auto px-4 py-16 md:py-20">
-            <div className="md:text-center space-y-3 mb-8 md:mb-10">
-                <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                    Made easy, <em className="italic text-brand-tobacco">your way</em>
-                </h2>
-            </div>
-            <PerkList className="grid sm:grid-cols-2 gap-x-10 gap-y-3 max-w-3xl mx-auto mb-12" />
-            <div className="max-w-3xl mx-auto">
                 <Bundles meals={meals} others={others} />
             </div>
         </section>
@@ -250,14 +264,24 @@ const LookB = ({ meals, others }) => (
 const Subscriptions = () => {
     const dispatch = useDispatch()
     const { bundles } = useSelector((state) => state.bundles)
-    // Two looks to compare while choosing (?look=b); the one Ash picks stays
-    const [look, setLook] = useState("a")
-    useEffect(() => {
-        if (new URLSearchParams(window.location.search).get("look") === "b") setLook("b")
-    }, [])
+    const [accent, setAccent] = useState("green")
+    const [menu, setMenu] = useState([])
 
     useEffect(() => {
+        if (new URLSearchParams(window.location.search).get("accent") === "blue") setAccent("blue")
         dispatch(fetchActiveBundles())
+        // This week's meals with a photo
+        let alive = true
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/products?order_type=meal_prep&limit=100`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((d) => {
+                const list = (d?.products || []).filter((p) => p.is_active && p.image_url && p.category?.name === "Meals")
+                if (alive) setMenu(list)
+            })
+            .catch(() => {})
+        return () => {
+            alive = false
+        }
     }, [dispatch])
 
     const { meals, others } = useMemo(() => {
@@ -267,12 +291,8 @@ const Subscriptions = () => {
     const fromPerMeal = meals.length ? Math.min(...meals.map(perMeal)) : 0
 
     return (
-        <div>
-            {look === "b" ? (
-                <LookB meals={meals} others={others} />
-            ) : (
-                <LookA meals={meals} others={others} fromPerMeal={fromPerMeal} />
-            )}
+        <div style={ACCENTS[accent]}>
+            <Page meals={meals} others={others} fromPerMeal={fromPerMeal} menu={menu} />
             <Details />
         </div>
     )
