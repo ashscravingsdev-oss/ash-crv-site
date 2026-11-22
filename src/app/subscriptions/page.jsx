@@ -2,9 +2,14 @@
 import Subscriptions from "@/components/subscriptions/subscriptions";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
+import WithSitePhotos from "@/components/with-site-photos";
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function SubscriptionsPage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="Meal Prep Subscriptions - Ash's Cravings | Your Meals, Every Week"
@@ -33,5 +38,6 @@ export default function SubscriptionsPage() {
       <Subscriptions />
       <Footer />
     </div>
+    </WithSitePhotos>
   )
 }

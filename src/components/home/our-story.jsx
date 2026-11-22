@@ -1,15 +1,14 @@
 import React from 'react'
 import Link from "next/link";
+import { SpotImg } from "@/components/site-photos";
 
 const OurStory = () => {
     return (
         <section id="our-story" className="container mx-auto px-4 py-16 md:py-24">
             <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
                 <div className="order-2 md:order-1 aspect-[4/5] max-w-lg w-full rounded-[18px] overflow-hidden bg-muted">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/brand/about-hero.jpg"
-                        alt="Ash in the kitchen"
+                    <SpotImg
+                        spot="home.story"
                         loading="lazy"
                         className="w-full h-full object-cover"
                     />

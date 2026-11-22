@@ -19,3 +19,20 @@ export const FlavorList = ({ items, className = "", as: Tag = "p" }) => (
         ))}
     </Tag>
 )
+
+/** A dessert's flavors as small soft tags (the Cakes & Desserts page). */
+export const FlavorTags = ({ items, className = "" }) => (
+    <span className={`flex flex-wrap gap-1.5 ${className}`}>
+        {items.map((p) => (
+            <span
+                key={p.id || p.name}
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[13px] ${
+                    p.is_holiday ? "bg-[#B0473B]/10 text-[#9A3B31]" : "bg-brand-latte/60 text-foreground/80"
+                }`}
+            >
+                {flavorLabel(p)}
+                {p.is_holiday && <span className="ml-1 text-[11px]">· holiday</span>}
+            </span>
+        ))}
+    </span>
+)

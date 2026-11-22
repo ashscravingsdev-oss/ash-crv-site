@@ -3,6 +3,7 @@ import React from 'react'
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { fadeUp } from "@/lib/animations";
+import { SpotImg } from "@/components/site-photos"
 
 const HeroSection = () => {
     return (
@@ -59,12 +60,7 @@ const HeroSection = () => {
                     className="relative pb-10"
                 >
                     <div className="aspect-[10/9] rounded-[18px] overflow-hidden bg-muted">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/brand/home-hero.jpg"
-                            alt="Teriyaki chicken meal prep bowls with rice and broccoli"
-                            className="w-full h-full object-cover"
-                        />
+                        <SpotImg spot="home.hero" className="w-full h-full object-cover" />
                     </div>
 
                     <p className="absolute top-4 right-4 rounded-full bg-brand-matcha-light px-4 py-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso shadow-md">
@@ -76,12 +72,7 @@ const HeroSection = () => {
                         href="/christmas"
                         className="absolute left-0 sm:-left-6 bottom-0 w-[250px] flex items-center gap-3 bg-background p-3 shadow-xl [clip-path:polygon(14px_0,calc(100%-14px)_0,100%_14px,100%_calc(100%-14px),calc(100%-14px)_100%,14px_100%,0_calc(100%-14px),0_14px)]"
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/gallery/cakes/cake-22.jpg"
-                            alt=""
-                            className="w-[68px] h-[68px] rounded-lg object-cover shrink-0"
-                        />
+                        <SpotImg spot="home.christmas" px={200} alt="" className="w-[68px] h-[68px] rounded-lg object-cover shrink-0" />
                         <span className="flex flex-col">
                             <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-heading"><span className="text-brand-matcha">■</span> New this season</span>
                             <span className="font-serif text-xl font-semibold leading-tight text-brand-espresso">Christmas Mini Cakes</span>

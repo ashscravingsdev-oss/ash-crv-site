@@ -1,7 +1,10 @@
 "use client"
 import Link from "next/link";
+import { sized } from "@/lib/site-photos";
+import { useSpot } from "@/components/site-photos";
 
 const Cravings = () => {
+    const photos = useSpot("home.cravings")
     // Four photos picked to sit together: bright, warm, soft colors
     const tiles = [
         { title: "Meal Prep", line: "Eat good all week", href: "/menu", img: "/gallery/meals/salmon-meal-prep.jpg", alt: "Salmon meal prep with an Ash's Cravings sticker" },
@@ -20,7 +23,7 @@ const Cravings = () => {
                     </h2>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-                    {tiles.map((t) => (
+                    {tiles.map((t, i) => (
                         <Link
                             key={t.title}
                             href={t.href}
@@ -29,8 +32,8 @@ const Cravings = () => {
                             <div className="aspect-square overflow-hidden bg-brand-latte">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
-                                    src={t.img}
-                                    alt={t.alt}
+                                    src={sized(photos[i]?.url || t.img, 900)}
+                                    alt={photos[i]?.alt || t.alt}
                                     loading="lazy"
                                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                                 />

@@ -2,9 +2,14 @@
 import { Footer } from "@/components/footer";
 import Catering from '@/components/catering/catering'
 import SEO from "@/components/seo";
+import WithSitePhotos from "@/components/with-site-photos";
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function EventsPage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="Events & Private Chef - Ash's Cravings | Party Food, Office Lunches & Chef Dinners in Eastvale, CA"
@@ -32,5 +37,6 @@ export default function EventsPage() {
       <Catering />
       <Footer />
     </div>
+    </WithSitePhotos>
   );
 }

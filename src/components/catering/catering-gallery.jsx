@@ -2,23 +2,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
+import { sized } from "@/lib/site-photos";
+import { useSpot } from "@/components/site-photos";
 
 // Past events, one photo per spread (no two shots of the same table, and none
 // of the photos shown bigger higher up the page). The first one is shown big.
-const photos = [
-    { src: "/gallery/catering/catering-01.jpg", alt: "Grazing board with veggies, grapes, cheeses and a spinach dip" },
-    { src: "/gallery/catering/catering-21.jpg", alt: "Crostini with whipped cheese, blueberry compote, walnuts and thyme" },
-    { src: "/gallery/catering/catering-13.jpg", alt: "Deviled eggs garnished with cranberries and parsley" },
-    { src: "/gallery/catering/catering-22.jpg", alt: "Shower table with white chocolate strawberries, rosette cupcakes, pretzel rods and deviled eggs" },
-    { src: "/gallery/catering/catering-14.jpg", alt: "Party table with brie bites, berries and a big glazed tray" },
-    { src: "/gallery/catering/catering-09.jpg", alt: "Fall party spread with crostini, pasta salad cups and mini desserts" },
-    { src: "/gallery/catering/catering-02.jpg", alt: "Tray of pesto and caprese toasts on ciabatta" },
-    { src: "/gallery/catering/catering-23.jpg", alt: "Truffle parmesan potato bites, deviled eggs and bacon crostini" },
-    { src: "/gallery/catering/catering-19.jpg", alt: "Caprese skewers with tomato, mozzarella and basil" },
-];
+// Ash can change them on the admin's Website photos page ("events.gallery").
 
 const CateringGallery = () => {
     const [viewing, setViewing] = useState(null);
+    const photos = useSpot("events.gallery").map((p) => ({ src: sized(p.url, 1800), thumb: sized(p.url, 900), alt: p.alt, note: p.note }));
 
     return (
         <motion.div
@@ -38,7 +31,7 @@ const CateringGallery = () => {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
                 {photos.map((p, idx) => (
                     <button
-                        key={p.src}
+                        key={`${p.src}-${idx}`}
                         type="button"
                         onClick={() => setViewing(idx)}
                         aria-label="See the whole photo"
@@ -48,7 +41,7 @@ const CateringGallery = () => {
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                            src={p.src}
+                            src={p.thumb}
                             alt={p.alt}
                             loading="lazy"
                             className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"

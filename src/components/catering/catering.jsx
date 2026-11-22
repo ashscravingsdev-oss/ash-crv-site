@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import InquiryForm from "./inquiry-form";
 import CateringGallery from "./catering-gallery";
 import FactStrip from "@/components/ui/fact-strip";
+import { SpotImg } from "@/components/site-photos";
 
 // Gentle fade-up as each section scrolls into view (same as the About page)
 const reveal = {
@@ -23,22 +24,16 @@ const occasions = [
     {
         title: "Birthdays & celebrations",
         text: "First birthdays, milestone parties and everything in between. I'll build a spread around your theme and your guest list.",
-        photo: "/gallery/events/birthdays.jpg",
-        alt: "10th birthday dessert table with chocolate strawberries, rainbow mini cupcakes and cheesecake cups",
         position: "object-center",
     },
     {
         title: "Showers & private parties",
         text: "Baby showers, bridal showers, graduations and backyard nights. It feels homemade, and you don't lift a finger.",
-        photo: "/gallery/events/showers.jpg",
-        alt: "Baby shower spread with charcuterie cups, blueberry crostini, mini cheesecakes and tea sandwiches",
         position: "object-center",
     },
     {
         title: "Office mornings & lunches",
         text: "Breakfast burritos, sandwich trays and easy bites your team will actually look forward to.",
-        photo: "/gallery/events/office.jpg",
-        alt: "Boxed focaccia sandwiches and fig crostini ready for an office lunch",
         position: "object-center",
     },
 ];
@@ -114,12 +109,9 @@ const Catering = () => {
                         transition={{ duration: 0.3 }}
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-17.jpg" alt="Bridal shower table with greenery, a welcome mirror and trays of bites" className="col-span-3 row-span-2 w-full h-full object-cover object-[30%_center] rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-15.jpg" alt="Smoked salmon bites on little gold forks" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-16.jpg" alt="Platters of crostini topped with tomatoes and herbs" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={0} className="col-span-3 row-span-2 w-full h-full object-cover object-[30%_center] rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={1} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={2} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -140,10 +132,11 @@ const Catering = () => {
                     </motion.div>
                     <div className="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
                         {occasions.map((o, i) => (
+                            // Ash can change these on the admin's Website photos page ("events.occasions")
                             <motion.article key={o.title} {...reveal} transition={{ duration: 0.35, delay: i * 0.08 }} className="space-y-4">
                                 <div className="aspect-[4/5] rounded-[18px] overflow-hidden bg-brand-latte">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={o.photo} alt={o.alt} loading="lazy" className={`w-full h-full object-cover ${o.position} hover:scale-105 transition-transform duration-500`} />
+                                    <SpotImg spot="events.occasions" i={i} px={1000} loading="lazy" className={`w-full h-full object-cover ${o.position} hover:scale-105 transition-transform duration-500`} />
                                 </div>
                                 <h3 className="font-serif text-3xl leading-tight text-brand-espresso">{o.title}</h3>
                                 <p className="text-foreground/80 leading-relaxed">{o.text}</p>
@@ -212,10 +205,8 @@ const Catering = () => {
                     className="scroll-mt-24 grid md:grid-cols-2 bg-muted rounded-[22px] overflow-hidden"
                 >
                     <div className="aspect-[4/3] md:aspect-auto md:min-h-[420px] bg-brand-latte">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/gallery/catering/catering-03.jpg"
-                            alt="Meatballs and baked mac and cheese cooking on the stove"
+                        <SpotImg
+                            spot="events.private-chef"
                             loading="lazy"
                             className="w-full h-full object-cover"
                         />
