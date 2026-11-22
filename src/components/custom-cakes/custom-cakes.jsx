@@ -7,8 +7,9 @@ import DessertRules from "@/components/desserts/dessert-rules";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 import FactStrip from "@/components/ui/fact-strip";
 import CheesecakeCard from "@/components/desserts/cheesecake-card";
+import CakeRow from "./cake-row";
 import { SpotImg, useSpot } from "@/components/site-photos";
-import { SPOT, sized } from "@/lib/site-photos";
+import { sized } from "@/lib/site-photos";
 
 // Cake flavors, in Ash's words
 const flavors = [
@@ -75,12 +76,9 @@ const FlavorsMenuCard = () => (
 )
 
 const CustomCakes = () => {
-    const [showAll, setShowAll] = useState(false);
     const [viewing, setViewing] = useState(null);
     // The cake gallery (Ash can change it on the admin's Website photos page)
     const cakePhotos = useSpot("cakes.gallery").map((p) => ({ src: sized(p.url, 1800), thumb: sized(p.url, 800), alt: p.alt, note: p.note }));
-    const first = SPOT["cakes.gallery"].first || 16;
-    const visibleCakes = showAll ? cakePhotos : cakePhotos.slice(0, first);
 
     return (
         <>
@@ -98,8 +96,8 @@ const CustomCakes = () => {
                             Made to <em className="italic text-brand-tobacco">wow</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed max-w-xl">
-                            From-scratch cakes, designed around your celebration and decorated by hand, down to the last
-                            little pearl. Share your vision and I&apos;ll take care of the rest.
+                            Every cake starts from scratch in my kitchen and is made just for your celebration. Tell me what
+                            you&apos;re dreaming of, and I&apos;ll make it happen.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
                             <a
@@ -136,7 +134,7 @@ const CustomCakes = () => {
             </section>
 
             {/* Flavors */}
-            <section className="container mx-auto px-4 pb-16 md:pb-20">
+            <section id="flavors" className="scroll-mt-24 container mx-auto px-4 pb-16 md:pb-20">
                 <div className="text-center mb-10">
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
@@ -146,48 +144,22 @@ const CustomCakes = () => {
             </section>
 
             {/* Gallery */}
-            <section className="bg-muted">
+            <section id="cakes" className="scroll-mt-24 bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
                     <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco text-center mb-2">Recent cakes</p>
-                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-8 md:mb-10">
                         Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                        {visibleCakes.map((photo, idx) => (
-                            <figure key={`${photo.src}-${idx}`} className="relative aspect-square overflow-hidden rounded-2xl bg-background">
-                                <button
-                                    type="button"
-                                    onClick={() => setViewing(idx)}
-                                    aria-label="See the whole photo"
-                                    className="block w-full h-full cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-tobacco rounded-2xl"
-                                >
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img
-                                        src={photo.thumb}
-                                        alt={photo.alt}
-                                        loading="lazy"
-                                        className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
-                                    />
-                                </button>
-                                {photo.note && (
-                                    <figcaption className="pointer-events-none absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
-                                        {photo.note}
-                                    </figcaption>
-                                )}
-                            </figure>
-                        ))}
-                    </div>
+                    <CakeRow photos={cakePhotos} onOpen={setViewing} />
                     <PhotoLightbox photos={cakePhotos} index={viewing} onIndexChange={setViewing} />
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8">
-                        {!showAll && cakePhotos.length > first && (
-                            <button
-                                type="button"
-                                onClick={() => setShowAll(true)}
-                                className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
-                            >
-                                Show more cakes
-                            </button>
-                        )}
+                        <button
+                            type="button"
+                            onClick={() => setViewing(0)}
+                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
+                        >
+                            See all cakes
+                        </button>
                         <a
                             href="#request"
                             className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
