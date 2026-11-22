@@ -93,15 +93,13 @@ const CustomCakes = () => {
                         transition={{ duration: 0.25 }}
                         className="space-y-5"
                     >
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> Cakes &amp; desserts
-                        </p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">Cakes &amp; desserts</p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
                             Made to <em className="italic text-brand-tobacco">wow</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed max-w-xl">
-                            Every cake is made from scratch and decorated by hand, down to the last little pearl. Tell me
-                            your idea and I&apos;ll bring it to life.
+                            From-scratch cakes, designed around your celebration and decorated by hand, down to the last
+                            little pearl. Share your vision and I&apos;ll take care of the rest.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 pt-2">
                             <a
@@ -137,12 +135,20 @@ const CustomCakes = () => {
                 </p>
             </section>
 
+            {/* Flavors */}
+            <section className="container mx-auto px-4 pb-16 md:pb-20">
+                <div className="text-center mb-10">
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                        Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
+                    </h2>
+                </div>
+                <FlavorsMenuCard />
+            </section>
+
             {/* Gallery */}
             <section className="bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading text-center mb-3">
-                        <span className="text-brand-matcha">■</span> Recent cakes
-                    </p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco text-center mb-2">Recent cakes</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
                         Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
@@ -172,8 +178,8 @@ const CustomCakes = () => {
                         ))}
                     </div>
                     <PhotoLightbox photos={cakePhotos} index={viewing} onIndexChange={setViewing} />
-                    {!showAll && cakePhotos.length > first && (
-                        <div className="flex justify-center pt-8">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8">
+                        {!showAll && cakePhotos.length > first && (
                             <button
                                 type="button"
                                 onClick={() => setShowAll(true)}
@@ -181,8 +187,14 @@ const CustomCakes = () => {
                             >
                                 Show more cakes
                             </button>
-                        </div>
-                    )}
+                        )}
+                        <a
+                            href="#request"
+                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
+                        >
+                            Request a cake <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
                     <p className="text-center mt-8">
                         <a
                             href="https://www.instagram.com/ashscravings"
@@ -196,28 +208,13 @@ const CustomCakes = () => {
                 </div>
             </section>
 
-            {/* Flavors */}
-            <section className="container mx-auto px-4 pt-16 md:pt-20">
-                <div className="text-center mb-10">
-                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                        Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
-                    </h2>
-                </div>
-                <FlavorsMenuCard />
-                <div className="max-w-5xl mx-auto mt-14 md:mt-16">
-                    <CheesecakeCard />
-                </div>
-            </section>
-
             {/* Desserts by the dozen */}
             <section id="desserts" className="scroll-mt-24 container mx-auto px-4 py-16 md:py-20">
                 {/* Phones: heading, a short photo strip, then the list.
                     Desktop: the list on the left, a small photo set that stays in view on the right. */}
                 <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-x-16 gap-y-8">
                     <div className="space-y-4 lg:col-start-1">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> Desserts
-                        </p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">Desserts</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>
@@ -263,6 +260,9 @@ const CustomCakes = () => {
                     <div className="lg:col-start-1">
                         <DessertList />
                     </div>
+                </div>
+                <div id="cheesecakes" className="scroll-mt-24 mt-14 md:mt-16">
+                    <CheesecakeCard />
                 </div>
             </section>
 

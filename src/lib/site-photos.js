@@ -117,9 +117,9 @@ export const SPOTS = [
         page: "Cakes & Desserts",
         label: "“Cakes I’ve loved making”",
         newAlt: "Custom cake by Ash's Cravings",
-        hint: "The first 16 show right away; the rest are under “Show more cakes”.",
+        hint: "The first 8 show right away; the rest are under “Show more cakes”.",
         gallery: true,
-        first: 16,
+        first: 8,
         notes: true,
         shapes: ["1:1"],
         photos: CAKES.map((f) => ({

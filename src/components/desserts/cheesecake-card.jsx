@@ -35,7 +35,6 @@ const CheesecakeCard = () => {
 
     const intro = (
         <div className="space-y-4">
-            <p className="font-serif italic text-lg text-brand-tobacco">Not by the dozen</p>
             <h3 className="font-serif font-medium text-4xl md:text-5xl leading-[1.05] text-brand-heading">
                 Cheesecakes, <em className="italic text-brand-tobacco">8 inch</em>
             </h3>
