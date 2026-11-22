@@ -231,9 +231,10 @@ export function spotPhotos(key, mine) {
         : null
     if (!picked || picked.length === 0) return builtIn
     const label = (spot?.label || "Photo").replace(/[“”]/g, "")
+    // A built-in photo keeps its description; a new one gets a plain one
     const withAlt = (p, fallback) => ({
         url: p.url,
-        alt: p.alt || fallback?.alt || `${label}, by Ash's Cravings`,
+        alt: p.alt || (fallback?.url === p.url ? fallback.alt : "") || `${label}, by Ash's Cravings`,
         note: typeof p.note === "string" ? p.note : "",
     })
     if (spot?.gallery || builtIn.length <= 1) return picked.map((p) => withAlt(p))
