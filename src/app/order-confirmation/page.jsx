@@ -80,8 +80,9 @@ function OrderConfirmationContent() {
         <SEO title="Order Confirmation - Ash's Cravings" description="Order confirmation" />
         <Navigation />
         <section className="container mx-auto px-4 py-16 md:py-24 text-center max-w-xl space-y-4">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-            <span className="text-brand-matcha">■</span> Your order
+          <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+            Your order
           </p>
           <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
             Hmm, I couldn&apos;t <em className="italic text-brand-tobacco">find it</em>
@@ -134,8 +135,9 @@ function OrderConfirmationContent() {
           {/* Thank you + what happens next */}
           <div className="space-y-6">
             <div className="space-y-3">
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                <span className="text-brand-matcha">■</span> Order #{order_number || orderId}
+              <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                Order #{order_number || orderId}
               </p>
               <h1 className="font-serif font-medium text-5xl md:text-6xl leading-[1.02] text-brand-heading">
                 Thank you{firstName ? <>, <em className="italic text-brand-tobacco">{firstName}</em></> : null}!

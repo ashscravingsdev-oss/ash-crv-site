@@ -12,7 +12,7 @@ const InstagramStrip = () => {
         <section className="py-12 md:py-16">
             <div className="container mx-auto px-4 flex items-end justify-between gap-4 mb-5">
                 <div>
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Follow along</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Follow along</p>
                     <a href={IG_URL} target="_blank" rel="noopener noreferrer" className="font-serif font-medium text-3xl md:text-4xl text-brand-heading hover:text-brand-tobacco transition-colors">
                         @ashscravings
                     </a>

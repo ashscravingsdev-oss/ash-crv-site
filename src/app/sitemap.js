@@ -13,7 +13,6 @@ const PAGES = [
     { path: "/bundles", priority: 0.7, changeFrequency: "weekly" },
     { path: "/subscriptions", priority: 0.7, changeFrequency: "monthly" },
     { path: "/about", priority: 0.7, changeFrequency: "monthly" },
-    { path: "/how-it-works", priority: 0.6, changeFrequency: "monthly" },
     { path: "/faq", priority: 0.6, changeFrequency: "monthly" },
     { path: "/contact", priority: 0.6, changeFrequency: "yearly" },
     { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },

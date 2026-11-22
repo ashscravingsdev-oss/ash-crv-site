@@ -17,7 +17,7 @@ const Cravings = () => {
         <section className="bg-muted">
             <div className="container mx-auto px-4 py-16 md:py-24">
                 <div className="text-center mb-10 md:mb-12 space-y-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Pick your craving</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Pick your craving</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Something for <em className="italic text-brand-tobacco">every</em> mood
                     </h2>

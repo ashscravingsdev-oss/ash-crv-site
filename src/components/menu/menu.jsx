@@ -317,8 +317,9 @@ const Menu = () => {
             {browsingAll && (
                 <div className="mt-10 rounded-[22px] border border-border bg-card p-6 md:p-8 flex flex-col md:flex-row md:items-center gap-5 justify-between">
                     <div>
-                        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> Desserts
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                            Desserts
                         </p>
                         <p className="font-serif text-3xl text-brand-espresso mt-1">
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>

@@ -75,7 +75,7 @@ const CakeInquiryForm = () => {
         <div className="max-w-3xl mx-auto">
             <Card className="rounded-2xl">
                 <CardHeader className="space-y-2">
-                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">Request a cake or desserts</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Request a cake or desserts</p>
                     <CardTitle className="font-serif text-4xl font-medium text-brand-heading">
                         Tell me about your <em className="italic text-brand-tobacco">celebration</em>
                     </CardTitle>

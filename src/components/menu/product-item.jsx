@@ -103,8 +103,9 @@ const ProductItem = ({ product }) => {
                             transition={{ delay: 0.1 }}
                             className="flex items-center gap-2 mb-2"
                         >
-                            <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
-                                <span className="text-brand-matcha">■</span> {product.category?.name || "Menu"}
+                            <span className="font-serif italic text-base text-brand-tobacco">
+                                <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.6em] align-[0.15em] mr-1.5">■</span>
+                                {product.category?.name || "Menu"}
                             </span>
 
                             {isInCart && (

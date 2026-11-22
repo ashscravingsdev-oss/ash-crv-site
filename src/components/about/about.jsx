@@ -34,7 +34,7 @@ const About = () => {
             <section className="container mx-auto px-4 pt-10 pb-16 md:pt-14 md:pb-24">
                 <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
                     <motion.div {...reveal} className="space-y-5">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> My story</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My story</p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
                             Hi, I&apos;m <em className="italic text-brand-tobacco">Ash</em>
                         </h1>
@@ -81,7 +81,7 @@ const About = () => {
                         </figcaption>
                     </motion.figure>
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Where it all started</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Where it all started</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
                             In the kitchen with <em className="italic text-brand-tobacco">my grandmas</em>
                         </h2>
@@ -101,7 +101,7 @@ const About = () => {
             <section className="container mx-auto px-4 py-16 md:py-24">
                 <div className="grid md:grid-cols-2 gap-10 md:gap-16">
                     <motion.div {...reveal} className="space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Culinary school</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Culinary school</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Class of <em className="italic text-brand-tobacco">2024</em>
                         </h2>
@@ -111,7 +111,7 @@ const About = () => {
                         </p>
                     </motion.div>
                     <motion.div {...reveal} className="space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> Outside the kitchen</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Outside the kitchen</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             My <em className="italic text-brand-tobacco">little family</em>
                         </h2>

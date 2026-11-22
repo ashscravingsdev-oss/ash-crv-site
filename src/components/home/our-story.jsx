@@ -15,7 +15,7 @@ const OurStory = () => {
                 </div>
 
                 <div className="space-y-5 order-1 md:order-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> My story</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My story</p>
                     <h2 className="font-serif font-medium text-5xl md:text-6xl leading-none text-brand-heading">
                         Hi, I’m <em className="italic text-brand-tobacco">Ash</em>
                     </h2>
