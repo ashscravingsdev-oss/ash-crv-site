@@ -132,7 +132,7 @@ export const SPOTS = [
         page: "Cakes & Desserts",
         label: "Cheesecakes card",
         newAlt: "Cheesecake by Ash's Cravings",
-        hint: "Until you pick one, it shows the photo from your cheesecakes on the menu.",
+        hint: "Until you pick one, the card shows a little cheesecake sticker in its corner.",
         shapes: ["4:3"],
         photos: [],
     },

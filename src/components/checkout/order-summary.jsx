@@ -20,7 +20,7 @@ const OrderSummary = ({
 }) => {
     return (
         <div className="lg:col-span-1">
-            <Card className="sticky top-20">
+            <Card className="sticky top-24 lg:top-32">
                 <CardHeader>
                     <CardTitle>Order Summary</CardTitle>
                 </CardHeader>

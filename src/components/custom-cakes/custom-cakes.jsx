@@ -134,7 +134,7 @@ const CustomCakes = () => {
             </section>
 
             {/* Flavors */}
-            <section id="flavors" className="scroll-mt-24 container mx-auto px-4 pb-16 md:pb-20">
+            <section id="flavors" className="scroll-mt-24 lg:scroll-mt-32 container mx-auto px-4 pb-16 md:pb-20">
                 <div className="text-center mb-10">
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
@@ -144,7 +144,7 @@ const CustomCakes = () => {
             </section>
 
             {/* Gallery */}
-            <section id="cakes" className="scroll-mt-24 bg-muted">
+            <section id="cakes" className="scroll-mt-24 lg:scroll-mt-32 bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
                     <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco text-center mb-2"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Recent cakes</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-8 md:mb-10">
@@ -181,7 +181,7 @@ const CustomCakes = () => {
             </section>
 
             {/* Desserts by the dozen */}
-            <section id="desserts" className="scroll-mt-24 container mx-auto px-4 py-16 md:py-20">
+            <section id="desserts" className="scroll-mt-24 lg:scroll-mt-32 container mx-auto px-4 py-16 md:py-20">
                 {/* Phones: heading, a short photo strip, then the list.
                     Desktop: the list on the left, a small photo set that stays in view on the right. */}
                 <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-x-16 gap-y-8">
@@ -195,7 +195,7 @@ const CustomCakes = () => {
                         </p>
                         <DessertRules cheesecakes={false} />
                     </div>
-                    <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-28 self-start">
+                    <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-32 self-start">
                         <div className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[4/3] lg:aspect-[4/5]">
                             <figure className="relative col-span-3 row-span-2 rounded-[18px] overflow-hidden bg-brand-latte">
                                 <video
@@ -233,13 +233,13 @@ const CustomCakes = () => {
                         <DessertList />
                     </div>
                 </div>
-                <div id="cheesecakes" className="scroll-mt-24 mt-14 md:mt-16">
+                <div id="cheesecakes" className="scroll-mt-24 lg:scroll-mt-32 mt-14 md:mt-16">
                     <CheesecakeCard />
                 </div>
             </section>
 
             {/* Request form */}
-            <section id="request" className="scroll-mt-24 bg-muted">
+            <section id="request" className="scroll-mt-24 lg:scroll-mt-32 bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
                     <CakeInquiryForm />
                 </div>

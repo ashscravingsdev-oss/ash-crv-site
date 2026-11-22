@@ -156,7 +156,7 @@ const Catering = () => {
             {/* Crowd favorites */}
             <section className="container mx-auto px-4 py-16 md:py-20">
                 <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
-                    <motion.div {...reveal} className="space-y-4 lg:sticky lg:top-28 self-start">
+                    <motion.div {...reveal} className="space-y-4 lg:sticky lg:top-32 self-start">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
                             <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                             On the menu
@@ -205,7 +205,7 @@ const Catering = () => {
                 <motion.div
                     id="private-chef"
                     {...reveal}
-                    className="scroll-mt-24 grid md:grid-cols-2 bg-muted rounded-[22px] overflow-hidden"
+                    className="scroll-mt-24 lg:scroll-mt-32 grid md:grid-cols-2 bg-muted rounded-[22px] overflow-hidden"
                 >
                     <div className="aspect-[4/3] md:aspect-auto md:min-h-[420px] bg-brand-latte">
                         <SpotImg
@@ -243,7 +243,7 @@ const Catering = () => {
             </section>
 
             {/* Request form */}
-            <section id="request-a-quote" className="scroll-mt-24 bg-muted">
+            <section id="request-a-quote" className="scroll-mt-24 lg:scroll-mt-32 bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
                     <InquiryForm />
                 </div>

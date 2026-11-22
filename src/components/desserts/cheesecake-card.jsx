@@ -28,9 +28,9 @@ const CheesecakeCard = () => {
     const picked = useSpot("cakes.cheesecakes")[0]
     if (!group || group.items.length === 0) return null
 
-    // Ash's pick on the Website photos page, else a cheesecake photo from the menu
-    const menuPhoto = group.items.find((p) => p.image_url)
-    const photo = picked || (menuPhoto ? { url: menuPhoto.image_url, alt: `${menuPhoto.name} from Ash's Cravings` } : null)
+    // Ash's pick on the Website photos page; otherwise the card wears a little
+    // cheesecake sticker in its corner
+    const photo = picked || null
     const extras = group.extras || []
 
     const intro = (
@@ -78,7 +78,17 @@ const CheesecakeCard = () => {
             </div>
         </div>
     ) : (
-        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center bg-muted rounded-[22px] p-6 md:p-10">
+        <div className="relative grid md:grid-cols-2 gap-6 md:gap-12 items-center bg-muted rounded-[22px] p-6 pt-24 md:p-10 md:pt-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+                src="/brand/cheesecake-sticker.webp"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                width={560}
+                height={464}
+                className="pointer-events-none select-none absolute -top-12 right-3 w-40 md:top-auto md:-bottom-12 md:-right-6 md:w-40 lg:w-52 rotate-[6deg]"
+            />
             {intro}
             {details}
         </div>

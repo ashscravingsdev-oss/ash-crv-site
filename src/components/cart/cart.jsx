@@ -339,7 +339,7 @@ const Cart = () => {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-1">
-                    <Card className="sticky top-20">
+                    <Card className="sticky top-24 lg:top-32">
                         <CardContent className="p-6 space-y-4">
                             <h3 className="text-xl font-bold">Order Summary</h3>
 
