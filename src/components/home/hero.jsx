@@ -17,9 +17,10 @@ const HeroSection = () => {
                 >
                     <motion.p
                         variants={fadeUp}
-                        className="inline-block font-mono text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] text-brand-heading border border-brand-tobacco/60 rounded-full px-4 py-1.5"
+                        className="font-serif italic text-xl md:text-2xl text-brand-tobacco"
                     >
-                        <span className="text-brand-matcha">■</span> Fresh meal prep, delivered weekly
+                        <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                        Fresh meal prep, delivered weekly
                     </motion.p>
 
                     <motion.h1
@@ -74,7 +75,7 @@ const HeroSection = () => {
                     >
                         <SpotImg spot="home.christmas" px={200} alt="" className="w-[68px] h-[68px] rounded-lg object-cover shrink-0" />
                         <span className="flex flex-col">
-                            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-brand-heading"><span className="text-brand-matcha">■</span> New this season</span>
+                            <span className="font-serif italic text-base text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.6em] align-[0.15em] mr-1.5">■</span>New this season</span>
                             <span className="font-serif text-xl font-semibold leading-tight text-brand-espresso">Christmas Mini Cakes</span>
                             <span className="text-sm font-medium text-brand-espresso border-b border-dashed border-brand-tobacco self-start">Order yours →</span>
                         </span>

@@ -78,8 +78,9 @@ const Catering = () => {
                         transition={{ duration: 0.25 }}
                         className="space-y-5"
                     >
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> Events &amp; private chef
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                            Events &amp; private chef
                         </p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
                             Made to <em className="italic text-brand-tobacco">gather around</em>
@@ -123,8 +124,9 @@ const Catering = () => {
             <section className="bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
                     <motion.div {...reveal} className="text-center mb-10 md:mb-12">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">
-                            <span className="text-brand-matcha">■</span> For every occasion
+                        <p className="mb-3 font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                            For every occasion
                         </p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Whatever you&apos;re <em className="italic text-brand-tobacco">celebrating</em>
@@ -155,8 +157,9 @@ const Catering = () => {
             <section className="container mx-auto px-4 py-16 md:py-20">
                 <div className="grid lg:grid-cols-[0.8fr_1.2fr] gap-10 lg:gap-16">
                     <motion.div {...reveal} className="space-y-4 lg:sticky lg:top-28 self-start">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> On the menu
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                            On the menu
                         </p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             A few <em className="italic text-brand-tobacco">crowd favorites</em>
@@ -212,8 +215,9 @@ const Catering = () => {
                         />
                     </div>
                     <div className="p-6 md:p-10 lg:p-12 flex flex-col justify-center space-y-4">
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                            <span className="text-brand-matcha">■</span> New · Private chef
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                            <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                            New · Private chef
                         </p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl leading-[1.05] text-brand-heading">
                             Your own chef, <em className="italic text-brand-tobacco">for the night</em>

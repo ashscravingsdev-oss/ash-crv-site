@@ -4,10 +4,11 @@ import { useEffect, useRef, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 /**
- * Recent cakes as one row you can swipe through (phones) or scroll with the
- * arrows (computers). Tapping a cake opens it big.
+ * Photos as one row you can swipe through (phones) or scroll with the arrows
+ * (computers), like the cakes on Cakes & Desserts and the past spreads on
+ * Events. Tapping a photo opens it big.
  */
-const CakeRow = ({ photos, onOpen }) => {
+const PhotoRow = ({ photos, onOpen, label = "photos" }) => {
     const row = useRef(null)
     const [edges, setEdges] = useState({ start: true, end: false })
 
@@ -28,7 +29,7 @@ const CakeRow = ({ photos, onOpen }) => {
 
     return (
         <div className="relative">
-            <button type="button" onClick={() => go(-1)} disabled={edges.start} aria-label="Earlier cakes" className={`${arrow} -left-3 lg:-left-5`}>
+            <button type="button" onClick={() => go(-1)} disabled={edges.start} aria-label={`Earlier ${label}`} className={`${arrow} -left-3 lg:-left-5`}>
                 <ChevronLeft className="h-5 w-5" aria-hidden="true" />
             </button>
             <div
@@ -63,11 +64,11 @@ const CakeRow = ({ photos, onOpen }) => {
                     </figure>
                 ))}
             </div>
-            <button type="button" onClick={() => go(1)} disabled={edges.end} aria-label="More cakes" className={`${arrow} -right-3 lg:-right-5`}>
+            <button type="button" onClick={() => go(1)} disabled={edges.end} aria-label={`More ${label}`} className={`${arrow} -right-3 lg:-right-5`}>
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />
             </button>
         </div>
     )
 }
 
-export default CakeRow
+export default PhotoRow

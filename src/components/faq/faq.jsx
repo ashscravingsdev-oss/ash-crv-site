@@ -137,7 +137,7 @@ const FAQ = () => {
         <div className="container mx-auto px-4 pt-8">
             {/* Header */}
             <div className="text-center mb-12">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3"><span className="text-brand-matcha">■</span> FAQ</p>
+                <p className="mb-3 font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>FAQ</p>
                 <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading mb-4">
                     Questions? <em className="italic text-brand-tobacco">I&apos;ve got you</em>
                 </h1>

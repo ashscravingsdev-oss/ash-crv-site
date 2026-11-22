@@ -4,7 +4,10 @@ const nextConfig = {
   },
   // The events page used to live at /catering; keep old links working.
   async redirects() {
-    return [{ source: '/catering', destination: '/events', permanent: false }]
+    return [
+      { source: '/catering', destination: '/events', permanent: false },
+      { source: '/how-it-works', destination: '/faq', permanent: true },
+    ]
   },
 }
 

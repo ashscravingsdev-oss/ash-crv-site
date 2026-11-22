@@ -214,8 +214,9 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
 
     return (
         <div className="container mx-auto px-4 pt-8 pb-16">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                <span className="text-brand-matcha">■</span> Checkout
+            <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                Checkout
             </p>
             <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading mt-2 mb-8">
                 Almost <em className="italic text-brand-tobacco">yours</em>

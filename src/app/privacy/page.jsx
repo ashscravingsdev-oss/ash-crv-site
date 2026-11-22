@@ -77,7 +77,7 @@ const sections = [
                 list: [
                     ["See, fix or delete your information:", " email me and I'll take care of it."],
                     ["Update your details:", " you can change them in your account."],
-                    ["Stop news and offers:", " use the unsubscribe link or just tell me. I'll still contact you about orders you place."],
+                    ["Stop news and offers:", " just reply to any of my emails or tell me. I'll still contact you about orders you place."],
                 ],
             },
         ],

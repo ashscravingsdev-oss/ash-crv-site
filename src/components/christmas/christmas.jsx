@@ -171,8 +171,9 @@ const Christmas = () => {
                     transition={{ duration: 0.25 }}
                     className="space-y-5"
                 >
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                        <span className="text-brand-matcha">■</span> This season only
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                        <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                        This season only
                     </p>
                     <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
                         Christmas <em className="italic text-brand-tobacco">mini cakes</em>

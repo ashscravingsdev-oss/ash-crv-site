@@ -136,8 +136,9 @@ const CustomItem = ({ token }) => {
                     {/* Details */}
                     <div className="space-y-6">
                         <div className="space-y-3">
-                            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                                <span className="text-brand-matcha">■</span> Made just for you
+                            <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                                <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                                Made just for you
                             </p>
                             <h1 className="font-serif font-medium text-[2.75rem] leading-[1.02] sm:text-6xl text-brand-heading">
                                 {item.name}
@@ -233,8 +234,9 @@ const CustomItem = ({ token }) => {
             {/* Explore: the link is a way in to the rest of the site */}
             <section className="bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading text-center mb-3">
-                        <span className="text-brand-matcha">■</span> While you&apos;re here
+                    <p className="text-center mb-3 font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                        <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                        While you&apos;re here
                     </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
                         What else are you <em className="italic text-brand-tobacco">craving?</em>

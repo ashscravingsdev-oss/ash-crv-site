@@ -7,8 +7,9 @@ export default function ReheatCard({ product }) {
 
     return (
         <section aria-labelledby="reheat-heading" className="rounded-[18px] bg-muted p-6 md:p-8 mb-16">
-            <p id="reheat-heading" className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-5">
-                <span className="text-brand-matcha">■</span> How to reheat
+            <p id="reheat-heading" className="font-serif italic text-xl md:text-2xl text-brand-tobacco mb-4">
+                <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                How to reheat
             </p>
             <ol className="grid gap-5 md:grid-cols-3">
                 {REHEAT_STEPS.map((s, i) => (

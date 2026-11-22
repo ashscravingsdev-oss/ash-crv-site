@@ -13,8 +13,9 @@ export default function NotFound() {
             <Navigation />
             <section className="container mx-auto px-4 py-20 md:py-32">
                 <div className="max-w-2xl mx-auto text-center space-y-4">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                        <span className="text-brand-matcha">■</span> Page not found
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                        <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                        Page not found
                     </p>
                     <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading text-balance">
                         This page isn&apos;t <em className="italic text-brand-tobacco">on the menu</em>

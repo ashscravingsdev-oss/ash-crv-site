@@ -7,7 +7,7 @@ import DessertRules from "@/components/desserts/dessert-rules";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 import FactStrip from "@/components/ui/fact-strip";
 import CheesecakeCard from "@/components/desserts/cheesecake-card";
-import CakeRow from "./cake-row";
+import PhotoRow from "@/components/ui/photo-row";
 import { SpotImg, useSpot } from "@/components/site-photos";
 import { sized } from "@/lib/site-photos";
 
@@ -91,7 +91,7 @@ const CustomCakes = () => {
                         transition={{ duration: 0.25 }}
                         className="space-y-5"
                     >
-                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">Cakes &amp; desserts</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Cakes &amp; desserts</p>
                         <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
                             Made to <em className="italic text-brand-tobacco">wow</em>
                         </h1>
@@ -146,11 +146,11 @@ const CustomCakes = () => {
             {/* Gallery */}
             <section id="cakes" className="scroll-mt-24 bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-20">
-                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco text-center mb-2">Recent cakes</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco text-center mb-2"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Recent cakes</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-8 md:mb-10">
                         Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
-                    <CakeRow photos={cakePhotos} onOpen={setViewing} />
+                    <PhotoRow photos={cakePhotos} onOpen={setViewing} label="cakes" />
                     <PhotoLightbox photos={cakePhotos} index={viewing} onIndexChange={setViewing} />
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-8">
                         <button
@@ -186,7 +186,7 @@ const CustomCakes = () => {
                     Desktop: the list on the left, a small photo set that stays in view on the right. */}
                 <div className="grid lg:grid-cols-[1.15fr_0.85fr] gap-x-16 gap-y-8">
                     <div className="space-y-4 lg:col-start-1">
-                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">Desserts</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Desserts</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>

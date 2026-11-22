@@ -2,7 +2,6 @@ import { Navigation } from "@/components/nav";
 import AnnouncementBar from "@/components/home/announcement-bar";
 import HeroSection from "@/components/home/hero";
 import Cravings from "@/components/home/cravings";
-import HowItWorks from "@/components/home/how-it-works";
 import FeaturedProducts from "@/components/home/featured-products";
 import CakesFeature from "@/components/home/cakes-feature";
 import OurStory from "@/components/home/our-story";
@@ -34,7 +33,6 @@ export default function HomePage() {
       <HeroSection />
       <MochaBand />
       <Cravings />
-      <HowItWorks />
       <FeaturedProducts />
       <Reviews />
       <CakesFeature />

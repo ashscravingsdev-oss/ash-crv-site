@@ -168,8 +168,9 @@ const Bundles = () => {
         <div className="pt-10 md:pt-14">
             {/* Header */}
             <motion.div initial="initial" animate="animate" variants={fadeUp} className="container mx-auto px-4 text-center mb-10 md:mb-14">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">
-                    <span className="text-brand-matcha">■</span> Meal prep bundles
+                <p className="mb-3 font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                    <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                    Meal prep bundles
                 </p>
                 <h1 className="font-serif font-medium text-5xl md:text-7xl leading-[0.98] text-brand-heading mb-4">
                     Build your <em className="italic text-brand-tobacco">bundle</em>

@@ -24,15 +24,18 @@ export default function FeaturedProducts() {
     const showSkeleton = loading || (products.length === 0 && !error)
 
     return (
-        <section className="container mx-auto px-4 pt-12 pb-16 md:pb-24">
+        <section className="container mx-auto px-4 pt-16 md:pt-24 pb-16 md:pb-24">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-8 md:mb-10">
                 <div className="space-y-2">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading"><span className="text-brand-matcha">■</span> This week’s menu</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>This week’s menu</p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Fresh <em className="italic text-brand-tobacco">picks</em>
                     </h2>
+                    <p className="text-lg text-foreground/80 leading-relaxed max-w-xl">
+                        Order by Sunday, and I&apos;ll cook it fresh for Tuesday, delivery or pickup.
+                    </p>
                 </div>
-                <p className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso bg-brand-matcha-light rounded-full px-4 py-2">
+                <p className="font-serif italic text-lg text-brand-espresso bg-brand-matcha-light rounded-full px-4 py-1.5">
                     $17 each · 5 for $80 · 10 for $160
                 </p>
             </div>

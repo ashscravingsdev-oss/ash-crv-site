@@ -7,8 +7,9 @@ export default function EmptyCart() {
         <section className="container mx-auto px-4 pt-12 pb-4 md:pt-20">
             <div className="max-w-4xl mx-auto">
                 <div className="text-center space-y-3 mb-8 md:mb-10">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                        <span className="text-brand-matcha">■</span> Your cart
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco">
+                        <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                        Your cart
                     </p>
                     <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading">
                         Nothing here <em className="italic text-brand-tobacco">yet</em>
