@@ -179,11 +179,8 @@ const Details = () => (
     </section>
 )
 
-// Two accent colors to compare while choosing (?accent=blue); the one Ash picks stays
-const ACCENTS = {
-    green: { "--acc": "#7D9150", "--acc-soft": "#E1E8C9", "--acc-wash": "#EEF2E0", "--acc-ink": "#4E6127" },
-    blue: { "--acc": "#5C7A92", "--acc-soft": "#DCE6EE", "--acc-wash": "#EAF0F4", "--acc-ink": "#33495B" },
-}
+// The page's soft green touches (the block behind the photo, check circles, price tags, the last band)
+const ACCENT = { "--acc": "#7D9150", "--acc-soft": "#E1E8C9", "--acc-wash": "#EEF2E0", "--acc-ink": "#4E6127" }
 
 // A smaller copy of a menu photo (Cloudinary resizes it), added after any crop already in the link
 const sized = (url, px = 480) =>
@@ -264,11 +261,9 @@ const Page = ({ meals, others, fromPerMeal, menu }) => (
 const Subscriptions = () => {
     const dispatch = useDispatch()
     const { bundles } = useSelector((state) => state.bundles)
-    const [accent, setAccent] = useState("green")
     const [menu, setMenu] = useState([])
 
     useEffect(() => {
-        if (new URLSearchParams(window.location.search).get("accent") === "blue") setAccent("blue")
         dispatch(fetchActiveBundles())
         // This week's meals with a photo
         let alive = true
@@ -291,7 +286,7 @@ const Subscriptions = () => {
     const fromPerMeal = meals.length ? Math.min(...meals.map(perMeal)) : 0
 
     return (
-        <div style={ACCENTS[accent]}>
+        <div style={ACCENT}>
             <Page meals={meals} others={others} fromPerMeal={fromPerMeal} menu={menu} />
             <Details />
         </div>
