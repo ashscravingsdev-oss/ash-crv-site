@@ -10,16 +10,49 @@ import CheesecakeCard from "@/components/desserts/cheesecake-card";
 import { SpotImg, useSpot } from "@/components/site-photos";
 import { SPOT, sized } from "@/lib/site-photos";
 
-// Cake flavors, in Ash's words
+// Cake flavors, in Ash's words. Each has a little round swatch of what the
+// cake looks like inside (chocolate, pink strawberry, vanilla bean specks...).
 const flavors = [
-    { name: "Chocolate", text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers." },
-    { name: "Strawberry Velvet", text: "My pink strawberry cake, made with real strawberries. Perfect with cream cheese or vanilla buttercream." },
-    { name: "Strawberries & Cream", text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested." },
-    { name: "Cookies & Cream", text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite." },
-    { name: "Vanilla Bean", text: "Soft vanilla cake made with real vanilla bean. Simple and so good." },
-    { name: "Red Velvet", text: "Classic red velvet with cream cheese frosting." },
-    { name: "Tres Leches", text: "Soaked in three milks, so it's light, creamy and melts in your mouth." },
-    { name: "Confetti", text: "Vanilla cake with sprinkles baked in. A birthday must." },
+    {
+        name: "Chocolate",
+        text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers.",
+        swatch: "radial-gradient(circle at 32% 30%, #84593f, #4a2c1d 72%)",
+    },
+    {
+        name: "Strawberry Velvet",
+        text: "My pink strawberry cake, made with real strawberries. Perfect with cream cheese or vanilla buttercream.",
+        swatch: "radial-gradient(circle at 32% 30%, #ecc2c0, #c98d8e 72%)",
+    },
+    {
+        name: "Strawberries & Cream",
+        text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested.",
+        swatch: "radial-gradient(circle at 64% 60%, #cf6a62 0 26%, transparent 27.5%), radial-gradient(circle at 34% 34%, #e48c84 0 14%, transparent 15.5%), radial-gradient(circle at 30% 70%, #d9776f 0 8%, transparent 9.5%), #f7eedf",
+    },
+    {
+        name: "Cookies & Cream",
+        text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite.",
+        swatch: "radial-gradient(circle at 28% 30%, #3b2a22 0 9%, transparent 10%), radial-gradient(circle at 62% 24%, #3b2a22 0 6%, transparent 7%), radial-gradient(circle at 72% 58%, #3b2a22 0 10%, transparent 11%), radial-gradient(circle at 40% 66%, #3b2a22 0 7%, transparent 8%), radial-gradient(circle at 22% 58%, #4a3529 0 5%, transparent 6%), radial-gradient(circle at 56% 82%, #3b2a22 0 5%, transparent 6%), radial-gradient(circle at 50% 45%, #4a3529 0 4%, transparent 5%), radial-gradient(circle at 80% 36%, #3b2a22 0 4%, transparent 5%), #efe6d8",
+    },
+    {
+        name: "Vanilla Bean",
+        text: "Soft vanilla cake made with real vanilla bean. Simple and so good.",
+        swatch: "radial-gradient(circle at 25% 30%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 45% 22%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 68% 35%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 30% 55%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 55% 50%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 75% 62%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 40% 75%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 60% 80%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 20% 70%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 80% 42%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 50% 35%, #4b3a2c 0 2.4%, transparent 3.6%), radial-gradient(circle at 35% 40%, #4b3a2c 0 2.4%, transparent 3.6%), #f3e7c9",
+    },
+    {
+        name: "Red Velvet",
+        text: "Classic red velvet with cream cheese frosting.",
+        swatch: "radial-gradient(circle at 32% 30%, #ac463f, #742826 72%)",
+    },
+    {
+        name: "Tres Leches",
+        text: "Soaked in three milks, so it's light, creamy and melts in your mouth.",
+        swatch: "radial-gradient(circle at 32% 30%, #fdf6e7, #e6d5b4 75%)",
+    },
+    {
+        name: "Confetti",
+        text: "Vanilla cake with sprinkles baked in. A birthday must.",
+        swatch: "radial-gradient(circle at 25% 30%, #e58aa0 0 4.5%, transparent 5.7%), radial-gradient(circle at 48% 20%, #7fb3d5 0 4.5%, transparent 5.7%), radial-gradient(circle at 70% 32%, #f2c14e 0 4.5%, transparent 5.7%), radial-gradient(circle at 32% 52%, #8cc084 0 4.5%, transparent 5.7%), radial-gradient(circle at 56% 48%, #e58aa0 0 4.5%, transparent 5.7%), radial-gradient(circle at 76% 60%, #b49fdc 0 4.5%, transparent 5.7%), radial-gradient(circle at 42% 74%, #f2c14e 0 4.5%, transparent 5.7%), radial-gradient(circle at 62% 78%, #7fb3d5 0 4.5%, transparent 5.7%), radial-gradient(circle at 20% 66%, #b49fdc 0 4.5%, transparent 5.7%), radial-gradient(circle at 82% 44%, #8cc084 0 4.5%, transparent 5.7%), radial-gradient(circle at 50% 62%, #7fb3d5 0 4.5%, transparent 5.7%), radial-gradient(circle at 38% 36%, #f2c14e 0 4.5%, transparent 5.7%), #f7efe2",
+    },
 ]
 
 const perks = [
@@ -160,11 +193,18 @@ const CustomCakes = () => {
                         Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
                     </h2>
                 </div>
-                <ul className="grid sm:grid-cols-2 gap-x-12 max-w-4xl mx-auto border-t border-brand-espresso/25">
+                <ul className="grid sm:grid-cols-2 gap-x-14 max-w-4xl mx-auto border-t border-brand-espresso/25">
                     {flavors.map((f) => (
-                        <li key={f.name} className="border-b border-dashed border-border py-5">
-                            <p className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{f.name}</p>
-                            <p className="mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">{f.text}</p>
+                        <li key={f.name} className="flex items-start gap-4 md:gap-5 border-b border-dashed border-border py-6">
+                            <span
+                                aria-hidden="true"
+                                className="mt-0.5 h-12 w-12 md:h-14 md:w-14 shrink-0 rounded-full shadow-[inset_0_0_0_1px_rgba(60,40,30,0.12),0_3px_10px_rgba(60,40,30,0.14)]"
+                                style={{ background: f.swatch }}
+                            />
+                            <span className="min-w-0">
+                                <span className="block font-serif text-[1.7rem] md:text-[2rem] leading-tight text-brand-espresso">{f.name}</span>
+                                <span className="block mt-1 text-[15px] leading-relaxed text-foreground/75">{f.text}</span>
+                            </span>
                         </li>
                     ))}
                 </ul>
@@ -189,7 +229,7 @@ const CustomCakes = () => {
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            Made fresh for birthdays, showers, holidays or just because. Mix and match your favorites.
+                            For birthdays, showers or just because. Mix and match your favorites.
                         </p>
                         <DessertRules cheesecakes={false} />
                     </div>

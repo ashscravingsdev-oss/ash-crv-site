@@ -5,7 +5,7 @@ import { STATIC_DESSERTS, useDesserts } from "@/lib/use-desserts"
 import { money, soldWhole } from "@/lib/special-orders"
 import { sized } from "@/lib/site-photos"
 import { useSpot } from "@/components/site-photos"
-import { FlavorTags } from "./flavor-list"
+import { FlavorLine } from "./flavor-list"
 
 // "$85 each · Classic is $80": the usual price, then any flavor that differs
 function priceLine(items) {
@@ -46,7 +46,7 @@ const CheesecakeCard = () => {
     )
     const details = (
         <div className="space-y-4">
-            <FlavorTags items={group.items} />
+            <FlavorLine items={group.items} />
             <p className="font-serif text-xl text-brand-espresso">{priceLine(group.items)}</p>
             {extras.length > 0 && (
                 <p className="text-sm text-muted-foreground -mt-2">
