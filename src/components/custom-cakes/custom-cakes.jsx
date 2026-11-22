@@ -12,14 +12,38 @@ import { SPOT, sized } from "@/lib/site-photos";
 
 // Cake flavors, in Ash's words
 const flavors = [
-    { name: "Chocolate", text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers." },
-    { name: "Strawberry Velvet", text: "My pink strawberry cake, made with real strawberries. Perfect with cream cheese or vanilla buttercream." },
-    { name: "Strawberries & Cream", text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested." },
-    { name: "Cookies & Cream", text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite." },
-    { name: "Vanilla Bean", text: "Soft vanilla cake made with real vanilla bean. Simple and so good." },
-    { name: "Red Velvet", text: "Classic red velvet with cream cheese frosting." },
-    { name: "Tres Leches", text: "Soaked in three milks, so it's light, creamy and melts in your mouth." },
-    { name: "Confetti", text: "Vanilla cake with sprinkles baked in. A birthday must." },
+    {
+        name: "Chocolate",
+        text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers.",
+    },
+    {
+        name: "Strawberry Velvet",
+        text: "My pink strawberry cake, made with real strawberries. Perfect with cream cheese or vanilla buttercream.",
+    },
+    {
+        name: "Strawberries & Cream",
+        text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested.",
+    },
+    {
+        name: "Cookies & Cream",
+        text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite.",
+    },
+    {
+        name: "Vanilla Bean",
+        text: "Soft vanilla cake made with real vanilla bean. Simple and so good.",
+    },
+    {
+        name: "Red Velvet",
+        text: "Classic red velvet with cream cheese frosting.",
+    },
+    {
+        name: "Tres Leches",
+        text: "Soaked in three milks, so it's light, creamy and melts in your mouth.",
+    },
+    {
+        name: "Confetti",
+        text: "Vanilla cake with sprinkles baked in. A birthday must.",
+    },
 ]
 
 const perks = [
@@ -27,6 +51,28 @@ const perks = [
     { value: "1 week", label: "to order ahead" },
     { value: "50%", label: "holds your date" },
 ]
+
+// The cake flavors on a printed bakery menu card (thin double border, centered italic names)
+const FlavorsMenuCard = () => (
+    <div className="max-w-4xl mx-auto rounded-md border border-brand-tobacco/30 bg-[#fffaf2] p-2 md:p-2.5">
+        <div className="rounded-[3px] border border-brand-tobacco/20 px-6 py-10 md:px-14 md:py-14">
+            <p className="text-center font-serif italic text-xl md:text-2xl text-brand-tobacco">Cake flavors</p>
+            <div aria-hidden="true" className="mx-auto mt-3 h-px w-14 bg-brand-tobacco/40" />
+            <ul className="mt-9 md:mt-10 grid md:grid-cols-2 gap-x-14 gap-y-8 md:gap-y-10 text-center">
+                {flavors.map((f) => (
+                    <li key={f.name}>
+                        <p className="font-serif italic text-[1.85rem] md:text-[2.1rem] leading-tight text-brand-espresso">{f.name}</p>
+                        <p className="mt-1.5 mx-auto max-w-xs text-[14.5px] leading-relaxed text-foreground/70">{f.text}</p>
+                    </li>
+                ))}
+            </ul>
+            <div aria-hidden="true" className="mx-auto mt-10 h-px w-14 bg-brand-tobacco/40" />
+            <p className="mt-4 text-center font-serif italic text-lg text-brand-tobacco">
+                Any flavor, any filling. Tell me what you&apos;re craving.
+            </p>
+        </div>
+    </div>
+)
 
 const CustomCakes = () => {
     const [showAll, setShowAll] = useState(false);
@@ -153,24 +199,11 @@ const CustomCakes = () => {
             {/* Flavors */}
             <section className="container mx-auto px-4 pt-16 md:pt-20">
                 <div className="text-center mb-10">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">
-                        <span className="text-brand-matcha">■</span> Flavors
-                    </p>
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
                     </h2>
                 </div>
-                <ul className="grid sm:grid-cols-2 gap-x-12 max-w-4xl mx-auto border-t border-brand-espresso/25">
-                    {flavors.map((f) => (
-                        <li key={f.name} className="border-b border-dashed border-border py-5">
-                            <p className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{f.name}</p>
-                            <p className="mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">{f.text}</p>
-                        </li>
-                    ))}
-                </ul>
-                <p className="text-center text-sm text-muted-foreground mt-8">
-                    Any flavor, any filling. Tell me what you&apos;re craving and I&apos;ll make it happen.
-                </p>
+                <FlavorsMenuCard />
                 <div className="max-w-5xl mx-auto mt-14 md:mt-16">
                     <CheesecakeCard />
                 </div>
@@ -189,7 +222,7 @@ const CustomCakes = () => {
                             Sweets by <em className="italic text-brand-tobacco">the dozen</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            Made fresh for birthdays, showers, holidays or just because. Mix and match your favorites.
+                            For birthdays, showers or just because. Mix and match your favorites.
                         </p>
                         <DessertRules cheesecakes={false} />
                     </div>

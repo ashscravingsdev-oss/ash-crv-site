@@ -3,11 +3,11 @@
 import Link from "next/link"
 import { STATIC_DESSERTS, useDesserts } from "@/lib/use-desserts"
 import { dessertSlug, soldWhole } from "@/lib/special-orders"
-import { FlavorTags } from "./flavor-list"
+import { FlavorLine } from "./flavor-list"
 
 /**
- * The dessert list for "Sweets by the dozen": each dessert with its flavors as
- * little tags. No prices here (they differ by flavor); each row opens that
+ * The dessert list for "Sweets by the dozen": each dessert with its flavors on
+ * one easy line, like a bakery menu. No prices here (they differ by flavor); each row opens that
  * dessert on the Menu, where the prices are. Cheesecakes have their own card
  * (CheesecakeCard), since they're sold whole. The rules sit above this list.
  */
@@ -30,7 +30,7 @@ const DessertList = () => {
                                     Order <span aria-hidden="true">→</span>
                                 </span>
                             </span>
-                            <FlavorTags items={g.items} className="mt-2.5" />
+                            <FlavorLine items={g.items} className="mt-1.5" />
                         </Link>
                     </li>
                 ))}
