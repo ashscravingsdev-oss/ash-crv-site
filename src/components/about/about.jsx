@@ -3,6 +3,7 @@ import React from 'react'
 import Link from "next/link";
 import { motion } from "framer-motion"
 import { fadeUp } from "@/lib/animations"
+import { SpotImg } from "@/components/site-photos";
 
 const values = [
     {
@@ -58,10 +59,8 @@ const About = () => {
                         transition={{ duration: 0.3 }}
                         className="aspect-[4/5] max-w-lg w-full md:ml-auto rounded-[18px] overflow-hidden bg-muted"
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/brand/about-hero.jpg"
-                            alt="Ash in the kitchen"
+                        <SpotImg
+                            spot="about.hero"
                             className="w-full h-full object-cover"
                         />
                     </motion.div>
@@ -72,10 +71,8 @@ const About = () => {
             <section className="bg-muted">
                 <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
                     <motion.figure {...reveal} className="relative order-2 md:order-1 max-w-lg w-full mx-auto md:mx-0 aspect-[9/10] rounded-[18px] overflow-hidden bg-background">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/brand/about-grandma.jpg"
-                            alt="Young Ash and her grandma Maria Elena making pupusas from scratch"
+                        <SpotImg
+                            spot="about.grandma"
                             loading="lazy"
                             className="w-full h-full object-cover object-[center_30%]"
                         />
@@ -123,10 +120,9 @@ const About = () => {
                             love so much, and our toy poodle, Cash, my baby boy.
                         </p>
                         <figure className="flex items-center gap-5 pt-3">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/brand/first-logo.jpg"
-                                alt="Ash's first logo: a round cream badge with cooking doodles and Cashy the poodle"
+                            <SpotImg
+                                spot="about.first-logo"
+                                px={400}
                                 loading="lazy"
                                 className="w-32 h-32 md:w-36 md:h-36 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
                             />

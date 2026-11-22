@@ -12,6 +12,7 @@ import { CHRISTMAS_DAYS, christmasOpenDays, money, shortDate } from "@/lib/speci
 import { useDayRoom } from "@/lib/use-day-room"
 import FactStrip from "@/components/ui/fact-strip"
 import WakingNote from "@/components/ui/waking-note"
+import { SpotImg } from "@/components/site-photos"
 
 const facts = [
     { value: "2 days", label: "Dec 19 & Dec 23" },
@@ -232,12 +233,7 @@ const Christmas = () => {
                     transition={{ duration: 0.3 }}
                     className="aspect-[4/5] rounded-[18px] overflow-hidden bg-brand-latte"
                 >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/gallery/cakes/cake-22.jpg"
-                        alt="Red and green Christmas mini cakes"
-                        className="w-full h-full object-cover"
-                    />
+                    <SpotImg spot="christmas.hero" className="w-full h-full object-cover" />
                 </motion.figure>
             </div>
 

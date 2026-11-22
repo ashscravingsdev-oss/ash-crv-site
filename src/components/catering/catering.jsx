@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import InquiryForm from "./inquiry-form";
 import CateringGallery from "./catering-gallery";
 import FactStrip from "@/components/ui/fact-strip";
+import { SpotImg } from "@/components/site-photos";
 
 // Gentle fade-up as each section scrolls into view (same as the About page)
 const reveal = {
@@ -114,12 +115,9 @@ const Catering = () => {
                         transition={{ duration: 0.3 }}
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-17.jpg" alt="Bridal shower table with greenery, a welcome mirror and trays of bites" className="col-span-3 row-span-2 w-full h-full object-cover object-[30%_center] rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-15.jpg" alt="Smoked salmon bites on little gold forks" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/catering/catering-16.jpg" alt="Platters of crostini topped with tomatoes and herbs" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={0} className="col-span-3 row-span-2 w-full h-full object-cover object-[30%_center] rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={1} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="events.hero" i={2} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -212,10 +210,8 @@ const Catering = () => {
                     className="scroll-mt-24 grid md:grid-cols-2 bg-muted rounded-[22px] overflow-hidden"
                 >
                     <div className="aspect-[4/3] md:aspect-auto md:min-h-[420px] bg-brand-latte">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/gallery/catering/catering-03.jpg"
-                            alt="Meatballs and baked mac and cheese cooking on the stove"
+                        <SpotImg
+                            spot="events.private-chef"
                             loading="lazy"
                             className="w-full h-full object-cover"
                         />

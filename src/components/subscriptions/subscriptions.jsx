@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Check } from "lucide-react"
 import { fadeUp } from "@/lib/animations"
 import { fetchActiveBundles } from "@/store/bundleSlice"
+import { SpotImg } from "@/components/site-photos"
 
 const money = (n) => {
     const v = Number(n || 0)
@@ -73,8 +74,7 @@ const Actions = () => (
 
 const Photo = ({ className = "", children }) => (
     <div className={`relative overflow-hidden bg-muted ${className}`}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/gallery/meals/salmon-meal-prep.jpg" alt="Salmon meal prep, packed and ready" className="w-full h-full object-cover" />
+        <SpotImg spot="subscriptions.hero" className="w-full h-full object-cover" />
         {children}
     </div>
 )

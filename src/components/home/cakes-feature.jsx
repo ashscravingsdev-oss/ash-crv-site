@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SpotImg } from "@/components/site-photos";
 
 const CakesFeature = () => {
     return (
@@ -27,24 +28,23 @@ const CakesFeature = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 md:gap-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/gallery/cakes/cake-37.jpg"
-                        alt="Vintage-piped cake topped with cherries and red bows"
+                    <SpotImg
+                        spot="home.cakes"
+                        i={0}
                         loading="lazy"
                         className="row-span-2 w-full h-full min-h-[320px] md:min-h-[460px] object-cover rounded-2xl"
                     />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/gallery/cakes/cake-22.jpg"
-                        alt="Red and green Christmas mini cakes"
+                    <SpotImg
+                        spot="home.cakes"
+                        i={1}
+                        px={900}
                         loading="lazy"
                         className="w-full aspect-square object-cover rounded-2xl"
                     />
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/gallery/cakes/cake-43.jpg"
-                        alt="Close-up of a vintage-piped engagement cake"
+                    <SpotImg
+                        spot="home.cakes"
+                        i={2}
+                        px={900}
                         loading="lazy"
                         className="w-full aspect-square object-cover rounded-2xl"
                     />

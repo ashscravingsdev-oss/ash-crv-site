@@ -6,83 +6,20 @@ import DessertList from "@/components/desserts/dessert-list";
 import DessertRules from "@/components/desserts/dessert-rules";
 import PhotoLightbox from "@/components/ui/photo-lightbox";
 import FactStrip from "@/components/ui/fact-strip";
+import CheesecakeCard from "@/components/desserts/cheesecake-card";
+import { SpotImg, useSpot } from "@/components/site-photos";
+import { SPOT, sized } from "@/lib/site-photos";
 
-// Photos removed from the gallery (redundant/weak shots) — kept out of both
-// featuredCakes and allCakes below.
-const removedCakes = [
-    "cake-07.jpg",
-    "cake-08.jpg",
-    "cake-12.jpg",
-    "cake-33.jpg",
-    "cake-35.jpg",
-    "cake-36.jpg",
-    "cake-42.jpg",
-    "cake-45.jpg",
-    "cake-47.jpg",
-];
-
-// EDIT ME: filenames from public/gallery/cakes/ shown by default before "Show more" is
-// clicked. Swap any of these to change which 15 cakes are featured — order matters,
-// they display left-to-right, top-to-bottom in this order.
-const featuredCakes = [
-    "cake-54.jpg",
-    "cake-55.jpg",
-    "cake-56.jpg",
-    "cake-51.jpg",
-    "cake-48.jpg",
-    "cake-50.jpg",
-    "cake-52.jpg",
-    "cake-49.jpg",
-    "cake-53.jpg",
-    "cake-37.jpg",
-    "cake-06.jpg",
-    "cake-05.jpg",
-    "cake-17.jpg",
-    "cake-01.jpg",
-    "cake-22.jpg",
-    "cake-27.jpg",
-    // "cake-39.jpg", "cake-43.jpg" and "cake-34.jpg" moved under "Show more" to keep the grid even
-];
-
-// A little note on special cakes, and a real description for screen readers
-const cakeNotes = {
-    "cake-55.jpg": {
-        alt: "White cake with blue piped bows and a gold 'Destiny' topper, cut open so rainbow sprinkles spill out",
-    },
-    "cake-56.jpg": {
-        alt: "Two mini cakes and cupcakes piped with funny 30th birthday doodles",
-    },
-    "cake-54.jpg": {
-        note: "For my grandma ♡",
-        alt: "Peach piped cake with baby's breath and a photo of Ash's grandma Maria Elena holding a cake",
-    },
-};
-
-const allCakes = Array.from(
-    { length: 56 },
-    (_, i) => `cake-${String(i + 1).padStart(2, "0")}.jpg`
-).filter((f) => !removedCakes.includes(f));
-
-const remainingCakes = allCakes.filter((f) => !featuredCakes.includes(f));
-
-// Every cake, in gallery order, for the full-size viewer
-const cakePhotos = [...featuredCakes, ...remainingCakes].map((filename, idx) => ({
-    src: `/gallery/cakes/${filename}`,
-    alt: cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`,
-    note: cakeNotes[filename]?.note,
-}));
-
-// Cake flavors, written to make you hungry. Short and sweet.
+// Cake flavors, in Ash's words
 const flavors = [
-    { name: "Midnight Chocolate", text: "Deep, dark and fudgy, with silky chocolate ganache between every layer." },
-    { name: "Strawberry Velvet", text: "Pretty in pink, soft and bursting with real strawberry. Dreamy with cream cheese or vanilla buttercream." },
-    { name: "Strawberries & Cream", text: "Soft vanilla cake, fresh strawberries and clouds of whipped cream." },
-    { name: "Cookies & Cream", text: "Vanilla bean cake packed with crushed cookies and cookies-and-cream filling." },
-    { name: "Vanilla Bean", text: "Classic, buttery and speckled with real vanilla bean. Never boring." },
-    { name: "Red Velvet", text: "Velvety cocoa cake with tangy cream cheese frosting." },
-    { name: "Tres Leches", text: "Soaked in three milks until it melts in your mouth. My grandma's favorite." },
-    { name: "Lemon Dream", text: "Bright lemon cake with lemon curd and a cloud of whipped cream." },
-    { name: "Confetti", text: "Birthday in a bite: vanilla cake with rainbow sprinkles baked right in." },
+    { name: "Chocolate", text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers." },
+    { name: "Strawberry Velvet", text: "My pink strawberry cake, made with real strawberries. So good with cream cheese or vanilla buttercream." },
+    { name: "Strawberries & Cream", text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested." },
+    { name: "Cookies & Cream", text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite." },
+    { name: "Vanilla Bean", text: "Soft vanilla cake made with real vanilla bean. Simple and so good." },
+    { name: "Red Velvet", text: "Soft red velvet with cream cheese frosting." },
+    { name: "Tres Leches", text: "Soaked in three milks, so it's light, creamy and melts in your mouth." },
+    { name: "Confetti", text: "Vanilla cake with sprinkles baked in. A birthday must." },
 ]
 
 const perks = [
@@ -94,7 +31,10 @@ const perks = [
 const CustomCakes = () => {
     const [showAll, setShowAll] = useState(false);
     const [viewing, setViewing] = useState(null);
-    const visibleCakes = showAll ? [...featuredCakes, ...remainingCakes] : featuredCakes;
+    // The cake gallery (Ash can change it on the admin's Website photos page)
+    const cakePhotos = useSpot("cakes.gallery").map((p) => ({ src: sized(p.url, 1800), thumb: sized(p.url, 800), alt: p.alt, note: p.note }));
+    const first = SPOT["cakes.gallery"].first || 16;
+    const visibleCakes = showAll ? cakePhotos : cakePhotos.slice(0, first);
 
     return (
         <>
@@ -138,12 +78,9 @@ const CustomCakes = () => {
                         transition={{ duration: 0.3 }}
                         className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[5/4]"
                     >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-05.jpg" alt="50th birthday cake with blush garden roses and a gold topper" className="col-span-3 row-span-2 w-full h-full object-cover object-center rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-01.jpg" alt="White cake with pink and red rosettes" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/gallery/cakes/cake-43.jpg" alt="Cream vintage heart cake piped with 'engaged'" className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="cakes.hero" i={0} className="col-span-3 row-span-2 w-full h-full object-cover object-center rounded-[18px]" />
+                        <SpotImg spot="cakes.hero" i={1} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
+                        <SpotImg spot="cakes.hero" i={2} px={900} className="col-span-2 w-full h-full object-cover rounded-[18px]" />
                     </motion.div>
                 </div>
 
@@ -164,8 +101,8 @@ const CustomCakes = () => {
                         Cakes I&apos;ve <em className="italic text-brand-tobacco">loved making</em>
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-                        {visibleCakes.map((filename, idx) => (
-                            <figure key={filename} className="relative aspect-square overflow-hidden rounded-2xl bg-background">
+                        {visibleCakes.map((photo, idx) => (
+                            <figure key={`${photo.src}-${idx}`} className="relative aspect-square overflow-hidden rounded-2xl bg-background">
                                 <button
                                     type="button"
                                     onClick={() => setViewing(idx)}
@@ -174,22 +111,22 @@ const CustomCakes = () => {
                                 >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
-                                        src={`/gallery/cakes/${filename}`}
-                                        alt={cakeNotes[filename]?.alt || `Custom cake ${idx + 1} by Ash's Cravings`}
+                                        src={photo.thumb}
+                                        alt={photo.alt}
                                         loading="lazy"
                                         className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-300"
                                     />
                                 </button>
-                                {cakeNotes[filename]?.note && (
+                                {photo.note && (
                                     <figcaption className="pointer-events-none absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
-                                        {cakeNotes[filename].note}
+                                        {photo.note}
                                     </figcaption>
                                 )}
                             </figure>
                         ))}
                     </div>
                     <PhotoLightbox photos={cakePhotos} index={viewing} onIndexChange={setViewing} />
-                    {!showAll && remainingCakes.length > 0 && (
+                    {!showAll && cakePhotos.length > first && (
                         <div className="flex justify-center pt-8">
                             <button
                                 type="button"
@@ -200,6 +137,16 @@ const CustomCakes = () => {
                             </button>
                         </div>
                     )}
+                    <p className="text-center mt-8">
+                        <a
+                            href="https://www.instagram.com/ashscravings"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-mono text-xs uppercase tracking-[0.18em] text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5"
+                        >
+                            See more on my Instagram <span aria-hidden="true">→</span>
+                        </a>
+                    </p>
                 </div>
             </section>
 
@@ -224,6 +171,9 @@ const CustomCakes = () => {
                 <p className="text-center text-sm text-muted-foreground mt-8">
                     Any flavor, any filling. Tell me what you&apos;re craving and I&apos;ll make it happen.
                 </p>
+                <div className="max-w-5xl mx-auto mt-14 md:mt-16">
+                    <CheesecakeCard />
+                </div>
             </section>
 
             {/* Desserts by the dozen */}
@@ -241,7 +191,7 @@ const CustomCakes = () => {
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             Made fresh for birthdays, showers, holidays or just because. Mix and match your favorites.
                         </p>
-                        <DessertRules />
+                        <DessertRules cheesecakes={false} />
                     </div>
                     <div className="lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:sticky lg:top-28 self-start">
                         <div className="grid grid-cols-5 grid-rows-2 gap-3 aspect-[4/3] lg:aspect-[4/5]">
@@ -261,17 +211,17 @@ const CustomCakes = () => {
                                     Packed with love ♡
                                 </figcaption>
                             </figure>
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/gallery/desserts/dessert-boxes-2.jpg"
-                                alt="Boxes of strawberry mini cheesecakes, cow-print strawberries and chocolate pretzels"
+                            <SpotImg
+                                spot="cakes.desserts"
+                                i={0}
+                                px={900}
                                 loading="lazy"
                                 className="col-span-2 w-full h-full object-cover object-[center_35%] rounded-[18px]"
                             />
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src="/gallery/cakes/cake-17.jpg"
-                                alt="Cupcake flower bouquet in pinks and yellows"
+                            <SpotImg
+                                spot="cakes.desserts"
+                                i={1}
+                                px={900}
                                 loading="lazy"
                                 className="col-span-2 w-full h-full object-cover rounded-[18px]"
                             />
