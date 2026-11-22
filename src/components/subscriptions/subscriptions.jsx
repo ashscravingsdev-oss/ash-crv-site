@@ -13,54 +13,26 @@ const money = (n) => {
     return `$${v % 1 === 0 ? v : v.toFixed(2)}`
 }
 
-const steps = [
-    {
-        n: "01",
-        title: "Pick a bundle",
-        text: "Choose 5 or 10 meals and how often: every week or every 2 weeks.",
-    },
-    {
-        n: "02",
-        title: "Pick your favorites",
-        text: "Mix and match from this week's menu, all one flavor or a little of everything.",
-    },
-    {
-        n: "03",
-        title: "Pick again each week",
-        text: "My menu changes, so pick new favorites from your account before the Sunday cutoff. If you don't, I'll repeat your last picks.",
-    },
-    {
-        n: "04",
-        title: "Delivered fresh",
-        text: "Delivery or pickup every Tuesday. Just heat and enjoy.",
-    },
-]
-
 const perks = [
     // \u00A0 keeps "fully booked" together, so the last word never wraps alone on a phone
-    "Your spot is always saved, even when I'm fully\u00A0booked",
-    "Pick new meals every week, right from your account",
-    "Forget to pick? I'll repeat your last picks for you",
-    "Something off the menu? I'll swap in a chef's choice",
+    "Your spot is saved, even when I'm fully\u00A0booked",
+    "New picks each week, right from your account",
+    "Forget to pick? I'll repeat your last ones",
     "Skip a week or pause anytime, no fees",
 ]
 
-const faqs = [
+const details = [
     {
         q: "When am I charged?",
-        a: "Your first order is charged at checkout. After that, your card is charged at the Sunday cutoff before each delivery.",
+        a: "At checkout for your first delivery. After that, on the Sunday before each one.",
     },
     {
-        q: "What if a meal I picked isn't on the menu that week?",
-        a: "My menu rotates, so if something you picked isn't available, I'll swap in a chef's choice from the same part of the menu, so you never miss a delivery.",
+        q: "What if a meal I picked is off the menu?",
+        a: "I'll swap in a chef's choice, so you never miss a delivery.",
     },
     {
-        q: "Can I subscribe to single meals?",
-        a: "Subscriptions are for bundles, so you can pick new meals every week as my menu changes. Single meals can always be ordered one time.",
-    },
-    {
-        q: "Can I skip a week or stop?",
-        a: "Yes! Skip a week or pause your subscription anytime from your account. It stays paused until you resume it.",
+        q: "Can I subscribe to one meal?",
+        a: "Subscriptions are for bundles. Single meals are always open as one-time orders.",
     },
 ]
 
@@ -84,59 +56,39 @@ const Subscriptions = () => {
 
     return (
         <div>
-            {/* Hero */}
-            <section className="container mx-auto px-4 pt-10 pb-14 md:pt-14 md:pb-20 text-center">
-                <motion.div initial="initial" animate="animate" variants={fadeUp} className="max-w-3xl mx-auto space-y-5">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
-                        <span className="text-brand-matcha">■</span> Subscriptions
-                    </p>
-                    <h1 className="font-serif font-medium text-5xl md:text-7xl leading-[0.98] text-brand-heading">
-                        Your meals, <em className="italic text-brand-tobacco">every week</em>
-                    </h1>
-                    <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
-                        Pick a bundle once and it shows up every week or every 2 weeks. My menu changes, so you get to pick new
-                        favorites each week, or I&apos;ll repeat your last picks for you.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                        <Link
-                            href="/bundles?subscribe=weekly"
-                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
-                        >
-                            Start my subscription <span aria-hidden="true">→</span>
-                        </Link>
-                        <Link
-                            href="/menu"
-                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg border border-primary text-primary font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/5 transition-colors"
-                        >
-                            See this week&apos;s menu <span aria-hidden="true">→</span>
-                        </Link>
-                    </div>
-                </motion.div>
-            </section>
-
-            {/* How it works */}
-            <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-20">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading text-center mb-3">
-                        <span className="text-brand-matcha">■</span> How it works
-                    </p>
-                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
-                        Simple, <em className="italic text-brand-tobacco">every week</em>
-                    </h2>
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {steps.map((s) => (
-                            <div key={s.n} className="bg-background rounded-2xl p-6 space-y-2">
-                                <p className="font-serif italic text-3xl text-brand-tobacco">{s.n}</p>
-                                <h3 className="font-serif text-2xl font-semibold text-brand-espresso">{s.title}</h3>
-                                <p className="text-muted-foreground leading-relaxed">{s.text}</p>
-                            </div>
-                        ))}
-                    </div>
+            {/* Hero: words on one side, real food on the other */}
+            <section className="container mx-auto px-4 pt-8 pb-12 md:pt-14 md:pb-14">
+                <div className="grid md:grid-cols-[1.3fr_0.7fr] gap-10 lg:gap-16 items-center">
+                    <motion.div initial="initial" animate="animate" variants={fadeUp} className="space-y-6 max-w-2xl">
+                        <h1 className="font-serif font-medium text-5xl md:text-7xl leading-[0.98] text-brand-heading">
+                            Your meals, <em className="italic text-brand-tobacco">every week</em>
+                        </h1>
+                        <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
+                            Pick a bundle once. Fresh meals every Tuesday, weekly or every other week, for delivery or pickup.
+                        </p>
+                        <div className="flex flex-wrap items-center gap-x-6 gap-y-4 pt-1">
+                            <Link
+                                href="/bundles?subscribe=weekly"
+                                className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
+                            >
+                                Start my subscription <span aria-hidden="true">→</span>
+                            </Link>
+                            <Link href="/menu" className="text-brand-tobacco underline underline-offset-4 decoration-brand-tobacco/40 hover:decoration-brand-tobacco">
+                                See this week&apos;s menu
+                            </Link>
+                        </div>
+                    </motion.div>
+                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+                        <div className="aspect-[4/3] md:aspect-square rounded-[18px] overflow-hidden bg-muted">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/gallery/meals/salmon-meal-prep.jpg" alt="Salmon meal prep, packed and ready" className="w-full h-full object-cover" />
+                        </div>
+                    </motion.div>
                 </div>
             </section>
 
             {/* Bundles you can subscribe to */}
-            <section className="container mx-auto px-4 py-16 md:py-20">
+            <section className="container mx-auto px-4 pt-6 pb-16 md:pt-10 md:pb-20">
                 <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-start">
                     <div className="space-y-4">
                         <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">
@@ -180,28 +132,27 @@ const Subscriptions = () => {
                 </div>
             </section>
 
-            {/* FAQ */}
+            {/* The little details, short */}
             <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-20 max-w-3xl">
-                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-center mb-10">
+                <div className="container mx-auto px-4 py-14 md:py-16">
+                    <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading mb-8">
                         Good to <em className="italic text-brand-tobacco">know</em>
                     </h2>
-                    <div className="space-y-4">
-                        {faqs.map((f) => (
-                            <div key={f.q} className="bg-background rounded-2xl p-6">
-                                <h3 className="font-serif text-2xl font-semibold text-brand-espresso mb-2">{f.q}</h3>
-                                <p className="text-foreground/85 leading-relaxed">{f.a}</p>
+                    <dl className="grid md:grid-cols-3 gap-x-10 gap-y-7">
+                        {details.map((d) => (
+                            <div key={d.q} className="border-t border-brand-tobacco/25 pt-4">
+                                <dt className="font-serif text-xl font-semibold text-brand-espresso">{d.q}</dt>
+                                <dd className="mt-1.5 text-foreground/80 leading-relaxed">{d.a}</dd>
                             </div>
                         ))}
-                    </div>
-                    <div className="text-center pt-10">
-                        <Link
-                            href="/bundles?subscribe=weekly"
-                            className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
-                        >
-                            Start my subscription <span aria-hidden="true">→</span>
+                    </dl>
+                    <p className="mt-10 text-foreground/80">
+                        Anything else?{" "}
+                        <Link href="/contact" className="text-brand-tobacco underline underline-offset-4 decoration-brand-tobacco/40 hover:decoration-brand-tobacco">
+                            Just ask me
                         </Link>
-                    </div>
+                        .
+                    </p>
                 </div>
             </section>
         </div>
