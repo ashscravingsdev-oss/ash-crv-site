@@ -75,22 +75,28 @@ const FlavorsMenuCard = () => (
     </div>
 )
 
-// Small links to each part of this long page (shown with ?links=1 while Ash decides)
+// Small links to each part of this long page, as little round photos like
+// Instagram highlights (shown with ?links=1 while Ash decides)
 const JUMPS = [
-    { href: "#flavors", label: "Flavors" },
-    { href: "#cakes", label: "Cakes" },
-    { href: "#desserts", label: "Desserts" },
-    { href: "#request", label: "Request" },
+    { href: "#flavors", label: "Flavors", photo: "/gallery/cakes/cake-55.jpg" },
+    { href: "#cakes", label: "Cakes", photo: "/gallery/cakes/cake-37.jpg" },
+    { href: "#desserts", label: "Desserts", photo: "/gallery/desserts/dessert-boxes-2.jpg" },
+    { href: "#request", label: "Request", photo: "/gallery/cakes/cake-43.jpg" },
 ]
 const JumpLinks = () => (
-    <nav aria-label="On this page" className="mt-10 flex flex-wrap items-center justify-center gap-y-2 font-serif italic text-lg md:text-xl text-brand-tobacco">
-        {JUMPS.map((j, i) => (
-            <span key={j.href} className="flex items-center">
-                {i > 0 && <span aria-hidden="true" className="mx-3 md:mx-4 text-brand-tobacco/40 not-italic">·</span>}
-                <a href={j.href} className="underline-offset-4 decoration-brand-tobacco/40 hover:underline">
-                    {j.label}
-                </a>
-            </span>
+    <nav aria-label="On this page" className="mt-10 md:mt-12 flex justify-center gap-5 sm:gap-8 md:gap-12">
+        {JUMPS.map((j) => (
+            <a key={j.href} href={j.href} className="group flex flex-col items-center gap-2">
+                <span className="rounded-full p-[3px] ring-1 ring-brand-tobacco/40 transition group-hover:ring-brand-tobacco">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src={j.photo}
+                        alt=""
+                        className="h-16 w-16 md:h-24 md:w-24 rounded-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                    />
+                </span>
+                <span className="font-serif italic text-base md:text-lg text-brand-tobacco group-hover:text-brand-espresso">{j.label}</span>
+            </a>
         ))}
     </nav>
 )
