@@ -13,10 +13,15 @@ import Reviews from "@/components/home/reviews";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
 import BusinessSchema from "@/components/business-schema";
+import WithSitePhotos from "@/components/with-site-photos";
 
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function HomePage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="Ash's Cravings | Meal Prep, Custom Cakes & Desserts"
@@ -38,5 +43,6 @@ export default function HomePage() {
       <Newsletter />
       <Footer flush />
     </div>
+    </WithSitePhotos>
   );
 }

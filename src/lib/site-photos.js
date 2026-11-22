@@ -6,6 +6,7 @@
 //   page    which page, for grouping in the admin
 //   label   what Ash sees in the admin
 //   hint    (optional) a short line under the label
+//   newAlt  what a new photo here is described as (for screen readers and search)
 //   names   (sets) a name for each position
 //   shapes  crop frame per position ("w:h"); the last one repeats
 //   gallery a list Ash can add to, remove from and reorder
@@ -36,6 +37,7 @@ export const SPOTS = [
         key: "home.hero",
         page: "Home",
         label: "Big photo at the top",
+        newAlt: "Meal prep from Ash's Cravings",
         shapes: ["10:9"],
         photos: [{ url: "/brand/home-hero.jpg", alt: "Teriyaki chicken meal prep bowls with rice and broccoli" }],
     },
@@ -43,6 +45,7 @@ export const SPOTS = [
         key: "home.christmas",
         page: "Home",
         label: "Christmas mini cakes card (at the top)",
+        newAlt: "Christmas mini cakes by Ash's Cravings",
         shapes: ["1:1"],
         photos: [{ url: "/gallery/cakes/cake-22.jpg", alt: "" }],
     },
@@ -50,6 +53,7 @@ export const SPOTS = [
         key: "home.cravings",
         page: "Home",
         label: "“Pick your craving” tiles",
+        newAlt: "Food from Ash's Cravings",
         names: ["Meal Prep", "Cakes & Desserts", "Events", "Private Chef"],
         shapes: ["1:1"],
         photos: [
@@ -63,6 +67,7 @@ export const SPOTS = [
         key: "home.cakes",
         page: "Home",
         label: "Cakes section",
+        newAlt: "Custom cake by Ash's Cravings",
         names: ["Tall photo", "Small photo, top", "Small photo, bottom"],
         shapes: ["3:4", "1:1"],
         photos: [
@@ -75,6 +80,7 @@ export const SPOTS = [
         key: "home.story",
         page: "Home",
         label: "“My story” photo",
+        newAlt: "A photo from Ash's kitchen",
         shapes: ["4:5"],
         photos: [{ url: "/brand/about-hero.jpg", alt: "Ash in the kitchen" }],
     },
@@ -82,6 +88,7 @@ export const SPOTS = [
         key: "home.instagram",
         page: "Home",
         label: "Instagram row",
+        newAlt: "From Ash's Cravings on Instagram",
         shapes: ["1:1"],
         photos: [
             { url: "/gallery/catering/catering-02.jpg", alt: "Avocado and tomato toasts for an event" },
@@ -96,6 +103,7 @@ export const SPOTS = [
         key: "cakes.hero",
         page: "Cakes & Desserts",
         label: "Photos at the top",
+        newAlt: "Custom cake by Ash's Cravings",
         names: ["Big photo", "Small photo, top", "Small photo, bottom"],
         shapes: ["3:4", "1:1"],
         photos: [
@@ -108,6 +116,7 @@ export const SPOTS = [
         key: "cakes.gallery",
         page: "Cakes & Desserts",
         label: "“Cakes I’ve loved making”",
+        newAlt: "Custom cake by Ash's Cravings",
         hint: "The first 16 show right away; the rest are under “Show more cakes”.",
         gallery: true,
         first: 16,
@@ -123,6 +132,7 @@ export const SPOTS = [
         key: "cakes.cheesecakes",
         page: "Cakes & Desserts",
         label: "Cheesecakes card",
+        newAlt: "Cheesecake by Ash's Cravings",
         hint: "Until you pick one, it shows the photo from your cheesecakes on the menu.",
         shapes: ["4:3"],
         photos: [],
@@ -131,6 +141,7 @@ export const SPOTS = [
         key: "cakes.desserts",
         page: "Cakes & Desserts",
         label: "“Sweets by the dozen” photos (next to the video)",
+        newAlt: "Desserts by Ash's Cravings",
         names: ["Small photo, top", "Small photo, bottom"],
         shapes: ["3:4"],
         photos: [
@@ -142,6 +153,7 @@ export const SPOTS = [
         key: "subscriptions.hero",
         page: "Subscriptions",
         label: "Big photo at the top",
+        newAlt: "Meal prep from Ash's Cravings",
         shapes: ["5:4"],
         photos: [{ url: "/gallery/meals/salmon-meal-prep.jpg", alt: "Salmon meal prep, packed and ready" }],
     },
@@ -149,6 +161,7 @@ export const SPOTS = [
         key: "events.hero",
         page: "Events",
         label: "Photos at the top",
+        newAlt: "Event food by Ash's Cravings",
         names: ["Big photo", "Small photo, top", "Small photo, bottom"],
         shapes: ["3:4", "1:1"],
         photos: [
@@ -158,9 +171,23 @@ export const SPOTS = [
         ],
     },
     {
+        key: "events.occasions",
+        page: "Events",
+        label: "“Whatever you’re celebrating” photos",
+        names: ["Birthdays & celebrations", "Showers & private parties", "Office mornings & lunches"],
+        shapes: ["4:5"],
+        newAlt: "Event food by Ash's Cravings",
+        photos: [
+            { url: "/gallery/events/birthdays.jpg", alt: "10th birthday dessert table with chocolate strawberries, rainbow mini cupcakes and cheesecake cups" },
+            { url: "/gallery/events/showers.jpg", alt: "Baby shower spread with charcuterie cups, blueberry crostini, mini cheesecakes and tea sandwiches" },
+            { url: "/gallery/events/office.jpg", alt: "Boxed focaccia sandwiches and fig crostini ready for an office lunch" },
+        ],
+    },
+    {
         key: "events.gallery",
         page: "Events",
         label: "“A peek at past spreads”",
+        newAlt: "Event food by Ash's Cravings",
         gallery: true,
         shapes: ["1:1"],
         photos: [
@@ -179,6 +206,7 @@ export const SPOTS = [
         key: "events.private-chef",
         page: "Events",
         label: "Private chef photo",
+        newAlt: "A private chef dinner by Ash's Cravings",
         shapes: ["4:3"],
         photos: [{ url: "/gallery/catering/catering-03.jpg", alt: "Meatballs and baked mac and cheese cooking on the stove" }],
     },
@@ -186,6 +214,7 @@ export const SPOTS = [
         key: "about.hero",
         page: "About",
         label: "Photo at the top",
+        newAlt: "A photo from Ash's kitchen",
         shapes: ["4:5"],
         photos: [{ url: "/brand/about-hero.jpg", alt: "Ash in the kitchen" }],
     },
@@ -193,6 +222,7 @@ export const SPOTS = [
         key: "about.grandma",
         page: "About",
         label: "Grandma photo",
+        newAlt: "A photo from Ash's story",
         shapes: ["9:10"],
         photos: [{ url: "/brand/about-grandma.jpg", alt: "Young Ash and her grandma Maria Elena making pupusas from scratch" }],
     },
@@ -200,6 +230,7 @@ export const SPOTS = [
         key: "about.first-logo",
         page: "About",
         label: "My first logo (shown in a circle)",
+        newAlt: "Ash's first logo",
         shapes: ["1:1"],
         photos: [{ url: "/brand/first-logo.jpg", alt: "Ash's first logo: a round cream badge with cooking doodles and Cashy the poodle" }],
     },
@@ -207,6 +238,7 @@ export const SPOTS = [
         key: "christmas.hero",
         page: "Christmas",
         label: "Big photo at the top",
+        newAlt: "Christmas mini cakes by Ash's Cravings",
         shapes: ["4:5"],
         photos: [{ url: "/gallery/cakes/cake-22.jpg", alt: "Red and green Christmas mini cakes" }],
     },
@@ -230,11 +262,10 @@ export function spotPhotos(key, mine) {
         ? mine.filter((p) => p && typeof p.url === "string" && OK_URL.test(p.url) && !p.url.includes(".."))
         : null
     if (!picked || picked.length === 0) return builtIn
-    const label = (spot?.label || "Photo").replace(/[“”]/g, "")
-    // A built-in photo keeps its description; a new one gets a plain one
+    // A built-in photo keeps its description; a new one gets the spot's plain one
     const withAlt = (p, fallback) => ({
         url: p.url,
-        alt: p.alt || (fallback?.url === p.url ? fallback.alt : "") || `${label}, by Ash's Cravings`,
+        alt: p.alt || (fallback?.url === p.url ? fallback.alt : "") || spot?.newAlt || "Photo from Ash's Cravings",
         note: typeof p.note === "string" ? p.note : "",
     })
     if (spot?.gallery || builtIn.length <= 1) return picked.map((p) => withAlt(p))

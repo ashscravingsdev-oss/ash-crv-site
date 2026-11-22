@@ -53,6 +53,7 @@ const CheesecakeCard = () => {
                     {extras.map((x) => `Add ${x.name} for ${money(x.price)}`).join(" · ")}
                 </p>
             )}
+            <p className="text-sm text-muted-foreground">10 days’ notice · 50% deposit holds your date · Delivery or pickup</p>
             <div className="pt-1">
                 <Link
                     href="/menu?tab=desserts&d=cheesecakes"

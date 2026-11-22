@@ -2,9 +2,14 @@ import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import CustomCakes from '@/components/custom-cakes/custom-cakes'
 import SEO from "@/components/seo";
+import WithSitePhotos from "@/components/with-site-photos";
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function CustomCakesPage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="Custom Cakes & Desserts - Ash's Cravings | Eastvale, CA"
@@ -26,5 +31,6 @@ export default function CustomCakesPage() {
       <CustomCakes />
       <Footer />
     </div>
+    </WithSitePhotos>
   );
 }

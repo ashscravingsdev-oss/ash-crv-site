@@ -2,9 +2,14 @@ import { Navigation } from "@/components/nav";
 import { Footer } from "@/components/footer";
 import Christmas from "@/components/christmas/christmas";
 import SEO from "@/components/seo";
+import WithSitePhotos from "@/components/with-site-photos";
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function ChristmasPage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="Christmas Mini Cakes - Ash's Cravings | Eastvale, CA"
@@ -19,5 +24,6 @@ export default function ChristmasPage() {
       <Christmas />
       <Footer />
     </div>
+    </WithSitePhotos>
   );
 }

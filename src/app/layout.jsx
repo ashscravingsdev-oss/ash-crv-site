@@ -14,17 +14,13 @@ import "@fontsource/dm-mono/500.css"
 import "./globals.css"
 import StoreProvider from "@/store/provider";
 import { Toaster } from "@/components/ui/sonner"
-import { SitePhotosProvider } from "@/components/site-photos"
-import { getSitePhotos } from "@/lib/site-photos-server"
 
-export default async function RootLayout({ children }) {
-  // Photos Ash picked on the admin's Website photos page
-  const photos = await getSitePhotos()
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="font-sans antialiased">
         <StoreProvider>
-          <SitePhotosProvider photos={photos}>{children}</SitePhotosProvider>
+          {children}
         </StoreProvider>
         <Toaster />
         <Analytics />

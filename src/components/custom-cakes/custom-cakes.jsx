@@ -13,11 +13,11 @@ import { SPOT, sized } from "@/lib/site-photos";
 // Cake flavors, in Ash's words
 const flavors = [
     { name: "Chocolate", text: "Moist chocolate cake with chocolate ganache in every layer. For my chocolate lovers." },
-    { name: "Strawberry Velvet", text: "My pink strawberry cake, made with real strawberries. So good with cream cheese or vanilla buttercream." },
+    { name: "Strawberry Velvet", text: "My pink strawberry cake, made with real strawberries. Perfect with cream cheese or vanilla buttercream." },
     { name: "Strawberries & Cream", text: "Vanilla cake with fresh strawberries and whipped cream. One of my most requested." },
     { name: "Cookies & Cream", text: "Vanilla cake with cookies & cream filling and crushed cookies in every bite." },
     { name: "Vanilla Bean", text: "Soft vanilla cake made with real vanilla bean. Simple and so good." },
-    { name: "Red Velvet", text: "Soft red velvet with cream cheese frosting." },
+    { name: "Red Velvet", text: "Classic red velvet with cream cheese frosting." },
     { name: "Tres Leches", text: "Soaked in three milks, so it's light, creamy and melts in your mouth." },
     { name: "Confetti", text: "Vanilla cake with sprinkles baked in. A birthday must." },
 ]

@@ -24,22 +24,16 @@ const occasions = [
     {
         title: "Birthdays & celebrations",
         text: "First birthdays, milestone parties and everything in between. I'll build a spread around your theme and your guest list.",
-        photo: "/gallery/events/birthdays.jpg",
-        alt: "10th birthday dessert table with chocolate strawberries, rainbow mini cupcakes and cheesecake cups",
         position: "object-center",
     },
     {
         title: "Showers & private parties",
         text: "Baby showers, bridal showers, graduations and backyard nights. It feels homemade, and you don't lift a finger.",
-        photo: "/gallery/events/showers.jpg",
-        alt: "Baby shower spread with charcuterie cups, blueberry crostini, mini cheesecakes and tea sandwiches",
         position: "object-center",
     },
     {
         title: "Office mornings & lunches",
         text: "Breakfast burritos, sandwich trays and easy bites your team will actually look forward to.",
-        photo: "/gallery/events/office.jpg",
-        alt: "Boxed focaccia sandwiches and fig crostini ready for an office lunch",
         position: "object-center",
     },
 ];
@@ -138,10 +132,11 @@ const Catering = () => {
                     </motion.div>
                     <div className="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
                         {occasions.map((o, i) => (
+                            // Ash can change these on the admin's Website photos page ("events.occasions")
                             <motion.article key={o.title} {...reveal} transition={{ duration: 0.35, delay: i * 0.08 }} className="space-y-4">
                                 <div className="aspect-[4/5] rounded-[18px] overflow-hidden bg-brand-latte">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={o.photo} alt={o.alt} loading="lazy" className={`w-full h-full object-cover ${o.position} hover:scale-105 transition-transform duration-500`} />
+                                    <SpotImg spot="events.occasions" i={i} px={1000} loading="lazy" className={`w-full h-full object-cover ${o.position} hover:scale-105 transition-transform duration-500`} />
                                 </div>
                                 <h3 className="font-serif text-3xl leading-tight text-brand-espresso">{o.title}</h3>
                                 <p className="text-foreground/80 leading-relaxed">{o.text}</p>

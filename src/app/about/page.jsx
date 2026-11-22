@@ -2,10 +2,15 @@ import { Navigation } from "@/components/nav";
 import About from "@/components/about/about";
 import { Footer } from "@/components/footer";
 import SEO from "@/components/seo";
+import WithSitePhotos from "@/components/with-site-photos";
 
+
+// Ash's picks from the admin's Website photos page show within a minute
+export const revalidate = 60
 
 export default function AboutPage() {
   return (
+    <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
         title="About Ash - Ash's Cravings | Meal Prep, Cakes & Private Chef in Eastvale, CA"
@@ -32,5 +37,6 @@ export default function AboutPage() {
       <About />
       <Footer />
     </div>
+    </WithSitePhotos>
   )
 }
