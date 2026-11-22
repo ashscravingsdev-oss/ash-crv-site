@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import CakeInquiryForm from "./cake-inquiry-form";
 import DessertList from "@/components/desserts/dessert-list";
@@ -52,7 +52,7 @@ const perks = [
     { value: "50%", label: "holds your date" },
 ]
 
-// Look A: a printed bakery menu card (thin double border, centered italic names)
+// The cake flavors on a printed bakery menu card (thin double border, centered italic names)
 const FlavorsMenuCard = () => (
     <div className="max-w-4xl mx-auto rounded-md border border-brand-tobacco/30 bg-[#fffaf2] p-2 md:p-2.5">
         <div className="rounded-[3px] border border-brand-tobacco/20 px-6 py-10 md:px-14 md:py-14">
@@ -74,33 +74,8 @@ const FlavorsMenuCard = () => (
     </div>
 )
 
-// Look B: an editorial list (big italic names, description beside them)
-const FlavorsEditorial = () => (
-    <div className="max-w-5xl mx-auto">
-        <ul className="border-t border-brand-espresso/30">
-            {flavors.map((f) => (
-                <li
-                    key={f.name}
-                    className="grid md:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] gap-x-12 gap-y-1.5 items-baseline py-5 md:py-6 border-b border-brand-espresso/15"
-                >
-                    <p className="font-serif italic text-[2rem] md:text-[2.6rem] leading-none text-brand-espresso">{f.name}</p>
-                    <p className="text-[15px] leading-relaxed text-foreground/75">{f.text}</p>
-                </li>
-            ))}
-        </ul>
-        <p className="mt-6 text-center font-serif italic text-lg text-brand-tobacco">
-            Any flavor, any filling. Tell me what you&apos;re craving.
-        </p>
-    </div>
-)
-
 const CustomCakes = () => {
     const [showAll, setShowAll] = useState(false);
-    // Two looks to compare while choosing (?flavors=b); the one Ash picks stays
-    const [flavorLook, setFlavorLook] = useState("a");
-    useEffect(() => {
-        if (new URLSearchParams(window.location.search).get("flavors") === "b") setFlavorLook("b");
-    }, []);
     const [viewing, setViewing] = useState(null);
     // The cake gallery (Ash can change it on the admin's Website photos page)
     const cakePhotos = useSpot("cakes.gallery").map((p) => ({ src: sized(p.url, 1800), thumb: sized(p.url, 800), alt: p.alt, note: p.note }));
@@ -228,7 +203,7 @@ const CustomCakes = () => {
                         Now the hard part: <em className="italic text-brand-tobacco">choosing</em>
                     </h2>
                 </div>
-                {flavorLook === "b" ? <FlavorsEditorial /> : <FlavorsMenuCard />}
+                <FlavorsMenuCard />
                 <div className="max-w-5xl mx-auto mt-14 md:mt-16">
                     <CheesecakeCard />
                 </div>
