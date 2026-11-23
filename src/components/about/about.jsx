@@ -94,15 +94,6 @@ const About = () => {
                                 className="w-full h-full object-cover"
                             />
                         </motion.div>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src="/brand/sticker-toast.webp"
-                            alt=""
-                            aria-hidden="true"
-                            width={520}
-                            height={526}
-                            className="pointer-events-none select-none absolute -bottom-8 -left-3 md:-left-12 w-32 md:w-44 -rotate-[8deg]"
-                        />
                     </div>
                 </div>
             </section>
@@ -139,8 +130,8 @@ const About = () => {
 
             <div className="container mx-auto px-4">
                 <Chapter
-                    kicker="My why"
-                    title={<>Food that <em className="italic text-brand-tobacco">loves you back</em></>}
+                    kicker="Culinary school"
+                    title={<>Class of <em className="italic text-brand-tobacco">2024</em></>}
                     photo={
                         <div className="aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
                             <SpotImg spot="about.kitchen" loading="lazy" className="w-full h-full object-cover" />
@@ -148,15 +139,21 @@ const About = () => {
                     }
                 >
                     <p className="text-lg text-foreground/85 leading-relaxed">
-                        Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school, and
-                        I graduated in 2024. Not long after, my health took a turn. I spent the next two years
-                        working closely with a holistic doctor, and it completely changed the way I think about
-                        food. I learned that what we eat plays the biggest role in how we feel, and I&apos;ve been
-                        studying it ever since.
+                        Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
+                        couple of years ago. I graduated in 2024, and now I get to cook for you every week.
+                    </p>
+                </Chapter>
+
+                <Chapter kicker="My why" title={<>Why I cook <em className="italic text-brand-tobacco">the way I do</em></>}>
+                    <p className="text-lg text-foreground/85 leading-relaxed">
+                        Not long after I graduated from culinary school, my health took a turn. I spent the next
+                        two years working closely with a holistic doctor, and it completely changed the way I think
+                        about food. I learned that what we eat plays the biggest role in how we feel, and I&apos;ve
+                        been studying it ever since.
                     </p>
                     <p className="text-lg text-foreground/85 leading-relaxed">
-                        That&apos;s why I cook the way I do: real ingredients, balanced and colorful, the way home
-                        cooking should be. Food that tastes amazing and helps you feel your best.
+                        That&apos;s why everything I make starts with real ingredients, balanced and colorful, the
+                        way home cooking should be. Food that tastes amazing and helps you feel your best.
                     </p>
                 </Chapter>
 
@@ -198,24 +195,14 @@ const About = () => {
 
             {/* Sign-off */}
             <section className="container mx-auto px-4 pt-4 pb-20 md:pb-28">
-                <motion.div {...reveal} className="relative rounded-[22px] bg-muted px-6 pt-20 pb-12 md:py-16 text-center">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                        src="/brand/sticker-mealprep.webp"
-                        alt=""
-                        aria-hidden="true"
-                        loading="lazy"
-                        width={380}
-                        height={574}
-                        className="pointer-events-none select-none absolute -top-12 right-3 md:-top-14 md:right-12 w-20 md:w-28 rotate-[8deg]"
-                    />
+                <motion.div {...reveal} className="rounded-[22px] bg-muted px-6 py-12 md:py-16 text-center">
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Made just for <em className="italic text-brand-tobacco">you</em>
                     </h2>
                     <p className="mt-4 mx-auto max-w-xl text-lg text-foreground/85 leading-relaxed">
                         No rice, extra veggies, extra protein, allergies? Just tell me, and I&apos;ll make it work.
                     </p>
-                    <p className="mt-5 font-serif italic text-2xl text-brand-tobacco">With love, Ash ♡</p>
+                    <p className="mt-5 font-serif italic text-2xl text-brand-tobacco">With love, Ash</p>
                     <div className="flex flex-col sm:flex-row gap-3 justify-center pt-8">
                         <Link
                             href="/menu"

@@ -228,7 +228,7 @@ export const SPOTS = [
     {
         key: "about.kitchen",
         page: "About",
-        label: "Photo by \"Food that loves you back\"",
+        label: "Photo by \"Class of 2024\"",
         newAlt: "Ash cooking",
         shapes: ["4:5"],
         photos: [{ url: "/brand/about-kitchen.jpg", alt: "Ash plating a dish in a professional kitchen" }],
