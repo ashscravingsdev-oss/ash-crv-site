@@ -6,7 +6,6 @@ import FeaturedProducts from "@/components/home/featured-products";
 import CakesFeature from "@/components/home/cakes-feature";
 import OurStory from "@/components/home/our-story";
 import Newsletter from "@/components/home/newsletter";
-import MochaBand from "@/components/home/mocha-band";
 import InstagramStrip from "@/components/home/instagram-strip";
 import Reviews from "@/components/home/reviews";
 import { Footer } from "@/components/footer";
@@ -31,7 +30,6 @@ export default function HomePage() {
       <AnnouncementBar />
       <Navigation />
       <HeroSection />
-      <MochaBand />
       <Cravings />
       <FeaturedProducts />
       <Reviews />
