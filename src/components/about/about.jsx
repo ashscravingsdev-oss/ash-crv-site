@@ -6,22 +6,7 @@ import { Plus } from "lucide-react"
 import { fadeUp } from "@/lib/animations"
 import { SpotImg } from "@/components/site-photos";
 
-const values = [
-    {
-        title: "Real, fresh food",
-        description: "Every meal, cake and dessert is made from scratch, fresh each week.",
-    },
-    {
-        title: "Made with love",
-        description: "The way my grandma taught me, with the goal of making you happy.",
-    },
-    {
-        title: "Made for you",
-        description: "No rice, extra veggies, extra protein, allergies. Just tell me and I'll make it work.",
-    },
-]
-
-// "Get to know me": tap a question to open it
+// "Get to know Ash": tap a question to open it
 const getToKnow = [
     {
         q: "Where did the name Ash's Cravings come from?",
@@ -29,7 +14,7 @@ const getToKnow = [
     },
     {
         q: "What did you grow up eating?",
-        a: "I'm Latina, so I grew up on the most incredible enchiladas and pozole. They're still my favorites to this day.",
+        a: "I grew up on the most incredible enchiladas and pozole. They're still my favorites to this day.",
     },
     {
         q: "A dish from your grandma you still make?",
@@ -82,30 +67,32 @@ const About = () => {
                             it, I&apos;ll make it with love.
                         </p>
                     </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="aspect-[4/5] max-w-lg w-full md:ml-auto rounded-[18px] overflow-hidden bg-muted"
-                    >
-                        <SpotImg
-                            spot="about.hero"
-                            className="w-full h-full object-cover"
-                        />
-                    </motion.div>
+                    <div className="relative max-w-lg w-full md:ml-auto">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="aspect-[4/5] w-full rounded-[18px] overflow-hidden bg-muted"
+                        >
+                            <SpotImg
+                                spot="about.hero"
+                                className="w-full h-full object-cover"
+                            />
+                        </motion.div>
+                    </div>
                 </div>
             </section>
 
             {/* Grandma */}
-            <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-                    <motion.figure {...reveal} className="relative order-2 md:order-1 max-w-lg w-full mx-auto md:mx-0 aspect-[9/10] rounded-[18px] overflow-hidden bg-background">
+            <section className="container mx-auto px-4 pb-14 md:pb-20">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 pt-14 md:pt-20">
+                    <motion.figure {...reveal} className="relative order-2 md:order-1 max-w-lg w-full mx-auto md:mx-0 aspect-[9/10] rounded-[18px] overflow-hidden bg-muted">
                         <SpotImg
                             spot="about.grandma"
                             loading="lazy"
                             className="w-full h-full object-cover object-[center_30%]"
                         />
-                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
                             Me &amp; my grandma Maria Elena ♡
                         </figcaption>
                     </motion.figure>
@@ -126,10 +113,10 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Culinary school + Ash's Cravings */}
-            <section className="container mx-auto px-4 py-16 md:py-24">
-                <div className="grid md:grid-cols-2 gap-10 md:gap-16">
-                    <motion.div {...reveal} className="space-y-4">
+            {/* Class of 2024: text on the left, photo on the right */}
+            <section className="container mx-auto px-4">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.div {...reveal} className="max-w-xl space-y-6">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Culinary school</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             Class of <em className="italic text-brand-tobacco">2024</em>
@@ -139,27 +126,62 @@ const About = () => {
                             couple of years ago. I graduated in 2024, and now I get to cook for you every week.
                         </p>
                     </motion.div>
-                    <motion.div {...reveal} className="space-y-4">
+                    <motion.figure {...reveal} className="max-w-md w-full mx-auto md:mr-0 aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
+                        <SpotImg spot="about.kitchen" loading="lazy" className="w-full h-full object-cover" />
+                    </motion.figure>
+                </div>
+            </section>
+
+            {/* Made to nourish: a quiet, centered pause in the middle of the story */}
+            <section className="container mx-auto px-4">
+                <motion.div {...reveal} className="border-t border-brand-tobacco/20 py-16 md:py-24">
+                    <div className="max-w-2xl mx-auto text-center space-y-5">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My why</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-6xl text-brand-heading">
+                            Made to <em className="italic text-brand-tobacco">nourish</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            Not long after I graduated from culinary school, my health took a turn. I spent the next
+                            two years working closely with a holistic doctor, and it completely changed the way I think
+                            about food. I learned that what we eat plays the biggest role in how we feel, and I&apos;ve
+                            been studying it ever since.
+                        </p>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            That&apos;s why everything I make starts with real ingredients, balanced and colorful, the
+                            way home cooking should be. Food that tastes amazing and helps you feel your best.
+                        </p>
+                    </div>
+                </motion.div>
+            </section>
+
+            {/* My little family: picture on the left, words on the right */}
+            <section className="container mx-auto px-4">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.figure {...reveal} className="order-2 md:order-1 relative max-w-md w-full mx-auto md:mx-0 aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
+                        <SpotImg spot="about.family" loading="lazy" className="w-full h-full object-cover" />
+                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
+                            My baby boy, Cash
+                        </figcaption>
+                    </motion.figure>
+                    <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Outside the kitchen</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                             My <em className="italic text-brand-tobacco">little family</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I
-                            love so much, and our toy poodle, Cash, my baby boy.
+                            When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I love so
+                            much, and our toy poodle, Cash, my baby boy.
                         </p>
-                        <figure className="flex items-center gap-5 pt-3">
+                        <figure className="flex items-center gap-5 pt-2">
                             <SpotImg
                                 spot="about.first-logo"
                                 px={400}
                                 loading="lazy"
-                                className="w-32 h-32 md:w-36 md:h-36 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
+                                className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
                             />
                             <figcaption className="space-y-1">
-                                <span className="block font-mono text-[11px] uppercase tracking-[0.14em] text-brand-espresso">
-                                    My very first logo ♡
-                                </span>
-                                <span className="block text-sm text-muted-foreground leading-relaxed">
+                                <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
+                                <span className="block text-muted-foreground leading-relaxed">
                                     My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
                                 </span>
                             </figcaption>
@@ -168,43 +190,16 @@ const About = () => {
                 </div>
             </section>
 
-            {/* My why */}
-            <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-24">
-                    <div className="grid md:grid-cols-[0.8fr_1.2fr] gap-8 md:gap-16">
-                        <motion.div {...reveal} className="space-y-4">
-                            <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My why</p>
-                            <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
-                                Why real food <em className="italic text-brand-tobacco">matters</em>
-                            </h2>
-                        </motion.div>
-                        <motion.div {...reveal} className="space-y-5 md:pt-12">
-                            <p className="text-lg text-foreground/85 leading-relaxed">
-                                Not long after I graduated from culinary school, my health took a turn. I spent the
-                                next two years working closely with a holistic doctor, and it completely changed the
-                                way I think about food. I learned that what we eat plays the biggest role in how we
-                                feel, and I&apos;ve been studying it ever since.
-                            </p>
-                            <p className="text-lg text-foreground/85 leading-relaxed">
-                                That&apos;s why everything I make starts from scratch with real ingredients, the way
-                                home cooking should be. My goal is simple: balanced, nutritious, colorful food that
-                                tastes amazing and helps you feel your best.
-                            </p>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Get to know me */}
-            <section className="container mx-auto px-4 py-16 md:py-24">
-                <div className="grid md:grid-cols-[0.8fr_1.2fr] gap-8 md:gap-16">
-                    <motion.div {...reveal} className="space-y-4">
+            {/* Get to know Ash: centered, questions open with a tap */}
+            <section className="container mx-auto px-4">
+                <div className="border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.div {...reveal} className="text-center space-y-3">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>More about me</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-                            Get to know <em className="italic text-brand-tobacco">me</em>
+                            Get to know <em className="italic text-brand-tobacco">Ash</em>
                         </h2>
                     </motion.div>
-                    <motion.div {...reveal} className="border-t border-brand-tobacco/30">
+                    <motion.div {...reveal} className="max-w-3xl mx-auto mt-8 md:mt-10 border-t border-brand-tobacco/20">
                         {getToKnow.map((item, i) => (
                             <details key={item.q} open={i === 0} className="group border-b border-brand-tobacco/20">
                                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-serif text-[1.45rem] md:text-[1.7rem] leading-tight text-brand-espresso [&::-webkit-details-marker]:hidden">
@@ -218,18 +213,17 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Values */}
-            <section className="bg-muted">
-                <div className="container mx-auto px-4 py-16 md:py-20">
-                    <div className="grid md:grid-cols-3 gap-5">
-                        {values.map((value) => (
-                            <motion.div {...reveal} key={value.title} className="bg-background rounded-2xl p-6 md:p-8 space-y-2">
-                                <h3 className="font-serif text-2xl md:text-3xl font-semibold text-brand-espresso">{value.title}</h3>
-                                <p className="text-muted-foreground leading-relaxed">{value.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-10">
+            {/* Sign-off */}
+            <section className="container mx-auto px-4 pt-4 pb-20 md:pb-28">
+                <motion.div {...reveal} className="rounded-[22px] bg-muted px-6 py-12 md:py-16 text-center">
+                    <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                        Made just for <em className="italic text-brand-tobacco">you</em>
+                    </h2>
+                    <p className="mt-4 mx-auto max-w-xl text-lg text-foreground/85 leading-relaxed">
+                        No rice, extra veggies, extra protein, allergies? Just tell me, and I&apos;ll make it work.
+                    </p>
+                    <p className="mt-5 font-serif italic text-2xl text-brand-tobacco">With love, Ash</p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center pt-8">
                         <Link
                             href="/menu"
                             className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
@@ -243,7 +237,7 @@ const About = () => {
                             Request a cake <span aria-hidden="true">→</span>
                         </Link>
                     </div>
-                </div>
+                </motion.div>
             </section>
         </>
     )
