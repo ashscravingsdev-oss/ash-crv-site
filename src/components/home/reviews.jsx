@@ -28,7 +28,7 @@ const Reviews = () => {
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Straight from <em className="italic text-brand-tobacco">the DMs</em>
                     </h2>
-                    <p className="text-muted-foreground mt-3">Real messages from real clients ♡</p>
+                    <p className="text-muted-foreground mt-3">Real messages from real clients</p>
                 </div>
 
                 <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-5 max-w-5xl mx-auto">

@@ -111,7 +111,7 @@ const CustomItem = ({ token }) => {
                                 <img src={photos[photo]} alt={`${item.name}, photo ${photo + 1}`} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full grid place-items-center font-serif italic text-3xl text-brand-tobacco">
-                                    Made just for you ♡
+                                    Made just for you
                                 </div>
                             )}
                         </div>
@@ -221,7 +221,7 @@ const CustomItem = ({ token }) => {
                             </>
                         ) : (
                             <div className="rounded-2xl bg-muted p-5 space-y-1">
-                                <p className="font-serif text-2xl text-brand-espresso">This one&apos;s been ordered ♡</p>
+                                <p className="font-serif text-2xl text-brand-espresso">This one&apos;s been ordered</p>
                                 <p className="text-sm text-muted-foreground">
                                     If it was yours, your receipt is in your email. Thank you!
                                 </p>
