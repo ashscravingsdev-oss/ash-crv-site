@@ -12,7 +12,7 @@ const values = [
     },
     {
         title: "Made with love",
-        description: "The way my grandmas taught me, with the goal of making you happy.",
+        description: "The way my grandma taught me, with the goal of making you happy.",
     },
     {
         title: "Made for you",
@@ -83,14 +83,14 @@ const About = () => {
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Where it all started</p>
                         <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
-                            In the kitchen with <em className="italic text-brand-tobacco">my grandmas</em>
+                            In the kitchen with <em className="italic text-brand-tobacco">my grandma</em>
                         </h2>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            I grew up in the kitchen, right beside my two grandmas, the best chefs I know.
-                            Everything I know about cooking, I learned from them.
+                            I grew up in the kitchen, right beside my grandma, the best chef I know.
+                            Everything I know about cooking, I learned from her.
                         </p>
                         <p className="text-lg text-foreground/85 leading-relaxed">
-                            They taught me that food is how you show love, and that love goes into everything
+                            She taught me that food is how you show love, and that love goes into everything
                             I make.
                         </p>
                     </motion.div>
