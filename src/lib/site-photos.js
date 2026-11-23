@@ -144,8 +144,8 @@ export const SPOTS = [
         names: ["Small photo, top", "Small photo, bottom"],
         shapes: ["3:4"],
         photos: [
-            { url: "/gallery/desserts/pretzel-rods.jpg", alt: "Boxes of white chocolate pretzel rods with pearls, swirls and gold sprinkles" },
-            { url: "/gallery/desserts/pumpkin-cheesecakes.jpg", alt: "Pumpkin mini cheesecakes with whipped cream, cookie crumble and chocolate sticks" },
+            { url: "/gallery/desserts/dessert-boxes-2.jpg", alt: "Boxes of strawberry mini cheesecakes, cow-print strawberries and chocolate pretzels" },
+            { url: "/gallery/cakes/cake-17.jpg", alt: "Cupcake flower bouquet in pinks and yellows" },
         ],
     },
     {
