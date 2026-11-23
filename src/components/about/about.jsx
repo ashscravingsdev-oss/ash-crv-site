@@ -14,7 +14,7 @@ const getToKnow = [
     },
     {
         q: "What did you grow up eating?",
-        a: "Everything! My grandmas on both sides cooked for our whole family every single day, so I grew up on every kind of Mexican food you can think of. Enchiladas and pozole are still my favorites.",
+        a: "Everything! My grandmas on both sides cooked for our whole family every single day, so I grew up on every kind of Mexican food you can think of. Enchiladas were my favorite.",
     },
     {
         q: "A dish from your grandma you still make?",
