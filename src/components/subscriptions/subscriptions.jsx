@@ -83,7 +83,7 @@ const Photo = ({ className = "", children }) => (
 const MealCard = ({ b }) => (
     <Link
         href={START}
-        className="group flex flex-col rounded-2xl border border-border bg-card p-6 hover:border-[color:var(--acc)] hover:shadow-md transition"
+        className="group flex flex-col rounded-2xl border border-border bg-card p-6 hover:border-[color:var(--acc-ink)] hover:shadow-md transition"
     >
         <p className="font-serif text-3xl font-semibold text-brand-espresso leading-tight">{b.name}</p>
         {b.description && <p className="text-muted-foreground mt-1">{b.description}</p>}
@@ -93,7 +93,7 @@ const MealCard = ({ b }) => (
                 <p className="text-sm text-muted-foreground mt-2 flex flex-wrap items-center gap-2">
                     a delivery
                     {perMeal(b) > 0 && (
-                        <span className="rounded-full bg-[color:var(--acc-soft)] px-2.5 py-0.5 text-[color:var(--acc-ink)]">
+                        <span className="rounded-full border border-[color:var(--acc-ink)] px-2.5 py-0.5 text-[color:var(--acc-ink)]">
                             {money(perMeal(b))} a meal
                         </span>
                     )}
@@ -145,8 +145,8 @@ const PerkList = ({ className = "" }) => (
     <ul className={className}>
         {perks.map((p) => (
             <li key={p} className="flex items-start gap-3 text-lg text-foreground/85">
-                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[color:var(--acc-soft)]">
-                    <Check className="h-3.5 w-3.5 text-[color:var(--acc-ink)]" strokeWidth={3} />
+                <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[color:var(--acc-ink)]">
+                    <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
                 </span>
                 <span>{p}</span>
             </li>
@@ -155,14 +155,14 @@ const PerkList = ({ className = "" }) => (
 )
 
 const Details = () => (
-    <section className="bg-[color:var(--acc-wash)]">
+    <section className="bg-muted">
         <div className="container mx-auto px-4 py-14 md:py-16">
             <h2 className="font-serif font-medium text-3xl md:text-4xl text-brand-heading mb-8">
                 Good to <em className="italic text-brand-tobacco">know</em>
             </h2>
             <dl className="grid md:grid-cols-3 gap-x-10 gap-y-7">
                 {details.map((d) => (
-                    <div key={d.q} className="border-t-2 border-[color:var(--acc-soft)] pt-4">
+                    <div key={d.q} className="border-t border-brand-tobacco/30 pt-4">
                         <dt className="font-serif text-xl font-semibold text-brand-espresso">{d.q}</dt>
                         <dd className="mt-1.5 text-foreground/80 leading-relaxed">{d.a}</dd>
                     </div>
@@ -179,8 +179,8 @@ const Details = () => (
     </section>
 )
 
-// The page's soft green touches (the block behind the photo, check circles, price tags, the last band)
-const ACCENT = { "--acc": "#7D9150", "--acc-soft": "#E1E8C9", "--acc-wash": "#EEF2E0", "--acc-ink": "#4E6127" }
+// The page's one accent: the dark green
+const ACCENT = { "--acc-ink": "#4E6127" }
 
 // A smaller copy of a menu photo (Cloudinary resizes it), added after any crop already in the link
 const sized = (url, px = 480) =>
