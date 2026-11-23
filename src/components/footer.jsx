@@ -77,13 +77,8 @@ export function Footer({ flush = false }) {
                 </Link>
               </li>
               <li>
-                <Link href="/christmas" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Christmas mini cakes
-                </Link>
-              </li>
-              <li>
                 <Link href="/events" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                  Events &amp; private chef
+                  Events
                 </Link>
               </li>
             </ul>
