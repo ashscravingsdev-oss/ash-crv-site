@@ -6,7 +6,7 @@ import { Plus } from "lucide-react"
 import { fadeUp } from "@/lib/animations"
 import { SpotImg } from "@/components/site-photos";
 
-// "Get to know me": tap a question to open it
+// "Get to know Ash": tap a question to open it
 const getToKnow = [
     {
         q: "Where did the name Ash's Cravings come from?",
@@ -40,21 +40,6 @@ const reveal = {
     viewport: { once: true, amount: 0.2 },
     variants: fadeUp,
 }
-
-// The rest of the story reads like chapters: the title on the left, the story
-// on the right, a thin line between them
-const Chapter = ({ kicker, title, photo, children }) => (
-    <section className="grid md:grid-cols-[0.8fr_1.2fr] gap-6 md:gap-16 border-t border-brand-tobacco/20 py-14 md:py-20">
-        <motion.div {...reveal} className="space-y-3">
-            <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>{kicker}</p>
-            <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">{title}</h2>
-            {photo && <div className="pt-5 max-w-sm">{photo}</div>}
-        </motion.div>
-        <motion.div {...reveal} className="space-y-5 md:pt-11">
-            {children}
-        </motion.div>
-    </section>
-)
 
 const About = () => {
     return (
@@ -128,58 +113,87 @@ const About = () => {
                 </div>
             </section>
 
-            <div className="container mx-auto px-4">
-                <Chapter
-                    kicker="Culinary school"
-                    title={<>Class of <em className="italic text-brand-tobacco">2024</em></>}
-                    photo={
-                        <div className="aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
-                            <SpotImg spot="about.kitchen" loading="lazy" className="w-full h-full object-cover" />
-                        </div>
-                    }
-                >
-                    <p className="text-lg text-foreground/85 leading-relaxed">
-                        Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
-                        couple of years ago. I graduated in 2024, and now I get to cook for you every week.
-                    </p>
-                </Chapter>
+            {/* Class of 2024: text on the left, photo on the right */}
+            <section className="container mx-auto px-4">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.div {...reveal} className="max-w-xl space-y-6">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Culinary school</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            Class of <em className="italic text-brand-tobacco">2024</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school a
+                            couple of years ago. I graduated in 2024, and now I get to cook for you every week.
+                        </p>
+                    </motion.div>
+                    <motion.figure {...reveal} className="max-w-md w-full mx-auto md:mr-0 aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
+                        <SpotImg spot="about.kitchen" loading="lazy" className="w-full h-full object-cover" />
+                    </motion.figure>
+                </div>
+            </section>
 
-                <Chapter kicker="My why" title={<>Why I cook <em className="italic text-brand-tobacco">the way I do</em></>}>
-                    <p className="text-lg text-foreground/85 leading-relaxed">
-                        Not long after I graduated from culinary school, my health took a turn. I spent the next
-                        two years working closely with a holistic doctor, and it completely changed the way I think
-                        about food. I learned that what we eat plays the biggest role in how we feel, and I&apos;ve
-                        been studying it ever since.
-                    </p>
-                    <p className="text-lg text-foreground/85 leading-relaxed">
-                        That&apos;s why everything I make starts with real ingredients, balanced and colorful, the
-                        way home cooking should be. Food that tastes amazing and helps you feel your best.
-                    </p>
-                </Chapter>
+            {/* Made to nourish: a quiet, centered pause in the middle of the story */}
+            <section className="container mx-auto px-4">
+                <motion.div {...reveal} className="border-t border-brand-tobacco/20 py-16 md:py-24">
+                    <div className="max-w-2xl mx-auto text-center space-y-5">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My why</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-6xl text-brand-heading">
+                            Made to <em className="italic text-brand-tobacco">nourish</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            Not long after I graduated from culinary school, my health took a turn. I spent the next
+                            two years working closely with a holistic doctor, and it completely changed the way I think
+                            about food. I learned that what we eat plays the biggest role in how we feel, and I&apos;ve
+                            been studying it ever since.
+                        </p>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            That&apos;s why everything I make starts with real ingredients, balanced and colorful, the
+                            way home cooking should be. Food that tastes amazing and helps you feel your best.
+                        </p>
+                    </div>
+                </motion.div>
+            </section>
 
-                <Chapter kicker="Outside the kitchen" title={<>My <em className="italic text-brand-tobacco">little family</em></>}>
-                    <p className="text-lg text-foreground/85 leading-relaxed">
-                        When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I love so
-                        much, and our toy poodle, Cash, my baby boy.
-                    </p>
-                    <figure className="flex items-center gap-5 pt-2">
+            {/* My little family: picture on the left, words on the right */}
+            <section className="container mx-auto px-4">
+                <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.figure {...reveal} className="order-2 md:order-1 flex flex-col items-center gap-4">
                         <SpotImg
                             spot="about.first-logo"
-                            px={400}
+                            px={700}
                             loading="lazy"
-                            className="w-32 h-32 md:w-44 md:h-44 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
+                            className="w-60 h-60 md:w-72 md:h-72 rounded-full object-cover ring-1 ring-border shadow-sm"
                         />
-                        <figcaption className="space-y-1">
+                        <figcaption className="text-center space-y-1">
                             <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
                             <span className="block text-muted-foreground leading-relaxed">
                                 My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
                             </span>
                         </figcaption>
-                    </figure>
-                </Chapter>
+                    </motion.figure>
+                    <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>Outside the kitchen</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            My <em className="italic text-brand-tobacco">little family</em>
+                        </h2>
+                        <p className="text-lg text-foreground/85 leading-relaxed">
+                            When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I love so
+                            much, and our toy poodle, Cash, my baby boy.
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
 
-                <Chapter kicker="More about me" title={<>Get to know <em className="italic text-brand-tobacco">me</em></>}>
-                    <div className="-mt-5 md:mt-0">
+            {/* Get to know Ash: centered, questions open with a tap */}
+            <section className="container mx-auto px-4">
+                <div className="border-t border-brand-tobacco/20 py-14 md:py-20">
+                    <motion.div {...reveal} className="text-center space-y-3">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>More about me</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            Get to know <em className="italic text-brand-tobacco">Ash</em>
+                        </h2>
+                    </motion.div>
+                    <motion.div {...reveal} className="max-w-3xl mx-auto mt-8 md:mt-10 border-t border-brand-tobacco/20">
                         {getToKnow.map((item, i) => (
                             <details key={item.q} open={i === 0} className="group border-b border-brand-tobacco/20">
                                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-serif text-[1.45rem] md:text-[1.7rem] leading-tight text-brand-espresso [&::-webkit-details-marker]:hidden">
@@ -189,9 +203,9 @@ const About = () => {
                                 <p className="-mt-1 pb-6 pr-8 text-lg leading-relaxed text-foreground/80">{item.a}</p>
                             </details>
                         ))}
-                    </div>
-                </Chapter>
-            </div>
+                    </motion.div>
+                </div>
+            </section>
 
             {/* Sign-off */}
             <section className="container mx-auto px-4 pt-4 pb-20 md:pb-28">
