@@ -2,6 +2,7 @@
 import React from 'react'
 import Link from "next/link";
 import { motion } from "framer-motion"
+import { Plus } from "lucide-react"
 import { fadeUp } from "@/lib/animations"
 import { SpotImg } from "@/components/site-photos";
 
@@ -17,6 +18,34 @@ const values = [
     {
         title: "Made for you",
         description: "No rice, extra veggies, extra protein, allergies. Just tell me and I'll make it work.",
+    },
+]
+
+// "Get to know me": tap a question to open it
+const getToKnow = [
+    {
+        q: "Where did the name Ash's Cravings come from?",
+        a: "A chef friend I met long before culinary school came up with it, and I knew right away it was the one. It works for meals and desserts, but mostly it's just true: I'm always craving something. I could honestly eat every hour (the right foods, of course).",
+    },
+    {
+        q: "What did you grow up eating?",
+        a: "I'm Latina, so I grew up on the most incredible enchiladas and pozole. They're still my favorites to this day.",
+    },
+    {
+        q: "A dish from your grandma you still make?",
+        a: "Pozole and birria, just the way she taught me.",
+    },
+    {
+        q: "What could you eat every single day?",
+        a: "Sushi and pho, no question. Honestly, anything with rice. I really love rice.",
+    },
+    {
+        q: "Sweet or savory?",
+        a: "I genuinely can't choose. I love both, which is probably why I make both.",
+    },
+    {
+        q: "Go-to late-night snack?",
+        a: "Peanut butter and jelly with fresh strawberry jam. Simple, but perfect.",
     },
 ]
 
@@ -135,6 +164,56 @@ const About = () => {
                                 </span>
                             </figcaption>
                         </figure>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* My why */}
+            <section className="bg-muted">
+                <div className="container mx-auto px-4 py-16 md:py-24">
+                    <div className="grid md:grid-cols-[0.8fr_1.2fr] gap-8 md:gap-16">
+                        <motion.div {...reveal} className="space-y-4">
+                            <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My why</p>
+                            <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">
+                                Why real food <em className="italic text-brand-tobacco">matters</em>
+                            </h2>
+                        </motion.div>
+                        <motion.div {...reveal} className="space-y-5 md:pt-12">
+                            <p className="text-lg text-foreground/85 leading-relaxed">
+                                Not long after I graduated from culinary school, my health took a turn. I spent the
+                                next two years working closely with a holistic doctor, and it completely changed the
+                                way I think about food. I learned that what we eat plays the biggest role in how we
+                                feel, and I&apos;ve been studying it ever since.
+                            </p>
+                            <p className="text-lg text-foreground/85 leading-relaxed">
+                                That&apos;s why everything I make starts from scratch with real ingredients, the way
+                                home cooking should be. My goal is simple: balanced, nutritious, colorful food that
+                                tastes amazing and helps you feel your best.
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Get to know me */}
+            <section className="container mx-auto px-4 py-16 md:py-24">
+                <div className="grid md:grid-cols-[0.8fr_1.2fr] gap-8 md:gap-16">
+                    <motion.div {...reveal} className="space-y-4">
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>More about me</p>
+                        <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
+                            Get to know <em className="italic text-brand-tobacco">me</em>
+                        </h2>
+                    </motion.div>
+                    <motion.div {...reveal} className="border-t border-brand-tobacco/30">
+                        {getToKnow.map((item, i) => (
+                            <details key={item.q} open={i === 0} className="group border-b border-brand-tobacco/20">
+                                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-5 font-serif text-[1.45rem] md:text-[1.7rem] leading-tight text-brand-espresso [&::-webkit-details-marker]:hidden">
+                                    {item.q}
+                                    <Plus aria-hidden="true" className="h-5 w-5 shrink-0 text-brand-tobacco transition-transform duration-200 group-open:rotate-45" />
+                                </summary>
+                                <p className="-mt-1 pb-6 pr-8 text-lg leading-relaxed text-foreground/80">{item.a}</p>
+                            </details>
+                        ))}
                     </motion.div>
                 </div>
             </section>
