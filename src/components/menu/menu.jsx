@@ -158,8 +158,14 @@ const Menu = () => {
                 variants={fadeUp}
                 className="mb-8"
             >
-                <h1 className="text-4xl font-semibold mb-2">The Menu</h1>
-                <p className="text-lg text-muted-foreground">Fresh meals, made from scratch. Delivery or pickup every Tuesday</p>
+                <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco mb-2">
+                    <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
+                    This week
+                </p>
+                <h1 className="font-serif font-semibold text-5xl md:text-6xl leading-[0.98] text-brand-heading mb-3">
+                    The <em className="italic font-medium text-brand-tobacco">menu</em>
+                </h1>
+                <p className="text-lg md:text-xl text-foreground/85">Fresh meals, made from scratch. Delivery or pickup every Tuesday.</p>
                 {!loading && !tabNames.includes("Juices") && new Date() < JUICE_NOTE_UNTIL && (
                     <p className="mt-2 text-sm text-muted-foreground">
                         My juices are taking a winter break. They&apos;ll be back in the new year!
