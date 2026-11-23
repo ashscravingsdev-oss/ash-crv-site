@@ -16,7 +16,7 @@ const CakesFeature = () => {
                     <div className="border-t border-dashed border-brand-tobacco max-w-md">
                         <div className="flex justify-between py-3 border-b border-dashed border-brand-tobacco">
                             <span>6” custom cakes</span>
-                            <span className="font-mono text-sm">from $125</span>
+                            <span className="font-serif italic text-base">from $125</span>
                         </div>
                     </div>
                     <Link

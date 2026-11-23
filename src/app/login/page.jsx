@@ -7,8 +7,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Login to Ash's Cravings | Access Your Meal Delivery Account"
-        description="Sign in to your Ash's Cravings account to manage meal deliveries, view order history, update preferences, and track your healthy meals."
+        title="Log in - Ash's Cravings"
+        description="Log in to your Ash's Cravings account to see your orders and manage your meal prep subscription."
         keywords={[
           "Ash's Cravings login",
           "sign in Ash's Cravings",

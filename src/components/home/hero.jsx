@@ -64,7 +64,7 @@ const HeroSection = () => {
                         <SpotImg spot="home.hero" className="w-full h-full object-cover" />
                     </div>
 
-                    <p className="absolute top-4 right-4 rounded-full bg-brand-matcha-light px-4 py-2 font-mono text-[11px] sm:text-xs uppercase tracking-[0.14em] text-brand-espresso shadow-md">
+                    <p className="absolute top-4 right-4 rounded-full bg-brand-matcha-light px-4 py-1.5 font-serif italic text-base sm:text-lg text-brand-espresso shadow-md">
                         $17 a meal · 10 for $160
                     </p>
 

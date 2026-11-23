@@ -17,7 +17,7 @@ const InstagramStrip = () => {
                         @ashscravings
                     </a>
                 </div>
-                <a href={IG_URL} target="_blank" rel="noopener noreferrer" className="shrink-0 font-mono text-xs uppercase tracking-[0.18em] text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5">
+                <a href={IG_URL} target="_blank" rel="noopener noreferrer" className="shrink-0 font-serif italic text-lg text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5">
                     Instagram →
                 </a>
             </div>

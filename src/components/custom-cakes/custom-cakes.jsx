@@ -172,7 +172,7 @@ const CustomCakes = () => {
                             href="https://www.instagram.com/ashscravings"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="font-mono text-xs uppercase tracking-[0.18em] text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5"
+                            className="font-serif italic text-lg text-brand-espresso border-b border-dashed border-brand-tobacco pb-0.5"
                         >
                             See more on my Instagram <span aria-hidden="true">→</span>
                         </a>

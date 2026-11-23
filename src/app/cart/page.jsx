@@ -8,8 +8,8 @@ export default function CartPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="My Cart - Ash's Cravings | Review Your Meal Delivery Order"
-        description="Review items in your Ash's Cravings cart before checkout. Add or remove meals, update quantities, and apply promo codes for your healthy meal delivery."
+        title="Your cart - Ash's Cravings"
+        description="Your Ash's Cravings cart: meal prep, cakes and desserts, made from scratch in Eastvale, CA."
         keywords={[
           "Ash's Cravings cart",
           "meal delivery cart",

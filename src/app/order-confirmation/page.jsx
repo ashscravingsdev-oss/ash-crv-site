@@ -66,7 +66,7 @@ function OrderConfirmationContent() {
         <Navigation />
         <div className="container mx-auto px-4 py-24 text-center">
           <Loader2 className="h-8 w-8 text-brand-tobacco mx-auto mb-4 animate-spin" />
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">Loading your order…</p>
+          <p className="font-serif italic text-xl text-brand-tobacco">Loading your order…</p>
         </div>
         <Footer />
       </div>
@@ -167,7 +167,7 @@ function OrderConfirmationContent() {
 
           {/* Receipt */}
           <div className="rounded-[18px] bg-muted p-6 md:p-8">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Your order</p>
+            <p className="font-serif italic text-xl text-brand-tobacco mb-4">Your order</p>
             {items.length > 0 && (
               <ul className="space-y-2.5 pb-4 border-b border-dashed border-brand-tobacco/30">
                 {items.map((it) => (
@@ -206,7 +206,7 @@ function OrderConfirmationContent() {
             )}
 
             <div className="mt-6 pt-5 border-t border-border/70 space-y-1 text-sm">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">
+              <p className="font-serif italic text-base text-brand-tobacco">
                 {pickup ? "Pickup in Eastvale" : "Delivering to"}
               </p>
               <p className="text-foreground/85">
@@ -262,7 +262,7 @@ export default function OrderConfirmationPage() {
           <Navigation />
           <div className="container mx-auto px-4 py-24 text-center">
             <Loader2 className="h-8 w-8 text-brand-tobacco mx-auto mb-4 animate-spin" />
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading">Loading your order…</p>
+            <p className="font-serif italic text-xl text-brand-tobacco">Loading your order…</p>
           </div>
           <Footer />
         </div>

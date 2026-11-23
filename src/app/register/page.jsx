@@ -7,8 +7,8 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Sign Up for Ash's Cravings | Create Your Meal Delivery Account"
-        description="Join Ash's Cravings for healthy meal delivery. Create your account in 60 seconds to order fresh meals, manage subscriptions, and track deliveries."
+        title="Create an account - Ash's Cravings"
+        description="Create your Ash's Cravings account to order meal prep, cakes and desserts, and keep track of your orders and subscription."
         keywords={[
           "sign up Ash's Cravings",
           "create account meal delivery",
