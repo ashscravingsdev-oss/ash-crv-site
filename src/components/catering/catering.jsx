@@ -1,4 +1,5 @@
 "use client";
+import { Fragment } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import InquiryForm from "./inquiry-form";
@@ -40,31 +41,76 @@ const occasions = [
 
 const favorites = [
     {
-        name: "Breakfast burritos",
+        name: "Breakfast Burritos",
         text: "Fluffy eggs, potatoes, sautéed peppers and onions, and lots of cheese, made from scratch.",
     },
     {
-        name: "Sandwich trays",
+        name: "Sandwich Trays",
         text: "Chipotle Chicken Club · Pesto Caprese Ciabatta · Turkey Provolone",
     },
     {
-        name: "Charcuterie cups",
+        name: "Charcuterie Cups",
         text: "Meats, cheeses, crackers and fruit, each in its own little cup.",
     },
     {
-        name: "Grazing spreads",
+        name: "Grazing Spreads",
         text: "Fresh veggies, dips, cheeses and fruit, styled for the table.",
     },
     {
-        name: "Little bites",
-        text: "Caprese skewers · deviled eggs · bruschetta · crostini",
+        name: "Little Bites",
+        text: "Caprese Skewers · Deviled Eggs · Bruschetta · Crostini",
     },
     {
-        name: "Dessert tables",
+        name: "Dessert Tables",
         text: "Chocolate strawberries, mini cheesecakes, cupcakes and more.",
         href: "/custom-cakes#desserts",
     },
 ];
+
+// Each favorite's little link: drop it into the quote form, or go see the desserts
+const ItemLink = ({ f }) =>
+    f.href ? (
+        <Link href={f.href} className="mt-2.5 inline-flex items-center gap-1.5 font-serif italic text-[17px] text-brand-tobacco hover:text-brand-espresso transition-colors">
+            See my desserts <span aria-hidden="true">→</span>
+        </Link>
+    ) : (
+        <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent("ash:want", { detail: f.name }))}
+            className="mt-2.5 inline-flex items-center gap-1.5 font-serif italic text-[17px] text-brand-tobacco hover:text-brand-espresso transition-colors"
+        >
+            Get a quote <span aria-hidden="true">→</span>
+        </button>
+    );
+
+// "A · B · C" lists wrap between items, never right after a dot
+const ItemText = ({ text }) =>
+    text.includes(" · ")
+        ? text.split(" · ").map((part, n, all) => (
+              <Fragment key={part}>
+                  <span className="whitespace-nowrap">
+                      {part}
+                      {n < all.length - 1 ? " ·" : ""}
+                  </span>{" "}
+              </Fragment>
+          ))
+        : text;
+
+// The favorites as an open list: big names, a short line, and a link to add
+// it to the quote form (or see the desserts)
+const Favorites = () => (
+    <motion.ul {...reveal} className="grid sm:grid-cols-2 gap-x-12 border-t border-brand-tobacco/30">
+        {favorites.map((f) => (
+            <li key={f.name} className="border-b border-brand-tobacco/15 py-6">
+                <p className="font-serif text-[1.9rem] md:text-[2.25rem] leading-tight text-brand-espresso">{f.name}</p>
+                <p className="mt-2 text-base leading-relaxed text-foreground/75">
+                    <ItemText text={f.text} />
+                </p>
+                <ItemLink f={f} />
+            </li>
+        ))}
+    </motion.ul>
+);
 
 const Catering = () => {
     return (
@@ -176,27 +222,7 @@ const Catering = () => {
                             </a>
                         </div>
                     </motion.div>
-                    <motion.ul {...reveal} className="grid sm:grid-cols-2 gap-x-10 border-t border-brand-espresso/25">
-                        {favorites.map((f) => (
-                            <li key={f.name} className="border-b border-dashed border-border py-5">
-                                <p className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{f.name}</p>
-                                <p className="mt-1.5 text-[15px] leading-relaxed italic text-foreground/70">{f.text}</p>
-                                {f.href ? (
-                                    <Link href={f.href} className="inline-block mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-tobacco underline underline-offset-4">
-                                        See desserts →
-                                    </Link>
-                                ) : (
-                                    <button
-                                        type="button"
-                                        onClick={() => window.dispatchEvent(new CustomEvent("ash:want", { detail: f.name }))}
-                                        className="inline-block mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-brand-tobacco underline underline-offset-4"
-                                    >
-                                        Get a quote →
-                                    </button>
-                                )}
-                            </li>
-                        ))}
-                    </motion.ul>
+                    <Favorites />
                 </div>
             </section>
 
