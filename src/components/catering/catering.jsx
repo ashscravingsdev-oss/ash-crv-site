@@ -112,26 +112,6 @@ const Favorites = () => (
     </motion.ul>
 );
 
-// A few seconds of sandwich boxes ready to go out (no sound)
-const SandwichVideo = ({ className = "" }) => (
-    <figure className={`relative w-full max-w-[280px] aspect-[3/4] rounded-[18px] overflow-hidden bg-brand-latte ${className}`}>
-        <video
-            className="absolute inset-0 w-full h-full object-cover"
-            src="/video/sandwich-boxes.mp4"
-            poster="/video/sandwich-boxes-poster.jpg"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            aria-label="Boxes of sandwiches with Ash's Cravings stickers, ready for an event"
-        />
-        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
-            Boxed &amp; ready
-        </figcaption>
-    </figure>
-);
-
 const Catering = () => {
     return (
         <>
@@ -241,10 +221,8 @@ const Catering = () => {
                                 Plan my event <span aria-hidden="true">→</span>
                             </a>
                         </div>
-                        <SandwichVideo className="mt-8 hidden lg:block" />
                     </motion.div>
                     <Favorites />
-                    <SandwichVideo className="lg:hidden mx-auto" />
                 </div>
             </section>
 
