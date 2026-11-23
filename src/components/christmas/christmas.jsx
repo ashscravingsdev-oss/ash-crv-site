@@ -105,37 +105,41 @@ const Option = ({ option, product }) => {
 const weekday = (d) =>
     new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { weekday: "long", timeZone: "UTC" })
 
-// Each Christmas day as a little gift tag on baker's twine, like the tags on the cake boxes
-const CARD = "#FFFEFA"
-const LINE = "#E4D5BE"
-const PAGE = "#FBF6EC"
-const TWINE_BACK = "M12 56 C 8 44, 3 36, -1 24 S -3 4, -4 -8"
-const TWINE_FRONT = "M12 56 C 4 47, -4 40, -9 27 S -7 6, -4 -8"
-// left: mini cakes still open that day (null while loading)
-const DayTag = ({ day, tilt, left }) => (
-    <li className="relative" style={{ transform: `rotate(${tilt}deg)` }}>
-        <div className="flex h-[112px]">
-            <svg aria-hidden="true" viewBox="0 0 30 112" width="30" height="112" className="shrink-0 overflow-visible">
-                <path d="M30 0.5 H21 L0.5 28 V84 L21 111.5 H30" fill={CARD} stroke={LINE} />
-                <circle cx="12" cy="56" r="4.5" fill={PAGE} stroke={LINE} />
-                {/* the twine, looped through the hole: a thin outline, white, then red stripes */}
-                {[TWINE_BACK, TWINE_FRONT].map((d) => (
-                    <g key={d} fill="none" strokeLinecap="round">
-                        <path d={d} stroke="#9C7A54" strokeOpacity="0.35" strokeWidth="3.4" />
-                        <path d={d} stroke="#FFFDF8" strokeWidth="2.4" />
-                        <path d={d} stroke="#B0473B" strokeWidth="2.4" strokeDasharray="3 3.2" strokeLinecap="butt" />
-                    </g>
-                ))}
-            </svg>
-            <div className="-ml-px flex flex-1 flex-col justify-center rounded-r-xl border border-l-0 border-brand-latte bg-card pl-2 pr-4">
-                <span className="text-sm text-brand-heading">{weekday(day.date)}</span>
-                <span className="font-serif text-[2rem] leading-tight text-brand-espresso">{shortDate(day.date)}</span>
-                <span className="font-serif italic text-[15px] text-brand-tobacco">
-                    {left === 0 ? "all spoken for" : left != null && left <= 5 ? `only ${left} left!` : `order by ${shortDate(day.closes)}`}
-                </span>
-            </div>
+const dayNum = (d) => Number(d.slice(8, 10))
+const monthName = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", timeZone: "UTC" })
+
+// The Christmas days as a simple list: the date big on its own, the day and
+// the order-by date beside it. left: mini cakes still open that day (null while loading)
+const ChristmasDays = ({ days, leftFor }) => (
+    <div className="max-w-md">
+        <div className="flex items-center gap-3">
+            <p className="font-serif italic text-xl text-brand-tobacco">Christmas days</p>
+            <span aria-hidden="true" className="h-px flex-1 bg-brand-tobacco/30" />
         </div>
-    </li>
+        <ul aria-label="Christmas cake days" className="mt-1">
+            {days.map((d) => {
+                const left = leftFor(d.date)
+                const urgent = left != null && left <= 5
+                return (
+                    <li key={d.date} className={`flex items-stretch gap-4 border-b border-brand-tobacco/20 py-3 last:border-b-0 ${left === 0 ? "opacity-60" : ""}`}>
+                        <span className="w-[4.5rem] shrink-0 self-center text-center font-serif text-[3.5rem] leading-none lining-nums text-brand-espresso">
+                            {dayNum(d.date)}
+                        </span>
+                        <span aria-hidden="true" className="w-px shrink-0 bg-brand-tobacco/25" />
+                        <span className="flex min-w-0 flex-1 flex-col justify-center">
+                            <span className="font-serif text-[1.5rem] leading-tight text-brand-heading">
+                                {weekday(d.date)}
+                                <em className="italic text-brand-tobacco">, {monthName(d.date)}</em>
+                            </span>
+                            <span className={`text-[14.5px] ${urgent ? "font-medium text-brand-tobacco" : "text-foreground/70"}`}>
+                                {left === 0 ? "All spoken for" : urgent ? `Only ${left} left!` : `Order by ${shortDate(d.closes)}`}
+                            </span>
+                        </span>
+                    </li>
+                )
+            })}
+        </ul>
+    </div>
 )
 
 const Christmas = () => {
@@ -144,6 +148,7 @@ const Christmas = () => {
     const [openDays, setOpenDays] = useState(CHRISTMAS_DAYS)
     useEffect(() => setOpenDays(christmasOpenDays()), [])
     const { room } = useDayRoom()
+    const leftFor = (date) => room(date)?.christmas ?? null
     const closed = openDays.length === 0
 
     useEffect(() => {
@@ -201,11 +206,7 @@ const Christmas = () => {
                         </div>
                     ) : options.length ? (
                         <div className="space-y-3 pt-2">
-                            <ul aria-label="Christmas cake days" className="grid grid-cols-2 gap-x-5 gap-y-4 pl-4 pt-4 pb-3 max-w-md">
-                                {openDays.map((d, i) => (
-                                    <DayTag key={d.date} day={d} tilt={i % 2 ? 1.5 : -2} left={room(d.date)?.christmas ?? null} />
-                                ))}
-                            </ul>
+                            <ChristmasDays days={openDays} leftFor={leftFor} />
                             {options.map(({ option, product }) => (
                                 <Option key={option.slug} option={option} product={product} />
                             ))}
