@@ -9,8 +9,8 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen">
       <SEO
-        title="Reset Your Password - Ash's Cravings | Forgot Password Help"
-        description="Forgot your Ash's Cravings password? Reset it quickly and securely. Enter your email to receive a password reset link for your meal delivery account."
+        title="Reset your password - Ash's Cravings"
+        description="Forgot your Ash's Cravings password? Enter your email and I'll send you a link to reset it."
         keywords={[
           "forgot password Ash's Cravings",
           "reset password meal delivery",

@@ -148,7 +148,7 @@ const CustomItem = ({ token }) => {
 
                         {item.description && (
                             <div className="rounded-2xl border border-border bg-card p-5">
-                                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading mb-2">The details</p>
+                                <p className="font-serif italic text-lg text-brand-tobacco mb-2">The details</p>
                                 <p className="text-foreground/85 leading-relaxed whitespace-pre-line">{item.description}</p>
                             </div>
                         )}
@@ -248,10 +248,10 @@ const CustomItem = ({ token }) => {
                                 href={e.href}
                                 className="group bg-background rounded-2xl p-6 border border-transparent hover:border-brand-tobacco transition-colors"
                             >
-                                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">{e.eyebrow}</p>
+                                <p className="font-serif italic text-base text-brand-tobacco">{e.eyebrow}</p>
                                 <p className="font-serif text-2xl font-semibold text-brand-espresso mt-1">{e.title}</p>
                                 <p className="text-sm text-muted-foreground mt-2">{e.text}</p>
-                                <p className="font-mono text-xs uppercase tracking-[0.16em] text-brand-tobacco mt-4 group-hover:underline underline-offset-4">
+                                <p className="font-serif italic text-lg text-brand-tobacco mt-4 group-hover:underline underline-offset-4">
                                     Take a look →
                                 </p>
                             </Link>

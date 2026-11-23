@@ -54,77 +54,61 @@ export function Footer({ flush = false }) {
 
           {/* Shop */}
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Shop</h3>
+            <h3 className="font-serif italic text-xl text-brand-tobacco mb-4">Shop</h3>
             <ul className="space-y-3">
               <li>
-                <Link
-                  href="/menu"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link href="/menu" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Menu
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/bundles"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link href="/bundles" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Bundles
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/subscriptions"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link href="/subscriptions" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   Subscriptions
+                </Link>
+              </li>
+              <li>
+                <Link href="/custom-cakes" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Cakes &amp; Desserts
+                </Link>
+              </li>
+              <li>
+                <Link href="/events" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Events
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* About */}
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Company</h3>
+            <h3 className="font-serif italic text-xl text-brand-tobacco mb-4">Ash&apos;s Cravings</h3>
             <ul className="space-y-3">
               <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   My Story
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/events"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/faq"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
+                <Link href="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
                   FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Your account */}
           <div>
-            <h3 className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-4">Support</h3>
+            <h3 className="font-serif italic text-xl text-brand-tobacco mb-4">Your account</h3>
             <ul className="space-y-3">
               <li>
                 <Link

@@ -10,8 +10,8 @@ export default function AccountPage() {
 
       <div className="min-h-screen">
         <SEO
-          title="My Account - Ash's Cravings | Manage Your Meal Delivery"
-          description="Access your Ash's Cravings account to manage subscriptions, view order history, update delivery preferences, and track your healthy meal deliveries."
+          title="My account - Ash's Cravings"
+          description="Your Ash's Cravings account: your orders, your subscription and your delivery details."
           keywords={[
             "Ash's Cravings account login",
             "manage meal subscription",

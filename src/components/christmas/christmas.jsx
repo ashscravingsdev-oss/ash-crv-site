@@ -10,15 +10,9 @@ import { toast } from "sonner"
 import { addToCart, fetchCart } from "@/store/cartSlice"
 import { CHRISTMAS_DAYS, christmasOpenDays, money, shortDate } from "@/lib/special-orders"
 import { useDayRoom } from "@/lib/use-day-room"
-import FactStrip from "@/components/ui/fact-strip"
 import WakingNote from "@/components/ui/waking-note"
 import { SpotImg } from "@/components/site-photos"
 
-const facts = [
-    { value: "2 days", label: "Dec 19 & Dec 23" },
-    { value: "Gift box", label: "for every cake" },
-    { value: "Paid", label: "at checkout" },
-]
 
 // The two mini cake products in the admin (by slug), in the order they show
 const OPTIONS = [
@@ -59,7 +53,7 @@ const Option = ({ option, product }) => {
                 <h3 className="font-serif text-2xl md:text-[1.7rem] leading-tight text-brand-espresso">{option.title}</h3>
                 <p className="font-serif text-2xl text-brand-espresso">{money(product.price)}</p>
             </div>
-            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading">{option.note}</p>
+            <p className="mt-0.5 font-serif italic text-base text-brand-tobacco">{option.note}</p>
             <div className="mt-5 flex items-center gap-3">
                 <div className="inline-flex items-center rounded-lg border border-border bg-background">
                     <button
@@ -239,7 +233,6 @@ const Christmas = () => {
                 </motion.figure>
             </div>
 
-            <FactStrip facts={facts} className="mt-12" />
         </section>
     )
 }

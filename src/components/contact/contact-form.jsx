@@ -1,15 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, CheckCircle2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitToWeb3Forms } from "@/lib/web3forms";
 
-const EMPTY = { firstName: "", lastName: "", email: "", phone: "", subject: "", message: "" };
+const TOPICS = ["Meal prep", "Cakes & desserts", "An event", "Something else"];
+const EMPTY = { name: "", email: "", phone: "", topic: "", message: "" };
 
 const ContactForm = () => {
     const [form, setForm] = useState(EMPTY);
@@ -20,15 +19,16 @@ const ContactForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setStatus("sending");
+        const topic = form.topic || "A question";
         try {
             // Same form service as the Events page: it emails the message to Ash
             await submitToWeb3Forms({
-                subject: `New message: ${form.subject} (Ash's Cravings website)`,
+                subject: `New message: ${topic} (Ash's Cravings website)`,
                 replyto: form.email,
-                Name: `${form.firstName} ${form.lastName}`.trim(),
+                Name: form.name.trim(),
                 Email: form.email,
                 Phone: form.phone || "Not given",
-                Subject: form.subject,
+                Subject: topic,
                 Message: form.message,
             });
             setStatus("success");
@@ -39,67 +39,88 @@ const ContactForm = () => {
     };
 
     return (
-        <div className="lg:col-span-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Send me a message</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    {status === "success" ? (
-                        <div role="status" className="flex flex-col items-center text-center gap-3 py-10">
-                            <CheckCircle2 className="h-10 w-10 text-primary" />
-                            <p className="text-lg font-medium">Thank you! I got your message.</p>
-                            <p className="text-muted-foreground">I&apos;ll get back to you soon.</p>
-                            <Button variant="outline" onClick={() => setStatus("idle")}>
-                                Send another message
-                            </Button>
+        <div className="rounded-[22px] border border-brand-tobacco/25 bg-[#fffaf2] p-6 md:p-9">
+            {status === "success" ? (
+                <div role="status" className="flex flex-col items-center text-center gap-3 py-12">
+                    <p className="font-serif text-4xl text-brand-heading">
+                        Thank <em className="italic text-brand-tobacco">you!</em>
+                    </p>
+                    <p className="text-lg text-foreground/80">I got your message and I&apos;ll get back to you soon.</p>
+                    <button
+                        type="button"
+                        onClick={() => setStatus("idle")}
+                        className="mt-2 font-serif italic text-lg text-brand-tobacco border-b border-dashed border-brand-tobacco"
+                    >
+                        Send another message
+                    </button>
+                </div>
+            ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    <p className="font-serif text-3xl text-brand-heading">
+                        Send me a <em className="italic text-brand-tobacco">message</em>
+                    </p>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" autoComplete="name" value={form.name} onChange={update("name")} required className="bg-background" />
                         </div>
-                    ) : (
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="firstName">First Name</Label>
-                                    <Input id="firstName" autoComplete="given-name" value={form.firstName} onChange={update("firstName")} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="lastName">Last Name</Label>
-                                    <Input id="lastName" autoComplete="family-name" value={form.lastName} onChange={update("lastName")} required />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input id="email" type="email" autoComplete="email" placeholder="you@example.com" value={form.email} onChange={update("email")} required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="phone">Phone Number (Optional)</Label>
-                                <Input id="phone" type="tel" autoComplete="tel" placeholder="(555) 123-4567" value={form.phone} onChange={update("phone")} />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="subject">Subject</Label>
-                                <Input id="subject" placeholder="How can I help?" value={form.subject} onChange={update("subject")} required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="message">Message</Label>
-                                <Textarea id="message" placeholder="Tell me more..." rows={6} value={form.message} onChange={update("message")} required />
-                            </div>
-                            {status === "error" && (
-                                <p role="alert" className="text-sm text-red-600">
-                                    Something went wrong sending your message. Please try again, or email me at Ashscravings@gmail.com.
-                                </p>
-                            )}
-                            <Button type="submit" size="lg" className="w-full" disabled={status === "sending"}>
-                                {status === "sending" ? (
-                                    <>
-                                        <Loader2 className="h-4 w-4 animate-spin" /> Sending...
-                                    </>
-                                ) : (
-                                    "Send Message"
-                                )}
-                            </Button>
-                        </form>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" autoComplete="email" value={form.email} onChange={update("email")} required className="bg-background" />
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="phone">
+                            Phone <span className="text-muted-foreground font-normal">(optional)</span>
+                        </Label>
+                        <Input id="phone" type="tel" autoComplete="tel" value={form.phone} onChange={update("phone")} className="bg-background" />
+                    </div>
+                    <fieldset className="space-y-2">
+                        <legend className="text-sm font-medium leading-none mb-2">What&apos;s it about?</legend>
+                        <div className="flex flex-wrap gap-2">
+                            {TOPICS.map((t) => (
+                                <label key={t} className="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="topic"
+                                        value={t}
+                                        checked={form.topic === t}
+                                        onChange={update("topic")}
+                                        className="peer sr-only"
+                                    />
+                                    <span className="inline-block rounded-full border border-brand-tobacco/40 bg-background px-4 py-1.5 text-[15px] text-brand-espresso transition-colors peer-checked:border-primary peer-checked:bg-primary peer-checked:text-primary-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-primary/40">
+                                        {t}
+                                    </span>
+                                </label>
+                            ))}
+                        </div>
+                    </fieldset>
+                    <div className="space-y-2">
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea id="message" rows={6} value={form.message} onChange={update("message")} required className="bg-background" />
+                    </div>
+                    {status === "error" && (
+                        <p role="alert" className="text-sm text-red-600">
+                            Something went wrong sending your message. Please try again, or email me at Ashscravings@gmail.com.
+                        </p>
                     )}
-                </CardContent>
-            </Card>
+                    <button
+                        type="submit"
+                        disabled={status === "sending"}
+                        className="inline-flex w-full items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors disabled:opacity-70"
+                    >
+                        {status === "sending" ? (
+                            <>
+                                <Loader2 className="h-4 w-4 animate-spin" /> Sending…
+                            </>
+                        ) : (
+                            <>
+                                Send my message <span aria-hidden="true">→</span>
+                            </>
+                        )}
+                    </button>
+                </form>
+            )}
         </div>
     );
 };

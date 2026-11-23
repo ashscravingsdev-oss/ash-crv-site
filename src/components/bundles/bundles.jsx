@@ -191,7 +191,7 @@ const Bundles = () => {
                 ) : (
                     <>
                         {/* Step 1: bundle */}
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">01 · Pick your bundle</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco mb-3">Pick your bundle</p>
                         <div className="space-y-6 mb-12">
                             {groups.map(([groupName, list]) => (
                                 <div key={groupName}>
@@ -224,7 +224,7 @@ const Bundles = () => {
                                                     )}
                                                     <p className="font-serif text-3xl md:text-4xl font-semibold text-brand-espresso mt-2">{money(b.price)}</p>
                                                     {slotsFor.length === 1 && req > 0 && (
-                                                        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mt-1">
+                                                        <p className="font-serif italic text-[15px] text-brand-tobacco mt-1">
                                                             {money(Number(b.price) / req)} each
                                                         </p>
                                                     )}
@@ -237,7 +237,7 @@ const Bundles = () => {
                         </div>
 
                         {/* Step 2: meals */}
-                        <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">02 · Pick your favorites</p>
+                        <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco mb-3">Pick your favorites</p>
                         {!template || template.loading ? (
                             <div className="flex justify-center py-12">
                                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -254,7 +254,7 @@ const Bundles = () => {
                                         <section key={slot.categoryId}>
                                             <div className="flex items-baseline justify-between mb-3">
                                                 <h2 className="font-serif text-3xl font-medium text-brand-heading">{slot.categoryName}</h2>
-                                                <span className="font-mono text-xs uppercase tracking-[0.14em] text-brand-espresso">
+                                                <span className="font-serif italic text-base text-brand-espresso">
                                                     {picked} of {slot.required}
                                                 </span>
                                             </div>
@@ -281,7 +281,7 @@ const Bundles = () => {
                                                                 <div className="flex-1 min-w-0">
                                                                     <p className="font-serif text-xl font-semibold leading-tight text-brand-espresso">{p.name}</p>
                                                                     {soldOut ? (
-                                                                        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground mt-1">Sold out</p>
+                                                                        <p className="font-serif italic text-[15px] text-brand-tobacco mt-1">Sold out</p>
                                                                     ) : p.description ? (
                                                                         <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{p.description}</p>
                                                                     ) : null}
@@ -324,7 +324,7 @@ const Bundles = () => {
             {/* Step 3: how often */}
             {sortedBundles.length > 0 && (
                 <div className="container mx-auto px-4 max-w-5xl mt-10">
-                    <p className="font-mono text-xs uppercase tracking-[0.18em] text-brand-heading mb-3">03 · How often?</p>
+                    <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco mb-3">How often?</p>
                     <div className="grid grid-cols-3 gap-2 md:gap-3">
                         {FREQUENCIES.map((f) => {
                             const active = frequency === f.value

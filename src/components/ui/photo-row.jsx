@@ -57,7 +57,7 @@ const PhotoRow = ({ photos, onOpen, label = "photos" }) => {
                             />
                         </button>
                         {photo.note && (
-                            <figcaption className="pointer-events-none absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-brand-espresso">
+                            <figcaption className="pointer-events-none absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
                                 {photo.note}
                             </figcaption>
                         )}

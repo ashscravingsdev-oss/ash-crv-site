@@ -80,7 +80,7 @@ const ProductItem = ({ product }) => {
             >
                 <Card className="relative overflow-hidden rounded-2xl hover:shadow-lg transition-shadow h-full">
                     {badge && (
-                        <span className="absolute top-3 left-3 z-10 rounded-full bg-brand-matcha-light text-brand-espresso px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] shadow-md">
+                        <span className="absolute top-3 left-3 z-10 rounded-full bg-brand-matcha-light text-brand-espresso px-3 py-0.5 font-serif italic text-[15px] shadow-md">
                             ★ {badge}
                         </span>
                     )}

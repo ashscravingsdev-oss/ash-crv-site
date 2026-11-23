@@ -12,7 +12,7 @@ export default function SubscriptionsPage() {
     <WithSitePhotos>
     <div className="min-h-screen">
       <SEO
-        title="Meal Prep Subscriptions - Ash's Cravings | Your Meals, Every Week"
+        title="Meal Prep Subscriptions - Ash's Cravings | Cravings, on Repeat"
         description="Get Ash's Cravings meal prep every week or every 2 weeks. Pick a bundle, choose new meals from the rotating menu each week, and skip or pause anytime. Eastvale, CA."
         keywords={[
           "meal prep subscription",

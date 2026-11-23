@@ -213,14 +213,6 @@ const Catering = () => {
                         <p className="text-lg text-foreground/85 leading-relaxed">
                             Every menu is made for your event, so mix and match or ask me for something special.
                         </p>
-                        <div className="pt-2">
-                            <a
-                                href="#request-a-quote"
-                                className="inline-flex items-center justify-center gap-3 h-12 px-6 rounded-lg bg-primary text-primary-foreground font-mono text-xs uppercase tracking-[0.18em] hover:bg-primary/90 transition-colors"
-                            >
-                                Plan my event <span aria-hidden="true">→</span>
-                            </a>
-                        </div>
                     </motion.div>
                     <Favorites />
                 </div>
@@ -253,7 +245,7 @@ const Catering = () => {
                             Date nights, birthdays, family dinners, a night in with the girls. Tell me what you&apos;re
                             craving and I&apos;ll build the menu around it.
                         </p>
-                        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand-heading leading-relaxed">
+                        <p className="font-serif italic text-lg text-brand-tobacco leading-relaxed">
                             Up to 10 guests · I bring the groceries · I clean up after
                         </p>
                         <div className="pt-2">

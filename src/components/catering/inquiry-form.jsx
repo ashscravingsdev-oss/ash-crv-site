@@ -24,10 +24,10 @@ const eventTypeLabels = {
 };
 
 const budgetLabels = {
-    "500": "Under $500",
     "1000": "$500 - $1,000",
     "2000": "$1,000 - $2,000",
-    "2000+": "$2,000+",
+    "3500": "$2,000 - $3,500",
+    "3500+": "$3,500+",
 };
 
 const initialFormState = {
@@ -260,10 +260,10 @@ const InquiryForm = () => {
                                         <SelectValue placeholder="Select range" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="500">Under $500</SelectItem>
                                         <SelectItem value="1000">$500 - $1,000</SelectItem>
                                         <SelectItem value="2000">$1,000 - $2,000</SelectItem>
-                                        <SelectItem value="2000+">$2,000+</SelectItem>
+                                        <SelectItem value="3500">$2,000 - $3,500</SelectItem>
+                                        <SelectItem value="3500+">$3,500+</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>

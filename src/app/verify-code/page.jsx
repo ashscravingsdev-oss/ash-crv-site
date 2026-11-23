@@ -10,7 +10,7 @@ export default function VerifyCodePage() {
     <div className="min-h-screen">
       <SEO
         title="Verify Your Account - Ash's Cravings | Enter Verification Code"
-        description="Enter the 6-digit verification code sent to your email or phone to complete your Ash's Cravings account setup and start ordering healthy meals."
+        description="Enter the 6-digit code I sent you to finish setting up your Ash's Cravings account."
         keywords={[
           "verify account Ash's Cravings",
           "verification code Ash's Cravings",
