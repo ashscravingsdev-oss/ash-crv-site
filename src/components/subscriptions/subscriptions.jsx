@@ -228,9 +228,7 @@ const Page = ({ meals, others, fromPerMeal, menu }) => (
                     <Intro />
                     <Actions />
                 </motion.div>
-                <div className="relative mr-3 mb-3 md:mr-0">
-                    {/* A soft block of color peeking out behind the photo */}
-                    <div aria-hidden="true" className="absolute inset-0 translate-x-3 translate-y-3 md:translate-x-5 md:translate-y-5 rounded-[18px] bg-[color:var(--acc-soft)]" />
+                <div className="relative">
                     <Photo className="aspect-[4/3] md:aspect-[5/4] rounded-[18px]">
                         {fromPerMeal > 0 && (
                             <p className="absolute top-4 right-4 rounded-full bg-[color:var(--acc-ink)] px-4 py-2 shadow-md font-serif italic text-lg text-white">
