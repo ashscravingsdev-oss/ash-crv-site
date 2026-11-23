@@ -172,8 +172,8 @@ const Bundles = () => {
                     <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                     Meal prep bundles
                 </p>
-                <h1 className="font-serif font-medium text-5xl md:text-7xl leading-[0.98] text-brand-heading mb-4">
-                    Build your <em className="italic text-brand-tobacco">bundle</em>
+                <h1 className="font-serif font-semibold text-5xl md:text-7xl leading-[0.98] text-brand-heading mb-4">
+                    Build your <em className="italic font-medium text-brand-tobacco">bundle</em>
                 </h1>
                 <p className="text-lg md:text-xl text-foreground/85 max-w-2xl mx-auto leading-relaxed">
                     Pick a bundle, then mix and match your favorites from this week&apos;s menu. All one flavor or a little

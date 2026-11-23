@@ -22,7 +22,7 @@ const Contact = () => {
                 >
                     <motion.h1
                         variants={fadeUp}
-                        className="text-4xl md:text-5xl font-bold mb-4"
+                        className="text-4xl md:text-5xl font-semibold mb-4"
                     >
                         Get in Touch
                     </motion.h1>

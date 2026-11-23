@@ -17,7 +17,7 @@ const ProductInfo = ({ product }) => {
                         {product.category.name}
                     </Badge>
                 )}
-                <h1 className="text-4xl font-bold mb-4 text-balance">{product.name}</h1>
+                <h1 className="text-4xl font-semibold mb-4 text-balance">{product.name}</h1>
                 <p className="text-lg text-muted-foreground leading-relaxed">{product.description}</p>
             </div>
 

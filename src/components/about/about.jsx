@@ -35,8 +35,8 @@ const About = () => {
                 <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
                     <motion.div {...reveal} className="space-y-5">
                         <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>My story</p>
-                        <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
-                            Hi, I&apos;m <em className="italic text-brand-tobacco">Ash</em>
+                        <h1 className="font-serif font-semibold text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
+                            Hi, I&apos;m <em className="italic font-medium text-brand-tobacco">Ash</em>
                         </h1>
                         <p className="text-lg md:text-xl text-foreground/85 leading-relaxed">
                             I&apos;m a culinary school-trained chef and the founder of Ash&apos;s Cravings. Food has

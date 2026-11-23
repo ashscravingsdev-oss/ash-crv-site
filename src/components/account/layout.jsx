@@ -16,7 +16,7 @@ const Layout = ({ title, description, children }) => {
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                         <div>
-                            <h1 className="text-4xl font-bold">{title}</h1>
+                            <h1 className="text-4xl font-semibold">{title}</h1>
                             <p className="text-lg text-muted-foreground mt-2">
                                 {description}
                             </p>

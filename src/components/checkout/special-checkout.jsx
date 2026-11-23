@@ -218,8 +218,8 @@ const SpecialCheckout = ({ cart, items, subtotal, taxTotal, couponDiscount, curr
                 <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                 Checkout
             </p>
-            <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading mt-2 mb-8">
-                Almost <em className="italic text-brand-tobacco">yours</em>
+            <h1 className="font-serif font-semibold text-4xl md:text-5xl text-brand-heading mt-2 mb-8">
+                Almost <em className="italic font-medium text-brand-tobacco">yours</em>
             </h1>
 
             <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8">

@@ -180,8 +180,8 @@ const Christmas = () => {
                         <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                         This season only
                     </p>
-                    <h1 className="font-serif font-medium text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
-                        Christmas <em className="italic text-brand-tobacco">mini cakes</em>
+                    <h1 className="font-serif font-semibold text-[3.25rem] leading-[0.98] sm:text-6xl lg:text-7xl text-brand-heading">
+                        Christmas <em className="italic font-medium text-brand-tobacco">mini cakes</em>
                     </h1>
                     <p className="text-lg md:text-xl text-foreground/85 leading-relaxed max-w-xl">
                         4&quot; mini cakes, each in its own gift box, and every design is different. Pick the design you

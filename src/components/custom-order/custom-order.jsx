@@ -22,7 +22,7 @@ const prettySlot = (slot) => String(slot || "").replace(/\s+-\s+/g, " – ")
 // Big, centered message for a link that can't be paid (not found, cancelled, paid...)
 const Notice = ({ title, children }) => (
     <section className="container mx-auto px-4 py-20 md:py-28 text-center max-w-xl space-y-4">
-        <h1 className="font-serif font-medium text-4xl sm:text-5xl leading-tight text-brand-heading">{title}</h1>
+        <h1 className="font-serif font-semibold text-4xl sm:text-5xl leading-tight text-brand-heading">{title}</h1>
         {children}
     </section>
 )
@@ -247,9 +247,9 @@ const CustomOrder = ({ token }) => {
 
     return (
         <section className="container mx-auto px-4 pt-8 pb-16 md:pt-12 max-w-2xl lg:max-w-5xl">
-            <h1 className="font-serif font-medium text-4xl md:text-5xl leading-tight text-brand-heading">
+            <h1 className="font-serif font-semibold text-4xl md:text-5xl leading-tight text-brand-heading">
                 {firstName ? <>Hi {firstName}! Here&apos;s your </> : <>Your </>}
-                <em className="italic text-brand-tobacco">order</em>
+                <em className="italic font-medium text-brand-tobacco">order</em>
             </h1>
             {order.note && (
                 <p className="mt-4 max-w-2xl border-l-2 border-brand-latte pl-4 font-serif italic text-xl leading-snug text-brand-espresso/85 whitespace-pre-line break-words">

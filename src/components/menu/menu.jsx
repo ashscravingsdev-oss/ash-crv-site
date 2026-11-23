@@ -158,7 +158,7 @@ const Menu = () => {
                 variants={fadeUp}
                 className="mb-8"
             >
-                <h1 className="text-4xl font-bold mb-2">The Menu</h1>
+                <h1 className="text-4xl font-semibold mb-2">The Menu</h1>
                 <p className="text-lg text-muted-foreground">Fresh meals, made from scratch. Delivery or pickup every Tuesday</p>
                 {!loading && !tabNames.includes("Juices") && new Date() < JUICE_NOTE_UNTIL && (
                     <p className="mt-2 text-sm text-muted-foreground">

@@ -50,8 +50,8 @@ const buttonClass =
 const linkClass = "text-brand-tobacco underline underline-offset-4 decoration-brand-tobacco/40 hover:decoration-brand-tobacco"
 
 const Heading = ({ className = "" }) => (
-    <h1 className={`font-serif font-medium text-5xl md:text-6xl xl:text-7xl leading-[0.98] text-brand-heading ${className}`}>
-        Your meals, <em className="italic text-brand-tobacco">every week</em>
+    <h1 className={`font-serif font-semibold text-5xl md:text-6xl xl:text-7xl leading-[0.98] text-brand-heading ${className}`}>
+        Your meals, <em className="italic font-medium text-brand-tobacco">every week</em>
     </h1>
 )
 
