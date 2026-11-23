@@ -157,18 +157,10 @@ const About = () => {
             {/* My little family: picture on the left, words on the right */}
             <section className="container mx-auto px-4">
                 <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center border-t border-brand-tobacco/20 py-14 md:py-20">
-                    <motion.figure {...reveal} className="order-2 md:order-1 flex flex-col items-center gap-4">
-                        <SpotImg
-                            spot="about.first-logo"
-                            px={700}
-                            loading="lazy"
-                            className="w-60 h-60 md:w-72 md:h-72 rounded-full object-cover ring-1 ring-border shadow-sm"
-                        />
-                        <figcaption className="text-center space-y-1">
-                            <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
-                            <span className="block text-muted-foreground leading-relaxed">
-                                My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
-                            </span>
+                    <motion.figure {...reveal} className="order-2 md:order-1 relative max-w-md w-full mx-auto md:mx-0 aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
+                        <SpotImg spot="about.family" loading="lazy" className="w-full h-full object-cover" />
+                        <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
+                            My baby boy, Cash
                         </figcaption>
                     </motion.figure>
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
@@ -180,6 +172,20 @@ const About = () => {
                             When I&apos;m not cooking, I&apos;m with my beautiful little family: my fiancé, who I love so
                             much, and our toy poodle, Cash, my baby boy.
                         </p>
+                        <figure className="flex items-center gap-5 pt-2">
+                            <SpotImg
+                                spot="about.first-logo"
+                                px={400}
+                                loading="lazy"
+                                className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
+                            />
+                            <figcaption className="space-y-1">
+                                <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
+                                <span className="block text-muted-foreground leading-relaxed">
+                                    My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
+                                </span>
+                            </figcaption>
+                        </figure>
                     </motion.div>
                 </div>
             </section>
