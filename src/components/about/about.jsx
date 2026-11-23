@@ -14,7 +14,7 @@ const getToKnow = [
     },
     {
         q: "What did you grow up eating?",
-        a: "I'm Latina, so I grew up on the most incredible enchiladas and pozole. They're still my favorites to this day.",
+        a: "I grew up on the most incredible enchiladas and pozole. They're still my favorites to this day.",
     },
     {
         q: "A dish from your grandma you still make?",
@@ -43,11 +43,12 @@ const reveal = {
 
 // The rest of the story reads like chapters: the title on the left, the story
 // on the right, a thin line between them
-const Chapter = ({ kicker, title, children }) => (
+const Chapter = ({ kicker, title, photo, children }) => (
     <section className="grid md:grid-cols-[0.8fr_1.2fr] gap-6 md:gap-16 border-t border-brand-tobacco/20 py-14 md:py-20">
         <motion.div {...reveal} className="space-y-3">
             <p className="font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>{kicker}</p>
             <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading text-balance">{title}</h2>
+            {photo && <div className="pt-5 max-w-sm">{photo}</div>}
         </motion.div>
         <motion.div {...reveal} className="space-y-5 md:pt-11">
             {children}
@@ -81,17 +82,28 @@ const About = () => {
                             it, I&apos;ll make it with love.
                         </p>
                     </motion.div>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        className="aspect-[4/5] max-w-lg w-full md:ml-auto rounded-[18px] overflow-hidden bg-muted"
-                    >
-                        <SpotImg
-                            spot="about.hero"
-                            className="w-full h-full object-cover"
+                    <div className="relative max-w-lg w-full md:ml-auto">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className="aspect-[4/5] w-full rounded-[18px] overflow-hidden bg-muted"
+                        >
+                            <SpotImg
+                                spot="about.hero"
+                                className="w-full h-full object-cover"
+                            />
+                        </motion.div>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src="/brand/sticker-toast.webp"
+                            alt=""
+                            aria-hidden="true"
+                            width={520}
+                            height={526}
+                            className="pointer-events-none select-none absolute -bottom-8 -left-3 md:-left-12 w-32 md:w-44 -rotate-[8deg]"
                         />
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -126,7 +138,15 @@ const About = () => {
             </section>
 
             <div className="container mx-auto px-4">
-                <Chapter kicker="My why" title={<>Food that <em className="italic text-brand-tobacco">loves you back</em></>}>
+                <Chapter
+                    kicker="My why"
+                    title={<>Food that <em className="italic text-brand-tobacco">loves you back</em></>}
+                    photo={
+                        <div className="aspect-[4/5] rounded-[18px] overflow-hidden bg-muted">
+                            <SpotImg spot="about.kitchen" loading="lazy" className="w-full h-full object-cover" />
+                        </div>
+                    }
+                >
                     <p className="text-lg text-foreground/85 leading-relaxed">
                         Ash&apos;s Cravings was truly the first thing on my mind when I went to culinary school, and
                         I graduated in 2024. Not long after, my health took a turn. I spent the next two years
@@ -150,7 +170,7 @@ const About = () => {
                             spot="about.first-logo"
                             px={400}
                             loading="lazy"
-                            className="w-28 h-28 md:w-32 md:h-32 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
+                            className="w-32 h-32 md:w-44 md:h-44 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
                         />
                         <figcaption className="space-y-1">
                             <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
@@ -178,7 +198,17 @@ const About = () => {
 
             {/* Sign-off */}
             <section className="container mx-auto px-4 pt-4 pb-20 md:pb-28">
-                <motion.div {...reveal} className="rounded-[22px] bg-muted px-6 py-12 md:py-16 text-center">
+                <motion.div {...reveal} className="relative rounded-[22px] bg-muted px-6 pt-20 pb-12 md:py-16 text-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                        src="/brand/sticker-mealprep.webp"
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        width={380}
+                        height={574}
+                        className="pointer-events-none select-none absolute -top-12 right-3 md:-top-14 md:right-12 w-20 md:w-28 rotate-[8deg]"
+                    />
                     <h2 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
                         Made just for <em className="italic text-brand-tobacco">you</em>
                     </h2>

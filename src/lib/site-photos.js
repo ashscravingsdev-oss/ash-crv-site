@@ -226,6 +226,14 @@ export const SPOTS = [
         photos: [{ url: "/brand/about-grandma.jpg", alt: "Young Ash and her grandma Maria Elena making pupusas from scratch" }],
     },
     {
+        key: "about.kitchen",
+        page: "About",
+        label: "Photo by \"Food that loves you back\"",
+        newAlt: "Ash cooking",
+        shapes: ["4:5"],
+        photos: [{ url: "/brand/about-kitchen.jpg", alt: "Ash plating a dish in a professional kitchen" }],
+    },
+    {
         key: "about.first-logo",
         page: "About",
         label: "My first logo (shown in a circle)",
