@@ -84,8 +84,8 @@ function OrderConfirmationContent() {
             <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
             Your order
           </p>
-          <h1 className="font-serif font-medium text-4xl md:text-5xl text-brand-heading">
-            Hmm, I couldn&apos;t <em className="italic text-brand-tobacco">find it</em>
+          <h1 className="font-serif font-semibold text-4xl md:text-5xl text-brand-heading">
+            Hmm, I couldn&apos;t <em className="italic font-medium text-brand-tobacco">find it</em>
           </h1>
           <p className="text-lg text-foreground/80">
             If you just paid, your receipt is in your email. Questions? Message me and I&apos;ll sort it out.
@@ -139,8 +139,8 @@ function OrderConfirmationContent() {
                 <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                 Order #{order_number || orderId}
               </p>
-              <h1 className="font-serif font-medium text-5xl md:text-6xl leading-[1.02] text-brand-heading">
-                Thank you{firstName ? <>, <em className="italic text-brand-tobacco">{firstName}</em></> : null}!
+              <h1 className="font-serif font-semibold text-5xl md:text-6xl leading-[1.02] text-brand-heading">
+                Thank you{firstName ? <>, <em className="italic font-medium text-brand-tobacco">{firstName}</em></> : null}!
               </h1>
               <p className="text-lg text-foreground/80 leading-relaxed">
                 Your order is in, and I can&apos;t wait to make it for you.

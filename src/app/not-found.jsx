@@ -17,8 +17,8 @@ export default function NotFound() {
                         <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                         Page not found
                     </p>
-                    <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading text-balance">
-                        This page isn&apos;t <em className="italic text-brand-tobacco">on the menu</em>
+                    <h1 className="font-serif font-semibold text-5xl md:text-6xl text-brand-heading text-balance">
+                        This page isn&apos;t <em className="italic font-medium text-brand-tobacco">on the menu</em>
                     </h1>
                     <p className="text-lg text-foreground/80">
                         I couldn&apos;t find what you were looking for.

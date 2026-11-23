@@ -138,8 +138,8 @@ const FAQ = () => {
             {/* Header */}
             <div className="text-center mb-12">
                 <p className="mb-3 font-serif italic text-xl md:text-2xl text-brand-tobacco"><span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>FAQ</p>
-                <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading mb-4">
-                    Questions? <em className="italic text-brand-tobacco">I&apos;ve got you</em>
+                <h1 className="font-serif font-semibold text-5xl md:text-6xl text-brand-heading mb-4">
+                    Questions? <em className="italic font-medium text-brand-tobacco">I&apos;ve got you</em>
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
                     Everything you might want to know before you order. Can&apos;t find your answer? Just message me.

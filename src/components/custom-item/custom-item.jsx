@@ -88,8 +88,8 @@ const CustomItem = ({ token }) => {
     if (status === "missing") {
         return (
             <section className="container mx-auto px-4 py-24 text-center max-w-xl space-y-4">
-                <h1 className="font-serif font-medium text-5xl text-brand-heading">
-                    Hmm, I can&apos;t find <em className="italic text-brand-tobacco">that one</em>
+                <h1 className="font-serif font-semibold text-5xl text-brand-heading">
+                    Hmm, I can&apos;t find <em className="italic font-medium text-brand-tobacco">that one</em>
                 </h1>
                 <p className="text-muted-foreground">
                     This link may have been mistyped. Message me and I&apos;ll send it again!
@@ -140,7 +140,7 @@ const CustomItem = ({ token }) => {
                                 <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                                 Made just for you
                             </p>
-                            <h1 className="font-serif font-medium text-[2.75rem] leading-[1.02] sm:text-6xl text-brand-heading">
+                            <h1 className="font-serif font-semibold text-[2.75rem] leading-[1.02] sm:text-6xl text-brand-heading">
                                 {item.name}
                             </h1>
                             <p className="font-serif text-3xl text-brand-espresso">{money(price)}</p>

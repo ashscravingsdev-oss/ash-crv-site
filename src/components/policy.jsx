@@ -18,7 +18,7 @@ export default function Policy({ title, updated, intro = [], sections = [] }) {
         <div className="min-h-screen">
             <Navigation />
             <div className="container mx-auto px-4 pt-12 pb-16 max-w-3xl">
-                <h1 className="text-4xl font-bold text-foreground mb-2">{title}</h1>
+                <h1 className="text-4xl font-semibold text-foreground mb-2">{title}</h1>
                 <p className="text-muted-foreground mb-8">Last updated: {updated}</p>
 
                 {intro.map((text) => (

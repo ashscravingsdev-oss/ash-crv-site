@@ -11,8 +11,8 @@ export default function EmptyCart() {
                         <span aria-hidden="true" className="not-italic text-brand-matcha text-[0.55em] align-[0.2em] mr-2">■</span>
                         Your cart
                     </p>
-                    <h1 className="font-serif font-medium text-5xl md:text-6xl text-brand-heading">
-                        Nothing here <em className="italic text-brand-tobacco">yet</em>
+                    <h1 className="font-serif font-semibold text-5xl md:text-6xl text-brand-heading">
+                        Nothing here <em className="italic font-medium text-brand-tobacco">yet</em>
                     </h1>
                     <p className="text-lg text-foreground/80">Let&apos;s fix that. Here&apos;s where to start:</p>
                 </div>
