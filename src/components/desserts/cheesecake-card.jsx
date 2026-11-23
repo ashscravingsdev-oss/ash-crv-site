@@ -86,7 +86,7 @@ const CheesecakeCard = () => {
                 aria-hidden="true"
                 loading="lazy"
                 width={560}
-                height={464}
+                height={542}
                 className="pointer-events-none select-none absolute -top-12 right-3 w-40 md:top-auto md:-bottom-12 md:-right-6 md:w-40 lg:w-52 rotate-[6deg]"
             />
             {intro}
