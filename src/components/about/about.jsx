@@ -93,7 +93,7 @@ const About = () => {
                             className="w-full h-full object-cover object-[center_30%]"
                         />
                         <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
-                            Me &amp; my grandma Maria Elena ♡
+                            Me &amp; my grandma Maria Elena
                         </figcaption>
                     </motion.figure>
                     <motion.div {...reveal} className="order-1 md:order-2 max-w-xl space-y-6">
@@ -180,7 +180,7 @@ const About = () => {
                                 className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-full object-cover ring-1 ring-border shadow-sm"
                             />
                             <figcaption className="space-y-1">
-                                <span className="block font-serif italic text-xl text-brand-espresso">My very first logo ♡</span>
+                                <span className="block font-serif italic text-xl text-brand-espresso">My very first logo</span>
                                 <span className="block text-muted-foreground leading-relaxed">
                                     My fiancé made it for me. Look closely and you&apos;ll find Cashy hiding up top!
                                 </span>

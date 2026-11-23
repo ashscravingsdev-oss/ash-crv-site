@@ -210,7 +210,7 @@ const CustomCakes = () => {
                                     aria-label="Ash packing up a dessert order with Ash's Cravings stickers"
                                 />
                                 <figcaption className="absolute left-3 bottom-3 whitespace-nowrap rounded-full bg-background/90 px-3.5 py-1 font-serif italic text-[15px] text-brand-espresso">
-                                    Packed with love ♡
+                                    Packed with love
                                 </figcaption>
                             </figure>
                             <SpotImg

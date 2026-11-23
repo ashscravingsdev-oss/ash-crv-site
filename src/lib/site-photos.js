@@ -11,7 +11,7 @@
 //   shapes  crop frame per position ("w:h"); the last one repeats
 //   gallery a list Ash can add to, remove from and reorder
 //   first   (galleries) how many show before "Show more"
-//   notes   (galleries) photos can have a little tag, like "For my grandma ♡"
+//   notes   (galleries) photos can have a little tag, like "For my grandma"
 //   photos  the built-in photos: [{ url, alt, note }]
 
 // The cake gallery, in the order it showed before Ash could change it
@@ -27,7 +27,7 @@ const CAKE_NOTES = {
     "cake-55.jpg": { alt: "White cake with blue piped bows and a gold 'Destiny' topper, cut open so rainbow sprinkles spill out" },
     "cake-56.jpg": { alt: "Two mini cakes and cupcakes piped with funny 30th birthday doodles" },
     "cake-54.jpg": {
-        note: "For my grandma ♡",
+        note: "For my grandma",
         alt: "Peach piped cake with baby's breath and a photo of Ash's grandma Maria Elena holding a cake",
     },
 }
@@ -281,7 +281,8 @@ export function spotPhotos(key, mine) {
     const withAlt = (p, fallback) => ({
         url: p.url,
         alt: p.alt || (fallback?.url === p.url ? fallback.alt : "") || spot?.newAlt || "Photo from Ash's Cravings",
-        note: typeof p.note === "string" ? p.note : "",
+        // No little heart symbols on the site (Ash's call), even in saved tags
+        note: typeof p.note === "string" ? p.note.replace(/\s*[\u2661\u2665\u2764\uFE0F]+/g, "").trim() : "",
     })
     if (spot?.gallery || builtIn.length <= 1) return picked.map((p) => withAlt(p))
     return builtIn.map((b, i) => (picked[i] ? withAlt(picked[i], b) : b))
