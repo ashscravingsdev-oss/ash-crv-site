@@ -67,7 +67,7 @@ const favorites = [
     },
 ];
 
-// Each favorite's little link: add it to the quote form, or go see the desserts
+// Each favorite's little link: drop it into the quote form, or go see the desserts
 const ItemLink = ({ f }) =>
     f.href ? (
         <Link href={f.href} className="mt-2.5 inline-flex items-center gap-1.5 font-serif italic text-[17px] text-brand-tobacco hover:text-brand-espresso transition-colors">
@@ -79,7 +79,7 @@ const ItemLink = ({ f }) =>
             onClick={() => window.dispatchEvent(new CustomEvent("ash:want", { detail: f.name }))}
             className="mt-2.5 inline-flex items-center gap-1.5 font-serif italic text-[17px] text-brand-tobacco hover:text-brand-espresso transition-colors"
         >
-            Add to my quote <span aria-hidden="true">+</span>
+            Get a quote <span aria-hidden="true">→</span>
         </button>
     );
 
